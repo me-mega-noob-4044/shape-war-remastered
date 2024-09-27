@@ -1,5 +1,3 @@
-# Ignore macOS DS_Store files
 .DS_Store
 
-# Ignore Node.js modules
 node_modules/
