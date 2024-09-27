@@ -1,0 +1,1049 @@
+html, body {
+    padding: 0;
+    margin: 0;
+    user-select: none;
+    font-family: "Open Sans";
+    overflow: hidden;
+}
+
+@keyframes backgroundAnimation {
+    0% {
+        background-color: rgba(0, 0, 0, 0.2);
+    }
+    100% {
+        background-color: rgba(0, 0, 0, 0.35);
+    }
+}
+
+.hanger-shape-name {
+    position: absolute;
+    bottom: 5px;
+    left: 10px;
+    text-align: left;
+    font-size: 22px;
+    width: calc(100% - 78px);
+}
+
+.hanger-slot-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.inventory-weapon-item {
+    position: absolute;
+    right: 10px;
+    width: 100px;
+    height: 100px;
+    border: solid;
+    border-width: 4px;
+    border-radius: 100%;
+    background-size: 100px 100px;
+    background-color: black;
+}
+
+.hanger-weapon-item {
+    position: absolute;
+    right: 10px;
+    width: 50px;
+    height: 50px;
+    border: solid;
+    border-width: 4px;
+    border-radius: 100%;
+    background-size: 50px 50px;
+    background-color: black;
+}
+
+.hanger-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 48px;
+    flex-direction: column;
+    background-color: rgb(0, 0, 0, .2);
+}
+
+.hanger-item:hover {
+    background-color: rgb(0, 0, 0, .3);
+}
+
+#hangerUI {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    display: none;
+    background-color: rgb(0, 0, 0, .2);
+    animation: backgroundAnimation 4s infinite alternate;
+}
+
+#gameLoad {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(0, 0, 0, .2);
+    animation: backgroundAnimation 4s infinite alternate;
+}
+
+#loadingText {
+    text-align: center;
+    margin-top: -30px;
+    font-size: 36px;
+    font-weight: 700;
+}
+
+.money-display-icon {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 30px;
+    height: 30px;
+}
+
+.money-display-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 30px;
+    width: 125px;
+    background-color: rgb(0, 0, 0, .3);
+    border-radius: 4px;
+}
+
+#moneyDisplayHolder {
+    pointer-events: none;
+    z-index: 10000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 25px;
+    left: 0px;
+    width: 100%;
+    height: 50px;
+}
+
+#shapeViewUI, #chooseShapesUI, #shapeItemsUI, #droneViewUI {
+    display: none;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(0, 0, 0, .2);
+    animation: backgroundAnimation 4s infinite alternate;
+    font-weight: 600;
+}
+
+.shape-view-item {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 27%;
+    height: 72%;
+    background-color: rgb(0, 0, 0, .2);
+    border-radius: 6px;
+}
+
+#droneViewNameLabel {
+    color: white;
+    position: absolute;
+    background-color: rgb(0, 0, 0, .2);
+    border-radius: 32px;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    top: calc(50% - 250px);
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.drone-view-item {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 350px;
+    height: 250px;
+    background-color: rgb(0, 0, 0, .2);
+    border-radius: 6px;
+}
+
+#shape-view-unequip-button {
+    position: absolute;
+    bottom: 14%;
+    left: calc(27% + 40px);
+    width: 60px;
+    height: 60px;
+    border-radius: 100%;
+    background-size: 50px 50px;
+    cursor: pointer;
+    border: solid;
+    border-width: 2px;
+    border-color: white;
+    background-position-x: center;
+    background-position-y: center;
+    background-repeat: no-repeat;
+    background-image: url("../src/media-files/icons/unequip_button.png");
+    background-color: rgb(0, 0, 0, .25);
+}
+
+#shape-view-unequip-button:hover {
+    background-color: rgb(0, 0, 0, .4);
+}
+
+#imageView, #droneImageView {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 375px;
+    height: 375px;
+}
+
+.shape-view-name {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    display: flex;
+    align-items: center;
+    width: calc(100% - 20px);
+    height: 40px;
+    font-size: 24px;
+}
+
+#shape-view-name {
+    color: white;
+    margin-left: 10px;
+}
+
+#shape-view-level {
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 100%;
+}
+
+.shape-view-industry {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    top: 55px;
+    left: 20px;
+    width: calc(100% - 30px);
+}
+
+.shape-icon-size {
+    width: 20px;
+    height: 20px;
+}
+
+#circle-shape {
+    background-color: white;
+    border-radius: 100%;
+}
+
+#pentagon-shape {
+    background-color: white;
+    position: relative;
+    clip-path: polygon(
+        50% 0%,
+        100% 38%,
+        82% 100%,
+        18% 100%,
+        0% 38%
+    );
+}
+
+.circle-shape {
+    background-color: white;
+    border-radius: 100%;
+}
+
+.pentagon-shape {
+    background-color: white;
+    position: relative;
+    clip-path: polygon(
+        50% 0%,
+        100% 38%,
+        82% 100%,
+        18% 100%,
+        0% 38%
+    );
+}
+
+#shape-view-industry-name {
+    margin-left: 5px;
+    font-size: 16px;
+}
+
+#view-shape-stats {
+    position: absolute;
+    top: 80px;
+    left: 20px;
+    width: calc(100% - 35px);
+    height: calc(100% - 335px);
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.stat-bar-style {
+    position: relative;
+    width: calc(100% - 20px);
+    background-color: #fff;
+    height: 5px;
+    border: solid;
+    border-color: rgb(205, 253, 253);
+    border-width: 0px 3px 0px 3px;
+}
+
+.stat-amount {
+    position: relative;
+    font-size: 20px;
+    color: white;
+    font-weight: 600;
+}
+
+.stat-bar-item {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    height: 100%;
+    background-color: #1abbbb;
+}
+
+#shape-ability-view {
+    position: absolute;
+    bottom: 120px;
+    left: 0px;
+    height: 122px;
+    width: 100%;
+    background-color: rgb(0, 0, 0, .1);
+    border: solid;
+    border-color: white;
+    border-width: 2px 0px 0px 0px;
+}
+
+.shape-bottom-view {
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    width: 100%;
+    height: 120px;
+    background-color: rgb(0, 0, 0, .1);
+    border-radius: 6px;
+}
+
+.view-button-items {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 0px;
+    background-color: rgb(0, 0, 0, .15);
+    height: calc(100% - 2px);
+}
+
+.view-pilot-button {
+    left: 0px;
+    width: calc(50% - 2px);
+    border: solid;
+    border-width: 2px 2px 0px 0px;
+    border-color: white;
+    cursor: pointer;
+    border-radius: 0px 0px 0px 5px;
+}
+
+.view-drone-button {
+    border: solid;
+    border-color: white;
+    border-width: 2px 0px 0px 0px;
+    left: 50%;
+    width: 50%;
+    cursor: pointer;
+    border-radius: 0px 0px 5px 0px;
+}
+
+.view-drone-button:hover {
+    background-color: rgb(255, 255, 255, .15);
+}
+
+.view-pilot-button:hover {
+    background-color: rgb(255, 255, 255, .15);
+}
+
+#shape-ability-view-image {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    width: 90px;
+    height: 90px;
+    border-radius: 100%;
+    background-color: rgb(255, 255, 255, .4);
+    cursor: pointer;
+}
+
+#shape-ability-view-image:hover {
+    background-color: rgb(0, 0, 0, .05);
+}
+
+#shape-ability-view-name {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    top: 15px;
+    font-size: 24px;
+    left: 115px;
+    color: white;
+    width: calc(100% - 125px);
+    height: 90px;
+}
+
+#view-pilot-image, #view-drone-image {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 15px;
+    left: 15px;
+    width: 90px;
+    height: 90px;
+    border-radius: 100%;
+    background-color: rgb(255, 255, 255, .4);
+}
+
+.right-view-tabs {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 50px;
+}
+
+#right-view-display {
+    position: absolute;
+    overflow: hidden;
+    top: 50px;
+    width: 100%;
+    height: calc(100% - 50px);
+}
+
+#right-view-weapons {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 24px;
+    top: 0px;
+    left: 0px;
+    width: 50%;
+    height: 100%;
+    border-radius: 6px 0px 0px 0px;
+    background-color: rgb(255, 255, 255, .25);
+}
+
+#right-view-modules {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #b3b3b3;
+    font-size: 24px;
+    top: 0px;
+    left: 50%;
+    width: 50%;
+    height: 100%;
+    border-radius: 0px 6px 0px 0px;
+    background-color: rgb(0, 0, 0, .1);
+}
+
+.diagonal-line-pattern {
+    background-image: repeating-linear-gradient(
+        -45deg, 
+        rgba(0, 0, 0, 0.1) 0, 
+        rgba(0, 0, 0, 0.1) 10px, 
+        rgba(255, 255, 255, 0.25) 10px, 
+        rgba(255, 255, 255, 0.25) 20px
+    );
+    border-radius: 0px 0px 6px 6px;
+}
+
+.more-info-button {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 7.5px;
+    right: 7.5px;
+    width: 20px;
+    height: 20px;
+    color: #898989;
+    cursor: pointer;
+    background-color: rgb(255, 255, 255, .3);
+    border-radius: 100%;
+}
+
+.more-info-button:hover {
+    background-color: rgb(255, 255, 255, .5);
+}
+
+#shape-view-more-info {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 5px;
+    right: 5px;
+    width: 30px;
+    height: 30px;
+    color: #898989;
+    cursor: pointer;
+    background-color: rgb(255, 255, 255, .3);
+    border-radius: 100%;
+}
+
+#shape-view-more-info:hover {
+    background-color: rgb(255, 255, 255, .5);
+}
+
+.view-weapon-indepth-button {
+    position: absolute;
+    display: flex;
+    font-weight: 600;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    color: #b3b3b3;
+    top: 10px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+    border-radius: 100%;
+    background-color: rgb(0, 0, 0, .3);
+    cursor: pointer;
+}
+
+.view-weapon-indepth-button:hover {
+    background-color: rgb(0, 0, 0, .1);
+}
+
+.view-weapon-bar-style {
+    position: relative;
+    cursor: pointer;
+    width: 100%;
+    background-color: rgb(255, 255, 255, .25);
+}
+
+.view-weapon-bar-style:hover {
+    background-color: rgb(0, 0, 0, .1);
+}
+
+.view-weapon-levelDisplay-style {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    width: 30px;
+    height: 30px;
+    border: solid;
+    border-color: white;
+    border-width: 2px;
+    border-radius: 100%; 
+}
+
+.shape-view-bottom-display, .shape-view-upgrade-bottom, .drone-view-bottom-display {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    bottom: 0px;
+    left: 0px;
+    height: 14%;
+    width: 100%;
+}
+
+.shape-view-bottom-button-style, .drone-view-bottom-button-style {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 225px;
+    color: white;
+    font-size: 18px;
+    font-weight: 700;
+    height: calc(100% - 40px);
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+#shape-view-back-button, #shape-view-back-button-2, #shape-view-back-button-3, #drone-view-back-button {
+    position: absolute;
+    top: 20px;
+    left: 30px;
+    background-color: rgb(0, 0, 0, .2);
+}
+
+#shape-view-back-button:hover {
+    background-color: rgb(0, 0, 0, .3);
+}
+
+#shape-view-back-button-2:hover {
+    background-color: rgb(0, 0, 0, .3);
+}
+
+#drone-view-back-button:hover {
+    background-color: rgb(0, 0, 0, .3);
+}
+
+#shape-view-back-button-3:hover {
+    background-color: rgb(0, 0, 0, .3);
+}
+
+#shape-view-upgrade-button, #shape-item-view-upgrade-button, #drone-view-upgrade-button{
+    margin-left: 15px;
+    background-color: rgb(1, 207, 77);
+}
+
+#shape-view-upgrade-button-2, #shape-view-buy-button, #drone-view-buy-button, #shape-item-view-buy-button, #shape-view-item-upgrade-button-2 {
+    margin-left: 15px;
+    background-color: rgb(1, 207, 77);
+    flex-direction: column;
+}
+
+#shape-item-view-buy-button {
+    display: none;
+}
+
+#shape-view-buy-button, #drone-view-buy-button {
+    display: none;
+}
+
+#drone-view-upgrade-button:hover {
+    background-color: rgb(1, 193, 71);
+}
+
+#shape-view-upgrade-button:hover {
+    background-color: rgb(1, 193, 71);
+}
+
+#shape-item-view-upgrade-button:hover {
+    background-color: rgb(1, 193, 71);
+}
+
+#shape-view-upgrade-button-2:hover {
+    background-color: rgb(1, 193, 71);
+}
+
+#shape-view-item-upgrade-button-2:hover {
+    background-color: rgb(1, 193, 71);
+}
+
+#shape-view-buy-button:hover {
+    background-color: rgb(1, 193, 71);
+}
+
+#drone-view-buy-button:hover {
+    background-color: rgb(1, 193, 71);
+}
+
+#shape-item-view-buy-button:hover {
+    background-color: rgb(1, 193, 71);
+}
+
+#drone-view-change-button {
+    margin-left: 15px;
+    text-align: center;
+    background-color: rgba(35, 134, 232);
+}
+
+#shape-view-change-button, #shape-view-equip-button, #shape-item-view-equip-button, #shape-item-view-unequip-button, #drone-view-equip-button, #drone-view-unequip-button {
+    text-align: center;
+    background-color: rgba(35, 134, 232);
+}
+
+#drone-view-unequip-button:hover {
+    background-color: rgb(28, 110, 191);
+}
+
+#drone-view-equip-button:hover {
+    background-color: rgb(28, 110, 191);
+}
+
+#shape-item-view-unequip-button:hover {
+    background-color: rgb(28, 110, 191);
+}
+
+#drone-view-change-button:hover {
+    background-color: rgb(28, 110, 191);
+}
+
+#shape-view-change-button:hover {
+    background-color: rgb(28, 110, 191);
+}
+
+#shape-view-equip-button:hover {
+    background-color: rgb(28, 110, 191);
+}
+
+#shape-item-view-equip-button:hover {
+    background-color: rgb(28, 110, 191);
+}
+
+#darkFadeTransition {
+    display: none;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 10000;
+    pointer-events: none;
+    transition: .2s;
+    opacity: 1;
+    background-color: rgb(0, 0, 0, .6);
+}
+
+#shape-view-upgrade-menu, #shape-view-info-menu, #shape-view-item-upgrade-menu, #shape-view-item-info-menu, #drone-ability-info-menu, #drone-view-upgrade-menu {
+    display: none;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    background-color: #a8a8a8;
+}
+
+#shape-view-upgrade-name, #shape-view-info-name, #shape-view-item-upgrade-name, #shape-view-item-info-name, #drone-ability-info-name {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    top: 120px;
+    left: 50px;
+    font-size: 24px;
+    width: calc(50% - 100px);
+    height: 40px;
+    z-index: 10;
+}
+
+#shape-view-upgrade-image, #shape-view-info-image, #shape-view-item-upgrade-image, #shape-view-item-info-image, #drone-ability-info-image {
+    position: absolute;
+    top: 50%;
+    left: 50px;
+    transform: translateY(-50%);
+    width: calc(50% - 100px);
+    aspect-ratio: 1 / 1;
+}
+
+#shape-view-upgrade-right-display, #shape-view-info-right-display, #shape-view-item-upgrade-right-display, #shape-view-item-info-right-display, #drone-ability-info-right-display {
+    position: absolute;
+    top: 50%;
+    right: 50px;
+    transform: translateY(-50%);
+    width: calc(50% - 100px);
+    aspect-ratio: 1/1;
+    /* border-radius: 6px; */
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+#shape-view-upgrade-money-icon, #shape-view-buy-money-icon, #drone-view-buy-money-icon, #shape-item-view-buy-money-icon, #shape-view-item-upgrade-money-icon {
+    width: 30px;
+    height: 30px;
+    background-size: 30px 30px; 
+}
+
+.shape-view-upgrade-name-level-display {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    top: 2.5px;
+    left: 0px;
+    width: 35px;
+    height: 35px;
+    border-radius: 100%; 
+}
+
+#shape-view-upgrade-back-button, #shape-view-info-back-button, #shape-view-item-upgrade-back-button, #shape-view-item-info-back-button, #drone-ability-info-back-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    color: white;
+    font-size: 48px;
+    cursor: pointer;
+}
+
+.hanger-level-style-display {
+    position: absolute;
+    top: 2.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    left: 0px;
+    width: 25px;
+    height: 25px;
+    border-radius: 100%; 
+}
+
+#change-shape-display {
+    position: absolute;
+    left: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: calc(100% - 60px);
+    height: 72%;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    background-color: rgb(0, 0, 0, .1);
+}
+
+#change-shape-item-display {
+    position: absolute;
+    left: 90px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: calc(100% - 180px);
+    height: 72%;
+    overflow: hidden;
+}
+
+.change-shape-item-bar-display-holder {
+    position: absolute;
+    bottom: calc(14% + 6px);
+    left: 90px;
+    transform: translateY(-50%);
+    width: calc(100% - 180px);
+    height: 4px;
+    background-color: rgb(0, 0, 0, .2);
+    overflow: hidden;
+}
+
+#change-shape-item-bar-display {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    height: 100%;
+    background-color: rgb(255, 255, 255);
+}
+
+.change-shape-top-style {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 62px;
+    left: 30px;
+    height: calc(14% - 62px);
+    width: calc(100% - 60px);
+    background-color: rgb(0, 0, 0, .15);
+    border: solid;
+    border-color: white;
+    border-width: 0px 0px 2px 0px;
+    overflow-y: hidden;
+    overflow-x: scroll;
+}
+
+.change-shape-top-style-2 {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 62px;
+    left: 90px;
+    height: calc(14% - 62px);
+    width: calc(100% - 180px);
+    background-color: rgb(0, 0, 0, .1);
+    overflow-y: hidden;
+    overflow-x: scroll;
+}
+
+.change-shape-button-style {
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 150px;
+    height: calc(100% - 10px);
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#change-shape-store-button, #shape-in-depth-view-store-button {
+    margin-left: 10px;
+}
+
+#change-shape-store-button:hover {
+    filter: invert(100%);
+}
+
+#change-shape-inventory-button:hover {
+    filter: invert(100%);
+}
+
+#shape-in-depth-view-inventory-button:hover {
+    filter: invert(100%);
+}
+
+#shape-in-depth-view-store-button:hover {
+    filter: invert(100%);
+}
+
+.store-item-name {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    color: white;
+    top: 25px;
+    left: 25px;
+    height: 21.5px;
+    background-color: rgb(0, 0, 0, .2);
+    height: 30px;
+    padding: 0px 10px 0 35px;
+    border-radius: 16px;
+}
+
+.store-item-level-display {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 0px;
+    left: 0px;
+    width: 30px;
+    height: 30px;
+    border-radius: 100%;
+}
+
+.drone-level-display {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 100%;
+}
+
+.store-item-stats-style-display {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 40px;
+    font-weight: 600;
+}
+
+.store-stats-display-holder-item {
+    position: absolute;
+    color: white;
+    font-size: 24px;
+    padding: 5px 20px 10px 5px;
+    bottom: 75px;
+    left: 25px;
+    background-image: linear-gradient(90deg, rgb(0, 0, 0, .45), rgb(0, 0, 0, 0));
+    border-radius: 4px 0px 0px 4px;
+}
+
+.store-item-cost {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    color: white;
+    top: 56.5px;
+    left: 25px;
+    height: 21.5px;
+    background-color: rgb(0, 0, 0, 0);
+    height: 30px;
+    padding: 0px 10px 0 35px;
+}
+
+.store-item {
+    position: absolute;
+    cursor: pointer;
+    top: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.store-item:hover {
+    background-color: rgb(0, 0, 0, .1);
+}
+
+#change-shape-replacing-holder, #change-shape-item-replacing-holder {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    top: 0px;
+    left: 0px;
+    height: 100%;
+}
+
+.center-the-god-damn-node {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+    
+.drone-ability-icon-image {
+    background-size: 80px 80px;
+    overflow: hidden;
+    width: 100px;
+    height: 100px;
+    border-radius: 100%;
+    background-color: rgb(255, 255, 255, .2);
+    background-position-y: center;
+    background-position-x: center;
+    background-repeat: no-repeat;
+}
+
+.drone-ability-data-holder {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    top: 0px;
+    left: 130px;
+    width: calc(100% - 130px);
+    height: 100%;
+    flex-direction: column;
+}
+
+.drone-ability-name-holder {
+    font-size: 22px;
+    color: white;
+    width: calc(100% - 15px);
+    height: 30px;
+    white-space: nowrap;
+    overflow-y: hidden;
+    mask-image: linear-gradient(to right, rgba(0, 0, 0, 1), rgba(0, 0, 0, 1) 85%, rgba(0, 0, 0, 0)); /* Apply fade-out effect */
+}
+
+.drone-ability-stat-holder {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    width: calc(100% - 15px);
+}
+
+.drone-ability-info-display-header {
+    color: white;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    width: 100%;
+    font-weight: 600;
+    background-color: rgb(0, 0, 0, .2);
+}
