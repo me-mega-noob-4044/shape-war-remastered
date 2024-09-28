@@ -620,7 +620,7 @@ a:-webkit-any-link {
     background-color: rgb(1, 207, 77);
 }
 
-#shape-view-upgrade-button-2, #shape-view-buy-button, #drone-view-buy-button, #shape-item-view-buy-button, #shape-view-item-upgrade-button-2 {
+#shape-view-upgrade-button-2, #shape-view-buy-button, #drone-view-buy-button, #shape-item-view-buy-button, #shape-view-item-upgrade-button-2, #drone-view-upgrade-button-2 {
     margin-left: 15px;
     background-color: rgb(1, 207, 77);
     flex-direction: column;
@@ -643,6 +643,10 @@ a:-webkit-any-link {
 }
 
 #shape-item-view-upgrade-button:hover {
+    background-color: rgb(1, 193, 71);
+}
+
+#drone-view-upgrade-button-2:hover {
     background-color: rgb(1, 193, 71);
 }
 
@@ -762,7 +766,7 @@ a:-webkit-any-link {
     overflow-x: hidden;
 }
 
-#shape-view-upgrade-money-icon, #shape-view-buy-money-icon, #drone-view-buy-money-icon, #shape-item-view-buy-money-icon, #shape-view-item-upgrade-money-icon {
+#shape-view-upgrade-money-icon, #shape-view-buy-money-icon, #drone-view-buy-money-icon, #shape-item-view-buy-money-icon, #shape-view-item-upgrade-money-icon, #drone-view-upgrade-money-icon {
     width: 30px;
     height: 30px;
     background-size: 30px 30px; 

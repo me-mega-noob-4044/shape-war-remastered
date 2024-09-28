@@ -633,6 +633,8 @@ import drone from "../src/js/drone.js";
             this.droneViewUpgradeName = UTILS.getElement("drone-view-upgrade-name");
             this.droneViewUpgradeImage = UTILS.getElement("drone-view-upgrade-image");
             this.droneViewUpgradeRightDisplay = UTILS.getElement("drone-view-upgrade-right-display");
+            this.droneViewUpgradeMoneyDisplay = UTILS.getElement("drone-view-upgrade-money-display");
+            this.droneViewUpgradeMoneyIcon = UTILS.getElement("drone-view-upgrade-money-icon");
             this.dataToImage = {
                 "healthData": "../src/media-files/icons/health.png",
                 "speedData": "../src/media-files/icons/speed.png",
@@ -2317,6 +2319,9 @@ import drone from "../src/js/drone.js";
                 this.droneViewUpgradeImage.appendChild(droneImg);
 
                 this.droneViewUpgradeRightDisplay.innerHTML = "";
+
+                this.droneViewUpgradeMoneyIcon.style.backgroundImage = `url("../src/media-files/money/microchips.png")`;
+                this.droneViewUpgradeMoneyDisplay.innerHTML = config.droneCost[drone.level];
             };
 
             let isIngoldAndMicrochipsElement = false;
