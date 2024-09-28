@@ -2375,7 +2375,6 @@ import drone from "../src/js/drone.js";
                         };
                     }
                 }
-                // Buy button
             };
 
             this.droneItemViewLeft.innerHTML = "";
