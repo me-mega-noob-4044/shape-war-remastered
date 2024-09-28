@@ -630,6 +630,9 @@ import drone from "../src/js/drone.js";
             this.droneAbilityInfoRightDisplay = UTILS.getElement("drone-ability-info-right-display");
             this.droneAbilityInfoBackButton = UTILS.getElement("drone-ability-info-back-button");
             this.droneViewUpgradeMenu = UTILS.getElement("drone-view-upgrade-menu");
+            this.droneViewUpgradeName = UTILS.getElement("drone-view-upgrade-name");
+            this.droneViewUpgradeImage = UTILS.getElement("drone-view-upgrade-image");
+            this.droneViewUpgradeRightDisplay = UTILS.getElement("drone-view-upgrade-right-display");
             this.dataToImage = {
                 "healthData": "../src/media-files/icons/health.png",
                 "speedData": "../src/media-files/icons/speed.png",
@@ -2294,6 +2297,26 @@ import drone from "../src/js/drone.js";
             this.droneViewUpgradeButton.onclick = () => {
                 doDarkModeTransition();
                 this.droneViewUpgradeMenu.style.display = "block";
+
+                this.droneViewUpgradeName.innerHTML = "";
+                let levelDisplay = document.createElement("div");
+                let nameDisplay = document.createElement("div");
+                nameDisplay.style = "margin-left: 40px;"
+                levelDisplay.classList.add("shape-view-upgrade-name-level-display");
+                levelDisplay.innerHTML = drone.level;
+
+                nameDisplay.innerHTML = `<span style="color: white;">${drone.name}</span> upgrade to level ${drone.level + 1}`;
+
+                levelDisplay.style.backgroundColor = config.tierColors[drone.tier];
+                this.droneViewUpgradeName.appendChild(levelDisplay);
+                this.droneViewUpgradeName.appendChild(nameDisplay);
+
+                this.droneViewUpgradeImage.innerHTML = "";
+                let droneImg = canvasDrawer.createUIItem(drone);
+                droneImg.style = "width: 100%; height: 100%;";
+                this.droneViewUpgradeImage.appendChild(droneImg);
+
+                this.droneViewUpgradeRightDisplay.innerHTML = "";
             };
 
             let isIngoldAndMicrochipsElement = false;

@@ -729,7 +729,7 @@ a:-webkit-any-link {
     background-color: #a8a8a8;
 }
 
-#shape-view-upgrade-name, #shape-view-info-name, #shape-view-item-upgrade-name, #shape-view-item-info-name, #drone-ability-info-name {
+#shape-view-upgrade-name, #shape-view-info-name, #shape-view-item-upgrade-name, #shape-view-item-info-name, #drone-ability-info-name, #drone-view-upgrade-name {
     position: absolute;
     display: flex;
     align-items: center;
@@ -741,7 +741,7 @@ a:-webkit-any-link {
     z-index: 10;
 }
 
-#shape-view-upgrade-image, #shape-view-info-image, #shape-view-item-upgrade-image, #shape-view-item-info-image, #drone-ability-info-image {
+#shape-view-upgrade-image, #shape-view-info-image, #shape-view-item-upgrade-image, #shape-view-item-info-image, #drone-ability-info-image, #drone-view-upgrade-image {
     position: absolute;
     top: 50%;
     left: 50px;
@@ -750,7 +750,7 @@ a:-webkit-any-link {
     aspect-ratio: 1 / 1;
 }
 
-#shape-view-upgrade-right-display, #shape-view-info-right-display, #shape-view-item-upgrade-right-display, #shape-view-item-info-right-display, #drone-ability-info-right-display {
+#shape-view-upgrade-right-display, #shape-view-info-right-display, #shape-view-item-upgrade-right-display, #shape-view-item-info-right-display, #drone-ability-info-right-display, #drone-view-upgrade-right-display {
     position: absolute;
     top: 50%;
     right: 50px;
