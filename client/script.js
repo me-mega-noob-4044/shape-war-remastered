@@ -635,6 +635,7 @@ import drone from "../src/js/drone.js";
             this.droneViewUpgradeRightDisplay = UTILS.getElement("drone-view-upgrade-right-display");
             this.droneViewUpgradeMoneyDisplay = UTILS.getElement("drone-view-upgrade-money-display");
             this.droneViewUpgradeMoneyIcon = UTILS.getElement("drone-view-upgrade-money-icon");
+            this.droneViewUpgradeBackButton = UTILS.getElement("drone-view-upgrade-back-button");
             this.dataToImage = {
                 "healthData": "../src/media-files/icons/health.png",
                 "speedData": "../src/media-files/icons/speed.png",
@@ -834,7 +835,7 @@ import drone from "../src/js/drone.js";
                 }, isUpgrading ? 100 : -1);
             }
             barHolderDisplay.style = "margin-left: 45px; width: 100%;";
-            statBarItem.classList.add("stat-bar-item")
+            statBarItem.classList.add("stat-bar-item");
 
             let dataSplit = data.split("Data");
             if (data == "damageData") {
@@ -2214,6 +2215,78 @@ import drone from "../src/js/drone.js";
 
             this.viewInDepth(shape, false, shape.slot, shape.slot);
         }
+        doDroneUpgradeProcessBar(drone, ability, abilityIndx, parentElement) {
+            let droneItem = items.drones.find(e => e.name == drone.name);
+
+            for (let i = 0; i < ability.statTitles.length; i++) {
+                let title = ability.statTitles[i];
+                let icon = ability.statIcons[i];
+
+                let statData = droneItem.abilities[abilityIndx].stats[i];
+                let stat = ability.stats[i];
+
+                if (title) {
+                    let element = document.createElement("div");
+                    element.style = "display: flex; align-items: center; width: 100%; height: 60px;";
+    
+                    let iconDisplay = document.createElement("div");
+                    iconDisplay.style = `position: absolute; width: 40px; height: 40px; background-size: 40px 40px; background-image: url('${icon}');`;
+                    element.appendChild(iconDisplay);
+
+                    let barHolder = document.createElement("div");
+                    barHolder.style = "margin-left: 45px; width: 100%;";
+
+                    let totalStat = statData?.base || statData;
+                    let nextProgress = 0;
+
+                    if (typeof statData == "object") {
+                        nextProgress = statData.level[drone.level];
+
+                        for (let i = 0 ; i < statData.level.length; i++) {
+                            totalStat += statData.level[i];
+                        }
+                    }
+
+                    let statHolder = document.createElement("div");
+                    statHolder.classList.add("stat-amount");
+                    statHolder.innerHTML = UTILS.styleNumberWithComma(stat);
+                    barHolder.appendChild(statHolder);
+                    
+                    if (drone.level < drone.maxlevel && nextProgress > 0) {
+                        let nextProgressDisplay = document.createElement("div");
+                        nextProgressDisplay.style = "position: absolute; color: #00ff00; top: 0px; right: 18px;";
+                        nextProgressDisplay.innerHTML = `+${UTILS.styleNumberWithComma(nextProgress)}`;
+
+                        statHolder.appendChild(nextProgressDisplay);
+                    }
+
+                    let titleDisplay = document.createElement("div");
+                    titleDisplay.style = "color: rgb(67, 67, 67); font-size: 12px; margin-top: -5px;";
+                    titleDisplay.innerHTML = title;
+                    barHolder.appendChild(titleDisplay);
+
+                    let bar = document.createElement("div");
+                    bar.classList.add("stat-bar-style");
+                    barHolder.appendChild(bar);
+
+                    if (drone.level < drone.maxlevel && nextProgress > 0) {
+                        let progressBar = document.createElement("div");
+                        progressBar.style = "position: absolute; top: 0px; left: 0px; height: 100%; background-color: rgb(0, 255, 0);";
+                        progressBar.style.width = `${((stat + nextProgress) / totalStat) * 100}%`;
+                        bar.appendChild(progressBar);
+                    }
+
+                    let currentBar = document.createElement("div");
+                    currentBar.classList.add("stat-bar-item");
+                    currentBar.style.width = `${(stat / totalStat) * 100}%`;
+                    bar.appendChild(currentBar);
+
+                    element.appendChild(barHolder);
+
+                    parentElement.appendChild(element);
+                }
+            }
+        }
         viewDroneInDepth(drone, isStore, isChanging, slotId) { // slotId is for locating the owner shape
             moneyDisplayManager.displayItems(["microchips"]);
             elements.droneViewUI.style.display = "block";
@@ -2322,6 +2395,17 @@ import drone from "../src/js/drone.js";
 
                 this.droneViewUpgradeMoneyIcon.style.backgroundImage = `url("../src/media-files/money/microchips.png")`;
                 this.droneViewUpgradeMoneyDisplay.innerHTML = config.droneCost[drone.level];
+
+                for (let i = 0; i < drone.abilities.length; i++) {
+                    let ability = drone.abilities[i];
+                    this.doDroneUpgradeProcessBar(drone, ability, i, this.droneViewUpgradeRightDisplay);
+                }
+
+                this.droneViewUpgradeBackButton.onclick = () => {
+                    doDarkModeTransition();
+                    this.droneViewUpgradeMenu.style.display = "none";
+                    this.viewDroneInDepth(drone, isStore, isChanging, slotId);
+                };
             };
 
             let isIngoldAndMicrochipsElement = false;

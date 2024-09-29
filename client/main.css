@@ -785,7 +785,7 @@ a:-webkit-any-link {
     border-radius: 100%; 
 }
 
-#shape-view-upgrade-back-button, #shape-view-info-back-button, #shape-view-item-upgrade-back-button, #shape-view-item-info-back-button, #drone-ability-info-back-button {
+#shape-view-upgrade-back-button, #shape-view-info-back-button, #shape-view-item-upgrade-back-button, #shape-view-item-info-back-button, #drone-ability-info-back-button, #drone-view-upgrade-back-button {
     position: absolute;
     top: 20px;
     right: 20px;
