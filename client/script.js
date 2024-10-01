@@ -2797,6 +2797,8 @@ import drone from "../src/js/drone.js";
                 this.tmpElements[i].remove(); // removes the useless diagonal-line-pattern element
             }
 
+            this.tmpElements = []; // resets the array
+
             if (isStore) {
                 for (let i = 0; i < otherElements.length; i++) otherElements[i].style.display = "none";
                 for (let i = 0; i < dynamicElements.length; i++) {
