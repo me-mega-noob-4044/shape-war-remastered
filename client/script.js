@@ -675,6 +675,7 @@ import drone from "../src/js/drone.js";
                 "duration": "Duration",
                 "regenData": "Regeneration Power"
             };
+            this.tmpElements = [];
         }
         showImageBadge(name) {
             for (let i = 0; i < this.shapeElements.length; i++) {
@@ -2790,8 +2791,12 @@ import drone from "../src/js/drone.js";
             }
 
             let dynamicElements = [UTILS.getElement("view-pilot-image-holder"), UTILS.getElement("view-drone-image-holder")];
-            let tmpElements = [];
             let otherElements = [UTILS.getElement("view-pilot-image"), UTILS.getElement("view-drone-image")];
+
+            for (let i = 0; i < this.tmpElements.length; i++) {
+                this.tmpElements[i].remove(); // removes the useless diagonal-line-pattern element
+            }
+
             if (isStore) {
                 for (let i = 0; i < otherElements.length; i++) otherElements[i].style.display = "none";
                 for (let i = 0; i < dynamicElements.length; i++) {
@@ -2799,10 +2804,11 @@ import drone from "../src/js/drone.js";
                     let tmpElement = document.createElement("div");
                     tmpElement.classList.add("diagonal-line-pattern");
                     tmpElement.style = "width: 100%; height: 100%;";
-                    tmpElements.push(tmpElement);
                     parentElement.appendChild(tmpElement);
 
                     parentElement.style.pointerEvents = "none";
+
+                    this.tmpElements.push(tmpElement);
                 }
             } else {
                 for (let i = 0; i < dynamicElements.length; i++) dynamicElements[i].style.pointerEvents = "auto";
@@ -2866,7 +2872,7 @@ import drone from "../src/js/drone.js";
 
             this.shapeViewBackButton.onclick = () => {
                 doDarkModeTransition();
-                for (let i = 0; i < tmpElements.length; i++) tmpElements[i].remove();
+
                 if (isStore || isChanging) {
                     elements.chooseShapesUI.style.display = "block";
                     this.shapeViewUI.style.display = "none";
@@ -3130,8 +3136,6 @@ import drone from "../src/js/drone.js";
                     this.shapeViewBuyButton.onclick = () => {
                         if (userProfile.bank.silver - shape.cost.silver >= 0) {
                             if (userProfile.bank.gold - shape.cost.gold >= 0) {
-                                for (let i = 0; i < tmpElements.length; i++) tmpElements[i].remove();
-
                                 let oldShape = userProfile.shapes.find(e => e.slot == shape.slot);
                                 if (oldShape) {
                                     oldShape.slot = null;
