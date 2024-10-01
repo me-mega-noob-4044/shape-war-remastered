@@ -87,6 +87,8 @@ import drone from "../src/js/drone.js";
         }
     };
 
+    // Don't really need to use a database (MongoDB for example) for this because
+    // this is only a single player game
     var userProfile = new class {
         constructor() {
             this.bank = {
@@ -96,7 +98,7 @@ import drone from "../src/js/drone.js";
                 microchips: 0 + 1e3,
                 keys: 100,
                 powercells: 2e3,
-                tokens: 0,
+                tokens: 0 + 10,
                 components: {
                     shapes: {},
                     weapon: {},
@@ -520,8 +522,24 @@ import drone from "../src/js/drone.js";
         upgradeDrone(drone, dontSaveData) {
             let item = items.drones.find(e => e.name == drone.name);
 
-            // Stuff:
+            for (let i = 0; i < drone.abilities.length; i++) {
+                let ability = drone.abilities[i];
+                let abilityItem = item.abilities[i]
 
+                for (let t = 0; t < abilityItem.stats.length; t++) {
+                    let stat = abilityItem.stats[t];
+
+                    if (typeof stat == "object") {
+                        let increase = stat.level[drone.level];
+
+                        if (increase) {
+                            ability.stats[t] += increase;
+                        }
+                    }
+                }
+            }
+
+            drone.level++;
             if (!dontSaveData) userProfile.saveProfile();
         }
     };
@@ -636,6 +654,7 @@ import drone from "../src/js/drone.js";
             this.droneViewUpgradeMoneyDisplay = UTILS.getElement("drone-view-upgrade-money-display");
             this.droneViewUpgradeMoneyIcon = UTILS.getElement("drone-view-upgrade-money-icon");
             this.droneViewUpgradeBackButton = UTILS.getElement("drone-view-upgrade-back-button");
+            this.droneViewUpgradeButton2 = UTILS.getElement("drone-view-upgrade-button-2");
             this.dataToImage = {
                 "healthData": "../src/media-files/icons/health.png",
                 "speedData": "../src/media-files/icons/speed.png",
@@ -2215,7 +2234,8 @@ import drone from "../src/js/drone.js";
 
             this.viewInDepth(shape, false, shape.slot, shape.slot);
         }
-        doDroneUpgradeProcessBar(drone, ability, abilityIndx, parentElement) {
+        // isUpgrading allows the function/method to do a nice upgrading animation
+        doDroneUpgradeProcessBar(drone, ability, abilityIndx, parentElement, isUpgrading) {
             let droneItem = items.drones.find(e => e.name == drone.name);
 
             for (let i = 0; i < ability.statTitles.length; i++) {
@@ -2238,8 +2258,10 @@ import drone from "../src/js/drone.js";
 
                     let totalStat = statData?.base || statData;
                     let nextProgress = 0;
+                    let lastProgress = 0;
 
                     if (typeof statData == "object") {
+                        lastProgress = statData.level[drone.level - 1];
                         nextProgress = statData.level[drone.level];
 
                         for (let i = 0 ; i < statData.level.length; i++) {
@@ -2272,13 +2294,35 @@ import drone from "../src/js/drone.js";
                     if (drone.level < drone.maxlevel && nextProgress > 0) {
                         let progressBar = document.createElement("div");
                         progressBar.style = "position: absolute; top: 0px; left: 0px; height: 100%; background-color: rgb(0, 255, 0);";
-                        progressBar.style.width = `${((stat + nextProgress) / totalStat) * 100}%`;
+
+                        if (isUpgrading) progressBar.style.transition = "width .5s";
+                        if (isUpgrading) {
+                            progressBar.style.width = `${(stat / totalStat) * 100}%`;
+
+                            setTimeout(() => {
+                                progressBar.style.width = `${((stat + nextProgress) / totalStat) * 100}%`;
+                            }, 100);
+                        } else {
+                            progressBar.style.width = `${((stat + nextProgress) / totalStat) * 100}%`;
+                        }
+
                         bar.appendChild(progressBar);
                     }
 
                     let currentBar = document.createElement("div");
                     currentBar.classList.add("stat-bar-item");
-                    currentBar.style.width = `${(stat / totalStat) * 100}%`;
+
+                    if (isUpgrading) currentBar.style.transition = "width .5s";
+                    if (isUpgrading) {
+                        currentBar.style.width = `${((stat - lastProgress) / totalStat) * 100}%`;
+
+                        setTimeout(() => {
+                            currentBar.style.width = `${(stat / totalStat) * 100}%`;
+                        }, 100);
+                    } else {
+                        currentBar.style.width = `${(stat / totalStat) * 100}%`;
+                    }
+
                     bar.appendChild(currentBar);
 
                     element.appendChild(barHolder);
@@ -2369,6 +2413,14 @@ import drone from "../src/js/drone.js";
                 this.droneViewBuyButton.style.display = "none";
             }
 
+            let isUpgrading = false;
+
+            if (drone.level < drone.maxlevel) {
+                this.droneViewUpgradeButton.style.display = "flex";
+            } else {
+                this.droneViewUpgradeButton.style.display = "none";
+            }
+
             this.droneViewUpgradeButton.onclick = () => {
                 doDarkModeTransition();
                 this.droneViewUpgradeMenu.style.display = "block";
@@ -2380,7 +2432,11 @@ import drone from "../src/js/drone.js";
                 levelDisplay.classList.add("shape-view-upgrade-name-level-display");
                 levelDisplay.innerHTML = drone.level;
 
-                nameDisplay.innerHTML = `<span style="color: white;">${drone.name}</span> upgrade to level ${drone.level + 1}`;
+                if (drone.level >= drone.maxlevel) {
+                    nameDisplay.innerHTML = `<span style="color: white;">${drone.name}</span>`;
+                } else {
+                    nameDisplay.innerHTML = `<span style="color: white;">${drone.name}</span> upgrade to level ${drone.level + 1}`;
+                }
 
                 levelDisplay.style.backgroundColor = config.tierColors[drone.tier];
                 this.droneViewUpgradeName.appendChild(levelDisplay);
@@ -2393,13 +2449,32 @@ import drone from "../src/js/drone.js";
 
                 this.droneViewUpgradeRightDisplay.innerHTML = "";
 
+                let droneCost = config.droneCost[drone.level];
+
                 this.droneViewUpgradeMoneyIcon.style.backgroundImage = `url("../src/media-files/money/microchips.png")`;
-                this.droneViewUpgradeMoneyDisplay.innerHTML = config.droneCost[drone.level];
+                this.droneViewUpgradeMoneyDisplay.innerHTML = droneCost;
 
                 for (let i = 0; i < drone.abilities.length; i++) {
                     let ability = drone.abilities[i];
-                    this.doDroneUpgradeProcessBar(drone, ability, i, this.droneViewUpgradeRightDisplay);
+                    this.doDroneUpgradeProcessBar(drone, ability, i, this.droneViewUpgradeRightDisplay, isUpgrading);
                 }
+
+                if (drone.level < drone.maxlevel) {
+                    this.droneViewUpgradeButton2.style.display = "flex";
+                } else {
+                    this.droneViewUpgradeButton2.style.display = "none";
+                }
+
+                this.droneViewUpgradeButton2.onclick = () => {
+                    if (userProfile.bank.microchips - droneCost >= 0 && drone.level < drone.maxlevel) {
+                        doDarkModeTransition();
+                        userProfile.changeBank("microchips", -droneCost);
+                        upgraderManager.upgradeDrone(drone);
+
+                        isUpgrading = true;
+                        this.droneViewUpgradeButton.click();
+                    }
+                };
 
                 this.droneViewUpgradeBackButton.onclick = () => {
                     doDarkModeTransition();
