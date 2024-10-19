@@ -6,6 +6,7 @@ import shape from "../src/js/shape.js";
 import weapon from "../src/js/weapon.js";
 import module from "../src/js/module.js";
 import drone from "../src/js/drone.js";
+import pilot from "../src/js/pilot.js";
 
 (function () {
     var elements = {
@@ -16,7 +17,8 @@ import drone from "../src/js/drone.js";
         shapeViewUI: UTILS.getElement("shapeViewUI"),
         darkFadeTransition: UTILS.getElement("darkFadeTransition"),
         chooseShapesUI: UTILS.getElement("chooseShapesUI"),
-        droneViewUI: UTILS.getElement("droneViewUI")
+        droneViewUI: UTILS.getElement("droneViewUI"),
+        pilotViewUI: UTILS.getElement("pilotViewUI")
     };
 
     var indxRole = ["Tank", "Assault", "Scout", "Support"];
@@ -357,6 +359,13 @@ import drone from "../src/js/drone.js";
 
             for (let i = 0; i < items.weapons.length + items.modules.length + items.activeModules.length; i++) {
                 let data = items.weapons[i] || items.modules[i - items.weapons.length] || items.activeModules[i - (items.weapons.length + items.modules.length)];
+                if (data) {
+                    this.cacheImage(data.imageSource);
+                }
+            }
+
+            for (let i = 0; i < items.pilots.length; i++) {
+                let data = items.pilots[i];
                 if (data) {
                     this.cacheImage(data.imageSource);
                 }
@@ -2659,6 +2668,9 @@ import drone from "../src/js/drone.js";
             };
 
         }
+        viewPilotInDepth(pilot, isStore, isChanging, slotId) { // slotId is for locating the owner shape
+            moneyDisplayManager.displayItems(["gold", "tokens"]);
+        }
         needToBeEquippedMessage(buttonPressed) {
             let mainBody = document.createElement("div");
             mainBody.style = "position: absolute; top: 0px; left: 0px; width: 100%; height: 100%;";
@@ -2826,6 +2838,7 @@ import drone from "../src/js/drone.js";
                     if (shape.slot != null && shape.slot != undefined) {
                         this.shapeViewUI.style.display = "none";
                         if (pilot) {
+                            doDarkModeTransition();
                         } else {
                             this.changeSlot(shape.sid, shape, "pilot");
                         }
@@ -2930,18 +2943,6 @@ import drone from "../src/js/drone.js";
                     this.viewInDepth(shape, isStore, isChanging, slotId);
                 };
             };
-
-            /*
-            if (isStore || isChanging) {
-                this.shapeViewUnequipButton.style.display = "none";
-            } else {
-                this.shapeViewUnequipButton.style.display = "block";
-            }
-
-            this.shapeViewUnequipButton.onclick = () => {
-                if (!isStore) { }
-            };
-            */
 
             let needMoreSilverIsOn = false;
 
@@ -3261,11 +3262,14 @@ import drone from "../src/js/drone.js";
                     let tmp = tmpItems[i];
                     if (type == "drone") {
                         items.push(new drone(tmp, tmpItems.owner));
+                    } else if (type == "pilot") {
+                        items.push(new pilot(tmp, tmpItems.owner));
                     } else {
                         items.push(new shape(tmp, undefined, true));
                     }
                 }
             }
+
 
             this.changeShapeDisplay.innerHTML = "";
 
@@ -3301,29 +3305,38 @@ import drone from "../src/js/drone.js";
                     if (createObjs) {
                         let costDisplay = document.createElement("div");
                         let costAmount = document.createElement("div");
-                        let image = imageManager.getImage(`../src/media-files/money/${type == "drone" ? "microchips" : "silver"}.png`);
+                        let image = imageManager.getImage(`../src/media-files/money/${type == "pilot" ? "gold" : type == "drone" ? "microchips" : "silver"}.png`);
                         image.style = "position: absolute; top: 0px; left: 0px; width: 30px; height: 30px;";
                         costDisplay.classList.add("store-item-cost");
                         costAmount.style.marginLeft = "-5px";
-                        costAmount.innerHTML = UTILS.styleNumberWithComma(type == "drone" ? item.cost : item.cost.silver);
+                        costAmount.innerHTML = UTILS.styleNumberWithComma(type == "pilot" ? item.cost : type == "drone" ? item.cost : item.cost.silver);
                         costDisplay.appendChild(image);
                         costDisplay.appendChild(costAmount);
                         element.appendChild(costDisplay);
                     }
 
-                    let statAmount = item.abilities.length + (type == "drone" ? 0 : 2);
+                    if (type != "pilot") {
+                        let statAmount = item.abilities.length + (type == "drone" ? 0 : 2);
 
-                    let statsDisplay = document.createElement("div");
-                    statsDisplay.classList.add("store-stats-display-holder-item");
-                    statsDisplay.style.height = `${(statAmount * 40) + (statAmount >= 3 ? (statAmount - 2) * 5 : 0)}px`;
+                        let statsDisplay = document.createElement("div");
+                        statsDisplay.classList.add("store-stats-display-holder-item");
+                        statsDisplay.style.height = `${(statAmount * 40) + (statAmount >= 3 ? (statAmount - 2) * 5 : 0)}px`;
 
-                    this.drawChooseShapeDisplay(item, statsDisplay, statAmount, type);
+                        this.drawChooseShapeDisplay(item, statsDisplay, statAmount, type);
 
-                    element.appendChild(statsDisplay);
+                        element.appendChild(statsDisplay);
+                    }
 
-                    let shapeImage = canvasDrawer.createUIItem(item);
-                    shapeImage.style = "width: calc(100% - 50px); height: calc(100% - 50px);";
-                    element.appendChild(shapeImage);
+                    if (type == "pilot") {
+                        // console.log(item, item.imageSource);
+                        let image = imageManager.getImage(item.imageSource);
+                        image.style = "width: calc(100% - 50px); height: calc(100% - 50px);";
+                        element.appendChild(image);
+                    } else {
+                        let shapeImage = canvasDrawer.createUIItem(item);
+                        shapeImage.style = "width: calc(100% - 50px); height: calc(100% - 50px);";
+                        element.appendChild(shapeImage);
+                    }
 
                     if (oldShape) {
                         let weapons = userProfile.weapons.filter(e => e.owner == item.sid).sort((a, b) => a.slot - b.slot);
@@ -3340,17 +3353,20 @@ import drone from "../src/js/drone.js";
                     element.onclick = () => {
                         elements.chooseShapesUI.style.display = "none";
                         if (createObjs) {
-                            if (type == "drone") {
+                            if (type == "pilot") {
+                                this.viewPilotInDepth(item, true, false, slot);
+                            } else if (type == "drone") {
                                 this.viewDroneInDepth(item, true, false, slot);
                             } else {
                                 this.shapeViewBuyMoneyIcon.style.backgroundImage = `url('../src/media-files/money/silver.png'), none`;
                                 this.shapeViewBuyMoneyDisplay.innerHTML = UTILS.styleNumberWithComma(item.cost.silver);
                                 item.slot = slot;
 
-                                this.viewInDepth(item, true); // item, isStore, isChaning, slotId
+                                this.viewInDepth(item, true); // item, isStore, isChanging, slotId
                             }
                         } else {
-                            if (type == "drone") {
+                            if (type == "pilot") {
+                            } else if (type == "drone") {
                                 this.viewDroneInDepth(item, false, true, slot);
                             } else {
                                 this.viewInDepth(item, false, true, slot);
@@ -3365,7 +3381,7 @@ import drone from "../src/js/drone.js";
             if (!items.length) {
                 let element = document.createElement("div");
                 element.style = "font-size: 22px; color: white; position: absolute; width: 100%; height: 100%; top: 0px; left: 0px; display: flex; align-items: center; justify-content: center;";
-                element.innerHTML = `You have no ${type == "drone" ? "drones" : "shapes"} in your inventory`;
+                element.innerHTML = `You have no ${type == "pilot" ? "pilots" : type == "drone" ? "drones" : "shapes"} in your inventory`;
 
                 this.changeShapeDisplay.appendChild(element);
             }
@@ -3374,6 +3390,8 @@ import drone from "../src/js/drone.js";
             doDarkModeTransition();
             if (type == "drone") {
                 moneyDisplayManager.displayItems(["microchips"]);
+            } else if (type == "pilot") {
+                moneyDisplayManager.displayItems(["gold", "tokens"]);
             } else {
                 moneyDisplayManager.displayItems(["powercells", "gold", "silver"]);
             }
@@ -3392,7 +3410,7 @@ import drone from "../src/js/drone.js";
                 this.changeShapeInventoryButton.style.backgroundColor = notClickBackground;
                 this.changeShapeInventoryButton.style.pointerEvents = "auto";
 
-                this.displayChangeSlot((type == "drone" ? items.drones : items.shapes).sort((a, b) => a.tier - b.tier), true, slot, null, type);
+                this.displayChangeSlot((type == "pilot" ? items.pilots : type == "drone" ? items.drones : items.shapes).sort((a, b) => a.tier - b.tier), true, slot, null, type);
             };
             this.changeShapeInventoryButton.onclick = () => {
                 this.changeShapeInventoryButton.style.backgroundColor = clickBackground;
@@ -3400,7 +3418,7 @@ import drone from "../src/js/drone.js";
                 this.changeShapeStoreButton.style.backgroundColor = notClickBackground;
                 this.changeShapeStoreButton.style.pointerEvents = "auto";
 
-                let unequipedShapes = type == "drone" ? userProfile.drones.filter(e => e.owner == null || e.owner == undefined) : userProfile.shapes.filter(e => typeof e.slot != "number");
+                let unequipedShapes = type == "pilot" ? userProfile.pilots.filter(e => e.owner == null || e.owner == undefined) : type == "drone" ? userProfile.drones.filter(e => e.owner == null || e.owner == undefined) : userProfile.shapes.filter(e => typeof e.slot != "number");
                 this.displayChangeSlot(unequipedShapes, false, slot, oldShape, type);
             };
 
@@ -3408,7 +3426,7 @@ import drone from "../src/js/drone.js";
             if (oldShape) {
                 let replacingText = document.createElement("div");
                 replacingText.style = `margin-top: 3px; margin-left: 15px; width: 100%;`;
-                replacingText.innerHTML = type == "drone" ? "Changing drone" : "Select another shape";
+                replacingText.innerHTML = type == "pilot" ? "Changing pilot" : type == "drone" ? "Changing drone" : "Select another shape";
 
                 let nameHolder = document.createElement("div");
                 let levelDisplay = document.createElement("div");
@@ -3432,13 +3450,13 @@ import drone from "../src/js/drone.js";
                 this.changeShapeReplacingHolder.appendChild(nameHolder);
             }
 
-            let unequipedShapes = type == "drone" ? userProfile.drones.filter(e => e.owner == null || e.owner == undefined) : userProfile.shapes.filter(e => typeof e.slot != "number");
+            let unequipedShapes = type == "pilot" ? userProfile.pilots.filter(e => e.owner == null || e.owner == undefined) : type == "drone" ? userProfile.drones.filter(e => e.owner == null || e.owner == undefined) : userProfile.shapes.filter(e => typeof e.slot != "number");
             if (unequipedShapes.length) {
                 this.changeShapeInventoryButton.click();
                 this.displayChangeSlot(unequipedShapes, false, slot, oldShape, type);
             } else {
                 this.changeShapeStoreButton.click();
-                this.displayChangeSlot((type == "drone" ? items.drones : items.shapes).sort((a, b) => a.tier - b.tier), true, slot, null, type);
+                this.displayChangeSlot((type == "pilot" ? items.pilots : type == "drone" ? items.drones : items.shapes).sort((a, b) => a.tier - b.tier), true, slot, null, type);
             }
 
             this.shapeViewBackButton2.onclick = () => {
