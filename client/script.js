@@ -2820,8 +2820,15 @@ import drone from "../src/js/drone.js";
                     otherElements[i].style.display = "flex";
                 }
 
+                let pilot = userProfile.pilots.find(e => e.owner == shape.sid);
+
                 dynamicElements[0].onclick = () => {
                     if (shape.slot != null && shape.slot != undefined) {
+                        this.shapeViewUI.style.display = "none";
+                        if (pilot) {
+                        } else {
+                            this.changeSlot(shape.sid, shape, "pilot");
+                        }
                     } else {
                         this.needToBeEquippedMessage("pilots");
                     }

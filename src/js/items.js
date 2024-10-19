@@ -235,7 +235,40 @@ const activeModules = [{
     cost: 40
 }];
 
-const pilots = [];
+// main = data that is displayed
+
+const skills = [{
+    name: "Armor Expert",
+    description: "Increases the maximum durability of the shape.",
+    imageSource: "../src/media-files/modules/armor_kit.png",
+    main: "healthIncrease",
+    healthIncrease: .09
+}, {
+    name: "Tough Guy",
+    description: "Increases the maximum durability of the shape but reduces 15% of the shape's weapon damage.",
+    imageSource: "../src/media-files/modules/armor_kit.png",
+    main: "healthIncrease",
+    healthIncrease: .15,
+    dmgIncrease: -.15
+}];
+
+// description = story
+
+const pilots = [{
+    tier: 0,
+    name: "Harold",
+    description: `
+    Year 220.
+    Harold never imagined that, at the prime age of 45, he would be at the lowest of his life. Life had struck him hard&ndash;his once thriving business, which had been his pride and joy, collapsed under the weight of the war. But that wasn't what hurt the most. His family, friends, and siblings were being drafted into the endless battle, disappearing without a trace, never to be heard of again.
+    He wasn't unfamiliar with the military; he had served for a bit during his youth, back when the wars were more about political standing. He left that life behind, wanting to build something more stable, more free, and his bloodborne. But as the war grew, and the world spiraled deepering into chaos, his past came knocking back on his door. A letter arrived&ndash;a formal draft, cold and impersonal, calling him back into the life he had abandoned. This time however, he had been selected for a special top secret program that promised the conclusion of the war.
+    He stared at the letter for hours. He had nothing left to lose: his family was gone, his business became a financial leech, and everything around him had no future like the war&ndash;torn world around him. Maybe this program is the answer, he thought. The last chance to make sense of everything around him. Mixed with desperation and hope, he signed his acceptance without looking back.
+    He had no idea what the program truly had to offer. The instructions were vague, the instructors cold and clinical, but Harold pressed forward, wanting to end this war, the war that took the ones he loved away from him. Day after day, the drills became more intense, pushing him beyond his own limits. The purpose of the training was never fully revealed, he assumed that it was just another hard military training&ndash;until the day he was led into a hangar, staring up at the towering combat shapes.
+    It was then that the pieces started falling into place, he wasn't trained to fight like a traditional soldier. The program had prepared him to pilot these massive war machines. And while the government had promised that the program would end the war, he had soon realized the truth: other nations had their own “secret programs,” training their own soldiers to do the exact same thing he was.
+    This war was never going to end. It was just the beginning, and now, Harold is a part of it.
+    `,
+    skills: 5,
+    cost: 100
+}];
 
 const drones = [{
     tier: 0,
