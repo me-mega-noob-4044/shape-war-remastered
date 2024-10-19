@@ -134,7 +134,7 @@ a:-webkit-any-link {
     height: 50px;
 }
 
-#shapeViewUI, #chooseShapesUI, #shapeItemsUI, #droneViewUI {
+#shapeViewUI, #chooseShapesUI, #shapeItemsUI, #droneViewUI, #pilotViewUI {
     display: none;
     position: absolute;
     top: 0px;

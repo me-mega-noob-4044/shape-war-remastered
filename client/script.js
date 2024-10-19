@@ -1772,6 +1772,18 @@ import pilot from "../src/js/pilot.js";
                     this.changeShapeItemDisplay.appendChild(element);
                 }
             }
+
+            if (!itemsData.length) {
+                this.shapeItemViewUnequipButton.style.display = "none";
+                this.shapeItemViewEquipButton.style.display = "none";
+                this.shapeItemViewUpgradeButton.style.display = "none";
+
+                let element = document.createElement("div");
+                element.style = "font-size: 22px; color: white; position: absolute; width: 100%; height: 100%; top: 0px; left: 0px; display: flex; align-items: center; justify-content: center;";
+                element.innerHTML = `You have no ${itemType == "weapon" ? "weapons" : "modules"} in your inventory`;
+
+                this.changeShapeItemDisplay.appendChild(element);
+            }
         }
         doInDepthShapeItem(shape, oldWpn, slot, currentIndx = 0, isStore = "SUPERMAN", itemType) {
             let isModuleData = false;
@@ -2384,7 +2396,7 @@ import pilot from "../src/js/pilot.js";
 
                         let shape = userProfile.shapes.find(e => e.sid == slotId);
 
-                        this.changeSlot(slotId, shape, "drone", true);
+                        this.changeSlot(slotId, shape, "drone", drone);
                     };
 
                     this.droneViewUnequipButton.onclick = () => {
@@ -2419,17 +2431,16 @@ import pilot from "../src/js/pilot.js";
                         this.viewInDepth(shape, false, false, shape.slot);
                     };
                 }
-                this.droneViewUpgradeButton.style.display = "flex";
                 this.droneViewBuyButton.style.display = "none";
+
+                if (drone.level < drone.maxlevel) {
+                    this.droneViewUpgradeButton.style.display = "flex";
+                } else {
+                    this.droneViewUpgradeButton.style.display = "none";
+                }
             }
 
             let isUpgrading = false;
-
-            if (drone.level < drone.maxlevel) {
-                this.droneViewUpgradeButton.style.display = "flex";
-            } else {
-                this.droneViewUpgradeButton.style.display = "none";
-            }
 
             this.droneViewUpgradeButton.onclick = () => {
                 doDarkModeTransition();
@@ -2670,6 +2681,10 @@ import pilot from "../src/js/pilot.js";
         }
         viewPilotInDepth(pilot, isStore, isChanging, slotId) { // slotId is for locating the owner shape
             moneyDisplayManager.displayItems(["gold", "tokens"]);
+            elements.pilotViewUI.style.display = "block";
+
+            let nameDisplayHolder = document.createElement("div");
+            nameDisplayHolder.style = "";
         }
         needToBeEquippedMessage(buttonPressed) {
             let mainBody = document.createElement("div");
@@ -3464,6 +3479,8 @@ import pilot from "../src/js/pilot.js";
                 if (nextPG) {
                     elements.chooseShapesUI.style.display = "none";
                     elements.droneViewUI.style.display = "block";
+
+                    this.viewDroneInDepth(nextPG, false, true, nextPG.owner);
                 } else if (oldShape) {
                     elements.chooseShapesUI.style.display = "none";
                     this.shapeViewUI.style.display = "block";
