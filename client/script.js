@@ -674,6 +674,11 @@ import pilot from "../src/js/pilot.js";
             this.pilotDisplayImage = UTILS.getElement("pilot-display-image");
             this.pilotRightSideDisplay = UTILS.getElement("pilot-right-side-display");
             this.pilotStoryDisplay = UTILS.getElement("pilot-story-display");
+            this.pilotOperatesHeader = UTILS.getElement("pilot-operates-header");
+            this.pilotHeaderDisplayLevel = UTILS.getElement("pilot-header-display-level");
+            this.pilotHeaderDisplayName = UTILS.getElement("pilot-header-display-name");
+            this.pilotSkillHeaderActiveSkills = UTILS.getElement("pilot-skill-header-active-skills");
+            this.pilotSkillHeaderMaxSkills = UTILS.getElement("pilot-skill-header-max-skills");
             this.dataToImage = {
                 "healthData": "../src/media-files/icons/health.png",
                 "speedData": "../src/media-files/icons/speed.png",
@@ -2716,6 +2721,20 @@ import pilot from "../src/js/pilot.js";
             image.style = "width: 100%; height: 100%;";
             this.pilotDisplayImage.appendChild(image);
 
+            if (isStore || isChanging) {
+                this.pilotOperatesHeader.innerHTML = "Unassigned";
+                this.pilotHeaderDisplayLevel.style.display = "none";
+                this.pilotHeaderDisplayName.innerHTML = "";
+                this.pilotSkillHeaderActiveSkills.innerHTML = "0";
+                this.pilotSkillHeaderMaxSkills.innerHTML = pilot.maxSkills;
+            } else {
+                this.pilotOperatesHeader.innerHTML = "Operates:";
+                this.pilotHeaderDisplayLevel.style.display = "flex";
+                this.pilotHeaderDisplayName.innerHTML = "Micheal Jackson"; // placeholder
+                this.pilotSkillHeaderActiveSkills.innerHTML = "-100"; // placeholder
+                this.pilotSkillHeaderMaxSkills.innerHTML = "100"; // placeholder
+            }
+
             if (isStore) {
                 this.pilotViewEquipButton.style.display = "none";
                 this.pilotViewUnequipButton.style.display = "none";
@@ -2724,8 +2743,10 @@ import pilot from "../src/js/pilot.js";
                 this.pilotViewChangeButton.style.display = "none";
                 this.pilotViewBuyMoneyDisplay.innerHTML = UTILS.styleNumberWithComma(pilot.cost);
             } else {
-                //
-                
+                if (isChanging) {
+                } else {
+                    //
+                }
             }
 
             this.pilotStoryDisplay.innerHTML = pilot.description;

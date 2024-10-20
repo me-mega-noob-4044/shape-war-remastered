@@ -5,7 +5,7 @@ export default class {
         this.name = data.name;
         this.owner = ownerSID;
         this.description = data.description;
-        this.skills = data.skills;
+        this.maxSkills = data.maxSkills;
         this.imageSource = data.imageSource;
         this.cost = data.cost;
     }
