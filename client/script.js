@@ -664,6 +664,12 @@ import pilot from "../src/js/pilot.js";
             this.droneViewUpgradeMoneyIcon = UTILS.getElement("drone-view-upgrade-money-icon");
             this.droneViewUpgradeBackButton = UTILS.getElement("drone-view-upgrade-back-button");
             this.droneViewUpgradeButton2 = UTILS.getElement("drone-view-upgrade-button-2");
+            this.pilotDisplayName = UTILS.getElement("pilot-display-name");
+            this.pilotViewEquipButton = UTILS.getElement("pilot-view-equip-button");
+            this.pilotViewUnequipButton = UTILS.getElement("pilot-view-unequip-button");
+            this.pilotViewUpgradeButton = UTILS.getElement("pilot-view-upgrade-button");
+            this.pilotViewBuyButton = UTILS.getElement("pilot-view-buy-button");
+            this.pilotViewChangeButton = UTILS.getElement("pilot-view-change-button");
             this.dataToImage = {
                 "healthData": "../src/media-files/icons/health.png",
                 "speedData": "../src/media-files/icons/speed.png",
@@ -2683,8 +2689,33 @@ import pilot from "../src/js/pilot.js";
             moneyDisplayManager.displayItems(["gold", "tokens"]);
             elements.pilotViewUI.style.display = "block";
 
+            this.pilotDisplayName.innerHTML = "";
             let nameDisplayHolder = document.createElement("div");
-            nameDisplayHolder.style = "";
+            nameDisplayHolder.style = "display: flex; align-items: center;";
+
+            let levelDisplay = document.createElement("div");
+            levelDisplay.style = "display: flex; align-items: center; width: 37px; height: 37px; justify-content: center; border-radius: 100%; border: solid; border-color: white; border-width: 1px;";
+            levelDisplay.style.backgroundColor = config.tierColors[pilot.tier];
+            levelDisplay.innerHTML = 1;
+
+            let nameDisplay = document.createElement("div");
+            nameDisplay.style = "margin-left: 7px;";
+            nameDisplay.innerHTML = pilot.name;
+
+            nameDisplayHolder.appendChild(levelDisplay);
+            nameDisplayHolder.appendChild(nameDisplay);
+
+            this.pilotDisplayName.appendChild(nameDisplayHolder);
+
+            if (isStore) {
+                this.pilotViewEquipButton.style.display = "none";
+                this.pilotViewUnequipButton.style.display = "none";
+                this.pilotViewUpgradeButton.style.display = "none";
+                this.pilotViewBuyButton.style.display = "flex";
+                this.pilotViewChangeButton.style.display = "none";
+            } else {
+                //
+            }
         }
         needToBeEquippedMessage(buttonPressed) {
             let mainBody = document.createElement("div");

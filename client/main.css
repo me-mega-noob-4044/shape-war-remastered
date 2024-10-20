@@ -568,7 +568,7 @@ a:-webkit-any-link {
     border-radius: 100%; 
 }
 
-.shape-view-bottom-display, .shape-view-upgrade-bottom, .drone-view-bottom-display {
+.shape-view-bottom-display, .shape-view-upgrade-bottom, .drone-view-bottom-display, .pilot-view-bottom-display {
     position: absolute;
     display: flex;
     align-items: center;
@@ -579,7 +579,7 @@ a:-webkit-any-link {
     width: 100%;
 }
 
-.shape-view-bottom-button-style, .drone-view-bottom-button-style {
+.shape-view-bottom-button-style, .drone-view-bottom-button-style, .pilot-view-bottom-button-style {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -592,7 +592,7 @@ a:-webkit-any-link {
     border-radius: 4px;
 }
 
-#shape-view-back-button, #shape-view-back-button-2, #shape-view-back-button-3, #drone-view-back-button {
+#shape-view-back-button, #shape-view-back-button-2, #shape-view-back-button-3, #drone-view-back-button, #pilot-view-back-button {
     position: absolute;
     top: 20px;
     left: 30px;
@@ -607,6 +607,10 @@ a:-webkit-any-link {
     background-color: rgb(0, 0, 0, .3);
 }
 
+#pilot-view-back-button:hover {
+    background-color: rgb(0, 0, 0, .3);
+}
+
 #drone-view-back-button:hover {
     background-color: rgb(0, 0, 0, .3);
 }
@@ -615,12 +619,12 @@ a:-webkit-any-link {
     background-color: rgb(0, 0, 0, .3);
 }
 
-#shape-view-upgrade-button, #shape-item-view-upgrade-button, #drone-view-upgrade-button{
+#shape-view-upgrade-button, #shape-item-view-upgrade-button, #drone-view-upgrade-button, #pilot-view-upgrade-button {
     margin-left: 15px;
     background-color: rgb(1, 207, 77);
 }
 
-#shape-view-upgrade-button-2, #shape-view-buy-button, #drone-view-buy-button, #shape-item-view-buy-button, #shape-view-item-upgrade-button-2, #drone-view-upgrade-button-2 {
+#shape-view-upgrade-button-2, #shape-view-buy-button, #pilot-view-buy-button, #drone-view-buy-button, #shape-item-view-buy-button, #shape-view-item-upgrade-button-2, #drone-view-upgrade-button-2 {
     margin-left: 15px;
     background-color: rgb(1, 207, 77);
     flex-direction: column;
@@ -630,8 +634,12 @@ a:-webkit-any-link {
     display: none;
 }
 
-#shape-view-buy-button, #drone-view-buy-button {
+#shape-view-buy-button, #drone-view-buy-button, #pilot-view-buy-button {
     display: none;
+}
+
+#pilot-view-upgrade-button:hover {
+    background-color: rgb(1, 193, 71);
 }
 
 #drone-view-upgrade-button:hover {
@@ -666,6 +674,10 @@ a:-webkit-any-link {
     background-color: rgb(1, 193, 71);
 }
 
+#pilot-view-buy-button:hover {
+    background-color: rgb(1, 193, 71);
+}
+
 #shape-item-view-buy-button:hover {
     background-color: rgb(1, 193, 71);
 }
@@ -676,7 +688,13 @@ a:-webkit-any-link {
     background-color: rgba(35, 134, 232);
 }
 
-#shape-view-change-button, #shape-view-equip-button, #shape-item-view-equip-button, #shape-item-view-unequip-button, #drone-view-equip-button, #drone-view-unequip-button {
+#pilot-view-change-button {
+    margin-left: 15px;
+    text-align: center;
+    background-color: rgba(35, 134, 232);
+}
+
+#shape-view-change-button, #shape-view-equip-button, #pilot-view-unequip-button, #shape-item-view-equip-button, #pilot-view-equip-button, #shape-item-view-unequip-button, #drone-view-equip-button, #drone-view-unequip-button {
     text-align: center;
     background-color: rgba(35, 134, 232);
 }
@@ -685,11 +703,23 @@ a:-webkit-any-link {
     background-color: rgb(28, 110, 191);
 }
 
+#pilot-view-unequip-button:hover {
+    background-color: rgb(28, 110, 191);
+}
+
+#pilot-view-equip-button:hover {
+    background-color: rgb(28, 110, 191);
+}
+
 #drone-view-equip-button:hover {
     background-color: rgb(28, 110, 191);
 }
 
 #shape-item-view-unequip-button:hover {
+    background-color: rgb(28, 110, 191);
+}
+
+#pilot-view-change-button:hover {
     background-color: rgb(28, 110, 191);
 }
 
@@ -766,7 +796,7 @@ a:-webkit-any-link {
     overflow-x: hidden;
 }
 
-#shape-view-upgrade-money-icon, #shape-view-buy-money-icon, #drone-view-buy-money-icon, #shape-item-view-buy-money-icon, #shape-view-item-upgrade-money-icon, #drone-view-upgrade-money-icon {
+#shape-view-upgrade-money-icon, #shape-view-buy-money-icon, #drone-view-buy-money-icon, #pilot-view-buy-money-icon, #shape-item-view-buy-money-icon, #shape-view-item-upgrade-money-icon, #drone-view-upgrade-money-icon {
     width: 30px;
     height: 30px;
     background-size: 30px 30px; 
@@ -1056,4 +1086,31 @@ a:-webkit-any-link {
     width: 100%;
     font-weight: 600;
     background-color: rgb(0, 0, 0, .2);
+}
+
+#pilot-display-name {
+    position: absolute;
+    font-size: 24px;
+    color: white;
+    left: 30px;
+    top: 55px;
+}
+
+#pilot-display-image {
+    position: absolute;
+    top: 115px;
+    left: 30px;
+    width: 375px;
+    height: 375px;
+    background-size: 375px 375px;
+    background-color: white;
+}
+
+#pilot-right-side-display {
+    position: absolute;
+    top: 55px;
+    right: 30px;
+    height: calc(100% - 170px);
+    width: calc(100% - 465px);
+    background-color: black;
 }
