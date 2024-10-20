@@ -242,14 +242,20 @@ const skills = [{
     description: "Increases the maximum durability of the shape.",
     imageSource: "../src/media-files/modules/armor_kit.png",
     main: "healthIncrease",
-    healthIncrease: .09
+    healthIncrease: .07
 }, {
     name: "Tough Guy",
     description: "Increases the maximum durability of the shape but reduces 15% of the shape's weapon damage.",
     imageSource: "../src/media-files/modules/armor_kit.png",
     main: "healthIncrease",
-    healthIncrease: .15,
-    dmgIncrease: -.15
+    healthIncrease: .12,
+    dmgIncrease: -.12
+}, {
+    name: "Master Gunsmith",
+    description: "Increases the damage output of all weapons mounted on the shape.",
+    imageSource: "../src/media-files/modules/armor_kit.png",
+    main: "dmgIncrease",
+    dmgIncrease: .07
 }];
 
 // description = story
@@ -267,7 +273,7 @@ const pilots = [{
     This war was never going to end. It was just the beginning, and now, Harold is a part of it.
     `,
     imageSource: "../src/media-files/pilots-badges/harold.png",
-    maxSkills: 5,
+    maxSkills: 3,
     cost: 100
 }];
 

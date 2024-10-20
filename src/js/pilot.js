@@ -8,5 +8,6 @@ export default class {
         this.maxSkills = data.maxSkills;
         this.imageSource = data.imageSource;
         this.cost = data.cost;
+        this.skills = [];
     }
 }

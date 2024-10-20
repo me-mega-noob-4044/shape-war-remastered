@@ -624,6 +624,10 @@ a:-webkit-any-link {
     background-color: rgb(1, 207, 77);
 }
 
+#pilot-view-upgrade-button {
+    flex-direction: column;
+}
+
 #shape-view-upgrade-button-2, #shape-view-buy-button, #pilot-view-buy-button, #drone-view-buy-button, #shape-item-view-buy-button, #shape-view-item-upgrade-button-2, #drone-view-upgrade-button-2 {
     margin-left: 15px;
     background-color: rgb(1, 207, 77);
@@ -796,13 +800,13 @@ a:-webkit-any-link {
     overflow-x: hidden;
 }
 
-#shape-view-upgrade-money-icon, #shape-view-buy-money-icon, #drone-view-buy-money-icon, #pilot-view-buy-money-icon, #shape-item-view-buy-money-icon, #shape-view-item-upgrade-money-icon, #drone-view-upgrade-money-icon {
+#shape-view-upgrade-money-icon, #shape-view-buy-money-icon, #drone-view-buy-money-icon, #pilot-view-upgrade-money-icon, #pilot-view-buy-money-icon, #shape-item-view-buy-money-icon, #shape-view-item-upgrade-money-icon, #drone-view-upgrade-money-icon {
     width: 30px;
     height: 30px;
     background-size: 30px 30px; 
 }
 
-#pilot-view-buy-money-icon {
+#pilot-view-buy-money-icon, #pilot-view-upgrade-money-icon {
     background-image: url("../src/media-files/money/gold.png");
 }
 

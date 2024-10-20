@@ -85,6 +85,10 @@ import pilot from "../src/js/pilot.js";
                 let data = items.drones.find(e => e.name == name);
                 userProfile.drones.push(new drone(data, ownerSID));
                 userProfile.saveProfile();
+            } else if (type == "pilot") {
+                let data = items.pilots.find(e => e.name == name);
+                userProfile.pilots.push(new pilot(data, ownerSID));
+                userProfile.saveProfile();
             }
         }
     };
@@ -2697,9 +2701,34 @@ import pilot from "../src/js/pilot.js";
         }
         buildPilotSkillDisplay(type, indx) {
             let element = document.createElement("div");
-            element.style = "width: 100%; height: 65px; margin-top: 7px; background-color: white; border-radius: 4px;";
+            element.style = "position: relative; display: flex; align-items: center; width: 100%; height: 65px; margin-top: 7px; background-color: rgba(0, 0, 0, .15); border-radius: 4px;";
 
-            if (type == "store") {}
+            if (type == "store") {
+                element.style.width = "calc(100% - 4px)";
+                element.style.border = "solid #00ff00 2px";
+
+                let weirdIcon = document.createElement("div");
+                weirdIcon.style = "pointer-events: none; overflow: hidden; display: flex; align-items: center; justify-content: center; margin-left: 5px; width: 45px; height: 45px; border-radius: 2px; background-color: rgba(0, 255, 0, .25);";
+                weirdIcon.innerHTML = `
+                <span style="font-size: 80px; color: rgba(0, 255, 0, .45); font-weight: 400;" class="material-symbols-outlined">
+                    close
+                </span>
+                `;
+                element.appendChild(weirdIcon);
+
+                let textDisplay = document.createElement("div");
+                textDisplay.style = "font-size: 20px; margin-left: 8px; color: #00ff00; font-weight: 600;";
+                textDisplay.innerHTML = "Empty skill slot";
+                element.appendChild(textDisplay);
+
+                /*
+                let addIconHolder = document.createElement("div");
+                addIconHolder.style = "position: absolute; width: 65px; height: 65px; right: 15px; top: 0px; background-color: white;";
+                addIconHolder.innerHTML = ``;
+
+                element.appendChild(addIconHolder);
+                */
+            }
 
             return element;
         }
@@ -2758,10 +2787,37 @@ import pilot from "../src/js/pilot.js";
                 this.pilotViewBuyButton.style.display = "flex";
                 this.pilotViewChangeButton.style.display = "none";
                 this.pilotViewBuyMoneyDisplay.innerHTML = UTILS.styleNumberWithComma(pilot.cost);
+
+                this.pilotViewBuyButton.onclick = () => {
+                    if (userProfile.bank.gold - pilot.cost >= 0) {
+                        doDarkModeTransition();
+                        userProfile.changeBank("gold", -pilot.cost);
+
+                        storeManager.addItem("pilot", pilot.name, undefined, slotId);
+                        elements.pilotViewUI.style.display = "none";
+
+                        let shape = userProfile.shapes.find(e => e.sid == slotId);
+
+                        this.viewInDepth(shape, false, false, shape.slot);
+                    }
+                };
             } else {
                 if (isChanging) {
+                    this.pilotViewEquipButton.style.display = "flex";
+                    this.pilotViewUnequipButton.style.display = "none";
+                    this.pilotViewUpgradeButton.style.display = "flex";
+                    this.pilotViewBuyButton.style.display = "none";
+                    this.pilotViewChangeButton.style.display = "flex";
                 } else {
-                    //
+                    this.pilotViewEquipButton.style.display = "none";
+                    this.pilotViewUnequipButton.style.display = "flex";
+                    this.pilotViewUpgradeButton.style.display = "flex";
+                    this.pilotViewBuyButton.style.display = "none";
+                    this.pilotViewChangeButton.style.display = "flex";
+
+                    if (pilot.level >= pilot.maxSkills) {
+                        this.pilotViewUpgradeButton.style.display = "none";
+                    }
                 }
             }
 
@@ -2935,6 +2991,7 @@ import pilot from "../src/js/pilot.js";
                         this.shapeViewUI.style.display = "none";
                         if (pilot) {
                             doDarkModeTransition();
+                            this.viewPilotInDepth(pilot, false, false, shape.sid);
                         } else {
                             this.changeSlot(shape.sid, shape, "pilot");
                         }
@@ -2963,6 +3020,12 @@ import pilot from "../src/js/pilot.js";
                     let droneImg = canvasDrawer.createUIItem(drone);
                     droneImg.style = "width: 90%; height: 90%;";
                     otherElements[1].appendChild(droneImg);
+                }
+
+                if (pilot) {
+                    let pilotImg = imageManager.getImage(pilot.imageSource);
+                    pilotImg.style = "width: 90%; height: 90%;";
+                    otherElements[0].appendChild(pilotImg);
                 }
             }
 
