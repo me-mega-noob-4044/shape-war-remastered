@@ -2725,6 +2725,7 @@ import pilot from "../src/js/pilot.js";
                 this.pilotViewBuyMoneyDisplay.innerHTML = UTILS.styleNumberWithComma(pilot.cost);
             } else {
                 //
+                
             }
 
             this.pilotStoryDisplay.innerHTML = pilot.description;
