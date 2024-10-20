@@ -670,6 +670,10 @@ import pilot from "../src/js/pilot.js";
             this.pilotViewUpgradeButton = UTILS.getElement("pilot-view-upgrade-button");
             this.pilotViewBuyButton = UTILS.getElement("pilot-view-buy-button");
             this.pilotViewChangeButton = UTILS.getElement("pilot-view-change-button");
+            this.pilotViewBuyMoneyDisplay = UTILS.getElement("pilot-view-buy-money-display");
+            this.pilotDisplayImage = UTILS.getElement("pilot-display-image");
+            this.pilotRightSideDisplay = UTILS.getElement("pilot-right-side-display");
+            this.pilotStoryDisplay = UTILS.getElement("pilot-story-display");
             this.dataToImage = {
                 "healthData": "../src/media-files/icons/health.png",
                 "speedData": "../src/media-files/icons/speed.png",
@@ -2707,15 +2711,23 @@ import pilot from "../src/js/pilot.js";
 
             this.pilotDisplayName.appendChild(nameDisplayHolder);
 
+            this.pilotDisplayImage.innerHTML = "";
+            let image = imageManager.getImage(pilot.imageSource);
+            image.style = "width: 100%; height: 100%;";
+            this.pilotDisplayImage.appendChild(image);
+
             if (isStore) {
                 this.pilotViewEquipButton.style.display = "none";
                 this.pilotViewUnequipButton.style.display = "none";
                 this.pilotViewUpgradeButton.style.display = "none";
                 this.pilotViewBuyButton.style.display = "flex";
                 this.pilotViewChangeButton.style.display = "none";
+                this.pilotViewBuyMoneyDisplay.innerHTML = UTILS.styleNumberWithComma(pilot.cost);
             } else {
                 //
             }
+
+            this.pilotStoryDisplay.innerHTML = pilot.description;
         }
         needToBeEquippedMessage(buttonPressed) {
             let mainBody = document.createElement("div");
