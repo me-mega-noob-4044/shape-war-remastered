@@ -679,6 +679,7 @@ import pilot from "../src/js/pilot.js";
             this.pilotHeaderDisplayName = UTILS.getElement("pilot-header-display-name");
             this.pilotSkillHeaderActiveSkills = UTILS.getElement("pilot-skill-header-active-skills");
             this.pilotSkillHeaderMaxSkills = UTILS.getElement("pilot-skill-header-max-skills");
+            this.pilotSkillsDisplay = UTILS.getElement("pilot-skills-display");
             this.dataToImage = {
                 "healthData": "../src/media-files/icons/health.png",
                 "speedData": "../src/media-files/icons/speed.png",
@@ -2694,6 +2695,14 @@ import pilot from "../src/js/pilot.js";
             };
 
         }
+        buildPilotSkillDisplay(type, indx) {
+            let element = document.createElement("div");
+            element.style = "width: 100%; height: 65px; margin-top: 7px; background-color: white; border-radius: 4px;";
+
+            if (type == "store") {}
+
+            return element;
+        }
         viewPilotInDepth(pilot, isStore, isChanging, slotId) { // slotId is for locating the owner shape
             moneyDisplayManager.displayItems(["gold", "tokens"]);
             elements.pilotViewUI.style.display = "block";
@@ -2727,6 +2736,13 @@ import pilot from "../src/js/pilot.js";
                 this.pilotHeaderDisplayName.innerHTML = "";
                 this.pilotSkillHeaderActiveSkills.innerHTML = "0";
                 this.pilotSkillHeaderMaxSkills.innerHTML = pilot.maxSkills;
+
+                this.pilotSkillsDisplay.innerHTML = "";
+                for (let i = 0; i < pilot.maxSkills; i++) {
+                    let data = this.buildPilotSkillDisplay("store", i);
+
+                    this.pilotSkillsDisplay.appendChild(data);
+                }
             } else {
                 this.pilotOperatesHeader.innerHTML = "Operates:";
                 this.pilotHeaderDisplayLevel.style.display = "flex";
