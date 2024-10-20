@@ -2703,7 +2703,7 @@ import pilot from "../src/js/pilot.js";
             let element = document.createElement("div");
             element.style = "position: relative; display: flex; align-items: center; width: 100%; height: 65px; margin-top: 7px; background-color: rgba(0, 0, 0, .15); border-radius: 4px;";
 
-            if (type == "store") {
+            if (type == "store" || type == "empty") {
                 element.style.width = "calc(100% - 4px)";
                 element.style.border = "solid #00ff00 2px";
 
@@ -2721,13 +2721,27 @@ import pilot from "../src/js/pilot.js";
                 textDisplay.innerHTML = "Empty skill slot";
                 element.appendChild(textDisplay);
 
-                /*
-                let addIconHolder = document.createElement("div");
-                addIconHolder.style = "position: absolute; width: 65px; height: 65px; right: 15px; top: 0px; background-color: white;";
-                addIconHolder.innerHTML = ``;
+                if (type == "empty") {
+                    element.style.cursor = "pointer";
 
-                element.appendChild(addIconHolder);
-                */
+                    let addIconHolder = document.createElement("div");
+                    addIconHolder.style = "position: absolute; display: flex; align-items: center; justify-content: center; width: 65px; height: 65px; right: 15px; top: 0px;";
+                    addIconHolder.innerHTML = `
+                    <span style="font-size: 80px; color: #00ff00;" class="material-symbols-outlined">
+                        add
+                    </span>
+                    `;
+    
+                    element.appendChild(addIconHolder);
+
+                    element.onmouseover = () => {
+                        element.style.backgroundColor = "rgba(0, 0, 0, .25)";
+                    };
+
+                    element.onmouseout = () => {
+                        element.style.backgroundColor = "rgba(0, 0, 0, .15)";
+                    };
+                }
             }
 
             return element;
@@ -2784,6 +2798,21 @@ import pilot from "../src/js/pilot.js";
                 this.pilotSkillHeaderMaxSkills.innerHTML = pilot.level; // placeholder
 
                 this.pilotSkillsDisplay.innerHTML = "";
+
+                for (let i = 0; i < pilot.maxSkills; i++) {
+                    let skill = pilot.skills[i];
+                    let data;
+
+                    if (skill) {
+                        // Skill showing
+                    } else if (i < pilot.level) {
+                        data = this.buildPilotSkillDisplay("empty", i);
+                    } else {
+                        // Locked
+                    }
+
+                    if (data) this.pilotSkillsDisplay.appendChild(data);
+                }
             }
 
             if (isStore) {
