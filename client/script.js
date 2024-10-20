@@ -2759,6 +2759,8 @@ import pilot from "../src/js/pilot.js";
             image.style = "width: 100%; height: 100%;";
             this.pilotDisplayImage.appendChild(image);
 
+            let parentShape = userProfile.shapes.find(e => e.sid == slotId);
+
             if (isStore || isChanging) {
                 this.pilotOperatesHeader.innerHTML = "Unassigned";
                 this.pilotHeaderDisplayLevel.style.display = "none";
@@ -2775,9 +2777,13 @@ import pilot from "../src/js/pilot.js";
             } else {
                 this.pilotOperatesHeader.innerHTML = "Operates:";
                 this.pilotHeaderDisplayLevel.style.display = "flex";
-                this.pilotHeaderDisplayName.innerHTML = "Micheal Jackson"; // placeholder
-                this.pilotSkillHeaderActiveSkills.innerHTML = "-100"; // placeholder
-                this.pilotSkillHeaderMaxSkills.innerHTML = "100"; // placeholder
+                this.pilotHeaderDisplayLevel.innerHTML = parentShape.level;
+                this.pilotHeaderDisplayLevel.style.backgroundColor = config.tierColors[parentShape.tier];
+                this.pilotHeaderDisplayName.innerHTML = parentShape.name; // placeholder
+                this.pilotSkillHeaderActiveSkills.innerHTML = "0"; // placeholder
+                this.pilotSkillHeaderMaxSkills.innerHTML = pilot.level; // placeholder
+
+                this.pilotSkillsDisplay.innerHTML = "";
             }
 
             if (isStore) {

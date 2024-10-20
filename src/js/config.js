@@ -5,6 +5,7 @@ export default {
     defaultScreenY: 1080,
     tierColors: ["#d3d3d3", "#38b0f5", "#7702bf", "#fcdf00", "#fa0032"],
     droneCost: [0, 40, 60, 90, 100, 100, 100, 120, 120, 130, 140, 1],
+    pilotCost: [0, 250, 500, 1e3, 2e3, 4e3, 8e3],
     silverUpgrades: [{
         shapes: [0, 10e3, 20e3, 40e3, 200e3, 400e3, 800e3, 1.5e6, 3e6, 5e6, 8e6, 13e6],
         weapons: [0, 10e3, 20e3, 40e3, 200e3, 400e3, 800e3, 1e6, 1.5e6, 2e6, 2.5e6, 3e6],
