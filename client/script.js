@@ -684,6 +684,7 @@ import pilot from "../src/js/pilot.js";
             this.pilotSkillHeaderActiveSkills = UTILS.getElement("pilot-skill-header-active-skills");
             this.pilotSkillHeaderMaxSkills = UTILS.getElement("pilot-skill-header-max-skills");
             this.pilotSkillsDisplay = UTILS.getElement("pilot-skills-display");
+            this.pilotViewUpgradeMoneyDisplay = UTILS.getElement("pilot-view-upgrade-money-display");
             this.dataToImage = {
                 "healthData": "../src/media-files/icons/health.png",
                 "speedData": "../src/media-files/icons/speed.png",
@@ -2699,7 +2700,7 @@ import pilot from "../src/js/pilot.js";
             };
 
         }
-        buildPilotSkillDisplay(type, indx) {
+        buildPilotSkillDisplay(type, indx, tier) {
             let element = document.createElement("div");
             element.style = "position: relative; display: flex; align-items: center; width: 100%; height: 65px; margin-top: 7px; background-color: rgba(0, 0, 0, .15); border-radius: 4px;";
 
@@ -2742,6 +2743,29 @@ import pilot from "../src/js/pilot.js";
                         element.style.backgroundColor = "rgba(0, 0, 0, .15)";
                     };
                 }
+            } else if (type == "locked") {
+                let addIconHolder = document.createElement("div");
+                addIconHolder.style = "position: absolute; display: flex; align-items: center; justify-content: center; width: 65px; height: 65px; left: 5px; top: 0px;";
+                addIconHolder.innerHTML = `
+                <span style="font-size: 50px; color: #3d3d3d;" class="material-symbols-outlined">
+                    lock
+                </span>
+                `;
+    
+                element.appendChild(addIconHolder);
+
+                let unlockDisplayHolder = document.createElement("div");
+                unlockDisplayHolder.style = "display: flex; align-items: center; justify-content: center; font-size: 18px; position: absolute; left: 65px; top: 0px; height: 65px;";
+                unlockDisplayHolder.innerHTML = `
+                <span class="material-symbols-outlined">
+                    add
+                </span>
+                skill at level
+                <div style="display: flex; align-items: center; justify-content: center; margin-left: 4px; border-radius: 100%; width: 25px; height: 25px; background-color: ${config.tierColors[tier]};">
+                ${indx + 1}
+                </div>
+                `;
+                element.appendChild(unlockDisplayHolder);
             }
 
             return element;
@@ -2757,7 +2781,7 @@ import pilot from "../src/js/pilot.js";
             let levelDisplay = document.createElement("div");
             levelDisplay.style = "display: flex; align-items: center; width: 37px; height: 37px; justify-content: center; border-radius: 100%; border: solid; border-color: white; border-width: 1px;";
             levelDisplay.style.backgroundColor = config.tierColors[pilot.tier];
-            levelDisplay.innerHTML = 1;
+            levelDisplay.innerHTML = pilot.level;
 
             let nameDisplay = document.createElement("div");
             nameDisplay.style = "margin-left: 7px;";
@@ -2808,7 +2832,7 @@ import pilot from "../src/js/pilot.js";
                     } else if (i < pilot.level) {
                         data = this.buildPilotSkillDisplay("empty", i);
                     } else {
-                        // Locked
+                        data = this.buildPilotSkillDisplay("locked", i, pilot.tier);
                     }
 
                     if (data) this.pilotSkillsDisplay.appendChild(data);
@@ -2852,6 +2876,21 @@ import pilot from "../src/js/pilot.js";
 
                     if (pilot.level >= pilot.maxSkills) {
                         this.pilotViewUpgradeButton.style.display = "none";
+                    } else {
+                        let pilotCost = config.pilotCost[pilot.level];
+
+                        this.pilotViewUpgradeButton.onclick = () => {
+                            if (userProfile.bank.gold - pilotCost >= 0) {
+                                doDarkModeTransition();
+                                userProfile.changeBank("gold", -pilotCost);
+
+                                pilot.level++;
+                                userProfile.saveProfile();
+                                this.viewPilotInDepth(pilot, isStore, isChanging, slotId);
+                            }
+                        };
+
+                        this.pilotViewUpgradeMoneyDisplay.innerHTML = UTILS.styleNumberWithComma(pilotCost);
                     }
                 }
             }
