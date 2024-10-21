@@ -563,14 +563,58 @@ import pilot from "../src/js/pilot.js";
         }
     }, { passive: false });
 
-    var moneyConverter = new (class {
+    var moneyConverter = new class {
         convertSilverToGold(amount) {
             return Math.ceil(amount / 1250);
         }
         convertMicrochipsToGold(amount) {
             return Math.ceil(amount * 255);
         }
-    })();
+    };
+
+    var errorEventManager = new class {
+
+        /**
+         * shows a popup error message
+         * @param {string} text 
+         */
+
+        error(text) {
+            let element = document.createElement("div");
+            element.style = `
+            z-index: 1001;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 550px;
+            height: 300px;
+            background-color: rgb(0, 0, 0, .85);
+            border-radius: 6px;
+            `;
+
+            element.innerHTML = `
+            <div style="font-weight: 600; display: flex; align-items: center; justify-content: center; position: absolute; color: #fff; text-align: center; font-size: 35px; top: 0px; left: 0px; width: 100%; height: 50px; background: linear-gradient(to right, transparent 0%, transparent 20%, rgb(255, 255, 255, .4) 50%, transparent 80%, transparent 100%);">
+            ATTENTION
+            </div>
+            <div style="color: white; font-weight: 600; font-size: 16px; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);">
+            ${text}
+            </div>
+            `;
+
+            let button = document.createElement("div");
+            button.style = "font-weight: 600; display: flex; align-items: center; justify-content: center; color: white; font-size: 18px; border-radius: 4px; width: 200px; height: 50px; background-color: rgb(255, 255, 255, .75); cursor: pointer; position: absolute; left: 50%; bottom: 10px; transform: translateX(-50%);";
+            button.innerHTML = "OK";
+
+            button.onclick = () => {
+                element.remove();
+            };
+
+            element.appendChild(button);
+
+            document.body.appendChild(element);
+        }
+    };
 
     var hangerDisplay = new class {
         constructor() {
@@ -685,6 +729,7 @@ import pilot from "../src/js/pilot.js";
             this.pilotSkillHeaderMaxSkills = UTILS.getElement("pilot-skill-header-max-skills");
             this.pilotSkillsDisplay = UTILS.getElement("pilot-skills-display");
             this.pilotViewUpgradeMoneyDisplay = UTILS.getElement("pilot-view-upgrade-money-display");
+            this.changePilotSkillButton = UTILS.getElement("change-pilot-skill-button");
             this.dataToImage = {
                 "healthData": "../src/media-files/icons/health.png",
                 "speedData": "../src/media-files/icons/speed.png",
@@ -2700,7 +2745,7 @@ import pilot from "../src/js/pilot.js";
             };
 
         }
-        buildPilotSkillDisplay(type, indx, tier) {
+        buildPilotSkillDisplay(type, indx, tier, skill) {
             let element = document.createElement("div");
             element.style = "position: relative; display: flex; align-items: center; width: 100%; height: 65px; margin-top: 7px; background-color: rgba(0, 0, 0, .15); border-radius: 4px;";
 
@@ -2766,9 +2811,14 @@ import pilot from "../src/js/pilot.js";
                 </div>
                 `;
                 element.appendChild(unlockDisplayHolder);
+            } else if (type == "skill") {
+                // 
             }
 
             return element;
+        }
+        modifyPilotSkill() {
+
         }
         viewPilotInDepth(pilot, isStore, isChanging, slotId) { // slotId is for locating the owner shape
             moneyDisplayManager.displayItems(["gold", "tokens"]);
@@ -2805,12 +2855,15 @@ import pilot from "../src/js/pilot.js";
                 this.pilotHeaderDisplayName.innerHTML = "";
                 this.pilotSkillHeaderActiveSkills.innerHTML = "0";
                 this.pilotSkillHeaderMaxSkills.innerHTML = pilot.maxSkills;
+                this.changePilotSkillButton.style.display = "none";
 
                 this.pilotSkillsDisplay.innerHTML = "";
                 for (let i = 0; i < pilot.maxSkills; i++) {
-                    let data = this.buildPilotSkillDisplay("store", i);
+                    if (isStore) {
+                        let data = this.buildPilotSkillDisplay("store", i);
 
-                    this.pilotSkillsDisplay.appendChild(data);
+                        this.pilotSkillsDisplay.appendChild(data);
+                    }
                 }
             } else {
                 this.pilotOperatesHeader.innerHTML = "Operates:";
@@ -2820,17 +2873,33 @@ import pilot from "../src/js/pilot.js";
                 this.pilotHeaderDisplayName.innerHTML = parentShape.name; // placeholder
                 this.pilotSkillHeaderActiveSkills.innerHTML = "0"; // placeholder
                 this.pilotSkillHeaderMaxSkills.innerHTML = pilot.level; // placeholder
+                this.changePilotSkillButton.style.display = "flex";
+
+                let hasSkills = pilot.skills.find(e => e);
+                this.changePilotSkillButton.onclick = () => {
+                    if (!hasSkills) {
+                        errorEventManager.error("Please train your pilot before trying to retrain them");
+                    } else {
+
+                    }
+                };
 
                 this.pilotSkillsDisplay.innerHTML = "";
 
                 for (let i = 0; i < pilot.maxSkills; i++) {
-                    let skill = pilot.skills[i];
+                    let skill = pilot.skills.find(e => e.slot == i);
                     let data;
 
                     if (skill) {
-                        // Skill showing
+                        data = this.buildPilotSkillDisplay("skill", i, pilot.tier, skill);
                     } else if (i < pilot.level) {
                         data = this.buildPilotSkillDisplay("empty", i);
+
+                        data.onclick = () => {
+                            doDarkModeTransition();
+                            this.modifyPilotSkill("empty", i);
+                            this.viewPilotInDepth(pilot, isStore, isChanging, slotId);
+                        };
                     } else {
                         data = this.buildPilotSkillDisplay("locked", i, pilot.tier);
                     }

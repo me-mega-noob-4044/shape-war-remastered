@@ -1,6 +1,6 @@
 export default {
-    gameUpdateRate: 60,
-    gameUpdateSpeed: 1e3 / 60,
+    gameUpdateRate: 20,
+    gameUpdateSpeed: 1e3 / 20,
     defaultScreenX: 1980,
     defaultScreenY: 1080,
     tierColors: ["#d3d3d3", "#38b0f5", "#7702bf", "#fcdf00", "#fa0032"],

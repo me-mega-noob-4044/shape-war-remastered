@@ -1172,3 +1172,30 @@ a:-webkit-any-link {
 #pilot-header-display-name {
     margin-left: 2.5px;
 }
+
+.change-pilot-skill-holder {
+    display: flex;
+    align-items: center;
+    height: 60px;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+}
+
+#change-pilot-skill-button {
+    margin-right: 7.5px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    width: 150px;
+    height: 45px;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: rgba(35, 134, 232);
+}
+
+#change-pilot-skill-button:hover {
+    background-color: rgb(28, 110, 191);
+}
