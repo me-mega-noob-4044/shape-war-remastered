@@ -247,7 +247,7 @@ const skills = [{
 }, {
     tier: 1,
     name: "Tough Guy",
-    description: "Increases the maximum durability of the shape but reduces 15% of the shape's weapon damage.",
+    description: "Increases the maximum durability of the shape but reduces 12% of the shape's weapon damage.",
     imageSource: "../src/media-files/modules/armor_kit.png",
     main: "healthIncrease",
     healthIncrease: .12,

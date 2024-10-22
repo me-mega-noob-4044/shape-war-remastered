@@ -2936,9 +2936,9 @@ import skill from "../src/js/skill.js";
                 this.pilotHeaderDisplayLevel.style.display = "flex";
                 this.pilotHeaderDisplayLevel.innerHTML = parentShape.level;
                 this.pilotHeaderDisplayLevel.style.backgroundColor = config.tierColors[parentShape.tier];
-                this.pilotHeaderDisplayName.innerHTML = parentShape.name; // placeholder
-                this.pilotSkillHeaderActiveSkills.innerHTML = "0"; // placeholder
-                this.pilotSkillHeaderMaxSkills.innerHTML = pilot.level; // placeholder
+                this.pilotHeaderDisplayName.innerHTML = parentShape.name;
+                this.pilotSkillHeaderActiveSkills.innerHTML = pilot.skills.filter(e => e).length;
+                this.pilotSkillHeaderMaxSkills.innerHTML = pilot.level;
                 this.changePilotSkillButton.style.display = "flex";
 
                 let hasSkills = pilot.skills.find(e => e);
@@ -2986,6 +2986,11 @@ import skill from "../src/js/skill.js";
                     if (userProfile.bank.gold - pilot.cost >= 0) {
                         doDarkModeTransition();
                         userProfile.changeBank("gold", -pilot.cost);
+
+                        let oldPilot = userProfile.pilots.find(e => e.owner == slotId);
+                        if (oldPilot) {
+                            oldPilot.owner = null;
+                        }
 
                         storeManager.addItem("pilot", pilot.name, undefined, slotId);
                         elements.pilotViewUI.style.display = "none";
@@ -3065,6 +3070,8 @@ import skill from "../src/js/skill.js";
 
             this.pilotViewBackButton.onclick = () => {
                 elements.pilotViewUI.style.display = "none";
+
+                console.log(isChanging);
 
                 if (isChanging) {
                     doDarkModeTransition();
@@ -3764,9 +3771,9 @@ import skill from "../src/js/skill.js";
                         elements.chooseShapesUI.style.display = "none";
                         if (createObjs) {
                             if (type == "pilot") {
-                                this.viewPilotInDepth(item, true, false, slot);
+                                this.viewPilotInDepth(item, true, true, slot);
                             } else if (type == "drone") {
-                                this.viewDroneInDepth(item, true, false, slot);
+                                this.viewDroneInDepth(item, true, true, slot);
                             } else {
                                 this.shapeViewBuyMoneyIcon.style.backgroundImage = `url('../src/media-files/money/silver.png'), none`;
                                 this.shapeViewBuyMoneyDisplay.innerHTML = UTILS.styleNumberWithComma(item.cost.silver);
@@ -3873,10 +3880,18 @@ import skill from "../src/js/skill.js";
             this.shapeViewBackButton2.onclick = () => {
                 doDarkModeTransition();
                 if (nextPG) {
-                    elements.chooseShapesUI.style.display = "none";
-                    elements.droneViewUI.style.display = "block";
-
-                    this.viewDroneInDepth(nextPG, false, true, nextPG.owner);
+                    if (type == "pilot") {
+                        
+                        elements.chooseShapesUI.style.display = "none";
+                        elements.pilotViewUI.style.display = "block";
+    
+                        this.viewPilotInDepth(nextPG, false, false, nextPG.owner);
+                    } else {
+                        elements.chooseShapesUI.style.display = "none";
+                        elements.droneViewUI.style.display = "block";
+    
+                        this.viewDroneInDepth(nextPG, false, false, nextPG.owner);
+                    }
                 } else if (oldShape) {
                     elements.chooseShapesUI.style.display = "none";
                     this.shapeViewUI.style.display = "block";
