@@ -2934,9 +2934,24 @@ import skill from "../src/js/skill.js";
             } else {
                 this.pilotOperatesHeader.innerHTML = "Operates:";
                 this.pilotHeaderDisplayLevel.style.display = "flex";
-                this.pilotHeaderDisplayLevel.innerHTML = parentShape.level;
+                if (parentShape.level == 25) {
+                    this.pilotHeaderDisplayLevel.innerHTML = 1;
+                } else if (parentShape.level > 12) {
+                    this.pilotHeaderDisplayLevel.innerHTML = parentShape.level - 12;
+                } else {
+                    this.pilotHeaderDisplayLevel.innerHTML = parentShape.level;
+                }
+
                 this.pilotHeaderDisplayLevel.style.backgroundColor = config.tierColors[parentShape.tier];
-                this.pilotHeaderDisplayName.innerHTML = parentShape.name;
+
+                if (parentShape.level == 25) {
+                    this.pilotHeaderDisplayName.innerHTML = `${parentShape.name} <span style="color: #ffff00;">MK3</span>`;
+                } else if (parentShape.level > 12) {
+                    this.pilotHeaderDisplayName.innerHTML = `${parentShape.name} <span style="color: #00ff00;">MK2</span>` ;
+                } else {
+                    this.pilotHeaderDisplayName.innerHTML = parentShape.name;
+                }
+
                 this.pilotSkillHeaderActiveSkills.innerHTML = pilot.skills.filter(e => e).length;
                 this.pilotSkillHeaderMaxSkills.innerHTML = pilot.level;
                 this.changePilotSkillButton.style.display = "flex";

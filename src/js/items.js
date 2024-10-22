@@ -259,6 +259,14 @@ const skills = [{
     imageSource: "../src/media-files/modules/nuclear_reactor.png",
     main: "dmgIncrease",
     dmgIncrease: .07
+}, {
+    tier: 2,
+    name: "Thrill Seeker",
+    description: "Increases the damage output of all weapons but reduces the shape's durability by 12%.",
+    imageSource: "../src/media-files/modules/nuclear_reactor.png",
+    main: "dmgIncrease",
+    dmgIncrease: .12,
+    healthIncrease: .12
 }];
 
 // description = story
