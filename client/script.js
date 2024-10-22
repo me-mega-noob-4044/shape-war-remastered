@@ -761,6 +761,7 @@ import skill from "../src/js/skill.js";
             this.pilotSkillsDisplay = UTILS.getElement("pilot-skills-display");
             this.pilotViewUpgradeMoneyDisplay = UTILS.getElement("pilot-view-upgrade-money-display");
             this.changePilotSkillButton = UTILS.getElement("change-pilot-skill-button");
+            this.pilotViewBackButton = UTILS.getElement("pilot-view-back-button");
             this.dataToImage = {
                 "healthData": "../src/media-files/icons/health.png",
                 "speedData": "../src/media-files/icons/speed.png",
@@ -2915,6 +2916,19 @@ import skill from "../src/js/skill.js";
                         let data = this.buildPilotSkillDisplay("store", i);
 
                         this.pilotSkillsDisplay.appendChild(data);
+                    } else {
+                        let skill = pilot.skills.find(e => e.slot == i);
+                        let data;
+
+                        if (skill) {
+                            data = this.buildPilotSkillDisplay("skill", i, pilot.tier, skill);
+                        } else if (i < pilot.level) {
+                            data = this.buildPilotSkillDisplay("store", i);
+                        } else {
+                            data = this.buildPilotSkillDisplay("locked", i, pilot.tier);
+                        }
+
+                        if (data) this.pilotSkillsDisplay.appendChild(data);
                     }
                 }
             } else {
@@ -2987,7 +3001,22 @@ import skill from "../src/js/skill.js";
                     this.pilotViewUnequipButton.style.display = "none";
                     this.pilotViewUpgradeButton.style.display = "flex";
                     this.pilotViewBuyButton.style.display = "none";
-                    this.pilotViewChangeButton.style.display = "flex";
+                    this.pilotViewChangeButton.style.display = "none";
+
+                    this.pilotViewEquipButton.onclick = () => {
+                        doDarkModeTransition();
+                        elements.pilotViewUI.style.display = "none";
+                        
+                        let oldPilot = userProfile.pilots.find(e => e.owner == slotId);
+                        if (oldPilot) {
+                            oldPilot.owner = null;
+                        }
+
+                        pilot.owner = slotId;
+
+                        let shape = userProfile.shapes.find(e => e.sid == slotId);
+                        this.viewInDepth(shape, false, false);
+                    };
                 } else {
                     this.pilotViewEquipButton.style.display = "none";
                     this.pilotViewUnequipButton.style.display = "flex";
@@ -3013,10 +3042,38 @@ import skill from "../src/js/skill.js";
 
                         this.pilotViewUpgradeMoneyDisplay.innerHTML = UTILS.styleNumberWithComma(pilotCost);
                     }
+
+                    this.pilotViewChangeButton.onclick = () => {
+                        doDarkModeTransition();
+                        elements.pilotViewUI.style.display = "none";
+
+                        let shape = userProfile.shapes.find(e => e.sid == slotId);
+
+                        this.changeSlot(slotId, shape, "pilot", pilot);
+                    };
+
+                    this.pilotViewUnequipButton.onclick = () => {
+                        doDarkModeTransition();
+                        pilot.owner = null;
+                        userProfile.saveProfile();
+                        this.pilotViewBackButton.click();
+                    };
                 }
             }
 
             this.pilotStoryDisplay.innerHTML = pilot.description;
+
+            this.pilotViewBackButton.onclick = () => {
+                elements.pilotViewUI.style.display = "none";
+
+                if (isChanging) {
+                    doDarkModeTransition();
+                    elements.chooseShapesUI.style.display = "block";
+                } else {
+                    let shape = userProfile.shapes.find(e => e.sid == slotId);
+                    this.viewInDepth(shape, false, false);
+                }
+            };
         }
         needToBeEquippedMessage(buttonPressed) {
             let mainBody = document.createElement("div");
@@ -3682,7 +3739,6 @@ import skill from "../src/js/skill.js";
                     }
 
                     if (type == "pilot") {
-                        // console.log(item, item.imageSource);
                         let image = imageManager.getImage(item.imageSource);
                         image.style = "width: calc(100% - 50px); height: calc(100% - 50px);";
                         element.appendChild(image);
@@ -3720,6 +3776,7 @@ import skill from "../src/js/skill.js";
                             }
                         } else {
                             if (type == "pilot") {
+                                this.viewPilotInDepth(item, false, true, slot);
                             } else if (type == "drone") {
                                 this.viewDroneInDepth(item, false, true, slot);
                             } else {
