@@ -238,12 +238,14 @@ const activeModules = [{
 // main = data that is displayed
 
 const skills = [{
+    tier: 1,
     name: "Armor Expert",
     description: "Increases the maximum durability of the shape.",
     imageSource: "../src/media-files/modules/armor_kit.png",
     main: "healthIncrease",
     healthIncrease: .07
 }, {
+    tier: 1,
     name: "Tough Guy",
     description: "Increases the maximum durability of the shape but reduces 15% of the shape's weapon damage.",
     imageSource: "../src/media-files/modules/armor_kit.png",
@@ -251,9 +253,10 @@ const skills = [{
     healthIncrease: .12,
     dmgIncrease: -.12
 }, {
+    tier: 0,
     name: "Master Gunsmith",
     description: "Increases the damage output of all weapons mounted on the shape.",
-    imageSource: "../src/media-files/modules/armor_kit.png",
+    imageSource: "../src/media-files/modules/nuclear_reactor.png",
     main: "dmgIncrease",
     dmgIncrease: .07
 }];
@@ -307,4 +310,4 @@ const motherships = [];
 
 const turrets = [];
 
-export default { shapes, weapons, modules, activeModules, pilots, drones, motherships, turrets };
+export default { shapes, weapons, modules, activeModules, pilots, skills, drones, motherships, turrets };

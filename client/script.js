@@ -7,6 +7,7 @@ import weapon from "../src/js/weapon.js";
 import module from "../src/js/module.js";
 import drone from "../src/js/drone.js";
 import pilot from "../src/js/pilot.js";
+import skill from "../src/js/skill.js";
 
 (function () {
     var elements = {
@@ -613,6 +614,36 @@ import pilot from "../src/js/pilot.js";
             element.appendChild(button);
 
             document.body.appendChild(element);
+        }
+    };
+
+    var pilotSkillManager = new class {
+        getSkills(pilot) {
+            let skills = [];
+            let pilotSkills = pilot.skills;
+
+            for (let i = 0; i < pilot.skills.length; i++) {}
+            for (let i = 0; i < items.skills.length; i++) {
+                let skill = items.skills[i];
+                let hasSkill = pilotSkills.find(e => e.name == skill.name);
+
+                if (hasSkill) continue;
+
+                skills.push(skill);
+            }
+
+            return skills;
+        }
+        styleSkillValue(skill) {
+            let value = skill[skill.main];
+
+            if (value == .07) {
+                value = 7;
+            } else {
+                value *= 100;
+            }
+
+            return value + "%";
         }
     };
 
@@ -2812,13 +2843,34 @@ import pilot from "../src/js/pilot.js";
                 `;
                 element.appendChild(unlockDisplayHolder);
             } else if (type == "skill") {
-                // 
+                let rgb =  UTILS.hexToRgb(config.tierColors[skill.tier])
+                element.style.backgroundColor = `rgba(${rgb}, .75)`;
+
+                let iconDisplay = document.createElement("div");
+                iconDisplay.style = `position: absolute; display: flex; align-items: center; justify-content: center; width: 65px; height: 65px; left: 5px; top: 0px; background-image: url('${skill.imageSource}'); background-size: 65px 65px;`;
+                element.appendChild(iconDisplay);
+
+                let dataHolder = document.createElement("div");
+                dataHolder.style = "position: absolute; display: flex; justify-content: center; flex-direction: column; top: 0px; left: 75px; height: 65px; width: calc(100% - 75px);";
+                dataHolder.innerHTML = `
+                <div style="position: relative; color: white; height: 24.5px; font-size: 18px;">
+                    <div style="position: absolute; left: 0px;">${skill.name}</div>
+                    <div style="position: absolute; right: 15px;">${pilotSkillManager.styleSkillValue(skill)}</div>
+                </div>
+                <div style="color: white; margin-top: -5px; font-weight: 500; font-size: 12px;">${skill.description}</div>
+                `;
+                element.appendChild(dataHolder);
             }
 
             return element;
         }
-        modifyPilotSkill() {
+        modifyPilotSkill(type, pilot, slot) {
+            let skills = pilotSkillManager.getSkills(pilot);
+            if (type == "empty") {
+                pilot.skills.push(new skill(skills[Math.floor(Math.random() * skills.length)], slot));
 
+                userProfile.saveProfile();
+            }
         }
         viewPilotInDepth(pilot, isStore, isChanging, slotId) { // slotId is for locating the owner shape
             moneyDisplayManager.displayItems(["gold", "tokens"]);
@@ -2897,7 +2949,7 @@ import pilot from "../src/js/pilot.js";
 
                         data.onclick = () => {
                             doDarkModeTransition();
-                            this.modifyPilotSkill("empty", i);
+                            this.modifyPilotSkill("empty", pilot, i);
                             this.viewPilotInDepth(pilot, isStore, isChanging, slotId);
                         };
                     } else {

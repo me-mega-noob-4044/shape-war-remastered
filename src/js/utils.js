@@ -16,6 +16,23 @@ export const deleteVal = (id) => {
     localStorage.removeItem(id);
 }
 
+export const hexToRgb = (hex) => {
+    hex = hex.replace(/^#/, "");
+
+    if (hex.length === 3) {
+        hex = hex.split("").map(function(h) {
+            return h + h;
+        }).join("");
+    }
+
+    let bigint = parseInt(hex, 16);
+    let r = (bigint >> 16) & 255;
+    let g = (bigint >> 8) & 255;
+    let b = bigint & 255;
+
+    return r + "," + g + "," + b;
+};
+
 export const abbreviateNumber = (value) => {
     if (value < 1e3) {
         return value;
