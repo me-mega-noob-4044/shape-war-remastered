@@ -195,19 +195,17 @@ import skill from "../src/js/skill.js";
             for (let i = 0; i < this.pilots.length; i++) {
                 let pilot = this.pilots[i];
                 let skills = [];
+
                 pilot.skills.forEach(e => {
-                    if (!e.legendary) {
-                        skills.push({
-                            name: e.name,
-                            level: e.level,
-                            ownerName: e.ownerName,
-                            slot: e.slot
-                        });
-                    }
+                    skills.push({
+                        name: e.name,
+                        slot: e.slot
+                    });
                 });
+
                 pilots.push({
                     name: pilot.name,
-                    owner: pilot.owner,
+                    ownerSID: pilot.owner,
                     level: pilot.level,
                     skills: skills
                 });
@@ -291,7 +289,19 @@ import skill from "../src/js/skill.js";
             }
 
             for (let i = 0; i < content.pilots.length; i++) {
-                //
+                let data = content.pilots[i];
+                let tmp = items.pilots.find(e => e.name == data.name);
+                let tmpItem = new pilot(tmp, data.ownerSID);
+                console.log(tmpItem, content.pilots);
+                tmpItem.level = data.level;
+
+                data.skills.forEach(e => {
+                    let tmp = items.skills.find(obj => obj.name == e.name);
+
+                    tmpItem.skills.push(new skill(tmp, e.slot));
+                });
+
+                this.pilots.push(tmpItem);
             }
 
             for (let i = 0; i < content.motherships.length; i++) {
@@ -3019,7 +3029,7 @@ import skill from "../src/js/skill.js";
                 if (isChanging) {
                     this.pilotViewEquipButton.style.display = "flex";
                     this.pilotViewUnequipButton.style.display = "none";
-                    this.pilotViewUpgradeButton.style.display = "flex";
+                    this.pilotViewUpgradeButton.style.display = "none";
                     this.pilotViewBuyButton.style.display = "none";
                     this.pilotViewChangeButton.style.display = "none";
 
@@ -3033,6 +3043,7 @@ import skill from "../src/js/skill.js";
                         }
 
                         pilot.owner = slotId;
+                        userProfile.saveProfile();
 
                         let shape = userProfile.shapes.find(e => e.sid == slotId);
                         this.viewInDepth(shape, false, false);
