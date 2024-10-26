@@ -774,6 +774,7 @@ import skill from "../src/js/skill.js";
             this.pilotViewBackButton = UTILS.getElement("pilot-view-back-button");
             this.pilotSkillsLeftSideDisplay = UTILS.getElement("pilot-skills-left-side-display");
             this.pilotSkillsRightSideDisplay = UTILS.getElement("pilot-skills-right-side-display");
+            this.pilotSkillsViewBackButton = UTILS.getElement("pilot-skills-view-back-button");
             this.dataToImage = {
                 "healthData": "../src/media-files/icons/health.png",
                 "speedData": "../src/media-files/icons/speed.png",
@@ -2979,6 +2980,13 @@ import skill from "../src/js/skill.js";
 
                 this.pilotSkillsLeftSideDisplay.appendChild(data);
             }
+
+            this.pilotSkillsViewBackButton.onclick = () => {
+                doDarkModeTransition();
+                elements.pilotViewUI.style.display = "block";
+                elements.pilotSkillChangeUi.style.display = "none";
+                moneyDisplayManager.displayItems(["gold", "tokens"]);
+            };
         }
         viewPilotInDepth(pilot, isStore, isChanging, slotId) { // slotId is for locating the owner shape
             moneyDisplayManager.displayItems(["gold", "tokens"]);
