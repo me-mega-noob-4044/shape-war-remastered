@@ -21,7 +21,8 @@ import skill from "../src/js/skill.js";
         droneViewUI: UTILS.getElement("droneViewUI"),
         pilotViewUI: UTILS.getElement("pilotViewUI"),
         pilotSkillChangeUi: UTILS.getElement("pilot-skill-change-ui"),
-        hangerButtonsUI: UTILS.getElement("hangerButtonsUI")
+        hangerButtonsUI: UTILS.getElement("hangerButtonsUI"),
+        toBattleButton: UTILS.getElement("toBattleButton")
     };
 
     const hangerUIObserver = new MutationObserver(() => {
@@ -4172,6 +4173,29 @@ import skill from "../src/js/skill.js";
                 this.holderElement.appendChild(tmpElement);
             }
         }
+    };
+
+    var GameManager = new class {
+        start() {
+            doDarkModeTransition();
+            moneyDisplayManager.displayItems([]);
+            elements.hangerUI.style.display = "none";
+
+            this.socket = new Worker("client/src/worker.js");
+            this.socket.onmessage = (event) => {
+                console.log(event);
+            };
+
+            this.socket.postMessage("init");
+        }
+
+        render() {
+            //
+        }
+    };
+
+    elements.toBattleButton.onclick = () => {
+        GameManager.start();
     };
 
     window.onload = () => {
