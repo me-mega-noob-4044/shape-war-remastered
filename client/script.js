@@ -4177,6 +4177,12 @@ import msgpack from "../src/js/msgpack.js";
     };
 
     var EquipmentBuilder = new class {
+
+        /**
+         * compresses the userProfile to a readable array for the Worker to process :)
+         * @returns {array}
+         */
+
         player() {
             let shapes = [];
 
@@ -4213,8 +4219,7 @@ import msgpack from "../src/js/msgpack.js";
                 let mod = equippedModules[i];
                 let module = {
                     name: mod.name,
-                    level: mod.level,
-                    slot: mod.slot
+                    level: mod.level
                 };
 
                 let shape = shapes.find(e => e.sid == mod.owner && e.slot >= 0);
@@ -4234,7 +4239,7 @@ import msgpack from "../src/js/msgpack.js";
                 if (shape) shape.skills = skills;
             }
 
-            console.log(shapes);
+            return shapes;
         }
     };
 
@@ -4247,7 +4252,7 @@ import msgpack from "../src/js/msgpack.js";
         }
 
         start() {
-            EquipmentBuilder.player();
+            let playerData = EquipmentBuilder.player();
 
             doDarkModeTransition();
             moneyDisplayManager.displayItems([]);
@@ -4261,7 +4266,7 @@ import msgpack from "../src/js/msgpack.js";
                 console.log(event);
             };
 
-            // this.send("init", {});
+            this.send("new", playerData);
         }
 
         render() {
