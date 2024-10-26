@@ -1242,3 +1242,21 @@ a:-webkit-any-link {
     border-radius: 4px;
     overflow-y: scroll;
 }
+
+#toBattleButton {
+    color: white;
+    font-weight: 600;
+    position: absolute;
+    width: 205px;
+    height: 75px;
+    background-color: rgba(0, 0, 0, .2);
+    font-size: 24px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    left: 50%;
+    bottom: 10px;
+    transform: translateX(-50%);
+    cursor: pointer;
+}
