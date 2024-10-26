@@ -134,7 +134,7 @@ a:-webkit-any-link {
     height: 50px;
 }
 
-#shapeViewUI, #chooseShapesUI, #shapeItemsUI, #droneViewUI, #pilotViewUI {
+#shapeViewUI, #chooseShapesUI, #shapeItemsUI, #droneViewUI, #pilotViewUI, #pilot-skill-change-ui {
     display: none;
     position: absolute;
     top: 0px;
@@ -592,7 +592,7 @@ a:-webkit-any-link {
     border-radius: 4px;
 }
 
-#shape-view-back-button, #shape-view-back-button-2, #shape-view-back-button-3, #drone-view-back-button, #pilot-view-back-button {
+#shape-view-back-button, #shape-view-back-button-2, #shape-view-back-button-3, #drone-view-back-button, #pilot-view-back-button, #pilot-skills-view-back-button {
     position: absolute;
     top: 20px;
     left: 30px;
@@ -604,6 +604,10 @@ a:-webkit-any-link {
 }
 
 #shape-view-back-button-2:hover {
+    background-color: rgb(0, 0, 0, .3);
+}
+
+#pilot-skills-view-back-button:hover {
     background-color: rgb(0, 0, 0, .3);
 }
 
@@ -1198,4 +1202,26 @@ a:-webkit-any-link {
 
 #change-pilot-skill-button:hover {
     background-color: rgb(28, 110, 191);
+}
+
+#pilot-skills-right-side-display {
+    position: absolute;
+    top: 55px;
+    right: 30px;
+    height: calc(100% - 170px);
+    width: calc(60% - 40px);
+    overflow: hidden;
+    background-color: white;
+    overflow-y: scroll;
+}
+
+#pilot-skills-left-side-display {
+    position: absolute;
+    top: 55px;
+    left: 30px;
+    height: calc(100% - 170px);
+    width: calc(40% - 40px);
+    overflow: hidden;
+    background-color: white;
+    overflow-y: scroll;
 }

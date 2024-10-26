@@ -19,7 +19,8 @@ import skill from "../src/js/skill.js";
         darkFadeTransition: UTILS.getElement("darkFadeTransition"),
         chooseShapesUI: UTILS.getElement("chooseShapesUI"),
         droneViewUI: UTILS.getElement("droneViewUI"),
-        pilotViewUI: UTILS.getElement("pilotViewUI")
+        pilotViewUI: UTILS.getElement("pilotViewUI"),
+        pilotSkillChangeUi: UTILS.getElement("pilot-skill-change-ui")
     };
 
     var indxRole = ["Tank", "Assault", "Scout", "Support"];
@@ -292,7 +293,6 @@ import skill from "../src/js/skill.js";
                 let data = content.pilots[i];
                 let tmp = items.pilots.find(e => e.name == data.name);
                 let tmpItem = new pilot(tmp, data.ownerSID);
-                console.log(tmpItem, content.pilots);
                 tmpItem.level = data.level;
 
                 data.skills.forEach(e => {
@@ -2883,6 +2883,13 @@ import skill from "../src/js/skill.js";
                 userProfile.saveProfile();
             }
         }
+        changePilotSkill(pilot) {
+            moneyDisplayManager.displayItems(["gold"]);
+
+            doDarkModeTransition();
+            elements.pilotViewUI.style.display = "none";
+            elements.pilotSkillChangeUi.style.display = "block";
+        }
         viewPilotInDepth(pilot, isStore, isChanging, slotId) { // slotId is for locating the owner shape
             moneyDisplayManager.displayItems(["gold", "tokens"]);
             elements.pilotViewUI.style.display = "block";
@@ -2971,7 +2978,7 @@ import skill from "../src/js/skill.js";
                     if (!hasSkills) {
                         errorEventManager.error("Please train your pilot before trying to retrain them");
                     } else {
-
+                        this.changePilotSkill(pilot);
                     }
                 };
 
