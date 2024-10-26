@@ -8,6 +8,7 @@ import module from "../src/js/module.js";
 import drone from "../src/js/drone.js";
 import pilot from "../src/js/pilot.js";
 import skill from "../src/js/skill.js";
+import msgpack from "../src/js/msgpack.js";
 
 (function () {
     var elements = {
@@ -4175,18 +4176,92 @@ import skill from "../src/js/skill.js";
         }
     };
 
+    var EquipmentBuilder = new class {
+        player() {
+            let shapes = [];
+
+            let equippedShape = userProfile.shapes.filter(e => e.slot >= 0);
+            for (let i = 0; i < equippedShape.length; i++) {
+                let shape = equippedShape[i];
+
+                shapes.push({
+                    name: shape.name,
+                    sid: shape.sid,
+                    level: shape.level,
+                    slot: shape.slot,
+                    weapons: [],
+                    modules: [],
+                    skills: []
+                });
+            }
+
+            let equippedWeapons = userProfile.weapons.filter(e => e.owner >= 0);
+            for (let i = 0; i < equippedWeapons.length; i++) {
+                let wpn = equippedWeapons[i];
+                let weapon = {
+                    name: wpn.name,
+                    level: wpn.level,
+                    slot: wpn.slot
+                };
+
+                let shape = shapes.find(e => e.sid == wpn.owner && e.slot >= 0);
+                if (shape) shape.weapons.push(weapon);
+            }
+
+            let equippedModules = userProfile.modules.filter(e => e.owner >= 0);
+            for (let i = 0; i < equippedModules.length; i++) {
+                let mod = equippedModules[i];
+                let module = {
+                    name: mod.name,
+                    level: mod.level,
+                    slot: mod.slot
+                };
+
+                let shape = shapes.find(e => e.sid == mod.owner && e.slot >= 0);
+                if (shape) shape.modules.push(module);
+            }
+
+            let equippedPilots = userProfile.pilots.filter(e => e.owner >= 0);
+            for (let i = 0; i < equippedPilots.length; i++) {
+                let pilot = equippedPilots[i];
+                let skills = [];
+
+                pilot.skills.forEach((obj) => {
+                    skills.push(obj.name);
+                });
+
+                let shape = shapes.find(e => e.sid == pilot.owner && e.slot >= 0);
+                if (shape) shape.skills = skills;
+            }
+
+            console.log(shapes);
+        }
+    };
+
     var GameManager = new class {
+        send(type) {
+            let data = Array.prototype.slice.call(arguments, 1);
+            let binary = msgpack.encode([type, data]);
+
+            this.socket.postMessage(binary);
+        }
+
         start() {
+            EquipmentBuilder.player();
+
             doDarkModeTransition();
             moneyDisplayManager.displayItems([]);
             elements.hangerUI.style.display = "none";
 
-            this.socket = new Worker("client/src/worker.js");
+            this.socket = new Worker("client/src/main.js", {
+                type: "module"
+            });
+
             this.socket.onmessage = (event) => {
                 console.log(event);
             };
 
-            this.socket.postMessage("init");
+            // this.send("init", {});
         }
 
         render() {

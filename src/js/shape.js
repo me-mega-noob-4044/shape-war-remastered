@@ -25,6 +25,7 @@ export default class {
         this.speed = data.speedData?.base || data.speed;
         this.activeModuleIndex = 0;
         this.abilities = [];
+
         if (data.abilities.length) {
             this.abilities = [];
             for (let i = 0; i < data.abilities.length; i++) {
