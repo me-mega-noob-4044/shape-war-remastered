@@ -20,8 +20,18 @@ import skill from "../src/js/skill.js";
         chooseShapesUI: UTILS.getElement("chooseShapesUI"),
         droneViewUI: UTILS.getElement("droneViewUI"),
         pilotViewUI: UTILS.getElement("pilotViewUI"),
-        pilotSkillChangeUi: UTILS.getElement("pilot-skill-change-ui")
+        pilotSkillChangeUi: UTILS.getElement("pilot-skill-change-ui"),
+        hangerButtonsUI: UTILS.getElement("hangerButtonsUI")
     };
+
+    const hangerUIObserver = new MutationObserver(() => {
+        if (elements.hangerUI.style.display != "none") {
+            elements.hangerButtonsUI.style.display = "block";
+        } else {
+            elements.hangerButtonsUI.style.display = "none";
+        }
+    });
+    hangerUIObserver.observe(elements.hangerUI, { attributes: true});
 
     var indxRole = ["Tank", "Assault", "Scout", "Support"];
 

@@ -1244,6 +1244,7 @@ a:-webkit-any-link {
 }
 
 #toBattleButton {
+    display: flex;
     color: white;
     font-weight: 600;
     position: absolute;
@@ -1252,11 +1253,18 @@ a:-webkit-any-link {
     background-color: rgba(0, 0, 0, .2);
     font-size: 24px;
     border-radius: 6px;
-    display: flex;
     align-items: center;
     justify-content: center;
     left: 50%;
-    bottom: 10px;
+    bottom: 12px;
     transform: translateX(-50%);
     cursor: pointer;
+}
+
+#toBattleButton:hover {
+    background-color: rgba(0, 0, 0, .35);
+}
+
+#gameUI {
+    display: none;
 }
