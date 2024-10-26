@@ -772,6 +772,7 @@ import skill from "../src/js/skill.js";
             this.pilotViewUpgradeMoneyDisplay = UTILS.getElement("pilot-view-upgrade-money-display");
             this.changePilotSkillButton = UTILS.getElement("change-pilot-skill-button");
             this.pilotViewBackButton = UTILS.getElement("pilot-view-back-button");
+            this.pilotSkillsLeftSideDisplay = UTILS.getElement("pilot-skills-left-side-display");
             this.dataToImage = {
                 "healthData": "../src/media-files/icons/health.png",
                 "speedData": "../src/media-files/icons/speed.png",
@@ -2853,7 +2854,12 @@ import skill from "../src/js/skill.js";
                 </div>
                 `;
                 element.appendChild(unlockDisplayHolder);
-            } else if (type == "skill") {
+            } else if (type == "skill" || type == "selector") {
+                if (type == "selector") {
+                    element.style.width = "calc(100% - 10px)";
+                    element.style.cursor = "pointer";
+                }
+
                 let rgb =  UTILS.hexToRgb(config.tierColors[skill.tier])
                 element.style.backgroundColor = `rgba(${rgb}, .75)`;
 
@@ -2889,6 +2895,34 @@ import skill from "../src/js/skill.js";
             doDarkModeTransition();
             elements.pilotViewUI.style.display = "none";
             elements.pilotSkillChangeUi.style.display = "block";
+
+            let sorted = pilot.skills.sort((a, b) => a.slot - b.slot);
+
+            let selectedSkill;
+
+            this.pilotSkillsLeftSideDisplay.innerHTML = "";
+            for (let i = 0; i < sorted.length; i++) {
+                let skill = sorted[i];
+
+                let data = this.buildPilotSkillDisplay("selector", i, pilot.tier, skill);
+                data.id = `slot:id:${skill.slot}`;
+
+                data.onclick = () => {
+                    if (selectedSkill) {
+                        selectedSkill.style.width = "calc(100% - 10px)";
+                        selectedSkill.style.border = "none";
+                    }
+
+                    selectedSkill = data;
+
+                    data.style.width = "calc(100% - 15px)";
+                    data.style.border = "solid";
+                    data.style.borderWidth = "2.5px";
+                    data.style.borderColor = "white";
+                };
+
+                this.pilotSkillsLeftSideDisplay.appendChild(data);
+            }
         }
         viewPilotInDepth(pilot, isStore, isChanging, slotId) { // slotId is for locating the owner shape
             moneyDisplayManager.displayItems(["gold", "tokens"]);

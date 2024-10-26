@@ -1221,7 +1221,11 @@ a:-webkit-any-link {
     left: 30px;
     height: calc(100% - 170px);
     width: calc(40% - 40px);
+    display: flex;
+    align-items: center;
+    flex-direction: column;
     overflow: hidden;
-    background-color: white;
+    background-color: rgba(0, 0, 0, .15);
+    border-radius: 4px;
     overflow-y: scroll;
 }
