@@ -2914,7 +2914,7 @@ import skill from "../src/js/skill.js";
                 userProfile.saveProfile();
             }
         }
-        changePilotSkill(pilot) {
+        changePilotSkill(pilot, callback) {
             moneyDisplayManager.displayItems(["gold"]);
 
             doDarkModeTransition();
@@ -2923,19 +2923,50 @@ import skill from "../src/js/skill.js";
 
             let sorted = pilot.skills.sort((a, b) => a.slot - b.slot);
 
+            let skillClassConstructor = skill;
+
             let selectedSkill;
 
             this.pilotSkillsLeftSideDisplay.innerHTML = "";
+            this.pilotSkillsRightSideDisplay.innerHTML = "";
+
             for (let i = 0; i < sorted.length; i++) {
                 let skill = sorted[i];
 
                 let data = this.buildPilotSkillDisplay("selector", i, pilot.tier, skill);
-                data.id = `slot:id:${skill.slot}`;
 
                 data.onclick = () => {
                     if (selectedSkill) {
                         selectedSkill.style.width = "calc(100% - 10px)";
                         selectedSkill.style.border = "none";
+                    } else {
+                        let avaiableSkills = pilotSkillManager.getSkills(pilot);
+
+                        for (let i = 0; i < avaiableSkills.length; i++) {
+                            let Skill = avaiableSkills[i];
+
+                            let Data = this.buildPilotSkillDisplay("purchase", i, pilot.tier, Skill, pilot.level);
+
+                            let cost = UTILS.getSkillCost(pilot.tier, Skill, pilot.level);
+
+                            Data.onclick = () => {
+                                if (userProfile.bank.gold - cost >= 0) {
+                                    doDarkModeTransition();
+                                    userProfile.changeBank("gold", -cost);
+
+                                    pilot.skills.push(new skillClassConstructor(Skill, skill.slot));
+
+                                    let oldIndx = pilot.skills.findIndex(e => e == skill);
+                                    pilot.skills.splice(oldIndx, 1);
+
+                                    userProfile.saveProfile();
+
+                                    callback();
+                                }
+                            };
+
+                            this.pilotSkillsRightSideDisplay.appendChild(Data);
+                        }
                     }
 
                     selectedSkill = data;
@@ -2947,18 +2978,6 @@ import skill from "../src/js/skill.js";
                 };
 
                 this.pilotSkillsLeftSideDisplay.appendChild(data);
-            }
-
-            let avaiableSkills = pilotSkillManager.getSkills(pilot);
-
-            this.pilotSkillsRightSideDisplay.innerHTML = "";
-            for (let i = 0; i < avaiableSkills.length; i++) {
-                let skill = avaiableSkills[i];
-
-                let data = this.buildPilotSkillDisplay("purchase", i, pilot.tier, skill, pilot.level);
-                data.id = `slot:id:buy:${i}`;
-
-                this.pilotSkillsRightSideDisplay.appendChild(data);
             }
         }
         viewPilotInDepth(pilot, isStore, isChanging, slotId) { // slotId is for locating the owner shape
@@ -3049,7 +3068,10 @@ import skill from "../src/js/skill.js";
                     if (!hasSkills) {
                         errorEventManager.error("Please train your pilot before trying to retrain them");
                     } else {
-                        this.changePilotSkill(pilot);
+                        this.changePilotSkill(pilot, () => {
+                            elements.pilotSkillChangeUi.style.display = "none";
+                            this.viewPilotInDepth(pilot, isStore, isChanging, slotId);
+                        });
                     }
                 };
 
