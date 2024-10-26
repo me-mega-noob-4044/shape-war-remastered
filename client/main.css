@@ -646,6 +646,14 @@ a:-webkit-any-link {
     display: none;
 }
 
+.upgrade-button-hover {
+    background-color: rgb(1, 207, 77);
+}
+
+.upgrade-button-hover:hover {
+    background-color: rgb(1, 193, 71);
+}
+
 #pilot-view-upgrade-button:hover {
     background-color: rgb(1, 193, 71);
 }
@@ -1210,8 +1218,13 @@ a:-webkit-any-link {
     right: 30px;
     height: calc(100% - 170px);
     width: calc(60% - 40px);
+    display: flex;
+    align-items: center;
+    flex-direction: column;
     overflow: hidden;
     background-color: white;
+    background-color: rgba(0, 0, 0, .15);
+    border-radius: 4px;
     overflow-y: scroll;
 }
 

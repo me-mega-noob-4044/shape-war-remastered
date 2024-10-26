@@ -773,6 +773,7 @@ import skill from "../src/js/skill.js";
             this.changePilotSkillButton = UTILS.getElement("change-pilot-skill-button");
             this.pilotViewBackButton = UTILS.getElement("pilot-view-back-button");
             this.pilotSkillsLeftSideDisplay = UTILS.getElement("pilot-skills-left-side-display");
+            this.pilotSkillsRightSideDisplay = UTILS.getElement("pilot-skills-right-side-display");
             this.dataToImage = {
                 "healthData": "../src/media-files/icons/health.png",
                 "speedData": "../src/media-files/icons/speed.png",
@@ -2788,7 +2789,7 @@ import skill from "../src/js/skill.js";
             };
 
         }
-        buildPilotSkillDisplay(type, indx, tier, skill) {
+        buildPilotSkillDisplay(type, indx, tier, skill, pilotLevel) {
             let element = document.createElement("div");
             element.style = "position: relative; display: flex; align-items: center; width: 100%; height: 65px; margin-top: 7px; background-color: rgba(0, 0, 0, .15); border-radius: 4px;";
 
@@ -2854,10 +2855,14 @@ import skill from "../src/js/skill.js";
                 </div>
                 `;
                 element.appendChild(unlockDisplayHolder);
-            } else if (type == "skill" || type == "selector") {
-                if (type == "selector") {
+            } else if (type == "skill" || type == "selector" || type == "purchase") {
+                if (type == "selector" || type == "purchase") {
                     element.style.width = "calc(100% - 10px)";
                     element.style.cursor = "pointer";
+
+                    if (type == "purchase") {
+                        element.style.height = "95px";
+                    }
                 }
 
                 let rgb =  UTILS.hexToRgb(config.tierColors[skill.tier])
@@ -2866,6 +2871,26 @@ import skill from "../src/js/skill.js";
                 let iconDisplay = document.createElement("div");
                 iconDisplay.style = `position: absolute; display: flex; align-items: center; justify-content: center; width: 65px; height: 65px; left: 5px; top: 0px; background-image: url('${skill.imageSource}'); background-size: 65px 65px;`;
                 element.appendChild(iconDisplay);
+
+                if (type == "purchase") {
+                    iconDisplay.style.top = "13.75px";
+                    element.style.pointerEvents = "none";
+
+                    let purchaseButton = document.createElement("div");
+                    purchaseButton.style = "pointer-events: auto; display: flex; align-items: center; justify-content: center; position: absolute; bottom: 5px; right: 15px; width: 150px; height: 35px; border-radius: 6px;";
+                    purchaseButton.classList.add("upgrade-button-hover");
+
+                    let moneyDisplay = document.createElement("div");
+                    moneyDisplay.style = "width: 25px; height: 25px; background-size: 25px 25px; background-image: url('src/media-files/money/gold.png');";
+                    purchaseButton.appendChild(moneyDisplay);
+
+                    let cost = document.createElement("div");
+                    cost.style = "color: white;";
+                    cost.innerHTML = UTILS.getSkillCost(tier, skill, pilotLevel);
+                    purchaseButton.appendChild(cost);
+
+                    element.appendChild(purchaseButton);
+                }
 
                 let dataHolder = document.createElement("div");
                 dataHolder.style = "position: absolute; display: flex; justify-content: center; flex-direction: column; top: 0px; left: 75px; height: 65px; width: calc(100% - 75px);";
@@ -2922,6 +2947,18 @@ import skill from "../src/js/skill.js";
                 };
 
                 this.pilotSkillsLeftSideDisplay.appendChild(data);
+            }
+
+            let avaiableSkills = pilotSkillManager.getSkills(pilot);
+
+            this.pilotSkillsRightSideDisplay.innerHTML = "";
+            for (let i = 0; i < avaiableSkills.length; i++) {
+                let skill = avaiableSkills[i];
+
+                let data = this.buildPilotSkillDisplay("purchase", i, pilot.tier, skill, pilot.level);
+                data.id = `slot:id:buy:${i}`;
+
+                this.pilotSkillsRightSideDisplay.appendChild(data);
             }
         }
         viewPilotInDepth(pilot, isStore, isChanging, slotId) { // slotId is for locating the owner shape

@@ -16,6 +16,36 @@ export const deleteVal = (id) => {
     localStorage.removeItem(id);
 }
 
+export const getSkillCost = (pilotTier, skill, pilotLevel, int) => {
+    let baseCost = 100;
+
+    baseCost *= (1 + (pilotTier / 2));
+
+    if (pilotTier >= 2) {
+        baseCost += 750;
+    }
+
+    let skillCost = skill.tier * 250;
+    let cost = Math.ceil(skillCost + baseCost);
+
+    let times = 0;
+    for (let i = 0; i < pilotLevel; i++) {
+        times++;
+
+        if (times < 3) {
+            cost += 25;
+        } else if (times < 5) {
+            cost += 50;
+        } else if (i == 6) {
+            cost += 150;
+        } else {
+            cost += 75;
+        }
+    }
+
+    return int ? cost : styleNumberWithComma(cost);
+};
+
 export const hexToRgb = (hex) => {
     hex = hex.replace(/^#/, "");
 
@@ -53,7 +83,7 @@ export const styleNumberWithComma = (value) => {
         return value;
     }
 
-    return Math.round(value).toLocaleString();//
+    return Math.round(value).toLocaleString();
 };
 
 export const getDistance = (start, end) => {
