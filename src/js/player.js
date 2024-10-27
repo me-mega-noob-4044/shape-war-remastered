@@ -129,7 +129,17 @@ export default class {
 
             for (let i = 0; i < data.weapons.length; i++) {
                 let wpn = data.weapons[i];
+
+                let Item = new weapon(items.weapons.find(e => e.name == wpn.name), undefined, wpn.slot);
+
+                for (let t = 0; t < wpn.level - 1; t++) {
+                    upgraderManager.upgradeWeapon(Item);
+                }
+
+                Shape.weapons.push(Item);
             }
+
+            Shape.weapons = Shape.weapons.sort((a, b) => a.slot - b.slot);
 
             console.log(data, Shape);
         }
