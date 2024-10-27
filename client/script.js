@@ -4268,7 +4268,7 @@ import msgpack from "../src/js/msgpack.js";
                 console.log(event);
             };
 
-            this.send("new", playerData);
+            this.send("new", playerData, true);
         }
 
         render() {

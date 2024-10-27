@@ -228,7 +228,5 @@ export default class {
 
             this.shapes.push(Shape);
         }
-
-        console.log(this.shapes);
     }
 }
