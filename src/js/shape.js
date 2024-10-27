@@ -1,11 +1,11 @@
-window.shapeSid = 0;
+(self || window).shapeSid = 0;
 import ability from "./ability.js";
 
 export default class {
     constructor(data, slot, dontAssignSID) {
         if (!dontAssignSID) {
-            this.sid = window.shapeSid;
-            window.shapeSid++;
+            this.sid = (self || window).shapeSid;
+            (self || window).shapeSid++;
         } else if (data.cost) {
             this.cost = { ...data.cost };
         }

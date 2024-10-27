@@ -3,15 +3,10 @@ import player from "../../src/js/player.js";
 
 var players = [];
 
-function createPlayingObject(data) {
-    players.push(new player(data));
-
-    console.log(players())
-}
-
 var clientEvents = {
-    "new": (data) => createPlayingObject(data),
-
+    "new": (data) => {
+        players.push(new player(data));
+    }
 };
 
 self.onmessage = (event) => {
@@ -28,7 +23,5 @@ self.onmessage = (event) => {
         if (clientEvents[type]) {
             clientEvents[type].apply(undefined, data);
         }
-
-        console.log(type, data);
     }
 };
