@@ -518,6 +518,8 @@ import msgpack from "../src/js/msgpack.js";
                 } else if (value) {
                     shape.health += value;
                 }
+
+                shape.maxhealth = shape.health;
             }
             if (item.speedData) {
                 let value = item.speedData.level[shape.level];

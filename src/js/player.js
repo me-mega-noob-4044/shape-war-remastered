@@ -2,6 +2,7 @@ import items from "./items.js";
 import shape from "./shape.js";
 import config from "./config.js";
 import weapon from "./weapon.js";
+import module from "./module.js";
 
 function getMk3Amount(tmp) {
     let maxNumber = tmp.base;
@@ -49,6 +50,8 @@ var upgraderManager = new class {
             } else if (value) {
                 shape.health += value;
             }
+
+            shape.maxhealth = shape.health;
         }
         if (item.speedData) {
             let value = item.speedData.level[shape.level];
@@ -107,6 +110,71 @@ var upgraderManager = new class {
     }
 };
 
+function setBonuses(shape, skills) {
+    let bonuses = {
+        healthIncrease: 1,
+        dmgIncrease: 1
+    };
+
+    for (let i = 0; i < skills.length; i++) {
+        let skill = items.skills.find(e => e.name == skills[i]);
+
+        for (let key in bonuses) {
+            if (skill[key]) {
+                bonuses[key] += skill[key];
+            }
+        }
+    }
+
+    for (let i = 0; i < shape.modules.length; i++) {
+        let mod = shape.modules[i];
+
+        for (let key in bonuses) {
+            if (mod[key]) {
+                bonuses[key] += mod[key];
+            }
+        }
+    }
+
+    shape.maxhealth = shape.health = Math.ceil(shape.health * bonuses.healthIncrease);
+
+    for (let i = 0; i < shape.weapons.length; i++) {
+        let wpn = shape.weapons[i];
+
+        wpn.dmg *= bonuses.dmgIncrease;
+    }
+}
+
+function playerify(shape) {
+    delete shape.cost;
+    delete shape.weaponHardpoints;
+    delete shape.moduleHardpoints;
+    delete shape.description;
+
+    for (let i = 0; i < shape.weapons.length; i++) {
+        let wpn = shape.weapons[i];
+
+        delete wpn.cost;
+        delete wpn.attributes;
+        delete wpn.description;
+        delete wpn.owner;
+        delete wpn.industryName;
+        delete wpn.type;
+    }
+
+    for (let i = 0; i < shape.modules.length; i++) {
+        let mod = shape.modules[i];
+
+        delete mod.cost;
+        delete mod.slot;
+        delete mod.attributes;
+        delete mod.description;
+        delete mod.owner;
+        delete mod.industryName;
+        delete mod.type;
+    }
+}
+
 export default class {
     constructor(data) {
         this.mothershipCharge = 0;
@@ -141,7 +209,26 @@ export default class {
 
             Shape.weapons = Shape.weapons.sort((a, b) => a.slot - b.slot);
 
-            console.log(data, Shape);
+            Shape.modules = [];
+
+            for (let i = 0; i < data.modules.length; i++) {
+                let Module = data.modules[i];
+
+                let Item = new module(items.modules.find(e => e.name == Module.name));
+
+                for (let t = 0; t < Module.level - 1; t++) {
+                    upgraderManager.upgradeModule(Item);
+                }
+
+                Shape.modules.push(Item);
+            }
+
+            setBonuses(Shape, data.skills);
+            playerify(Shape);
+
+            this.shapes.push(Shape);
         }
+
+        console.log(this.shapes);
     }
 }
