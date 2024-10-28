@@ -1,10 +1,14 @@
 import msgpack from "../../src/js/msgpack.js";
 import player from "../../src/js/player.js";
-import mapBuilder from "./game/mapBuilder.js";
+import { maps, mapBuilder } from "./game/mapBuilder.js";
 import config from "../../src/js/config.js";
 
 var players = [];
 var buildings = [];
+var mapSize = {
+    width: 0, // X axis
+    height: 0 // Y axis
+};
 
 var clientEvents = {
     "new": (data, isUser) => {
@@ -52,9 +56,9 @@ var game = new class {
     updateGame() {}
 
     start() {
-        mapBuilder.build(buildings);
+        let map = mapBuilder.build(buildings);
 
-        this.send("init");
+        this.send("init", map, buildings);
 
         this.interval = setInterval(() => {
             this.updateGame();

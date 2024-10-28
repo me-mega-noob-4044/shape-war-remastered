@@ -23,7 +23,9 @@ import msgpack from "../src/js/msgpack.js";
         pilotViewUI: UTILS.getElement("pilotViewUI"),
         pilotSkillChangeUi: UTILS.getElement("pilot-skill-change-ui"),
         hangerButtonsUI: UTILS.getElement("hangerButtonsUI"),
-        toBattleButton: UTILS.getElement("toBattleButton")
+        toBattleButton: UTILS.getElement("toBattleButton"),
+        chooseShapeUI: UTILS.getElement("chooseShapeUI"),
+        gameUI: UTILS.getElement("gameUI")
     };
 
     const hangerUIObserver = new MutationObserver(() => {
@@ -4246,6 +4248,81 @@ import msgpack from "../src/js/msgpack.js";
     };
 
     var GameManager = new class {
+        constructor() {
+            this.map = {};
+            this.buildings = [];
+            this.serverEvents = {
+                "init": (map, buildings) => {
+                    this.map = map;
+                    this.buildings = buildings;
+
+                    this.setUpChooseSlots();
+                }
+            };
+        }
+
+        setUpChooseSlots() {
+            let containerWidth = window.innerWidth - 200;
+            let containerHeight = window.innerHeight;
+            let gap = 10;
+
+            let totalGapWidth = gap * 3;
+            let totalGapHeight = gap * 1;
+            let squareSize = (containerWidth - totalGapWidth) / 4;
+            let verticalOffset = (containerHeight - squareSize * 2 - totalGapHeight) / 2;
+
+            for (let i = 0; i < 8; i++) {
+                let row = Math.floor(i / 4);
+                let col = i % 4;
+
+                let left = col * (squareSize + gap) + 100;
+                let top = row * (squareSize + gap) + verticalOffset;
+
+                let squareItem = document.createElement("div");
+                squareItem.classList.add("hanger-item");
+                squareItem.style = `position: absolute; top: ${top}px; left: ${left}px; width: ${squareSize}px; height: ${squareSize}px; border-radius: 4px;`;
+
+                let shape = userProfile.shapes.find(e => e.slot == i);
+                if (shape) {
+                    let shapeImage = canvasDrawer.createUIItem(shape);
+                    squareItem.style.cursor = "pointer";
+                    shapeImage.style = "width: 100%; height: 100%;";
+                    squareItem.innerHTML = `
+                    <div class="hanger-shape-name" style="color: white;">
+                        <div class="hanger-level-style-display" style="background-color: ${config.tierColors[shape.tier]}">
+                            ${shape.level - (shape.level == 25 ? 24 : shape.level > 12 ? 12 : 0)}
+                        </div>
+                        <div style="margin-left: 30px;">
+                            ${shape.name} ${shape.level == 25 ? `<span style="color: #ffff00">MK3</span>` : shape.level > 12 ? `<span style="color: #00ff00">MK2</span>` : ""}
+                        </div>
+                    </div>
+                    `;
+                    let weapons = userProfile.weapons.filter(e => e.owner == shape.sid).sort((a, b) => a.slot - b.slot);
+                    for (let t = 0; t < weapons.length; t++) {
+                        let wpn = weapons[t];
+                        let tmpElement = document.createElement("div");
+                        let bottom = 10 + (t * 70);
+                        tmpElement.classList.add("hanger-weapon-item");
+                        tmpElement.style = `bottom: ${bottom}px; border-color: ${config.tierColors[wpn.tier]}; background-image: url('${wpn.imageSource}'), none;`;
+                        squareItem.appendChild(tmpElement);
+                    }
+                    squareItem.appendChild(shapeImage);
+                    squareItem.onclick = () => {
+                        this.viewInDepth(shape);
+                    };
+                } else {
+                    squareItem.style.pointerEvents = "none";
+                    squareItem.innerHTML = `
+                    <span class="material-symbols-outlined" style="font-size: 175px;">
+                    lock
+                    </span>
+                    `;
+                }
+
+                elements.chooseShapeUI.appendChild(squareItem);
+            }
+        }
+
         send(type) {
             let data = Array.prototype.slice.call(arguments, 1);
             let binary = msgpack.encode([type, data]);
@@ -4259,13 +4336,21 @@ import msgpack from "../src/js/msgpack.js";
             doDarkModeTransition();
             moneyDisplayManager.displayItems([]);
             elements.hangerUI.style.display = "none";
+            elements.gameUI.style.display = "block";
 
             this.socket = new Worker("client/src/main.js", {
                 type: "module"
             });
 
             this.socket.onmessage = (event) => {
-                console.log(event);
+                let data = new Uint8Array(event.data);
+                let parsed = msgpack.decode(data);
+                let type = parsed[0];
+                data = parsed[1];
+
+                if (this.serverEvents[type]) {
+                    this.serverEvents[type].apply(undefined, data);
+                }
             };
 
             this.send("new", playerData, true);
