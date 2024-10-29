@@ -4247,24 +4247,76 @@ import msgpack from "../src/js/msgpack.js";
         }
     };
 
+    var keys = {};
+    var moveKeys = {
+        87: [0, -1],
+        38: [0, -1],
+        83: [0, 1],
+        40: [0, 1],
+        65: [-1, 0],
+        37: [-1, 0],
+        68: [1, 0],
+        39: [1, 0]
+    };
+
+    document.addEventListener("keydown", (event) => {
+        if (event.isTrusted) {
+            let key = event.which || event.keyCode;
+
+            keys[key] = 1;
+            if (moveKeys[key]) {
+                GameManager.updateMovement();
+            }
+        }
+    });
+    document.addEventListener("keyup", (event) => {
+        if (event.isTrusted) {
+            let key = event.which || event.keyCode;
+
+            keys[key] = 0;
+            if (moveKeys[key]) {
+                GameManager.updateMovement();
+            }
+        }
+    });
+
+    var gameCanvas = document.getElementById("gameCanvas");
+    var ctx = gameCanvas.getContext("2d");
+
     var renderer = new class {
         constructor() {
             this.start = false;
         }
 
+        resize() {
+            gameCanvas.style.width = `${window.innerWidth}px`;
+            gameCanvas.style.height = `${window.innerHeight}px`;
+            gameCanvas.width = window.innerWidth;
+            gameCanvas.height = window.innerHeight;
+        }
+
         render() {
             // Renders Stuff
+            // ctx.fillStyle = "lightgreen";
+            ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
 
             if (renderer.start) {
-                window.requestAnimationFrame(this.render);
+                window.requestAnimationFrame(() => {
+                    this.render();
+                });
             }
         }
     };
 
+    window.addEventListener("resize", renderer.resize);
+    renderer.resize();
+
     var GameManager = new class {
         constructor() {
-            this.map = {};
+            this.players = [];
             this.buildings = [];
+            this.map = {};
+
             this.serverEvents = {
                 "init": (map, buildings) => {
                     this.map = map;
@@ -4274,13 +4326,29 @@ import msgpack from "../src/js/msgpack.js";
                     this.startRendering();
                 },
                 "updatePlayers": (data) => {
-                    console.log(data);
+                    for (let i = 0; i < data.length;) {
+                        let tmpObj = this.players[data[i]];
+
+                        if (!tmpObj) {
+                            tmpObj = new shape(items.shapes.find(e => e.name == data[i + 1]), undefined, true);
+                        }
+
+                        if (tmpObj) {
+                            tmpObj.x = data[i + 2];
+                            tmpObj.y = data[i + 3];
+
+                            // console.log(data.slice(i, i + 5));
+                        }
+
+                        i += 5;
+                    }
                 }
             };
         }
 
         startRendering() {
             renderer.start = true;
+            renderer.render();
         }
 
         setUpChooseSlots() {

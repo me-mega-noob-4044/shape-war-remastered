@@ -148,6 +148,7 @@ function setBonuses(shape, skills) {
 function playerify(shape) {
     shape.x = 0;
     shape.y = 0;
+    shape.dir = 0;
     delete shape.cost;
     delete shape.weaponHardpoints;
     delete shape.moduleHardpoints;
@@ -181,6 +182,7 @@ export default class {
     constructor(data) {
         this.chooseIndex = -1;
         this.mothershipCharge = 0;
+        this.moveDir = undefined;
         this.shapes = [];
 
         this.init(data);

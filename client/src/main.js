@@ -64,7 +64,7 @@ var game = new class {
             let shape = player.shapes[player.chooseIndex];
 
             if (shape) {
-                playersData.push(i, shape.x, shape.y); // ID, x, y
+                playersData.push(i, shape.name, shape.x, shape.y, shape.dir); // ID, name, x, y, dir
             }
         }
 
