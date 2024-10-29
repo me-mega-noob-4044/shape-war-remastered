@@ -101,7 +101,7 @@ export const getDistance = (start, end) => {
 };
 
 export const getDirection = (start, end) => {
-    return Math.atan2(end.y - start.y, end.x - start.x);
+    return Math.atan2(start.y - end.y, start.x - end.x);
 };
 
 export const capitalizeFirstLetter = (string) => {

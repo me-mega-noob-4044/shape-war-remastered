@@ -4278,7 +4278,12 @@ import msgpack from "../src/js/msgpack.js";
 
     var renderer = new class {
         constructor() {
+            this.lastUpdate = 0;
             this.start = false;
+            this.cam = {
+                x: 0,
+                y: 0
+            };
 
             this.offset = {
                 x: 0,
@@ -4344,17 +4349,73 @@ import msgpack from "../src/js/msgpack.js";
             }
         }
 
+        renderGrid() {
+            ctx.lineWidth = 4;
+            ctx.strokeStyle = "#000";
+            ctx.globalAlpha = 0.06;
+            ctx.beginPath();
+
+            let x, y; 
+
+            for (x = -this.cam.x; x < this.screenSize.x; x += this.screenSize.y / 4) {
+                if (x > 0) {
+                    ctx.moveTo(x, 0);
+                    ctx.lineTo(x, this.screenSize.y);
+                }
+            }
+            for (y = -this.cam.y; y < this.screenSize.y; y += this.screenSize.y / 4) {
+                if (x > 0) {
+                    ctx.moveTo(0, y);
+                    ctx.lineTo(this.screenSize.x, y);
+                }
+            }
+            ctx.stroke();
+        }
+
         render() {
+            let delta = Date.now() - this.lastUpdate;
+            this.lastUpdate = Date.now();
+
             if (player) {
-                this.offset = {
-                    x: player.x - (this.screenSize.x / 2),
-                    y: player.y - (this.screenSize.y / 2)
-                };
+                let tmpDist = UTILS.getDistance(this.cam, player);
+                let tmpDir = UTILS.getDirection(player, this.cam);
+                let camSpd = Math.min(tmpDist * 0.01 * delta, (tmpDist || 0));
+
+                if (tmpDist > 0.05) {
+                    this.cam.x += camSpd * Math.cos(tmpDir);
+                    this.cam.y += camSpd * Math.sin(tmpDir);
+                } else {
+                    this.cam.x = player.x;
+                    this.cam.y = player.y;
+                }
+            } else {
+                this.cam.x = GameManager.map.x / 2;
+                this.cam.y = GameManager.map.y / 2;
+            }
+
+            this.offset = {
+                x: this.cam.x - (this.screenSize.x / 2),
+                y: this.cam.y - (this.screenSize.y / 2)
+            };
+
+            for (let i = 0; i < GameManager.players.length; i++) {
+                let tmpObj = GameManager.players[i];
+
+                if (tmpObj) {
+                    let tmpDiff = tmpObj.x2 - tmpObj.x1;
+                    tmpObj.dt += delta;
+                    let tmpRate = Math.min(1.7, tmpObj.dt / 128);
+                    tmpObj.x = tmpObj.x1 + (tmpDiff * tmpRate);
+                    tmpDiff = (tmpObj.y2 - tmpObj.y1);
+                    tmpObj.y = tmpObj.y1 + (tmpDiff * tmpRate);
+                }
             }
 
             ctx.globalAlpha = 1;
             ctx.fillStyle = "#b0db51";
             ctx.fillRect(0, 0, this.screenSize.x, this.screenSize.y);
+
+            this.renderGrid();
 
             this.renderPlayers();
             this.renderBorders();
@@ -4412,12 +4473,17 @@ import msgpack from "../src/js/msgpack.js";
                                 player = tmpObj;
                             }
 
+                            tmpObj.x = data[i + 2];
+                            tmpObj.y = data[i + 3];
                             this.players.push(tmpObj);
                         }
 
                         if (tmpObj) {
-                            tmpObj.x = data[i + 2];
-                            tmpObj.y = data[i + 3];
+                            tmpObj.x1 = tmpObj.x;
+                            tmpObj.y1 = tmpObj.y;
+                            tmpObj.dt = 0;
+                            tmpObj.x2 = data[i + 2];
+                            tmpObj.y2 = data[i + 3];
                             tmpObj.dir = data[i + 4];
                             tmpObj.health = data[i + 5];
                             tmpObj.maxhealth = data[i + 6];
