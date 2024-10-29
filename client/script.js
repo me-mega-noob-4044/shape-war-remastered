@@ -4247,6 +4247,20 @@ import msgpack from "../src/js/msgpack.js";
         }
     };
 
+    var renderer = new class {
+        constructor() {
+            this.start = false;
+        }
+
+        render() {
+            // Renders Stuff
+
+            if (renderer.start) {
+                window.requestAnimationFrame(this.render);
+            }
+        }
+    };
+
     var GameManager = new class {
         constructor() {
             this.map = {};
@@ -4257,8 +4271,16 @@ import msgpack from "../src/js/msgpack.js";
                     this.buildings = buildings;
 
                     this.setUpChooseSlots();
+                    this.startRendering();
+                },
+                "updatePlayers": (data) => {
+                    console.log(data);
                 }
             };
+        }
+
+        startRendering() {
+            renderer.start = true;
         }
 
         setUpChooseSlots() {
@@ -4308,7 +4330,8 @@ import msgpack from "../src/js/msgpack.js";
                     }
                     squareItem.appendChild(shapeImage);
                     squareItem.onclick = () => {
-                        this.viewInDepth(shape);
+                        elements.chooseShapeUI.style.display = "none";
+                        this.send("chooseSlot", i);
                     };
                 } else {
                     squareItem.style.pointerEvents = "none";

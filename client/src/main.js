@@ -17,6 +17,9 @@ var clientEvents = {
         if (isUser) {
             game.start();
         }
+    },
+    "chooseSlot": (slot) => {
+        players[0].chooseIndex = slot;
     }
 };
 
@@ -24,7 +27,6 @@ self.onmessage = (event) => {
     let { data } = event;
 
     if (typeof data == "string") {
-        // 
     } else {
         data = new Uint8Array(data);
         let parsed = msgpack.decode(data);
@@ -53,7 +55,21 @@ var game = new class {
         
     }
     
-    updateGame() {}
+    updateGame() {
+        let playersData = [];
+
+        for (let i = 0; i < players.length; i++) {
+            let player = players[i];
+
+            let shape = player.shapes[player.chooseIndex];
+
+            if (shape) {
+                playersData.push(i, shape.x, shape.y); // ID, x, y
+            }
+        }
+
+        this.send("updatePlayers", playersData);
+    }
 
     start() {
         let map = mapBuilder.build(buildings);
