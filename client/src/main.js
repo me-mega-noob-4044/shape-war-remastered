@@ -19,7 +19,10 @@ var clientEvents = {
         }
     },
     "chooseSlot": (slot) => {
-        players[0].chooseIndex = slot;
+        if (players[0]) players[0].chooseIndex = slot;
+    },
+    "updateMovement": (newMoveDir) => {
+        if (players[0]) players[0].moveDir = newMoveDir;
     }
 };
 
@@ -41,6 +44,7 @@ self.onmessage = (event) => {
 
 var game = new class {
     constructor() {
+        this.map = null;
         this.interval = null;
     }
 
@@ -64,6 +68,8 @@ var game = new class {
             let shape = player.shapes[player.chooseIndex];
 
             if (shape) {
+                player.update(shape, this.map);
+
                 // ID, name, x, y, dir, health, maxhealth, grayDamage
                 playersData.push(i, shape.name, shape.x, shape.y, shape.dir, shape.health, shape.maxhealth, shape.grayDamage);
             }
@@ -73,7 +79,7 @@ var game = new class {
     }
 
     start() {
-        let map = mapBuilder.build(buildings);
+        let map = this.map = mapBuilder.build(buildings);
 
         this.send("init", map, buildings);
 

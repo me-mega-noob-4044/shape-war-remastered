@@ -77,6 +77,10 @@ export const abbreviateNumber = (value) => {
     return value;
 };
 
+export const fixTo = (value, indx) => {
+    return parseFloat(value.toFixed(indx));
+};
+
 export const styleNumberWithSpace = (value) => {
     value = styleNumberWithComma(value);
 

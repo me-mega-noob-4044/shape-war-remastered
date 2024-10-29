@@ -235,4 +235,37 @@ export default class {
             this.shapes.push(Shape);
         }
     }
+
+    handleMovement(shape) {
+        if (this.moveDir != undefined) {
+            let spdMulti = config.gameUpdateSpeed * 0.35;
+
+            shape.x += Math.cos(this.moveDir) * spdMulti;
+            shape.y += Math.sin(this.moveDir) * spdMulti;
+        }
+    }
+
+    update(shape, map) {
+        // Movement:
+
+        this.handleMovement(shape);
+
+        if (shape.x <= shape.scale) {
+            shape.x = shape.scale;
+        }
+
+        if (shape.x >= map.width - shape.scale) {
+            shape.x = map.width - shape.scale;
+        }
+
+        if (shape.y <= shape.scale) {
+            shape.y = shape.scale;
+        }
+
+        if (shape.y >= map.height - shape.scale) {
+            shape.y = map.height - shape.scale;
+        }
+
+        console.log(shape.x, shape.y);
+    }
 }

@@ -6,7 +6,7 @@ const shapes = [{
     Recommended Equipment: x2 Punisher
     `,
     aimTurnSpeed: 0.008,
-    fovMulti: 1.4,
+    fovMulti: 1.3,
     scale: 55,
     indxRole: 1,
     speedData: {
@@ -42,7 +42,7 @@ const shapes = [{
     Recommended Equipment: x4 Punisher
     `,
     aimTurnSpeed: 0.008,
-    fovMulti: 1.45,
+    fovMulti: 1.3,
     scale: 65,
     indxRole: 1,
     speedData: {
@@ -78,7 +78,7 @@ const shapes = [{
     Recommended Equipment: x1 Punisher T
     `,
     aimTurnSpeed: 0.008,
-    fovMulti: 1.2,
+    fovMulti: 1.1,
     scale: 40,
     indxRole: 2,
     speedData: {

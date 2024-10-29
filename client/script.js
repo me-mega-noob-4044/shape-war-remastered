@@ -325,14 +325,6 @@ import msgpack from "../src/js/msgpack.js";
         }
     };
 
-    function resize() {
-        if (elements.hangerUI.style.display == "block") {
-            hangerDisplay.updateHanger();
-        }
-    }
-    window.addEventListener("resize", resize);
-    resize();
-
     var imageManager = new class {
         constructor() {
             this.images = {};
@@ -4294,8 +4286,8 @@ import msgpack from "../src/js/msgpack.js";
             };
 
             this.screenSize = {
-                width: config.maxScreenWidth,
-                height: config.maxScreenHeight
+                x: config.maxScreenWidth,
+                y: config.maxScreenHeight
             };
         }
 
@@ -4311,46 +4303,64 @@ import msgpack from "../src/js/msgpack.js";
 
         renderBorders() {
             ctx.fillStyle = "#000";
-            ctx.globalAlpha = 0.09;
+            ctx.globalAlpha = 0.18;
             if (this.offset.x <= 0) {
-                ctx.fillRect(0, 0, -this.offset.x, window.innerHeight);
+                ctx.fillRect(0, 0, -this.offset.x, this.screenSize.y);
             }
 
-            if (GameManager.map.x - this.offset.x <= window.innerWidth) {
+            if (GameManager.map.width - this.offset.x <= this.screenSize.x) {
                 let tmpY = Math.max(0, -this.offset.y);
-                ctx.fillRect(GameManager.map.x - this.offset.x, tmpY, window.innerWidth - (GameManager.map.x - this.offset.x), window.innerHeight - tmpY);
+                ctx.fillRect(GameManager.map.width - this.offset.x, tmpY, this.screenSize.x - (GameManager.map.width - this.offset.x), this.screenSize.y - tmpY);
             }
 
             if (this.offset.y <= 0) {
-                ctx.fillRect(-this.offset.x, 0, window.innerWidth + this.offset.x, -this.offset.y);
+                ctx.fillRect(-this.offset.x, 0, this.screenSize.x + this.offset.x, -this.offset.y);
             }
             
-            if (GameManager.map.y - this.offset.y <= window.innerHeight) {
+            if (GameManager.map.height - this.offset.y <= this.screenSize.y) {
                 let tmpX = Math.max(0, -this.offset.x);
                 let tmpMin = 0;
-                if (GameManager.map.x - this.offset.x <= window.innerWidth) {
-                    tmpMin = window.innerWidth - (GameManager.map.x - this.offset.x);
+                if (GameManager.map.width - this.offset.x <= this.screenSize.x) {
+                    tmpMin = this.screenSize.x - (GameManager.map.width - this.offset.x);
                 }
 
-                ctx.fillRect(tmpX, GameManager.map.y - this.offset.y, (window.innerWidth - tmpX) - tmpMin, window.innerHeight - (GameManager.map.y - this.offset.y));
+                ctx.fillRect(tmpX, GameManager.map.height - this.offset.y, (this.screenSize.x - tmpX) - tmpMin, this.screenSize.y - (GameManager.map.height - this.offset.y));
+            }
+        }
+
+        renderPlayers() {
+            ctx.globalAlpha = 1;
+            for (let i = 0; i < GameManager.players.length; i++) {
+                let tmpObj = GameManager.players[i];
+
+                if (tmpObj && tmpObj.health > 0) {
+                    ctx.save();
+                    ctx.translate(tmpObj.x - this.offset.x, tmpObj.y - this.offset.y);
+                    ctx.strokeStyle = "black";
+                    ctx.fillStyle = tmpObj.color;
+                    canvasDrawer.drawCircle(0, 0, ctx, tmpObj.scale, false, false);
+                    ctx.restore();
+                }
             }
         }
 
         render() {
             if (player) {
                 this.offset = {
-                    x: player.x - (window.innerWidth / 2),
-                    y: player.y - (window.innerHeight / 2)
+                    x: player.x - (this.screenSize.x / 2),
+                    y: player.y - (this.screenSize.y / 2)
                 };
             }
 
+            ctx.globalAlpha = 1;
             ctx.fillStyle = "#b0db51";
-            ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
+            ctx.fillRect(0, 0, this.screenSize.x, this.screenSize.y);
 
+            this.renderPlayers();
             this.renderBorders();
 
             ctx.fillStyle = "rgba(0, 0, 70, 0.35)";
-            ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
+            ctx.fillRect(0, 0, this.screenSize.x, this.screenSize.y);
 
             if (renderer.start) {
                 window.requestAnimationFrame(() => {
@@ -4360,13 +4370,20 @@ import msgpack from "../src/js/msgpack.js";
         }
     };
 
-    window.addEventListener("resize", renderer.resize);
-    renderer.resize();
+    function resize() {
+        if (elements.hangerUI.style.display == "block") {
+            hangerDisplay.updateHanger();
+        }
+        renderer.resize();
+    }
+    window.addEventListener("resize", resize);
+    resize();
 
     var player;
 
     var GameManager = new class {
         constructor() {
+            this.lastMoveDir;
             this.players = [];
             this.buildings = [];
             this.map = {};
@@ -4377,6 +4394,7 @@ import msgpack from "../src/js/msgpack.js";
 
             this.serverEvents = {
                 "init": (map, buildings) => {
+                    console.log(map);
                     this.map = map;
                     this.buildings = buildings;
 
@@ -4413,7 +4431,7 @@ import msgpack from "../src/js/msgpack.js";
                         i += 8;
                     }
 
-                    console.log(this.players);
+                    // console.log(this.players);
                 }
             };
         }
@@ -4422,6 +4440,24 @@ import msgpack from "../src/js/msgpack.js";
             this.grayDamageBar.style.width = `${(player.grayDamage / player.maxhealth) * 100}%`;
             this.healthBar.style.width = `${(player.health / player.maxhealth) * 100}%`;
             this.healthText.innerText = UTILS.styleNumberWithSpace(player.health);
+        }
+
+        updateMovement() {
+            let dx = 0;
+            let dy = 0;
+
+            for (let key in moveKeys) {
+                let tmpDir = moveKeys[key];
+
+                dx += !!keys[key] * tmpDir[0];
+                dy += !!keys[key] * tmpDir[1];
+            }
+
+            let newMoveDir = (dx == 0 && dy == 0) ? undefined : UTILS.fixTo(Math.atan2(dy, dx), 2);
+            if (this.lastMoveDir == undefined || newMoveDir == undefined || Math.abs(newMoveDir - this.lastMoveDir) > 0.3) {
+                this.send("updateMovement", newMoveDir);
+                this.lastMoveDir = newMoveDir;
+            }
         }
 
         startRendering() {
@@ -4477,8 +4513,8 @@ import msgpack from "../src/js/msgpack.js";
                     squareItem.appendChild(shapeImage);
                     squareItem.onclick = () => {
                         renderer.screenSize = {
-                            width: config.maxScreenWidth * shape.fovMulti,
-                            height: config.maxScreenHeight * shape.fovMulti
+                            x: config.maxScreenWidth * shape.fovMulti,
+                            y: config.maxScreenHeight * shape.fovMulti
                         };
                         renderer.resize();
 
