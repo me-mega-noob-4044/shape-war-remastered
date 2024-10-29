@@ -3,6 +3,7 @@ import shape from "./shape.js";
 import config from "./config.js";
 import weapon from "./weapon.js";
 import module from "./module.js";
+import * as UTILS from "./utils.js";
 
 function getMk3Amount(tmp) {
     let maxNumber = tmp.base;
@@ -150,6 +151,8 @@ function playerify(shape) {
     shape.y = 0;
     shape.dir = 0;
     shape.grayDamage = 0;
+    shape.vel = { x: 0, y: 0 };
+
     delete shape.cost;
     delete shape.weaponHardpoints;
     delete shape.moduleHardpoints;
@@ -237,11 +240,32 @@ export default class {
     }
 
     handleMovement(shape) {
-        if (this.moveDir != undefined) {
-            let spdMulti = config.gameUpdateSpeed * 0.35;
+        let delta = config.gameUpdateSpeed;
 
-            shape.x += Math.cos(this.moveDir) * spdMulti;
-            shape.y += Math.sin(this.moveDir) * spdMulti;
+        if (this.moveDir != undefined) {
+            let spdMulti = config.gameUpdateSpeed * 0.25;
+            console.log(shape);
+
+            shape.vel.x += Math.cos(this.moveDir) * shape.speed * config.gameUpdateSpeed;
+            shape.vel.y += Math.sin(this.moveDir) * shape.speed * config.gameUpdateSpeed;
+        }
+        
+        let tmpSpeed = UTILS.getDistance({ x: 0, y: 0 }, { x: shape.vel.x * delta, y: shape.vel.y * delta });
+		let depth = Math.min(4, Math.max(1, Math.round(tmpSpeed / 40)));
+		let tMlt = 1 / depth;
+
+		for (let i = 0; i < depth; i++) {
+            if (shape.vel.x) shape.x += shape.vel.x * delta * tMlt;
+            if (shape.vel.y) shape.y += shape.vel.y * delta * tMlt;
+        }
+
+        if (shape.vel.x) {
+            shape.vel.x *= Math.pow(config.playerDecel, config.gameUpdateSpeed);
+			if (shape.vel.x <= 0.01 && shape.vel.x >= -0.01) shape.vel.x = 0;
+        }
+        if (shape.vel.y) {
+            shape.vel.y *= Math.pow(config.playerDecel, config.gameUpdateSpeed);
+			if (shape.vel.y <= 0.01 && shape.vel.y >= -0.01) shape.vel.y = 0;
         }
     }
 
