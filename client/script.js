@@ -25,7 +25,8 @@ import msgpack from "../src/js/msgpack.js";
         hangerButtonsUI: UTILS.getElement("hangerButtonsUI"),
         toBattleButton: UTILS.getElement("toBattleButton"),
         chooseShapeUI: UTILS.getElement("chooseShapeUI"),
-        gameUI: UTILS.getElement("gameUI")
+        gameUI: UTILS.getElement("gameUI"),
+        inGameUI: UTILS.getElement("inGameUI")
     };
 
     const hangerUIObserver = new MutationObserver(() => {
@@ -4286,6 +4287,11 @@ import msgpack from "../src/js/msgpack.js";
     var renderer = new class {
         constructor() {
             this.start = false;
+
+            this.offset = {
+                x: 0,
+                y: 0
+            };
         }
 
         resize() {
@@ -4297,7 +4303,10 @@ import msgpack from "../src/js/msgpack.js";
 
         render() {
             // Renders Stuff
-            // ctx.fillStyle = "lightgreen";
+            ctx.fillStyle = "#b0db51";
+            ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
+
+            ctx.fillStyle = "rgba(0, 0, 70, 0.35)";
             ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
 
             if (renderer.start) {
@@ -4310,6 +4319,8 @@ import msgpack from "../src/js/msgpack.js";
 
     window.addEventListener("resize", renderer.resize);
     renderer.resize();
+
+    var player;
 
     var GameManager = new class {
         constructor() {
@@ -4331,17 +4342,26 @@ import msgpack from "../src/js/msgpack.js";
 
                         if (!tmpObj) {
                             tmpObj = new shape(items.shapes.find(e => e.name == data[i + 1]), undefined, true);
+
+                            if (data[i] == 0) {
+                                player = tmpObj;
+                            }
+
+                            this.players.push(tmpObj);
                         }
 
                         if (tmpObj) {
                             tmpObj.x = data[i + 2];
                             tmpObj.y = data[i + 3];
-
-                            // console.log(data.slice(i, i + 5));
+                            tmpObj.dir = data[i + 4];
+                            tmpObj.health = data[i + 5];
+                            tmpObj.maxhealth = data[i + 6];
                         }
 
-                        i += 5;
+                        i += 7;
                     }
+
+                    console.log(this.players);
                 }
             };
         }
@@ -4398,6 +4418,7 @@ import msgpack from "../src/js/msgpack.js";
                     }
                     squareItem.appendChild(shapeImage);
                     squareItem.onclick = () => {
+                        elements.inGameUI.style.display = "block";
                         elements.chooseShapeUI.style.display = "none";
                         this.send("chooseSlot", i);
                     };
@@ -4422,6 +4443,7 @@ import msgpack from "../src/js/msgpack.js";
         }
 
         start() {
+            console.clear();
             let playerData = EquipmentBuilder.player();
 
             doDarkModeTransition();

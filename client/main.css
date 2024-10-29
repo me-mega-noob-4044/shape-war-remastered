@@ -1267,4 +1267,38 @@ a:-webkit-any-link {
 
 #gameUI {
     display: none;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+}
+
+#inGameUI {
+    pointer-events: none;
+    display: none;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+}
+
+#healthHolder {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: black;
+    width: 375px;
+    height: 40px;
+    border: solid;
+    border-color: black;
+    border-width: 4px;
+}
+
+#healthBar {
+    width: 100%;
+    height: 100%;
+    background-color: #00ff00;
 }
