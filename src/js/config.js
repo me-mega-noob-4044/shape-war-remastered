@@ -15,6 +15,8 @@ export default {
         shapes: [0, 250e3, 500e3, 1e6, 3.75e6, 3.75e6, 3.75e6, 3.75e6, 3.75e6, 3.75e6, 3.75e6, 3.75e6],
         weapons: [0, 4e6, 4.5e6, 5e6, 5.5e6, 6e6, 6.5e6, 7e6, 7.5e6, 8e6, 8.5e6, 9e6]
     }],
+    maxScreenWidth: 1920,
+    maxScreenHeight: 1080,
     mk2UpgradeCost: 500,
     mk3UpgradeCost: [1, 1, 2, 3, 4],
     mk3EnchantmentIncrease: .1,

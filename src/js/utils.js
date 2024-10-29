@@ -77,6 +77,12 @@ export const abbreviateNumber = (value) => {
     return value;
 };
 
+export const styleNumberWithSpace = (value) => {
+    value = styleNumberWithComma(value);
+
+    return value.split(",").join(" ");
+};
+
 export const styleNumberWithComma = (value) => {
     if (typeof value == "string") {
         console.log("Number cannot be styled: Value is a string!");

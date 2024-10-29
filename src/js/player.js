@@ -149,6 +149,7 @@ function playerify(shape) {
     shape.x = 0;
     shape.y = 0;
     shape.dir = 0;
+    shape.grayDamage = 0;
     delete shape.cost;
     delete shape.weaponHardpoints;
     delete shape.moduleHardpoints;
