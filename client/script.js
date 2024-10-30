@@ -26,7 +26,9 @@ import msgpack from "../src/js/msgpack.js";
         toBattleButton: UTILS.getElement("toBattleButton"),
         chooseShapeUI: UTILS.getElement("chooseShapeUI"),
         gameUI: UTILS.getElement("gameUI"),
-        inGameUI: UTILS.getElement("inGameUI")
+        inGameUI: UTILS.getElement("inGameUI"),
+        pingDisplay: UTILS.getElement("pingDisplay"),
+        weaponsDisplay: UTILS.getElement("weaponsDisplay")
     };
 
     const hangerUIObserver = new MutationObserver(() => {
@@ -4404,7 +4406,7 @@ import msgpack from "../src/js/msgpack.js";
                 if (tmpObj) {
                     let tmpDiff = tmpObj.x2 - tmpObj.x1;
                     tmpObj.dt += delta;
-                    let tmpRate = Math.min(1.7, tmpObj.dt / 128);
+                    let tmpRate = tmpObj.dt / 50;
                     tmpObj.x = tmpObj.x1 + (tmpDiff * tmpRate);
                     tmpDiff = (tmpObj.y2 - tmpObj.y1);
                     tmpObj.y = tmpObj.y1 + (tmpDiff * tmpRate);
@@ -4447,7 +4449,10 @@ import msgpack from "../src/js/msgpack.js";
             this.lastMoveDir;
             this.players = [];
             this.buildings = [];
+            this.weaponElements = [];
             this.map = {};
+            this.pingInterval = null;
+            this.pingLastUpdate = 0;
 
             this.healthText = UTILS.getElement("healthText");
             this.healthBar = UTILS.getElement("healthBar");
@@ -4498,6 +4503,40 @@ import msgpack from "../src/js/msgpack.js";
                     }
 
                     // console.log(this.players);
+                },
+                "pingSocket": () => {
+                    elements.pingDisplay.innerText = `${Date.now() - this.pingLastUpdate} ms`;
+                },
+                "initializeWeapons": (wpns) => {
+                    elements.weaponsDisplay.innerHTML = "";
+                    this.weaponElements = [];
+
+                    for (let i = 0; i < wpns.length; i++) {
+                        let wpn = wpns[i];
+
+                        let element = document.createElement("div");
+                        element.style = `position: absolute; bottom: ${(115 * i) + 15}px; left: 15px; width: 105px; height: 100px; background-color: rgba(0, 0, 0, .35);`;
+
+                        let iconDisplay = document.createElement("div");
+                        iconDisplay.style = `position: absolute; top: 0px; left: 0px; width: 100px; height; 100px;`;
+
+                        let image = imageManager.getImage(wpn.imageSource);
+                        image.style = "width: 100%; height: 100%;";
+                        iconDisplay.appendChild(image);
+                        element.appendChild(iconDisplay);
+
+                        let ammoHolder = document.createElement("div");
+                        ammoHolder.style = "position: absolute; right: 0px; top: 0px; width: 5px; height: 100%; background-color: rgba(0, 0, 0, .15);";
+
+                        let ammoDisplay = document.createElement("div");
+                        ammoDisplay.style = "position: absolute; bottom: 0px; left: 0px; background-color: white; width: 100%; height: 100%;";
+                        ammoHolder.appendChild(ammoDisplay);
+
+                        element.appendChild(ammoHolder);
+
+                        this.weaponElements.push(ammoDisplay);
+                        elements.weaponsDisplay.appendChild(element);
+                    }
                 }
             };
         }
@@ -4631,6 +4670,11 @@ import msgpack from "../src/js/msgpack.js";
                     this.serverEvents[type].apply(undefined, data);
                 }
             };
+
+            this.pingInterval = setInterval(() => {
+                this.send("pingSocket");
+                this.pingLastUpdate = Date.now();
+            }, 1e3);
 
             this.send("new", playerData, true);
         }

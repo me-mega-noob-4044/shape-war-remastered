@@ -10,6 +10,26 @@ var mapSize = {
     height: 0 // Y axis
 };
 
+function groupWeapons(player) {
+    let data = [];
+    let shape = player.shapes[player.chooseIndex];
+
+    if (shape) {
+        for (let i = 0; i < shape.weapons.length; i++) {
+            let wpn = shape.weapons[i];
+
+            data.push({
+                name: wpn.name,
+                maxammo: wpn.maxammo,
+                ammo: wpn.ammo,
+                imageSource: wpn.imageSource
+            });
+        }
+    }
+
+    return data;
+}
+
 var clientEvents = {
     "new": (data, isUser) => {
         players.push(new player(data, isUser));
@@ -19,10 +39,17 @@ var clientEvents = {
         }
     },
     "chooseSlot": (slot) => {
-        if (players[0]) players[0].chooseIndex = slot;
+        if (players[0]) {
+            players[0].chooseIndex = slot;
+
+            game.send("initializeWeapons", groupWeapons(players[0]));
+        }
     },
     "updateMovement": (newMoveDir) => {
         if (players[0]) players[0].moveDir = newMoveDir;
+    },
+    "pingSocket": () => {
+        game.send("pingSocket");
     }
 };
 

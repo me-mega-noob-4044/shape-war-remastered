@@ -243,8 +243,8 @@ export default class {
         let delta = config.gameUpdateSpeed;
 
         if (this.moveDir != undefined) {
-            let spdMulti = config.gameUpdateSpeed * 0.25;
-            console.log(shape);
+            // let spdMulti = config.gameUpdateSpeed * 0.25;
+            // console.log(shape);
 
             shape.vel.x += Math.cos(this.moveDir) * shape.speed * config.gameUpdateSpeed;
             shape.vel.y += Math.sin(this.moveDir) * shape.speed * config.gameUpdateSpeed;
@@ -290,6 +290,6 @@ export default class {
             shape.y = map.height - shape.scale;
         }
 
-        console.log(shape.x, shape.y);
+        // console.log(shape.x, shape.y);
     }
 }

@@ -1323,3 +1323,12 @@ a:-webkit-any-link {
     height: 100%;
     font-size: 20px;
 }
+
+#pingDisplay {
+    position: absolute;
+    font-size: 12px;
+    bottom: 5px;
+    right: 5px;
+    color: white;
+    font-weight: 600;
+}
