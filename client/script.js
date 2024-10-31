@@ -4261,6 +4261,8 @@ import msgpack from "../src/js/msgpack.js";
             keys[key] = 1;
             if (moveKeys[key]) {
                 GameManager.updateMovement();
+            } else if (key == 32) {
+                GameManager.send("setAttack", 1);
             }
         }
     });
@@ -4271,6 +4273,8 @@ import msgpack from "../src/js/msgpack.js";
             keys[key] = 0;
             if (moveKeys[key]) {
                 GameManager.updateMovement();
+            } else if (key == 32) {
+                GameManager.send("setAttack", 0);
             }
         }
     });
@@ -4406,7 +4410,8 @@ import msgpack from "../src/js/msgpack.js";
                 if (tmpObj) {
                     let tmpDiff = tmpObj.x2 - tmpObj.x1;
                     tmpObj.dt += delta;
-                    let tmpRate = tmpObj.dt / 50;
+                    let tmpRate = Math.min(1, tmpObj.dt / 50);
+                    // console.log(delta, tmpRate)
                     tmpObj.x = tmpObj.x1 + (tmpDiff * tmpRate);
                     tmpDiff = (tmpObj.y2 - tmpObj.y1);
                     tmpObj.y = tmpObj.y1 + (tmpDiff * tmpRate);
@@ -4536,6 +4541,13 @@ import msgpack from "../src/js/msgpack.js";
 
                         this.weaponElements.push(ammoDisplay);
                         elements.weaponsDisplay.appendChild(element);
+                    }
+                },
+                "updateWeapons": (Data) => {
+                    for (let i = 0; i < Data.length; i++) {
+                        let data = Data[i];
+
+                        this.weaponElements[data[0]].style.height = `${data[1] * 100}%`;
                     }
                 }
             };

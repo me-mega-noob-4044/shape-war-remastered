@@ -161,6 +161,7 @@ function playerify(shape) {
     for (let i = 0; i < shape.weapons.length; i++) {
         let wpn = shape.weapons[i];
 
+        wpn.fireRateTimer = 0;
         delete wpn.cost;
         delete wpn.attributes;
         delete wpn.description;
@@ -183,7 +184,10 @@ function playerify(shape) {
 }
 
 export default class {
-    constructor(data) {
+    constructor(data, isUser, Game) {
+        this.Game = Game;
+        this.isUser = isUser;
+        this.isAttacking = 0;
         this.chooseIndex = -1;
         this.mothershipCharge = 0;
         this.moveDir = undefined;
@@ -243,9 +247,6 @@ export default class {
         let delta = config.gameUpdateSpeed;
 
         if (this.moveDir != undefined) {
-            // let spdMulti = config.gameUpdateSpeed * 0.25;
-            // console.log(shape);
-
             shape.vel.x += Math.cos(this.moveDir) * shape.speed * config.gameUpdateSpeed;
             shape.vel.y += Math.sin(this.moveDir) * shape.speed * config.gameUpdateSpeed;
         }
@@ -269,11 +270,7 @@ export default class {
         }
     }
 
-    update(shape, map) {
-        // Movement:
-
-        this.handleMovement(shape);
-
+    handleBorder(shape, map) {
         if (shape.x <= shape.scale) {
             shape.x = shape.scale;
         }
@@ -289,7 +286,48 @@ export default class {
         if (shape.y >= map.height - shape.scale) {
             shape.y = map.height - shape.scale;
         }
+    }
 
-        // console.log(shape.x, shape.y);
+    update(shape, map) {
+        // Movement:
+
+        this.handleMovement(shape);
+        this.handleBorder(shape, map);
+
+        this.manageWeapons(shape);
+    }
+
+    manageWeapons(shape) {
+        let game = this.Game;
+        let fired = [];
+
+        for (let i = 0; i < shape.weapons.length; i++) {
+            let wpn = shape.weapons[i];
+
+            if (wpn) { // wpn.maxammo
+                if (wpn.ammo > 0 && wpn.reloaded) {
+                    wpn.fireRateTimer -= config.gameUpdateSpeed;
+                    if (wpn.fireRateTimer <= 0 && this.isAttacking) {
+                        wpn.fireRateTimer = wpn.fireRate;
+                        wpn.ammo--;
+
+                        fired.push([i, wpn.ammo / wpn.maxammo]);
+                    }
+                } else {
+                    wpn.reloaded = false;
+
+                    wpn.ammo += (wpn.maxammo / wpn.reload) * config.gameUpdateSpeed;
+                    if (wpn.ammo > wpn.maxammo) {
+                        wpn.ammo = wpn.maxammo;
+
+                        fired.push([i, wpn.ammo / wpn.maxammo]);
+                    }
+                }
+            }
+        }
+
+        if (fired.length) {
+            game.send("updateWeapons", fired);
+        }
     }
 }

@@ -17,6 +17,7 @@ export default class {
         this.dmg = data.damageData?.base || data.dmg;
         this.reload = data.reload;
         this.fireRate = data.fireRate;
+        this.reloaded = true;
         this.range = data.range;
         this.cost = { ...data.cost };
     }

@@ -32,7 +32,7 @@ function groupWeapons(player) {
 
 var clientEvents = {
     "new": (data, isUser) => {
-        players.push(new player(data, isUser));
+        players.push(new player(data, isUser, game));
 
         if (isUser) {
             game.start();
@@ -50,6 +50,9 @@ var clientEvents = {
     },
     "pingSocket": () => {
         game.send("pingSocket");
+    },
+    "setAttack": (indx) => {
+        if (players[0]) players[0].isAttacking = indx;
     }
 };
 
