@@ -53,6 +53,9 @@ var clientEvents = {
     },
     "setAttack": (indx) => {
         if (players[0]) players[0].isAttacking = indx;
+    },
+    "reloadWeapons": () => {
+        if (players[0]) players[0].reloadAllWeapons = true;
     }
 };
 

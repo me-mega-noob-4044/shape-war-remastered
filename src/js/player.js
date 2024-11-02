@@ -191,6 +191,7 @@ export default class {
         this.chooseIndex = -1;
         this.mothershipCharge = 0;
         this.moveDir = undefined;
+        this.reloadAllWeapons = false;
         this.shapes = [];
 
         this.init(data);
@@ -304,7 +305,12 @@ export default class {
         for (let i = 0; i < shape.weapons.length; i++) {
             let wpn = shape.weapons[i];
 
-            if (wpn) { // wpn.maxammo
+            if (wpn) {
+                if (this.reloadAllWeapons) {
+                    wpn.ammo = 0;
+                    fired.push([i, 0]);
+                }
+
                 if (wpn.ammo > 0 && wpn.reloaded) {
                     wpn.fireRateTimer -= config.gameUpdateSpeed;
                     if (wpn.fireRateTimer <= 0 && this.isAttacking) {
@@ -314,17 +320,24 @@ export default class {
                         fired.push([i, wpn.ammo / wpn.maxammo]);
                     }
                 } else {
+                    if (wpn.reloaded) {
+                        game.send("reloadWeapon", i, wpn.reload);
+                    }
+
                     wpn.reloaded = false;
 
                     wpn.ammo += (wpn.maxammo / wpn.reload) * config.gameUpdateSpeed;
                     if (wpn.ammo > wpn.maxammo) {
                         wpn.ammo = wpn.maxammo;
+                        wpn.reloaded = true;
 
                         fired.push([i, wpn.ammo / wpn.maxammo]);
                     }
                 }
             }
         }
+
+        this.reloadAllWeapons = false;
 
         if (fired.length) {
             game.send("updateWeapons", fired);

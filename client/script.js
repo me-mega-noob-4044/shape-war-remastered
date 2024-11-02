@@ -4275,6 +4275,8 @@ import msgpack from "../src/js/msgpack.js";
                 GameManager.updateMovement();
             } else if (key == 32) {
                 GameManager.send("setAttack", 0);
+            } else if (key == 82) {
+                GameManager.send("reloadWeapons");
             }
         }
     });
@@ -4449,12 +4451,17 @@ import msgpack from "../src/js/msgpack.js";
 
     var player;
 
+    var wpnReloadDisplay = new class {
+        create(time) {}
+    };
+
     var GameManager = new class {
         constructor() {
             this.lastMoveDir;
             this.players = [];
             this.buildings = [];
             this.weaponElements = [];
+            this.wpnParents = [];
             this.map = {};
             this.pingInterval = null;
             this.pingLastUpdate = 0;
@@ -4539,6 +4546,7 @@ import msgpack from "../src/js/msgpack.js";
 
                         element.appendChild(ammoHolder);
 
+                        this.wpnParents.push(element);
                         this.weaponElements.push(ammoDisplay);
                         elements.weaponsDisplay.appendChild(element);
                     }
@@ -4549,6 +4557,41 @@ import msgpack from "../src/js/msgpack.js";
 
                         this.weaponElements[data[0]].style.height = `${data[1] * 100}%`;
                     }
+                },
+                "reloadWeapon": (id, duration) => {
+                    console.log(id);
+                    let element = document.createElement("canvas");
+                    element.width = element.height = 500;
+                    element.style = `position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 100px; height: 100px;`;
+
+                    let ctx = element.getContext("2d");
+
+                    let delta = 0;
+                    let lastUpdate = Date.now();
+
+                    let update = () => {
+                        let d = Date.now() - lastUpdate;
+                        lastUpdate = Date.now();
+                        delta += d;
+
+                        ctx.clearRect(0, 0, 500, 500);
+                        ctx.shadowBlur = 12.5;
+                        ctx.shadowColor = "black";
+                        ctx.strokeStyle = "white";
+                        ctx.lineWidth = 35;
+                        ctx.beginPath();
+                        ctx.arc(250, 250, 200, 0, (Math.PI * 2) * (delta / duration));
+                        ctx.stroke();
+
+                        if (delta < duration) {
+                            window.requestAnimationFrame(update);
+                        } else {
+                            element.remove();
+                        }
+                    };
+                    window.requestAnimationFrame(update);
+
+                    this.wpnParents[id].appendChild(element);
                 }
             };
         }
