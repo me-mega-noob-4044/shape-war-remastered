@@ -184,9 +184,13 @@ function playerify(shape) {
 }
 
 export default class {
-    constructor(data, isUser, Game) {
+    constructor(data, isUser, Game, indx) {
         this.Game = Game;
         this.isUser = isUser;
+        this.indx = indx;
+
+        this.isAlly = !!isUser;
+
         this.isAttacking = 0;
         this.chooseIndex = -1;
         this.mothershipCharge = 0;
@@ -298,6 +302,52 @@ export default class {
         this.manageWeapons(shape);
     }
 
+    fireWeapon(shape, slot, wpn, hardpoints) {
+        let x, y;
+
+        let hScale = 20 / 2;
+
+        if (hardpoints == 1) {
+            x = shape.x + Math.cos(shape.dir) * (shape.scale - hScale);
+            y = shape.y + Math.sin(shape.dir) * (shape.scale - hScale);
+        } else if (hardpoints == 2) {
+            if (slot == 0) {
+                x = shape.x + Math.cos(shape.dir + 1.57) * (shape.scale - hScale);
+                y = shape.y + Math.sin(shape.dir + 1.57) * (shape.scale - hScale);
+            } else {
+                x = shape.x + Math.cos(shape.dir - 1.57) * (shape.scale - hScale);
+                y = shape.y + Math.sin(shape.dir - 1.57) * (shape.scale - hScale);
+            }
+        } else if (hardpoints == 3) {
+            if (slot == 0) {
+                x = shape.x + Math.cos(shape.dir + 1.57) * (shape.scale - hScale);
+                y = shape.y + Math.sin(shape.dir + 1.57) * (shape.scale - hScale);
+            } else if (slot == 1) {
+                x = shape.x + Math.cos(shape.dir) * (shape.scale - hScale);
+                y = shape.y + Math.sin(shape.dir) * (shape.scale - hScale);
+            } else {
+                x = shape.x + Math.cos(shape.dir - 1.57) * (shape.scale - hScale);
+                y = shape.y + Math.sin(shape.dir - 1.57) * (shape.scale - hScale);
+            }
+        } else {
+            if (slot == 0 || slot == 4) {
+                x = shape.x + Math.cos(shape.dir + 1.57) * (shape.scale - 7.5);
+                y = shape.y + Math.sin(shape.dir + 1.57) * (shape.scale - 7.5);
+            } else if (slot == 1 || slot == 5) {
+                x = shape.x + Math.cos(shape.dir + 0.39) * (shape.scale - 7.5);
+                y = shape.y + Math.sin(shape.dir + 0.39) * (shape.scale - 7.5);
+            } else if (slot == 2 || slot == 6) {
+                x = shape.x + Math.cos(shape.dir - 0.39) * (shape.scale - 7.5);
+                y = shape.y + Math.sin(shape.dir - 0.39) * (shape.scale - 7.5);
+            } else {
+                x = shape.x + Math.cos(shape.dir - 1.57) * (shape.scale - 7.5);
+                y = shape.y + Math.sin(shape.dir - 1.57) * (shape.scale - 7.5);
+            }
+        }
+
+        this.Game.addProjectile(x, y, shape.dir, this.indx, wpn);
+    }
+
     manageWeapons(shape) {
         let game = this.Game;
         let fired = [];
@@ -316,6 +366,7 @@ export default class {
                     if (wpn.fireRateTimer <= 0 && this.isAttacking) {
                         wpn.fireRateTimer = wpn.fireRate;
                         wpn.ammo--;
+                        this.fireWeapon(shape, i, wpn, shape.weapons.length);
 
                         fired.push([i, wpn.ammo / wpn.maxammo]);
                     }

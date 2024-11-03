@@ -118,12 +118,12 @@ const weapons = [{
     industryName: "Circle",
     name: "Punisher",
     type: "light",
-    projType: "normal",
     description: "Multi-barreled machine gun with a high rate of fire. Great at close range.",
     damageData: {
         base: 160,
         level: [0, 20, 20, 20, 20, 20, 30, 30, 30, 40, 40, 40]
     },
+    projectileId: 0,
     attributes: ["Kinetic", "Manual", "Automatic", "Magazine"],
     mothershipChargeRate: 0.000125,
     mk2DataIncrease: 1.2,
@@ -141,12 +141,12 @@ const weapons = [{
     industryName: "Circle",
     name: "Molot",
     type: "light",
-    projType: "normal",
     description: "Multi-barreled machine gun with a high rate of fire. Great at close range.",
     damageData: {
         base: 279,
         level: [0, 30, 30, 30, 40, 40, 40, 40, 40, 50, 60, 70]
     },
+    projectileId: 0,
     attributes: ["Kinetic", "Manual", "Automatic", "Magazine"],
     mothershipChargeRate: 0.000125,
     mk2DataIncrease: 1.2,
@@ -164,12 +164,12 @@ const weapons = [{
     industryName: "Circle",
     name: "Punisher T",
     type: "medium",
-    projType: "normal",
     description: "Twin lightweight and fast firing machineguns. Most effective aganist enemies at close range.",
     damageData: {
         base: 260,
         level: [0, 30, 30, 40, 45, 45, 50, 50, 60, 65, 65, 80]
     },
+    projectileId: 0,
     attributes: ["Kinetic", "Manual", "Automatic", "Magazine"],
     mothershipChargeRate: 0.000125,
     mk2DataIncrease: 1.2,

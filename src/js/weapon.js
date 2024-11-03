@@ -8,7 +8,6 @@ export default class {
         this.level = 1;
         this.industryName = data.industryName;
         this.description = data.description;
-        this.projType = data.projType;
         this.type = data.type;
         this.attributes = [ ...data.attributes ];
         this.ammo = this.maxammo = data.ammo;
@@ -18,6 +17,7 @@ export default class {
         this.reload = data.reload;
         this.fireRate = data.fireRate;
         this.reloaded = true;
+        this.projectileId = data.projectileId;
         this.range = data.range;
         this.cost = { ...data.cost };
     }

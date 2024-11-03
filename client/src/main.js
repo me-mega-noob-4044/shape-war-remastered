@@ -2,9 +2,11 @@ import msgpack from "../../src/js/msgpack.js";
 import player from "../../src/js/player.js";
 import { maps, mapBuilder } from "./game/mapBuilder.js";
 import config from "../../src/js/config.js";
+import projectile from "./game/projectile.js";
 
 var players = [];
 var buildings = [];
+var projectiles = [];
 var mapSize = {
     width: 0, // X axis
     height: 0 // Y axis
@@ -32,7 +34,9 @@ function groupWeapons(player) {
 
 var clientEvents = {
     "new": (data, isUser) => {
-        players.push(new player(data, isUser, game));
+        let indx = players.length;
+
+        players.push(new player(data, isUser, game, indx));
 
         if (isUser) {
             game.start();
@@ -108,7 +112,28 @@ var game = new class {
             }
         }
 
+        for (let i = 0; i < projectiles.length; i++) {
+            let projectile = projectiles[i];
+
+            if (projectile) {
+                projectile.update(players);
+
+                if (projectile.range <= 0) {
+                    this.send("removeProjectile", projectile.sid);
+                    projectiles.splice(i, 1);
+                }
+            }
+        }
+
         this.send("updatePlayers", playersData);
+    }
+
+    addProjectile(x, y, dir, owner, wpn) {
+        projectiles.push(new projectile(x, y, wpn.name, wpn.projectileId, wpn.range, dir, owner, wpn.dmg));
+
+        let { name, range, projectileId } = wpn;
+
+        this.send("addProjectile", x, y, dir, owner, { name, range, projectileId });
     }
 
     start() {

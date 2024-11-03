@@ -4451,10 +4451,6 @@ import msgpack from "../src/js/msgpack.js";
 
     var player;
 
-    var wpnReloadDisplay = new class {
-        create(time) {}
-    };
-
     var GameManager = new class {
         constructor() {
             this.lastMoveDir;
@@ -4592,6 +4588,9 @@ import msgpack from "../src/js/msgpack.js";
                     window.requestAnimationFrame(update);
 
                     this.wpnParents[id].appendChild(element);
+                },
+                "addProjectile": (x, y, dir, owner, data) => {
+                    // 
                 }
             };
         }
@@ -4733,10 +4732,6 @@ import msgpack from "../src/js/msgpack.js";
 
             this.send("new", playerData, true);
         }
-
-        render() {
-            //
-        }
     };
 
     elements.toBattleButton.onclick = () => {
@@ -4745,5 +4740,9 @@ import msgpack from "../src/js/msgpack.js";
 
     window.onload = () => {
         game.init();
+    };
+
+    window.onbeforeunload = function(event) {
+        event.preventDefault();
     };
 }());
