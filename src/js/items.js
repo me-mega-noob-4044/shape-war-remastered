@@ -10,7 +10,7 @@ const shapes = [{
     scale: 55,
     indxRole: 1,
     speedData: {
-        base: 0.0218,
+        base: 0.0018,
         level: [0, 0, 0.0001, 0.0001, 0, 0.0001, 0.0001, 0, 0.0001, 0.0002, 0.0003, 0.0004]
     },
     mk2DataIncrease: 1.2,
@@ -41,7 +41,7 @@ const shapes = [{
     Having 4 light weapon slots, this shape is extremely verstile. Fit for combay at any range.<br><br>
     Recommended Equipment: x4 Punisher
     `,
-    aimTurnSpeed: 0.008,
+    aimTurnSpeed: 0.006,
     fovMulti: 1.3,
     scale: 65,
     indxRole: 1,

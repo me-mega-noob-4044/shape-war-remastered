@@ -4656,7 +4656,6 @@ import projectile from "../client/src/game/projectile.js";
                     }
                 },
                 "reloadWeapon": (id, duration) => {
-                    console.log(id);
                     let element = document.createElement("canvas");
                     element.width = element.height = 500;
                     element.style = `position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 100px; height: 100px;`;

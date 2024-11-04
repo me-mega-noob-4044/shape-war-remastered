@@ -393,12 +393,12 @@ export default class {
             let wpn = shape.weapons[i];
 
             if (wpn) {
-                if (this.reloadAllWeapons) {
-                    wpn.ammo = 0;
-                    fired.push([i, 0]);
-                }
-
                 if (wpn.ammo > 0 && wpn.reloaded) {
+                    if (this.reloadAllWeapons) {
+                        wpn.ammo = 0;
+                        fired.push([i, 0]);
+                    }
+
                     wpn.fireRateTimer -= config.gameUpdateSpeed;
                     if (wpn.fireRateTimer <= 0 && this.isAttacking) {
                         wpn.fireRateTimer = wpn.fireRate;

@@ -1,7 +1,7 @@
 const maps = [{
-    name: "Plain Field",
-    width: 3e3,
-    height: 3e3
+    name: "Bastion",
+    width: 12e3,
+    height: 6e3
 }];
 
 var mapBuilder = new class {
