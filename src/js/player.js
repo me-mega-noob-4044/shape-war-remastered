@@ -198,6 +198,8 @@ export default class {
         this.reloadAllWeapons = false;
         this.shapes = [];
 
+        this.targetDir = 0;
+
         this.init(data);
     }
 

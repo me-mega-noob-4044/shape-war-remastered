@@ -4299,6 +4299,16 @@ import projectile from "../client/src/game/projectile.js";
         68: [1, 0],
         39: [1, 0]
     };
+    var mouseX = 0, mouseY = 0;
+
+    function getAimDir() {
+        return Math.atan2(mouseY - (renderer.screenSize.y / 2), mouseX - (renderer.screenSize.x / 2));
+    }
+
+    document.addEventListener("mousemove", (event) => {
+        mouseX = event.clientX;
+        mouseY = event.clientY;
+    });
 
     document.addEventListener("keydown", (event) => {
         if (event.isTrusted) {
@@ -4348,6 +4358,8 @@ import projectile from "../client/src/game/projectile.js";
                 x: config.maxScreenWidth,
                 y: config.maxScreenHeight
             };
+
+            this.aimSendDate = 100;
         }
 
         resize() {
@@ -4456,6 +4468,12 @@ import projectile from "../client/src/game/projectile.js";
             this.lastUpdate = Date.now();
 
             if (player) {
+                this.aimSendDate -= delta;
+                if (this.aimSendDate <= 0) {
+                    GameManager.send("aim", getAimDir());
+                    this.aimSendDate = 100;
+                }
+
                 let tmpDist = UTILS.getDistance(this.cam, player);
                 let tmpDir = UTILS.getDirection(player, this.cam);
                 let camSpd = Math.min(tmpDist * 0.01 * delta, (tmpDist || 0));
