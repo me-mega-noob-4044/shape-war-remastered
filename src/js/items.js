@@ -131,7 +131,7 @@ const weapons = [{
     ammo: 220,
     fireRate: 60,
     reload: 8e3,
-    range: 1200,
+    range: 500,// 1200,
     cost: {
         silver: 20e3,
         gold: 0

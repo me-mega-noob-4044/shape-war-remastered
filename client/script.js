@@ -435,7 +435,10 @@ import projectile from "../client/src/game/projectile.js";
     var canvasDrawer = new class {
         constructor() {
             this.mainContext = elements.gameCanvas.getContext("2d");
+            this.bulletImages = {};
+            this.bulletSprites = {};
         }
+
         drawCircle(x, y, mainContext, scale, dontStroke, dontFill, lineWidth = 5.5) {
             mainContext.lineWidth = lineWidth;
             mainContext.beginPath();
@@ -443,6 +446,7 @@ import projectile from "../client/src/game/projectile.js";
             if (!dontFill) mainContext.fill();
             if (!dontStroke) mainContext.stroke();
         }
+
         createUIItem(tmpObj) {
             if (tmpObj.visualData) tmpObj = tmpObj.visualData;
 
@@ -458,6 +462,47 @@ import projectile from "../client/src/game/projectile.js";
                 this.drawCircle(0, 0, tmpContext, tmpObj.scale * 2, false, false, 11);
             }
             return tmpCanvas;
+        }
+
+        getBulletSprite(tmpObj) {
+            let tmp = this.bulletSprites[tmpObj.imageSource];
+
+            if (!tmp) {
+                tmp = new Image();
+                tmp.src = tmpObj.imageSource;
+                tmp.onload = function () {
+                    tmp.isLoaded = true;
+                }
+
+                this.bulletSprites[tmpObj.imageSource] = tmp;
+            }
+
+            if (tmp.isLoaded) return tmp;
+        }
+
+        getBulletImage(tmpObj) {
+            let image = this.bulletImages[tmpObj.imageSource];
+
+            if (!image) {
+                let image = this.getBulletSprite(tmpObj);
+
+                if (image) {
+                    let tmpCanvas = document.createElement("canvas");
+                    tmpCanvas.width = tmpCanvas.height = 160;
+                    tmpCanvas.style.width = tmpCanvas.style.height = 160 + "px";
+
+                    let tmpCtx = tmpCanvas.getContext("2d");
+                    tmpCtx.globalAlpha = 1;
+                    tmpCtx.translate((tmpCanvas.width / 2), (tmpCanvas.height / 2));
+
+                    let size = 160;
+                    tmpCtx.drawImage(image, -size / 2, -size / 2, size, size);
+
+                    this.bulletImages[tmpObj.imageSource] = image = tmpCanvas;
+                }
+            }
+
+            return image;
         }
     };
 
@@ -4383,18 +4428,23 @@ import projectile from "../client/src/game/projectile.js";
 
         renderProjectiles(delta) {
             ctx.globalAlpha = 1;
+
             for (let i = 0; i < GameManager.projectiles.length; i++) {
                 let tmpObj = GameManager.projectiles[i];
 
                 if (tmpObj) {
                     ctx.save();
                     ctx.translate(tmpObj.x - this.offset.x, tmpObj.y - this.offset.y);
-                    ctx.strokeStyle = "black";
-                    ctx.fillStyle = "white";
-                    canvasDrawer.drawCircle(0, 0, ctx, tmpObj.scale, false, false);
-                    ctx.restore();
+                    ctx.rotate(tmpObj.dir);
 
-                    console.log(tmpObj.x, tmpObj.y, tmpObj.dir)
+                    let image = canvasDrawer.getBulletImage(tmpObj);
+
+                    if (image) {
+                        let size = 40;
+                        ctx.drawImage(image, -size / 2, -size / 2, size, size);
+                    }
+
+                    ctx.restore();
 
                     tmpObj.update([], false, delta);
                 }
@@ -4446,8 +4496,8 @@ import projectile from "../client/src/game/projectile.js";
 
             this.renderGrid();
 
-            this.renderPlayers();
             this.renderProjectiles(delta);
+            this.renderPlayers();
             this.renderBorders();
 
             ctx.fillStyle = "rgba(0, 0, 70, 0.35)";
@@ -4616,6 +4666,14 @@ import projectile from "../client/src/game/projectile.js";
                     tmp.sid = data.sid;
 
                     this.projectiles.push(tmp);
+                },
+                "removeProjectile": (sid) => {
+                    for (let i = 0; i < this.projectiles.length; i++) {
+                        if (this.projectiles[i].sid == sid) {
+                            this.projectiles.splice(i, 1); // [i].active = false;
+                            break;
+                        }
+                    }
                 }
             };
         }

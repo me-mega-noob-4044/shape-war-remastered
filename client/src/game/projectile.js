@@ -1,5 +1,6 @@
 import config from "../../../src/js/config.js";
 import projectiles from "../../../src/js/projectiles.js";
+import * as UTILS from "../../../src/js/utils.js";
 
 self.projectileSids = 0;
 export default class {
@@ -22,13 +23,20 @@ export default class {
         this.speed = data.speed;
         this.dir = dir;
         this.dmg = dmg;
+
+        this.active = true;
     }
 
     update(players, server, delta) {
         let tmpSpd = this.speed * (delta || config.gameUpdateSpeed);
+        
+        let oldX = this.x, oldY = this.y;
+
         this.x += Math.cos(this.dir) * tmpSpd;
         this.y += Math.sin(this.dir) * tmpSpd;
-        this.range -= tmpSpd * (delta || config.gameUpdateSpeed);
+
+
+        this.range -= UTILS.getDistance({ x: oldX, y: oldY }, this);
 
         if (server) {
             for (let i = 0; i < players.length; i++) {}

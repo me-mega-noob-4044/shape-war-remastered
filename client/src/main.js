@@ -115,12 +115,13 @@ var game = new class {
         for (let i = 0; i < projectiles.length; i++) {
             let projectile = projectiles[i];
 
-            if (projectile) {
+            if (projectile && projectile.active) {
                 projectile.update(players, true);
 
                 if (projectile.range <= 0) {
                     this.send("removeProjectile", projectile.sid);
                     projectiles.splice(i, 1);
+                    i--;
                 }
             }
         }
