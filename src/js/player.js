@@ -204,6 +204,8 @@ export default class {
 
         this.targetDir = 0;
 
+        this.vel = 0;
+
         this.init(data);
     }
 
@@ -266,10 +268,14 @@ export default class {
 		let depth = Math.min(4, Math.max(1, Math.round(tmpSpeed / 40)));
 		let tMlt = 1 / depth;
 
+        let x = shape.x, y = shape.y;
+
 		for (let i = 0; i < depth; i++) {
             if (shape.vel.x) shape.x += shape.vel.x * delta * tMlt;
             if (shape.vel.y) shape.y += shape.vel.y * delta * tMlt;
         }
+
+        this.vel = UTILS.getDistance({ x, y }, shape) / config.gameUpdateSpeed;
 
         if (shape.vel.x) {
             shape.vel.x *= Math.pow(config.playerDecel, config.gameUpdateSpeed);
@@ -376,7 +382,7 @@ export default class {
             dir = UTILS.getDirection(loc, { x: x, y: y });
         }
 
-        this.Game.addProjectile(x, y, dir, this.indx, wpn);
+        this.Game.addProjectile(x, y, dir, this.indx, wpn, this.vel);
     }
 
     manageWeapons(shape) {

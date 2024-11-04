@@ -4693,6 +4693,7 @@ import projectile from "../client/src/game/projectile.js";
                 "addProjectile": (x, y, dir, owner, data) => {
                     let tmp = new projectile(x, y, data.name, data.projectileId, data.range, dir, owner, data.dmg, true);
                     tmp.sid = data.sid;
+                    tmp.speed += data.extraSpeed;
 
                     this.projectiles.push(tmp);
                 },

@@ -136,14 +136,14 @@ var game = new class {
         this.send("updatePlayers", playersData);
     }
 
-    addProjectile(x, y, dir, owner, wpn) {
+    addProjectile(x, y, dir, owner, wpn, extraSpeed) {
         let tmp = new projectile(x, y, wpn.name, wpn.projectileId, wpn.range, dir, owner, wpn.dmg)
         projectiles.push(tmp);
 
         let { name, range, projectileId } = wpn;
         let { sid } = tmp;
 
-        this.send("addProjectile", x, y, dir, owner, { name, range,  projectileId, sid });
+        this.send("addProjectile", x, y, dir, owner, { name, range,  projectileId, sid, extraSpeed });
     }
 
     start() {
