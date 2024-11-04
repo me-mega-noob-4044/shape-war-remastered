@@ -9,6 +9,7 @@ import drone from "../src/js/drone.js";
 import pilot from "../src/js/pilot.js";
 import skill from "../src/js/skill.js";
 import msgpack from "../src/js/msgpack.js";
+import projectile from "../client/src/game/projectile.js";
 
 (function () {
     var elements = {
@@ -4380,6 +4381,26 @@ import msgpack from "../src/js/msgpack.js";
             ctx.stroke();
         }
 
+        renderProjectiles(delta) {
+            ctx.globalAlpha = 1;
+            for (let i = 0; i < GameManager.projectiles.length; i++) {
+                let tmpObj = GameManager.projectiles[i];
+
+                if (tmpObj) {
+                    ctx.save();
+                    ctx.translate(tmpObj.x - this.offset.x, tmpObj.y - this.offset.y);
+                    ctx.strokeStyle = "black";
+                    ctx.fillStyle = "white";
+                    canvasDrawer.drawCircle(0, 0, ctx, tmpObj.scale, false, false);
+                    ctx.restore();
+
+                    console.log(tmpObj.x, tmpObj.y, tmpObj.dir)
+
+                    tmpObj.update([], false, delta);
+                }
+            }
+        }
+
         render() {
             let delta = Date.now() - this.lastUpdate;
             this.lastUpdate = Date.now();
@@ -4413,7 +4434,6 @@ import msgpack from "../src/js/msgpack.js";
                     let tmpDiff = tmpObj.x2 - tmpObj.x1;
                     tmpObj.dt += delta;
                     let tmpRate = Math.min(1, tmpObj.dt / 50);
-                    // console.log(delta, tmpRate)
                     tmpObj.x = tmpObj.x1 + (tmpDiff * tmpRate);
                     tmpDiff = (tmpObj.y2 - tmpObj.y1);
                     tmpObj.y = tmpObj.y1 + (tmpDiff * tmpRate);
@@ -4427,6 +4447,7 @@ import msgpack from "../src/js/msgpack.js";
             this.renderGrid();
 
             this.renderPlayers();
+            this.renderProjectiles(delta);
             this.renderBorders();
 
             ctx.fillStyle = "rgba(0, 0, 70, 0.35)";
@@ -4456,6 +4477,7 @@ import msgpack from "../src/js/msgpack.js";
             this.lastMoveDir;
             this.players = [];
             this.buildings = [];
+            this.projectiles = [];
             this.weaponElements = [];
             this.wpnParents = [];
             this.map = {};
@@ -4590,7 +4612,10 @@ import msgpack from "../src/js/msgpack.js";
                     this.wpnParents[id].appendChild(element);
                 },
                 "addProjectile": (x, y, dir, owner, data) => {
-                    // 
+                    let tmp = new projectile(x, y, data.name, data.projectileId, data.range, dir, owner, data.dmg, true);
+                    tmp.sid = data.sid;
+
+                    this.projectiles.push(tmp);
                 }
             };
         }

@@ -116,7 +116,7 @@ var game = new class {
             let projectile = projectiles[i];
 
             if (projectile) {
-                projectile.update(players);
+                projectile.update(players, true);
 
                 if (projectile.range <= 0) {
                     this.send("removeProjectile", projectile.sid);
@@ -129,11 +129,13 @@ var game = new class {
     }
 
     addProjectile(x, y, dir, owner, wpn) {
-        projectiles.push(new projectile(x, y, wpn.name, wpn.projectileId, wpn.range, dir, owner, wpn.dmg));
+        let tmp = new projectile(x, y, wpn.name, wpn.projectileId, wpn.range, dir, owner, wpn.dmg)
+        projectiles.push(tmp);
 
         let { name, range, projectileId } = wpn;
+        let { sid } = tmp;
 
-        this.send("addProjectile", x, y, dir, owner, { name, range, projectileId });
+        this.send("addProjectile", x, y, dir, owner, { name, range,  projectileId, sid });
     }
 
     start() {
