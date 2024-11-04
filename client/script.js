@@ -4302,13 +4302,16 @@ import projectile from "../client/src/game/projectile.js";
     var mouseX = 0, mouseY = 0;
 
     function getAimDir() {
-        return Math.atan2(mouseY - (renderer.screenSize.y / 2), mouseX - (renderer.screenSize.x / 2));
+        return Math.atan2(mouseY - (window.innerHeight / 2), mouseX - (window.innerWidth / 2));
     }
 
     document.addEventListener("mousemove", (event) => {
         mouseX = event.clientX;
         mouseY = event.clientY;
     });
+    
+    var gameCanvas = document.getElementById("gameCanvas");
+    var ctx = gameCanvas.getContext("2d");
 
     document.addEventListener("keydown", (event) => {
         if (event.isTrusted) {
@@ -4336,9 +4339,6 @@ import projectile from "../client/src/game/projectile.js";
             }
         }
     });
-
-    var gameCanvas = document.getElementById("gameCanvas");
-    var ctx = gameCanvas.getContext("2d");
 
     var renderer = new class {
         constructor() {
@@ -4468,12 +4468,6 @@ import projectile from "../client/src/game/projectile.js";
             this.lastUpdate = Date.now();
 
             if (player) {
-                this.aimSendDate -= delta;
-                if (this.aimSendDate <= 0) {
-                    GameManager.send("aim", getAimDir());
-                    this.aimSendDate = 100;
-                }
-
                 let tmpDist = UTILS.getDistance(this.cam, player);
                 let tmpDir = UTILS.getDirection(player, this.cam);
                 let camSpd = Math.min(tmpDist * 0.01 * delta, (tmpDist || 0));
@@ -4494,6 +4488,23 @@ import projectile from "../client/src/game/projectile.js";
                 x: this.cam.x - (this.screenSize.x / 2),
                 y: this.cam.y - (this.screenSize.y / 2)
             };
+
+            if (player) {
+                this.aimSendDate -= delta;
+                if (this.aimSendDate <= 0) {
+                    let x1 = mouseX / window.innerWidth;
+                    let y1 = mouseY / window.innerHeight;
+                    let x2 = x1 * this.screenSize.x;
+                    let y2 = y1 * this.screenSize.y;
+                    let x3 = this.screenSize.x / 2;
+                    let y3 = this.screenSize.y / 2;
+
+                    let dist = UTILS.getDistance({ x: x3, y: y3}, { x: x2, y: y2 });
+
+                    GameManager.send("aim", getAimDir(), dist);
+                    this.aimSendDate = 100;
+                }
+            }
 
             for (let i = 0; i < GameManager.players.length; i++) {
                 let tmpObj = GameManager.players[i];

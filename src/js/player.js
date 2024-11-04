@@ -183,6 +183,8 @@ function playerify(shape) {
     }
 }
 
+var PI2 = Math.PI * 2;
+
 export default class {
     constructor(data, isUser, Game, indx) {
         this.Game = Game;
@@ -197,6 +199,8 @@ export default class {
         this.moveDir = undefined;
         this.reloadAllWeapons = false;
         this.shapes = [];
+
+        this.mouseDistance = 0;
 
         this.targetDir = 0;
 
@@ -295,7 +299,23 @@ export default class {
         }
     }
 
+    updateDir(shape) {
+        if (shape.dir != this.targetDir) {
+            shape.dir %= PI2;
+
+            let netAngle = (shape.dir - this.targetDir + PI2) % PI2;
+            let amnt = Math.min(Math.abs(netAngle - PI2), netAngle, shape.aimTurnSpeed * config.gameUpdateSpeed);
+            let sign = (netAngle - Math.PI) >=0 ? 1 : -1;
+
+            shape.dir += sign * amnt + PI2;
+        }
+
+        shape.dir %= PI2;
+    }
+
     update(shape, map) {
+        this.updateDir(shape);
+
         // Movement:
 
         this.handleMovement(shape);
@@ -305,7 +325,7 @@ export default class {
     }
 
     fireWeapon(shape, slot, wpn, hardpoints) {
-        let x, y;
+        let x, y, dir = 0;
 
         let hScale = 20 / 2;
 
@@ -347,7 +367,16 @@ export default class {
             }
         }
 
-        this.Game.addProjectile(x, y, shape.dir, this.indx, wpn);
+        if (this.isUser) {
+            let loc = {
+                x: shape.x + Math.cos(shape.dir) * this.mouseDistance,
+                y: shape.y + Math.sin(shape.dir) * this.mouseDistance
+            };
+
+            dir = UTILS.getDirection(loc, { x: x, y: y });
+        }
+
+        this.Game.addProjectile(x, y, dir, this.indx, wpn);
     }
 
     manageWeapons(shape) {

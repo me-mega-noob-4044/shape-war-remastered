@@ -61,8 +61,12 @@ var clientEvents = {
     "reloadWeapons": () => {
         if (players[0]) players[0].reloadAllWeapons = true;
     },
-    "aim": (radian) => {
-        if (players[0]) players[0].targetDir = radian;
+    "aim": (radian, mouseDistance) => {
+        if (players[0]) {
+            players[0].targetDir = radian;
+
+            players[0].mouseDistance = mouseDistance;
+        }
     }
 };
 
