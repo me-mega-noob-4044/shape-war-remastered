@@ -439,12 +439,11 @@ import projectile from "../client/src/game/projectile.js";
             this.bulletSprites = {};
         }
 
-        drawCircle(x, y, mainContext, scale, dontStroke, dontFill, lineWidth = 5.5) {
-            mainContext.lineWidth = lineWidth;
-            mainContext.beginPath();
-            mainContext.arc(x, y, scale, 0, Math.PI * 2);
-            if (!dontFill) mainContext.fill();
-            if (!dontStroke) mainContext.stroke();
+        drawCircle(x, y, tmpContext, scale, dontStroke, dontFill) {
+            tmpContext.beginPath();
+            tmpContext.arc(x, y, scale, 0, Math.PI * 2);
+            if (!dontFill) tmpContext.fill();
+            if (!dontStroke) tmpContext.stroke();
         }
 
         createUIItem(tmpObj) {
@@ -452,11 +451,14 @@ import projectile from "../client/src/game/projectile.js";
 
             let tmpCanvas = document.createElement("canvas");
             tmpCanvas.width = tmpCanvas.height = tmpObj.scale * 6;
-            tmpCanvas.style.width = tmpCanvas.style.height = (tmpObj.scale * 6) + "px";
+            tmpCanvas.style.width = tmpCanvas.style.height = (tmpObj.scale * 6) + "px"
+
             let tmpContext = tmpCanvas.getContext("2d");
             tmpContext.globalAlpha = 1;
             tmpContext.translate((tmpCanvas.width / 2), (tmpCanvas.height / 2));
+            tmpContext.lineWidth = 5.5;
             tmpContext.strokeStyle = "#000";
+
             if (tmpObj.name.includes("Circle")) {
                 tmpContext.fillStyle = tmpObj.color;
                 this.drawCircle(0, 0, tmpContext, tmpObj.scale * 2, false, false, 11);
@@ -4340,6 +4342,9 @@ import projectile from "../client/src/game/projectile.js";
         }
     });
 
+    var selectorMiniMap = document.getElementById("selectorMiniMap");
+    var ctxSelectorMiniMap = selectorMiniMap.getContext("2d");
+
     var renderer = new class {
         constructor() {
             this.lastUpdate = 0;
@@ -4463,6 +4468,37 @@ import projectile from "../client/src/game/projectile.js";
             }
         }
 
+        renderSelectorMiniMap() {
+            let map = GameManager.map;
+            let miniMapSize = 450;
+            let maxSize = Math.max(map.width, map.height);
+
+            ctxSelectorMiniMap.clearRect(0, 0, selectorMiniMap.width, selectorMiniMap.height);
+
+            ctxSelectorMiniMap.fillStyle = "rgba(0, 0, 0, .4)";
+
+            let width = (map.width / maxSize) * miniMapSize;
+            let height = (map.height / maxSize) * miniMapSize;
+            let x = (miniMapSize - width) / 2;
+            let y = (miniMapSize - height) / 2;
+
+            ctxSelectorMiniMap.fillRect(x, y, width, height);
+
+            ctxSelectorMiniMap.lineWidth = 5.5;
+
+            if (player) {
+                let playerX = x + (player.x / maxSize) * miniMapSize;
+                let playerY = y + (player.y / maxSize) * miniMapSize;
+
+                console.log(playerX, playerY);
+
+                ctxSelectorMiniMap.fillStyle = "white";
+                canvasDrawer.drawCircle(playerX, playerY, ctxSelectorMiniMap, 3.5, true, false);
+            }
+
+            window.requestAnimationFrame(renderer.renderSelectorMiniMap);
+        }
+
         render() {
             let delta = Date.now() - this.lastUpdate;
             this.lastUpdate = Date.now();
@@ -4525,6 +4561,8 @@ import projectile from "../client/src/game/projectile.js";
 
             this.renderGrid();
 
+            ctx.lineWidth = 5.5;
+
             this.renderProjectiles(delta);
             this.renderPlayers();
             this.renderBorders();
@@ -4569,9 +4607,16 @@ import projectile from "../client/src/game/projectile.js";
 
             this.serverEvents = {
                 "init": (map, buildings) => {
-                    console.log(map);
                     this.map = map;
                     this.buildings = buildings;
+
+                    /*const maps = [{
+                        name: "Bastion",
+                        width: 12e3,
+                        height: 6e3
+                    }];*/
+
+                    window.requestAnimationFrame(renderer.renderSelectorMiniMap);
 
                     this.setUpChooseSlots();
                     this.startRendering();
@@ -4699,7 +4744,7 @@ import projectile from "../client/src/game/projectile.js";
                 "removeProjectile": (sid) => {
                     for (let i = 0; i < this.projectiles.length; i++) {
                         if (this.projectiles[i].sid == sid) {
-                            this.projectiles.splice(i, 1); // [i].active = false;
+                            this.projectiles.splice(i, 1);
                             break;
                         }
                     }
