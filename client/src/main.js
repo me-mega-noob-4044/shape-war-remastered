@@ -7,10 +7,6 @@ import projectile from "./game/projectile.js";
 var players = [];
 var buildings = [];
 var projectiles = [];
-var mapSize = {
-    width: 0, // X axis
-    height: 0 // Y axis
-};
 
 function groupWeapons(player) {
     let data = [];
@@ -45,6 +41,16 @@ var clientEvents = {
     "chooseSlot": (slot) => {
         if (players[0]) {
             players[0].chooseIndex = slot;
+
+            let shape = players[0].shapes[slot];
+
+            if (players[0].isAlly) {
+                shape.x = game.map.locations[game.spawnIndx].x;
+                shape.y = game.map.locations[game.spawnIndx].y;
+            } else {
+                shape.x = game.map.locations[+!game.spawnIndx].x;
+                shape.y = game.map.locations[+!game.spawnIndx].y;
+            }
 
             game.send("initializeWeapons", groupWeapons(players[0]));
         }
@@ -90,6 +96,7 @@ var game = new class {
     constructor() {
         this.map = null;
         this.interval = null;
+        this.spawnIndx = 0;
     }
 
     send(type) {
@@ -148,6 +155,7 @@ var game = new class {
 
     start() {
         let map = this.map = mapBuilder.build(buildings);
+        this.spawnIndx = Math.floor(Math.random() * 2);
 
         this.send("init", map, buildings);
 

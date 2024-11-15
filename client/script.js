@@ -4342,9 +4342,6 @@ import projectile from "../client/src/game/projectile.js";
         }
     });
 
-    var selectorMiniMap = document.getElementById("selectorMiniMap");
-    var ctxSelectorMiniMap = selectorMiniMap.getContext("2d");
-
     var renderer = new class {
         constructor() {
             this.lastUpdate = 0;
@@ -4468,37 +4465,6 @@ import projectile from "../client/src/game/projectile.js";
             }
         }
 
-        renderSelectorMiniMap() {
-            let map = GameManager.map;
-            let miniMapSize = 450;
-            let maxSize = Math.max(map.width, map.height);
-
-            ctxSelectorMiniMap.clearRect(0, 0, selectorMiniMap.width, selectorMiniMap.height);
-
-            ctxSelectorMiniMap.fillStyle = "rgba(0, 0, 0, .4)";
-
-            let width = (map.width / maxSize) * miniMapSize;
-            let height = (map.height / maxSize) * miniMapSize;
-            let x = (miniMapSize - width) / 2;
-            let y = (miniMapSize - height) / 2;
-
-            ctxSelectorMiniMap.fillRect(x, y, width, height);
-
-            ctxSelectorMiniMap.lineWidth = 5.5;
-
-            if (player) {
-                let playerX = x + (player.x / maxSize) * miniMapSize;
-                let playerY = y + (player.y / maxSize) * miniMapSize;
-
-                console.log(playerX, playerY);
-
-                ctxSelectorMiniMap.fillStyle = "white";
-                canvasDrawer.drawCircle(playerX, playerY, ctxSelectorMiniMap, 3.5, true, false);
-            }
-
-            window.requestAnimationFrame(renderer.renderSelectorMiniMap);
-        }
-
         render() {
             let delta = Date.now() - this.lastUpdate;
             this.lastUpdate = Date.now();
@@ -4609,15 +4575,7 @@ import projectile from "../client/src/game/projectile.js";
                 "init": (map, buildings) => {
                     this.map = map;
                     this.buildings = buildings;
-
-                    /*const maps = [{
-                        name: "Bastion",
-                        width: 12e3,
-                        height: 6e3
-                    }];*/
-
-                    window.requestAnimationFrame(renderer.renderSelectorMiniMap);
-
+                    
                     this.setUpChooseSlots();
                     this.startRendering();
                 },
