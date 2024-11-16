@@ -4367,8 +4367,8 @@ import projectile from "../client/src/game/projectile.js";
         resize() {
             gameCanvas.width = window.innerWidth;
             gameCanvas.height = window.innerHeight;
-            gameCanvas.style.width = `${window.innerWidth}px`;
-            gameCanvas.style.height = `${window.innerHeight}px`;
+            // gameCanvas.style.width = `${window.innerWidth}px`;
+            // gameCanvas.style.height = `${window.innerHeight}px`;
 
             let scaleFillNative = Math.max(window.innerWidth / this.screenSize.x, window.innerHeight / this.screenSize.y);
             ctx.setTransform(scaleFillNative, 0, 0, scaleFillNative, (window.innerWidth - (this.screenSize.x * scaleFillNative)) / 2,(window.innerHeight - (this.screenSize.y * scaleFillNative)) / 2);
@@ -4465,6 +4465,40 @@ import projectile from "../client/src/game/projectile.js";
             }
         }
 
+        renderBuildings(delta) {
+            for (let i = 0; i < GameManager.buildings.length; i++) {
+                let tmpObj = GameManager.buildings[i];
+
+                if (tmpObj) {
+                    ctx.save();
+                    ctx.globalAlpha = 1;
+                    ctx.translate(tmpObj.x - this.offset.x, tmpObj.y - this.offset.y);
+
+                    if (tmpObj.name == "beacon") {
+                        ctx.lineWidth = 7.5;
+                        ctx.strokeStyle = "black";
+                        ctx.fillStyle = Math.abs(tmpObj.capturePoints) == 6e3 ? tmpObj.capturePoints > 0 ? "blue" : "red" : "white";
+                        canvasDrawer.drawCircle(0, 0, ctx, 45, false, false);
+
+                        ctx.lineWidth = 11;
+                        ctx.strokeStyle = "white";
+                        canvasDrawer.drawCircle(0, 0, ctx, 400, false, true);
+
+                        let difference = tmpObj.targetCapturePoints - tmpObj.capturePoints;
+                        let value = tmpObj.capturePoints + difference * (tmpObj.deltaTime / 50);
+                        tmpObj.deltaTime += delta;
+
+                        ctx.strokeStyle = tmpObj.capturePoints > 0 ? "blue" : "red";
+                        ctx.beginPath();
+                        ctx.arc(0, 0, 400, 0, Math.PI * 2 * (value / 6e3));
+                        ctx.stroke();
+                    }
+
+                    ctx.restore();
+                }
+            }
+        }
+
         render() {
             let delta = Date.now() - this.lastUpdate;
             this.lastUpdate = Date.now();
@@ -4482,8 +4516,8 @@ import projectile from "../client/src/game/projectile.js";
                     this.cam.y = player.y;
                 }
             } else {
-                this.cam.x = GameManager.map.x / 2;
-                this.cam.y = GameManager.map.y / 2;
+                this.cam.x = GameManager.map.width / 2;
+                this.cam.y = GameManager.map.height / 2;
             }
 
             this.offset = {
@@ -4525,6 +4559,7 @@ import projectile from "../client/src/game/projectile.js";
             ctx.fillStyle = "#b0db51";
             ctx.fillRect(0, 0, this.screenSize.x, this.screenSize.y);
 
+            this.renderBuildings(delta);
             this.renderGrid();
 
             ctx.lineWidth = 5.5;
@@ -4706,6 +4741,13 @@ import projectile from "../client/src/game/projectile.js";
                             break;
                         }
                     }
+                },
+                "beaconUpdate": (sid, points) => {
+                    let tmpObj = this.buildings[sid];
+
+                    tmpObj.capturePoints = (tmpObj.targetCapturePoints || 0);
+                    tmpObj.targetCapturePoints = points;
+                    tmpObj.deltaTime = 0;
                 }
             };
         }

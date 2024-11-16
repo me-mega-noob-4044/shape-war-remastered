@@ -12,8 +12,20 @@ const maps = [{
 }];
 
 var mapBuilder = new class {
-    build() {
-        return maps[0];
+    build(buildings) {
+        let indx = Math.floor(Math.random() * maps.length);
+        let map = maps[indx];
+
+        if (indx == 0) {
+            buildings.push({
+                name: "beacon",
+                x: map.width / 2,
+                y: map.height / 2,
+                capturePoints: 0
+            });
+        }
+
+        return map;
     }
 };
 

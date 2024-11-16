@@ -319,13 +319,31 @@ export default class {
         shape.dir %= PI2;
     }
 
-    update(shape, map) {
-        this.updateDir(shape);
+    handleBuildingCollisions(shape, buildings) {
+        for (let i = 0; i < buildings.length; i++) {
+            let tmpObj = buildings[i];
 
-        // Movement:
+            if (tmpObj) {
+                if (tmpObj.name == "beacon") {
+                    if (UTILS.getDistance(shape, tmpObj) <= 400 + shape.scale) {
+                        let tmpAdd = (this.isAlly ? 1 : -1);
+
+                        tmpObj.capturePoints = Math.min(6e3, tmpObj.capturePoints + (tmpAdd * config.gameUpdateSpeed));
+
+                        this.Game.send("beaconUpdate", i, tmpObj.capturePoints);
+                    }
+                }
+            }
+        }
+    }
+
+    update(shape, map, buildings) {
+        this.updateDir(shape);
 
         this.handleMovement(shape);
         this.handleBorder(shape, map);
+
+        this.handleBuildingCollisions(shape, buildings);
 
         this.manageWeapons(shape);
     }

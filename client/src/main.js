@@ -119,7 +119,7 @@ var game = new class {
             let shape = player.shapes[player.chooseIndex];
 
             if (shape) {
-                player.update(shape, this.map);
+                player.update(shape, this.map, buildings);
 
                 // ID, name, x, y, dir, health, maxhealth, grayDamage
                 playersData.push(i, shape.name, shape.x, shape.y, shape.dir, shape.health, shape.maxhealth, shape.grayDamage);
