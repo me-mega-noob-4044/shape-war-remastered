@@ -328,9 +328,21 @@ export default class {
                     if (UTILS.getDistance(shape, tmpObj) <= 400 + shape.scale) {
                         let tmpAdd = (this.isAlly ? 1 : -1);
 
-                        tmpObj.capturePoints = Math.min(6e3, tmpObj.capturePoints + (tmpAdd * config.gameUpdateSpeed));
+                        tmpObj.capturePoints = Math[tmpAdd ? "min" : "max"](6e3, tmpObj.capturePoints + (tmpAdd * config.gameUpdateSpeed));
 
                         this.Game.send("beaconUpdate", i, tmpObj.capturePoints);
+                    } else {
+                        if (tmpObj.capturePoints != 0 && Math.abs(tmpObj.capturePoints) != 6e3) {
+                            let wasNeg = tmpObj.capturePoints < 0 ? -1 : 1;
+
+                            if (Math.abs(tmpObj.capturePoints) <= 60) {
+                                tmpObj.capturePoints = 0;
+                            } else {
+                                tmpObj.capturePoints -= (6e3 / config.gameUpdateSpeed) * wasNeg * .25;
+                            }
+    
+                            this.Game.send("beaconUpdate", i, tmpObj.capturePoints);
+                        }
                     }
                 }
             }

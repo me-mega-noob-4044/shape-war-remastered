@@ -4475,6 +4475,9 @@ import projectile from "../client/src/game/projectile.js";
                     ctx.translate(tmpObj.x - this.offset.x, tmpObj.y - this.offset.y);
 
                     if (tmpObj.name == "beacon") {
+                        if (tmpObj.capturePoints > 6e3) tmpObj.capturePoints = 6e3;
+                        if (tmpObj.capturePoints < -6e3) tmpObj.capturePoints = -6e3;
+
                         ctx.lineWidth = 7.5;
                         ctx.strokeStyle = "black";
                         ctx.fillStyle = Math.abs(tmpObj.capturePoints) == 6e3 ? tmpObj.capturePoints > 0 ? "blue" : "red" : "white";
@@ -4484,14 +4487,16 @@ import projectile from "../client/src/game/projectile.js";
                         ctx.strokeStyle = "white";
                         canvasDrawer.drawCircle(0, 0, ctx, 400, false, true);
 
-                        let difference = tmpObj.targetCapturePoints - tmpObj.capturePoints;
-                        let value = tmpObj.capturePoints + difference * (tmpObj.deltaTime / 50);
-                        tmpObj.deltaTime += delta;
-
-                        ctx.strokeStyle = tmpObj.capturePoints > 0 ? "blue" : "red";
-                        ctx.beginPath();
-                        ctx.arc(0, 0, 400, 0, Math.PI * 2 * (value / 6e3));
-                        ctx.stroke();
+                        if (tmpObj.targetCapturePoints != 0) {
+                            let difference = Math.abs(tmpObj.targetCapturePoints) - Math.abs(tmpObj.capturePoints);
+                            let value = Math.abs(tmpObj.capturePoints) + difference * (tmpObj.deltaTime / 50);
+                            tmpObj.deltaTime += delta;
+    
+                            ctx.strokeStyle = tmpObj.capturePoints > 0 ? "blue" : "red";
+                            ctx.beginPath();
+                            ctx.arc(0, 0, 400, 0, Math.PI * 2 * (value / 6e3));
+                            ctx.stroke();
+                        }
                     }
 
                     ctx.restore();
@@ -4548,7 +4553,8 @@ import projectile from "../client/src/game/projectile.js";
                 if (tmpObj) {
                     let tmpDiff = tmpObj.x2 - tmpObj.x1;
                     tmpObj.dt += delta;
-                    let tmpRate = Math.min(1, tmpObj.dt / 50);
+                    let tmpRate = tmpObj.dt / 66.5;
+
                     tmpObj.x = tmpObj.x1 + (tmpDiff * tmpRate);
                     tmpDiff = (tmpObj.y2 - tmpObj.y1);
                     tmpObj.y = tmpObj.y1 + (tmpDiff * tmpRate);

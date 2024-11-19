@@ -6,11 +6,11 @@ const shapes = [{
     Recommended Equipment: x2 Punisher
     `,
     aimTurnSpeed: .008,
-    fovMulti: 1.35,
+    fovMulti: 5.35,
     scale: 55,
     indxRole: 1,
     speedData: {
-        base: 0.1018,
+        base: 0.0518,
         level: [0, 0, 0.0001, 0.0001, 0, 0.0001, 0.0001, 0, 0.0001, 0.0002, 0.0003, 0.0004]
     },
     mk2DataIncrease: 1.2,
