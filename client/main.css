@@ -1344,3 +1344,38 @@ a:-webkit-any-link {
     width: 100%;
     height: 100%;
 }
+
+.topHolder {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    top: 7px;
+    left: 0px;
+    width: 100%;
+}
+
+#cooldownTimer {
+    font-weight: 600;
+}
+
+#beaconDisplay {
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+}
+
+.progressBar {
+    display: flex;
+    position: relative;
+    overflow: hidden;
+    align-items: center;
+    margin-top: 4px;
+    width: 200px;
+    height: 40px;
+    border-radius: 4px;
+    background-color: rgb(0, 0, 0, .4);
+}

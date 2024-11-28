@@ -95,8 +95,8 @@ self.onmessage = (event) => {
 var game = new class {
     constructor() {
         this.map = null;
-        this.interval = null;
         this.spawnIndx = 0;
+        this.points = [0, 0];
     }
 
     send(type) {
@@ -159,7 +159,24 @@ var game = new class {
 
         this.send("init", map, buildings);
 
-        this.interval = setInterval(() => {
+        setInterval(() => {
+            for (let i = 0; i < buildings.length; i++) {
+                let tmpObj = buildings[i];
+
+                if (tmpObj.name == "beacon") {
+                    if (Math.abs(tmpObj.capturePoints) == 6e3) {
+                        let indx = (tmpObj.capturePoints == -6) * 1;
+
+                        this.points[indx] = Math.min(this.points[indx], 300);
+                        this.send("updateBeaconBars", indx, this.points[indx]);
+
+                        tmpObj.collectionTime = 1e3;
+                    }
+                }
+            }
+        }, 1e3);
+
+        setInterval(() => {
             this.updateGame();
         }, config.gameUpdateSpeed);
     }

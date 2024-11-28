@@ -19,8 +19,29 @@ var mapBuilder = new class {
         if (indx == 0) {
             buildings.push({
                 name: "beacon",
+                x: 1700,
+                y: map.height * .75,
+                capturePoints: 0
+            });
+
+            buildings.push({
+                name: "beacon",
                 x: map.width / 2,
-                y: map.height / 2,
+                y: map.height * .25,
+                capturePoints: 0
+            });
+
+            buildings.push({
+                name: "beacon",
+                x: map.width / 2,
+                y: map.height * .75,
+                capturePoints: 0
+            });
+
+            buildings.push({
+                name: "beacon",
+                x: 6300,
+                y: map.height * .25,
                 capturePoints: 0
             });
         }

@@ -4545,6 +4545,8 @@ import projectile from "../client/src/game/projectile.js";
                     GameManager.send("aim", getAimDir(), dist);
                     this.aimSendDate = 100;
                 }
+
+                document.title = `${player.x.toFixed(0)} | ${player.y.toFixed(0)}`;
             }
 
             for (let i = 0; i < GameManager.players.length; i++) {
@@ -4595,6 +4597,44 @@ import projectile from "../client/src/game/projectile.js";
     resize();
 
     var player;
+    let beaconDisplay = document.getElementById("beaconDisplay");
+    var beaconLetters = ["A", "B", "C", "D", "E"];
+
+    function updateBeacons() {
+        let beacons = GameManager.buildings.filter(e => e.name == "beacon");
+
+        beaconDisplay.innerHTML = "";
+
+        for (let i = 0; i < beacons.length; i++) {
+            let element = document.createElement("div");
+            element.style = "position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; background-color: rgb(0, 0, 0, .4); border-radius: 4px; margin-right: 10px;";
+
+            let overlay = document.createElement("div");
+            overlay.style = "position: absolute; left: 0px; bottom: 0px; width: 100%;";
+
+            overlay.style.height = `${(Math.abs(beacons[i].capturePoints) / 6e3) * 100}%`;
+
+            if (beacons[i].capturePoints < 0) {
+                overlay.style.backgroundColor = "#f00";
+            } else {
+                overlay.style.backgroundColor = "#00f";
+            }
+
+            let beaconName = document.createElement("div");
+            beaconName.style = "z-index: 1231; font-size: 22px; color: white; font-weight: 600;";
+            beaconName.innerHTML = beaconLetters[i];
+
+            if (i == beacons.length - 1) {
+                element.style.marginRight = null;
+            }
+
+            element.appendChild(beaconName);
+            element.appendChild(overlay);
+            beaconDisplay.appendChild(element);
+        }
+    }
+
+    var beaconBarDisplays = ["allyBeaconProgress", "enemyBeaconProgress"];
 
     var GameManager = new class {
         constructor() {
@@ -4619,6 +4659,7 @@ import projectile from "../client/src/game/projectile.js";
                     
                     this.setUpChooseSlots();
                     this.startRendering();
+                    updateBeacons();
                 },
                 "updatePlayers": (data) => {
                     for (let i = 0; i < data.length;) {
@@ -4754,6 +4795,35 @@ import projectile from "../client/src/game/projectile.js";
                     tmpObj.capturePoints = (tmpObj.targetCapturePoints || 0);
                     tmpObj.targetCapturePoints = points;
                     tmpObj.deltaTime = 0;
+
+                    updateBeacons();
+                },
+                "updateBeaconBars": (indx, points) => {
+                    let element = UTILS.getElement(beaconBarDisplays[indx]);
+                    element.innerHTML = "";
+
+                    let bar = document.createElement("div");
+                    bar.style = "position: absolute; top: 0px; height: 100%;";
+                    bar.style.width = `${(points / 300) * 100}%`;
+
+                    let num = document.createElement("div");
+                    num.style = "z-index: 213; font-size: 18px; font-weight: 600; color: white;";
+                    num.innerHTML = UTILS.styleNumberWithSpace(points);
+
+                    if (indx == 0) {
+                        num.style.marginLeft = "6px";
+                        num.style.float = "left";
+                        bar.style.left = "0px";
+                        bar.style.backgroundColor = "#00f";
+                    } else {
+                        num.style.marginRight = "6px";
+                        num.style.float = "right";
+                        bar.style.right = "0px";
+                        bar.style.backgroundColor = "#f00";
+                    }
+
+                    element.appendChild(num);
+                    element.appendChild(bar);
                 }
             };
         }
