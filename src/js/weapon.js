@@ -6,6 +6,7 @@ export default class {
         this.name = data.name;
         this.slot = slot;
         this.level = 1;
+        this.spread = data.spread;
         this.industryName = data.industryName;
         this.description = data.description;
         this.type = data.type;

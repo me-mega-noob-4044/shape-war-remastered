@@ -6,7 +6,7 @@ const shapes = [{
     Recommended Equipment: x2 Punisher
     `,
     aimTurnSpeed: .008,
-    fovMulti: 5.35,
+    fovMulti: 1.35,
     scale: 55,
     indxRole: 1,
     speedData: {
@@ -124,6 +124,7 @@ const weapons = [{
         level: [0, 20, 20, 20, 20, 20, 30, 30, 30, 40, 40, 40]
     },
     projectileId: 0,
+    spread: 10,
     attributes: ["Kinetic", "Manual", "Automatic", "Magazine"],
     mothershipChargeRate: 0.000125,
     mk2DataIncrease: 1.2,
@@ -147,6 +148,7 @@ const weapons = [{
         level: [0, 30, 30, 30, 40, 40, 40, 40, 40, 50, 60, 70]
     },
     projectileId: 0,
+    spread: 7,
     attributes: ["Kinetic", "Manual", "Automatic", "Magazine"],
     mothershipChargeRate: 0.000125,
     mk2DataIncrease: 1.2,
@@ -170,6 +172,7 @@ const weapons = [{
         level: [0, 30, 30, 40, 45, 45, 50, 50, 60, 65, 65, 80]
     },
     projectileId: 0,
+    spread: 10,
     attributes: ["Kinetic", "Manual", "Automatic", "Magazine"],
     mothershipChargeRate: 0.000125,
     mk2DataIncrease: 1.2,

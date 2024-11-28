@@ -4465,11 +4465,11 @@ import projectile from "../client/src/game/projectile.js";
             }
         }
 
-        renderBuildings(delta) {
+        renderBuildings(delta, layer) {
             for (let i = 0; i < GameManager.buildings.length; i++) {
                 let tmpObj = GameManager.buildings[i];
 
-                if (tmpObj) {
+                if (tmpObj && tmpObj.layer == layer) {
                     ctx.save();
                     ctx.globalAlpha = 1;
                     ctx.translate(tmpObj.x - this.offset.x, tmpObj.y - this.offset.y);
@@ -4497,6 +4497,12 @@ import projectile from "../client/src/game/projectile.js";
                             ctx.arc(0, 0, 400, 0, Math.PI * 2 * (value / 6e3));
                             ctx.stroke();
                         }
+                    } else if (tmpObj.name == "wall") {
+                        ctx.fillStyle = "#808080";
+                        ctx.fillRect(0, 0, tmpObj.width, tmpObj.height);
+
+                        ctx.fillStyle = "#969595";
+                        ctx.fillRect(30, 30, tmpObj.width - 60, tmpObj.height - 60);
                     }
 
                     ctx.restore();
@@ -4567,12 +4573,13 @@ import projectile from "../client/src/game/projectile.js";
             ctx.fillStyle = "#b0db51";
             ctx.fillRect(0, 0, this.screenSize.x, this.screenSize.y);
 
-            this.renderBuildings(delta);
+            this.renderBuildings(delta, 0);
             this.renderGrid();
 
             ctx.lineWidth = 5.5;
 
             this.renderProjectiles(delta);
+            this.renderBuildings(delta, 1);
             this.renderPlayers();
             this.renderBorders();
 

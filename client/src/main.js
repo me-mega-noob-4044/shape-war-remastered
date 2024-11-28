@@ -3,6 +3,7 @@ import player from "../../src/js/player.js";
 import { maps, mapBuilder } from "./game/mapBuilder.js";
 import config from "../../src/js/config.js";
 import projectile from "./game/projectile.js";
+import * as UTILS from "../../src/js/utils.js";
 
 var players = [];
 var buildings = [];
@@ -132,6 +133,24 @@ var game = new class {
             if (projectile && projectile.active) {
                 projectile.update(players, true);
 
+                for (let t = 0; t < buildings.length; t++) {
+                    let tmpObj = buildings[t];
+
+                    if (tmpObj && tmpObj.name == "wall") {
+                        if (projectile.x >= tmpObj.x - projectile.scale && projectile.x <= tmpObj.x + tmpObj.width + projectile.scale) {
+                            if (projectile.y >= tmpObj.y - projectile.scale && projectile.y <= tmpObj.y + tmpObj.height + projectile.scale) {
+                                let Px = Math.max(tmpObj.x + projectile.scale, Math.min(projectile.x, tmpObj.x + tmpObj.width - projectile.scale));
+                                let Py = Math.max(tmpObj.y + projectile.scale, Math.min(projectile.y, tmpObj.y + tmpObj.height - projectile.scale));
+        
+                                if (UTILS.getDistance({ x: Px, y: Py }, projectile) <= projectile.scale * 2) {
+                                    projectile.range = 0;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+
                 if (projectile.range <= 0) {
                     this.send("removeProjectile", projectile.sid);
                     projectiles.splice(i, 1);
@@ -167,7 +186,7 @@ var game = new class {
                     if (Math.abs(tmpObj.capturePoints) == 6e3) {
                         let indx = (tmpObj.capturePoints == -6) * 1;
 
-                        this.points[indx] = Math.min(this.points[indx], 300);
+                        this.points[indx] = Math.min(this.points[indx] + 1, 300);
                         this.send("updateBeaconBars", indx, this.points[indx]);
 
                         tmpObj.collectionTime = 1e3;

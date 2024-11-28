@@ -115,3 +115,10 @@ export const droneStatAmount = (name, value) => {
         return `${(value / 1e3)} sec`;
     }
 };
+
+export const randDirectionSpread = (degrees) => {
+    let rand = Math.random() * (degrees / 2);
+    rand = rand / 180 * Math.PI;
+
+    return rand * (Math.random() > .5 ? -1 : 1);
+};

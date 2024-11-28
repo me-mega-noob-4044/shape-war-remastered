@@ -269,6 +269,8 @@ export default class {
 		let tMlt = 1 / depth;
 
         let x = shape.x, y = shape.y;
+        shape.lastX = x;
+        shape.lastY = y;
 
 		for (let i = 0; i < depth; i++) {
             if (shape.vel.x) shape.x += shape.vel.x * delta * tMlt;
@@ -344,6 +346,20 @@ export default class {
                             this.Game.send("beaconUpdate", i, tmpObj.capturePoints);
                         }
                     }
+                } else if (tmpObj.name == "wall") {
+                    if (shape.x >= tmpObj.x - shape.scale && shape.x <= tmpObj.x + tmpObj.width + shape.scale) {
+                        if (shape.y >= tmpObj.y - shape.scale && shape.y <= tmpObj.y + tmpObj.height + shape.scale) {
+                            let Px = Math.max(tmpObj.x + shape.scale, Math.min(shape.x, tmpObj.x + tmpObj.width - shape.scale));
+                            let Py = Math.max(tmpObj.y + shape.scale, Math.min(shape.y, tmpObj.y + tmpObj.height - shape.scale));
+
+                            if (UTILS.getDistance({ x: Px, y: Py }, shape) <= shape.scale * 2) {
+                                let angle = UTILS.getDirection(shape, { x: Px, y: Py });
+
+                                shape.x = Px + Math.cos(angle) * shape.scale * 2;
+                                shape.y = Py + Math.sin(angle) * shape.scale * 2;;
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -411,6 +427,8 @@ export default class {
 
             dir = UTILS.getDirection(loc, { x: x, y: y });
         }
+
+        if (wpn.spread) dir += UTILS.randDirectionSpread(wpn.spread);
 
         this.Game.addProjectile(x, y, dir, this.indx, wpn, this.vel);
     }
