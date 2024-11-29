@@ -4466,53 +4466,73 @@ import projectile from "../client/src/game/projectile.js";
         }
 
         renderBuildings(delta, layer) {
+            ctx.globalAlpha = 1;
+
             for (let i = 0; i < GameManager.buildings.length; i++) {
                 let tmpObj = GameManager.buildings[i];
 
-                if (tmpObj && tmpObj.layer == layer) {
+                if (tmpObj) {
                     ctx.save();
-                    ctx.globalAlpha = 1;
-                    ctx.translate(tmpObj.x - this.offset.x, tmpObj.y - this.offset.y);
 
-                    if (tmpObj.name == "beacon") {
-                        if (tmpObj.capturePoints > 6e3) tmpObj.capturePoints = 6e3;
-                        if (tmpObj.capturePoints < -6e3) tmpObj.capturePoints = -6e3;
+                    if (tmpObj.layer == layer) {
+                        ctx.translate(tmpObj.x - this.offset.x, tmpObj.y - this.offset.y);
 
-                        ctx.lineWidth = 7.5;
-                        ctx.strokeStyle = "black";
-                        ctx.fillStyle = Math.abs(tmpObj.capturePoints) == 6e3 ? tmpObj.capturePoints > 0 ? "blue" : "red" : "white";
-                        canvasDrawer.drawCircle(0, 0, ctx, 45, false, false);
+                        if (tmpObj.name == "beacon") {
+                            if (tmpObj.capturePoints > 6e3) tmpObj.capturePoints = 6e3;
+                            if (tmpObj.capturePoints < -6e3) tmpObj.capturePoints = -6e3;
 
-                        ctx.lineWidth = 11;
-                        ctx.strokeStyle = "white";
-                        canvasDrawer.drawCircle(0, 0, ctx, 400, false, true);
+                            ctx.lineWidth = 7.5;
+                            ctx.strokeStyle = "black";
+                            ctx.fillStyle = Math.abs(tmpObj.capturePoints) == 6e3 ? tmpObj.capturePoints > 0 ? "blue" : "red" : "white";
+                            canvasDrawer.drawCircle(0, 0, ctx, 45, false, false);
 
-                        if (tmpObj.targetCapturePoints != 0) {
-                            let difference = Math.abs(tmpObj.targetCapturePoints) - Math.abs(tmpObj.capturePoints);
-                            let value = Math.abs(tmpObj.capturePoints) + difference * (tmpObj.deltaTime / 50);
-                            tmpObj.deltaTime += delta;
-    
-                            ctx.strokeStyle = tmpObj.capturePoints > 0 ? "blue" : "red";
-                            ctx.beginPath();
-                            ctx.arc(0, 0, 400, 0, Math.PI * 2 * (value / 6e3));
-                            ctx.stroke();
+                            ctx.lineWidth = 11;
+                            ctx.strokeStyle = "white";
+                            canvasDrawer.drawCircle(0, 0, ctx, 400, false, true);
+
+                            if (tmpObj.targetCapturePoints != 0) {
+                                let difference = Math.abs(tmpObj.targetCapturePoints) - Math.abs(tmpObj.capturePoints);
+                                let value = Math.abs(tmpObj.capturePoints) + difference * (tmpObj.deltaTime / 50);
+                                tmpObj.deltaTime += delta;
+
+                                ctx.strokeStyle = tmpObj.capturePoints > 0 ? "blue" : "red";
+                                ctx.beginPath();
+                                ctx.arc(0, 0, 400, 0, Math.PI * 2 * (value / 6e3));
+                                ctx.stroke();
+                            }
+                        } else if (tmpObj.name == "wall") {
+                            ctx.fillStyle = "#808080";
+                            ctx.fillRect(0, 0, tmpObj.width, tmpObj.height);
+
+                            ctx.fillStyle = "#969595";
+                            ctx.fillRect(30, 30, tmpObj.width - 60, tmpObj.height - 60);
+                        } else if (tmpObj.name == "healing beacon") {
+                            ctx.lineWidth = 11;
+                            ctx.strokeStyle = "#009c00";
+                            ctx.fillStyle = "rgb(0, 156, 0, .4)";
+                            canvasDrawer.drawCircle(0, 0, ctx, tmpObj.scale, false, false);
+
+                            ctx.lineWidth = 7.5;
+                            ctx.strokeStyle = "black";
+                            ctx.fillStyle = "#009c00";
+                            canvasDrawer.drawCircle(0, 0, ctx, 60, false, false);
                         }
-                    } else if (tmpObj.name == "wall") {
-                        ctx.fillStyle = "#808080";
-                        ctx.fillRect(0, 0, tmpObj.width, tmpObj.height);
+                    } else if (layer == 1) {
+                        if (tmpObj.name == "healing beacon") {
+                            for (let t = 0; t < GameManager.players.length; t++) {
+                                let player = GameManager.players[t];
 
-                        ctx.fillStyle = "#969595";
-                        ctx.fillRect(30, 30, tmpObj.width - 60, tmpObj.height - 60);
-                    } else if (tmpObj.name == "healing beacon") {
-                        ctx.lineWidth = 11;
-                        ctx.strokeStyle = "#009c00";
-                        ctx.fillStyle = "rgb(0, 156, 0, .4)";
-                        canvasDrawer.drawCircle(0, 0, ctx, tmpObj.scale, false, false);
-
-                        ctx.lineWidth = 7.5;
-                        ctx.strokeStyle = "black";
-                        ctx.fillStyle = "#009c00";
-                        canvasDrawer.drawCircle(0, 0, ctx, 60, false, false);
+                                if (player && UTILS.getDistance(tmpObj, player) <= player.scale + tmpObj.scale) {
+                                    ctx.strokeStyle = "#009c00";
+                                    ctx.lineWidth = 18;
+                                    ctx.lineCap = "round";
+                                    ctx.beginPath();
+                                    ctx.moveTo(tmpObj.x - this.offset.x, tmpObj.y - this.offset.y);
+                                    ctx.lineTo(player.x - this.offset.x, player.y - this.offset.y);
+                                    ctx.stroke();
+                                }
+                            }
+                        }
                     }
 
                     ctx.restore();

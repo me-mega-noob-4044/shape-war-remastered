@@ -108,8 +108,8 @@ var mapBuilder = new class {
                 layer: 2,
                 x: 5250,
                 y: 4000,
-                power: 6e3,
-                scale: 750
+                power: 3e3,
+                scale: 550
             });
         }
 

@@ -296,6 +296,8 @@ export default class {
     
                                     shape.x = Px + Math.cos(angle) * shape.scale * 2;
                                     shape.y = Py + Math.sin(angle) * shape.scale * 2;
+                                    shape.vel.x *= .75;
+                                    shape.vel.y *= .75;
                                 }
                             }
                         }
