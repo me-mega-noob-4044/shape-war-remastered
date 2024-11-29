@@ -4503,6 +4503,16 @@ import projectile from "../client/src/game/projectile.js";
 
                         ctx.fillStyle = "#969595";
                         ctx.fillRect(30, 30, tmpObj.width - 60, tmpObj.height - 60);
+                    } else if (tmpObj.name == "healing beacon") {
+                        ctx.lineWidth = 11;
+                        ctx.strokeStyle = "#009c00";
+                        ctx.fillStyle = "rgb(0, 156, 0, .4)";
+                        canvasDrawer.drawCircle(0, 0, ctx, tmpObj.scale, false, false);
+
+                        ctx.lineWidth = 7.5;
+                        ctx.strokeStyle = "black";
+                        ctx.fillStyle = "#009c00";
+                        canvasDrawer.drawCircle(0, 0, ctx, 60, false, false);
                     }
 
                     ctx.restore();
@@ -4581,6 +4591,7 @@ import projectile from "../client/src/game/projectile.js";
             this.renderProjectiles(delta);
             this.renderBuildings(delta, 1);
             this.renderPlayers();
+            this.renderBuildings(delta, 2);
             this.renderBorders();
 
             ctx.fillStyle = "rgba(0, 0, 70, 0.35)";

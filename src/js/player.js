@@ -152,6 +152,7 @@ function playerify(shape) {
     shape.dir = 0;
     shape.grayDamage = 0;
     shape.vel = { x: 0, y: 0 };
+    shape.health = shape.maxhealth / 2;
 
     delete shape.cost;
     delete shape.weaponHardpoints;
@@ -256,7 +257,11 @@ export default class {
         }
     }
 
-    handleMovement(shape) {
+    changeHealth(shape, value) {
+        shape.health += value;
+    }
+
+    handleMovement(shape, buildings) {
         let delta = config.gameUpdateSpeed;
 
         if (this.moveDir != undefined) {
@@ -275,6 +280,41 @@ export default class {
 		for (let i = 0; i < depth; i++) {
             if (shape.vel.x) shape.x += shape.vel.x * delta * tMlt;
             if (shape.vel.y) shape.y += shape.vel.y * delta * tMlt;
+
+            for (let i = 0; i < buildings.length; i++) {
+                let tmpObj = buildings[i];
+    
+                if (tmpObj) {
+                    if (tmpObj.name == "wall") {
+                        if (shape.x >= tmpObj.x - shape.scale && shape.x <= tmpObj.x + tmpObj.width + shape.scale) {
+                            if (shape.y >= tmpObj.y - shape.scale && shape.y <= tmpObj.y + tmpObj.height + shape.scale) {
+                                let Px = Math.max(tmpObj.x + shape.scale, Math.min(shape.x, tmpObj.x + tmpObj.width - shape.scale));
+                                let Py = Math.max(tmpObj.y + shape.scale, Math.min(shape.y, tmpObj.y + tmpObj.height - shape.scale));
+    
+                                if (UTILS.getDistance({ x: Px, y: Py }, shape) <= shape.scale * 2) {
+                                    let angle = UTILS.getDirection(shape, { x: Px, y: Py });
+    
+                                    shape.x = Px + Math.cos(angle) * shape.scale * 2;
+                                    shape.y = Py + Math.sin(angle) * shape.scale * 2;
+                                }
+                            }
+                        }
+                    } else if (tmpObj.name == "healing beacon") {
+                        if (UTILS.getDistance(shape, tmpObj) < shape.scale + 60) {
+                            let angle = UTILS.getDirection(shape, tmpObj);
+                            let tmp = {
+                                x: tmpObj.x + Math.cos(angle) * (shape.scale + 61),
+                                y: tmpObj.y + Math.sin(angle) * (shape.scale + 61)
+                            };
+    
+                            shape.x = tmp.x;
+                            shape.y = tmp.y;
+                            shape.vel.x *= .75;
+                            shape.vel.y *= .75;
+                        }
+                    }
+                }
+            }
         }
 
         this.vel = UTILS.getDistance({ x, y }, shape) / config.gameUpdateSpeed;
@@ -346,20 +386,6 @@ export default class {
                             this.Game.send("beaconUpdate", i, tmpObj.capturePoints);
                         }
                     }
-                } else if (tmpObj.name == "wall") {
-                    if (shape.x >= tmpObj.x - shape.scale && shape.x <= tmpObj.x + tmpObj.width + shape.scale) {
-                        if (shape.y >= tmpObj.y - shape.scale && shape.y <= tmpObj.y + tmpObj.height + shape.scale) {
-                            let Px = Math.max(tmpObj.x + shape.scale, Math.min(shape.x, tmpObj.x + tmpObj.width - shape.scale));
-                            let Py = Math.max(tmpObj.y + shape.scale, Math.min(shape.y, tmpObj.y + tmpObj.height - shape.scale));
-
-                            if (UTILS.getDistance({ x: Px, y: Py }, shape) <= shape.scale * 2) {
-                                let angle = UTILS.getDirection(shape, { x: Px, y: Py });
-
-                                shape.x = Px + Math.cos(angle) * shape.scale * 2;
-                                shape.y = Py + Math.sin(angle) * shape.scale * 2;;
-                            }
-                        }
-                    }
                 }
             }
         }
@@ -368,12 +394,16 @@ export default class {
     update(shape, map, buildings) {
         this.updateDir(shape);
 
-        this.handleMovement(shape);
+        this.handleMovement(shape, buildings);
         this.handleBorder(shape, map);
 
         this.handleBuildingCollisions(shape, buildings);
 
         this.manageWeapons(shape);
+
+        if (shape.health > shape.maxhealth - shape.grayDamage) {
+            shape.health = shape.maxhealth - shape.grayDamage;
+        }
     }
 
     fireWeapon(shape, slot, wpn, hardpoints) {

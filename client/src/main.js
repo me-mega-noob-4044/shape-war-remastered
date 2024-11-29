@@ -178,7 +178,7 @@ var game = new class {
 
         this.send("init", map, buildings);
 
-        setInterval(() => {
+        setInterval(() => { // healing beacon
             for (let i = 0; i < buildings.length; i++) {
                 let tmpObj = buildings[i];
 
@@ -194,6 +194,24 @@ var game = new class {
                 }
             }
         }, 1e3);
+
+        setInterval(() => { // healing beacon
+            for (let i = 0; i < buildings.length; i++) {
+                let tmpObj = buildings[i];
+
+                if (tmpObj.name == "healing beacon") {
+                    for (let i = 0; i < players.length; i++) {
+                        let player = players[i];
+            
+                        let shape = player.shapes[player.chooseIndex];
+            
+                        if (shape && UTILS.getDistance(tmpObj, shape) <= tmpObj.scale + shape.scale) {
+                            player.changeHealth(shape, tmpObj.power);
+                        }
+                    }
+                }
+            }
+        }, 2e3);
 
         setInterval(() => {
             this.updateGame();
