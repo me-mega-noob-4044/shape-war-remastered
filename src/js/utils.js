@@ -122,3 +122,10 @@ export const randDirectionSpread = (degrees) => {
 
     return rand * (Math.random() > .5 ? -1 : 1);
 };
+
+export const formatMilliseconds = (ms) => {
+    let minutes = Math.floor(ms / 60000);
+    let seconds = Math.floor((ms % 60000) / 1000);
+
+    return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+}

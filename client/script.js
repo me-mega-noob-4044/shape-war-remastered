@@ -4583,6 +4583,9 @@ import projectile from "../client/src/game/projectile.js";
                 }
 
                 document.title = `${player.x.toFixed(0)} | ${player.y.toFixed(0)}`;
+
+                GameManager.durationOfGame -= delta;
+                UTILS.getElement("cooldownTimer").innerHTML = UTILS.formatMilliseconds(GameManager.durationOfGame);
             }
 
             for (let i = 0; i < GameManager.players.length; i++) {
@@ -4591,7 +4594,7 @@ import projectile from "../client/src/game/projectile.js";
                 if (tmpObj) {
                     let tmpDiff = tmpObj.x2 - tmpObj.x1;
                     tmpObj.dt += delta;
-                    let tmpRate = tmpObj.dt / 66.5;
+                    let tmpRate = tmpObj.dt / 76.5;// 66.5;
 
                     tmpObj.x = tmpObj.x1 + (tmpDiff * tmpRate);
                     tmpDiff = (tmpObj.y2 - tmpObj.y1);
@@ -4673,6 +4676,7 @@ import projectile from "../client/src/game/projectile.js";
     }
 
     var beaconBarDisplays = ["allyBeaconProgress", "enemyBeaconProgress"];
+    var playersVisualDisplays = ["allyAliveDisplay", "enemyAliveDisplay"];
 
     var GameManager = new class {
         constructor() {
@@ -4685,6 +4689,8 @@ import projectile from "../client/src/game/projectile.js";
             this.map = {};
             this.pingInterval = null;
             this.pingLastUpdate = 0;
+
+            this.durationOfGame = 5 * 60 * 1e3;
 
             this.healthText = UTILS.getElement("healthText");
             this.healthBar = UTILS.getElement("healthBar");
@@ -4862,6 +4868,36 @@ import projectile from "../client/src/game/projectile.js";
 
                     element.appendChild(num);
                     element.appendChild(bar);
+                },
+                "updatePlayerDisplay": (allies, enemies) => {
+                    for (let i = 0; i < playersVisualDisplays.length; i++) {
+                        let element = UTILS.getElement(playersVisualDisplays[i]);
+
+                        element.innerHTML = "";
+
+                        for (let t = 0; t < 5; t++) {
+                            let box = document.createElement("div");
+                            box.style = "width: 30px; height: 30px; border-radius: 4px; background-color: rgb(0, 0, 0, .4);";
+
+                            if (i) {
+                                box.style.marginLeft = "4px";
+                            } else {
+                                box.style.marginRight = "4px";
+                            }
+
+                            if ((i ? enemies : allies) > 0) {
+                                if (i) {
+                                    box.style.backgroundColor = "#f00";
+                                    enemies--;
+                                } else {
+                                    box.style.backgroundColor = "#00f";
+                                    allies--;
+                                }
+                            }
+
+                            element.appendChild(box);
+                        }
+                    }
                 }
             };
         }
@@ -4975,6 +5011,8 @@ import projectile from "../client/src/game/projectile.js";
         start() {
             console.clear();
             let playerData = EquipmentBuilder.player();
+
+            this.durationOfGame = 5 * 60 * 1e3;
 
             doDarkModeTransition();
             moneyDisplayManager.displayItems([]);

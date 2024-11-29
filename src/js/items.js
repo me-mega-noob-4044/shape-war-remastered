@@ -10,7 +10,7 @@ const shapes = [{
     scale: 55,
     indxRole: 1,
     speedData: {
-        base: 0.0538, // .018
+        base: 0.0028, // .018
         level: [0, 0, 0.0001, 0.0001, 0, 0.0001, 0.0001, 0, 0.0001, 0.0002, 0.0003, 0.0004]
     },
     mk2DataIncrease: 1.2,
@@ -46,7 +46,7 @@ const shapes = [{
     scale: 65,
     indxRole: 1,
     speedData: {
-        base: 0.0008,
+        base: 0.0016,
         level: [0, 0, 0.0001, 0.0001, 0, 0, 0.0001, 0, 0.0001, 0, 0.0001, 0.0001]
     },
     mk2DataIncrease: 1.35,
@@ -82,7 +82,7 @@ const shapes = [{
     scale: 40,
     indxRole: 2,
     speedData: {
-        base: 0.002,
+        base: 0.0032,
         level: [0, 0, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0002, 0.0003, 0.0003]
     },
     mk2DataIncrease: 1.2,

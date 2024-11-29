@@ -1379,3 +1379,9 @@ a:-webkit-any-link {
     border-radius: 4px;
     background-color: rgb(0, 0, 0, .4);
 }
+
+#allyAliveDisplay, #enemyAliveDisplay {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

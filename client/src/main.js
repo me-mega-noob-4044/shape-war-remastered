@@ -29,6 +29,25 @@ function groupWeapons(player) {
     return data;
 }
 
+function updatePlayerDisplay() {
+    let allies = 0;
+    let enemies = 0;
+
+    for (let i = 0; i < players.length; i++) {
+        let player = players[i];
+
+        if (player) {
+            if (player.isAlly) {
+                allies++;
+            } else {
+                enemies++;
+            }
+        }
+    }
+
+    game.send("updatePlayerDisplay", allies, enemies);
+}
+
 var clientEvents = {
     "new": (data, isUser) => {
         let indx = players.length;
@@ -54,6 +73,7 @@ var clientEvents = {
             }
 
             game.send("initializeWeapons", groupWeapons(players[0]));
+            updatePlayerDisplay();
         }
     },
     "updateMovement": (newMoveDir) => {
@@ -136,17 +156,22 @@ var game = new class {
                 for (let t = 0; t < buildings.length; t++) {
                     let tmpObj = buildings[t];
 
-                    if (tmpObj && tmpObj.name == "wall") {
-                        if (projectile.x >= tmpObj.x - projectile.scale && projectile.x <= tmpObj.x + tmpObj.width + projectile.scale) {
-                            if (projectile.y >= tmpObj.y - projectile.scale && projectile.y <= tmpObj.y + tmpObj.height + projectile.scale) {
-                                let Px = Math.max(tmpObj.x + projectile.scale, Math.min(projectile.x, tmpObj.x + tmpObj.width - projectile.scale));
-                                let Py = Math.max(tmpObj.y + projectile.scale, Math.min(projectile.y, tmpObj.y + tmpObj.height - projectile.scale));
-        
-                                if (UTILS.getDistance({ x: Px, y: Py }, projectile) <= projectile.scale * 2) {
-                                    projectile.range = 0;
-                                    break;
+                    if (tmpObj) {
+                        if (tmpObj.name == "wall") {
+                            if (projectile.x >= tmpObj.x - projectile.scale && projectile.x <= tmpObj.x + tmpObj.width + projectile.scale) {
+                                if (projectile.y >= tmpObj.y - projectile.scale && projectile.y <= tmpObj.y + tmpObj.height + projectile.scale) {
+                                    let Px = Math.max(tmpObj.x + projectile.scale, Math.min(projectile.x, tmpObj.x + tmpObj.width - projectile.scale));
+                                    let Py = Math.max(tmpObj.y + projectile.scale, Math.min(projectile.y, tmpObj.y + tmpObj.height - projectile.scale));
+            
+                                    if (UTILS.getDistance({ x: Px, y: Py }, projectile) <= projectile.scale * 2) {
+                                        projectile.range = 0;
+                                        break;
+                                    }
                                 }
                             }
+                        } else if (tmpObj.name == "healing beacon" && UTILS.getDistance(tmpObj, projectile) <= projectile.scale + 60) {
+                            projectile.range = 0;
+                            break;
                         }
                     }
                 }

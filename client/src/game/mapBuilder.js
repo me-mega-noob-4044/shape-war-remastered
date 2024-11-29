@@ -50,6 +50,14 @@ var mapBuilder = new class {
             });
 
             buildings.push({
+                name: "beacon",
+                layer: 0,
+                x: 7015,
+                y: 3785,
+                capturePoints: 0
+            });
+
+            buildings.push({
                 name: "wall",
                 layer: 1,
                 width: 1800,
@@ -95,6 +103,24 @@ var mapBuilder = new class {
             });
 
             buildings.push({
+                name: "wall",
+                layer: 1,
+                width: 1350,
+                height: 300,
+                x: 6315,
+                y: 2600
+            });
+
+            buildings.push({
+                name: "wall",
+                layer: 1,
+                width: 300,
+                height: 300,
+                x: 2708,
+                y: 1087
+            })
+
+            buildings.push({
                 name: "healing beacon",
                 layer: 2,
                 x: 2500,
@@ -107,7 +133,16 @@ var mapBuilder = new class {
                 name: "healing beacon",
                 layer: 2,
                 x: 5250,
-                y: 4000,
+                y: 3750,
+                power: 3e3,
+                scale: 550
+            });
+
+            buildings.push({
+                name: "healing beacon",
+                layer: 2,
+                x: 55,
+                y: 4e3,
                 power: 3e3,
                 scale: 550
             });
