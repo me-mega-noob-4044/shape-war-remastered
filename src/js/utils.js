@@ -123,6 +123,10 @@ export const randDirectionSpread = (degrees) => {
     return rand * (Math.random() > .5 ? -1 : 1);
 };
 
+export const randInt = (min, max) => {
+    return (Math.random() * (max - min + 1)) + min;
+};
+
 export const formatMilliseconds = (ms) => {
     let minutes = Math.floor(ms / 60000);
     let seconds = Math.floor((ms % 60000) / 1000);

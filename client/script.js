@@ -4242,6 +4242,7 @@ import projectile from "../client/src/game/projectile.js";
                     sid: shape.sid,
                     level: shape.level,
                     slot: shape.slot,
+                    drone: null,
                     weapons: [],
                     modules: [],
                     skills: []
@@ -4287,6 +4288,90 @@ import projectile from "../client/src/game/projectile.js";
             }
 
             return shapes;
+        }
+
+        fetchRandWeapon(type, weaponAvgTier, weaponAvgLevel, W) {
+            let weapons = items.weapons.filter(e => e.type == type && e.tier == weaponAvgTier);
+
+            while (!weapons.length) {
+                weaponAvgTier--;
+                weapons = items.weapons.filter(e => e.type == type && e.tier == weaponAvgTier);
+            }
+
+            let weapon = weapons[Math.floor(Math.random() * weapons.length)];
+
+            let slot = W.slot;
+            W.slot++;
+
+            return {
+                name: weapon.name,
+                level: weaponAvgLevel,
+                slot: slot
+            };
+        }
+
+        fetchRandModule(type, moduleAvgTier, moduleAvgLevel) {
+            let modules = items.modules.filter(e => (type == "Universal" ? true : e.type == type) && e.tier == moduleAvgTier);
+
+            while (!modules.length) {
+                moduleAvgTier--;
+                modules = items.modules.filter(e => (type == "Universal" ? true : e.type == type) && e.tier == moduleAvgTier);
+            }
+
+            let module = modules[Math.floor(Math.random() * modules.length)];
+
+            return {
+                name: module.name,
+                level: moduleAvgLevel,
+                slot: 0
+            };;
+        }
+
+        create(hangerSlots, shapeAvgTier, shapeAvgLevel, weaponAvgTier, weaponAvgLevel, moduleAvgTier, moduleAvgLevel) {
+            let allShapes = [];
+            let shapes = items.shapes.filter(e => e.tier == shapeAvgTier);
+
+            for (let ii = 0; ii < hangerSlots; ii++) {
+                let shape = shapes[Math.floor(Math.random() * shapes.length)];
+    
+                let wpns = { slot: 0 };
+                let weapons = [];
+    
+                if (shape.weaponHardpoints.light) {
+                    for (let i = 0; i < shape.weaponHardpoints.light; i++) {
+                        weapons.push(this.fetchRandWeapon("light", weaponAvgTier, weaponAvgLevel, wpns));
+                    }
+                }
+                if (shape.weaponHardpoints.medium) {
+                    for (let i = 0; i < shape.weaponHardpoints.medium; i++) {
+                        weapons.push(this.fetchRandWeapon("medium", weaponAvgTier, weaponAvgLevel, wpns));
+                    }
+                }
+                if (shape.weaponHardpoints.heavy) {
+                    for (let i = 0; i < shape.weaponHardpoints.heavy; i++) {
+                        weapons.push(this.fetchRandWeapon("heavy", weaponAvgTier, weaponAvgLevel, wpns));
+                    }
+                }
+    
+                let modules = [];
+    
+                if (shape.moduleHardpoints.defense) modules.push(this.fetchRandModule("Defense", moduleAvgTier, moduleAvgLevel));
+                if (shape.moduleHardpoints.assault) modules.push(this.fetchRandModule("Assault", moduleAvgTier, moduleAvgLevel));
+                if (shape.moduleHardpoints.universal) modules.push(this.fetchRandModule("Universal", moduleAvgTier, moduleAvgLevel));
+
+                allShapes.push({
+                    name: shape.name,
+                    sid: shape.sid,
+                    level: shapeAvgLevel,
+                    slot: ii,
+                    drone: null,
+                    weapons: weapons,
+                    modules: modules,
+                    skills: []
+                });
+            }
+
+            return allShapes;
         }
     };
 
@@ -4722,7 +4807,7 @@ import projectile from "../client/src/game/projectile.js";
                 },
                 "updatePlayers": (data) => {
                     for (let i = 0; i < data.length;) {
-                        let tmpObj = this.players[data[i]];
+                        let tmpObj = this.players.find(e => e.sid == data[i]);
 
                         if (!tmpObj) {
                             tmpObj = new shape(items.shapes.find(e => e.name == data[i + 1]), undefined, true);
@@ -4731,8 +4816,10 @@ import projectile from "../client/src/game/projectile.js";
                                 player = tmpObj;
                             }
 
+                            tmpObj.sid = data[i];
                             tmpObj.x = data[i + 2];
                             tmpObj.y = data[i + 3];
+
                             this.players.push(tmpObj);
                         }
 
@@ -4754,8 +4841,6 @@ import projectile from "../client/src/game/projectile.js";
 
                         i += 8;
                     }
-
-                    // console.log(this.players);
                 },
                 "pingSocket": () => {
                     this.pingTime = Date.now() - this.pingLastUpdate;
@@ -5025,6 +5110,25 @@ import projectile from "../client/src/game/projectile.js";
             this.socket.postMessage(binary);
         }
 
+        getAvgData(Data, items) {
+            let avgTier = 0;
+            let avgLevel = 0;
+
+            for (let i = 0; i < Data.length; i++) {
+                let data = Data[i];
+
+                avgLevel += data.level;
+                avgTier += items.find(e => e.name == data.name).tier;
+            }
+
+            avgTier /= Data.length;
+            avgTier = Math.floor(avgTier);
+            avgLevel /= Data.length;
+            avgLevel =  Math.floor(avgLevel);
+
+            return [(avgTier || 0), (avgLevel || 0)];
+        }
+
         start() {
             console.clear();
             let playerData = EquipmentBuilder.player();
@@ -5056,7 +5160,37 @@ import projectile from "../client/src/game/projectile.js";
                 this.pingLastUpdate = Date.now();
             }, 1e3);
 
-            this.send("new", playerData, true);
+            this.send("new", playerData, "me");
+
+            let [ shapeAvgTier, shapeAvgLevel ] = this.getAvgData(playerData, items.shapes);
+
+            let weapons = [];
+            let modules = [];
+
+            for (let i = 0; i < playerData.length; i++) {
+                weapons.push(...playerData[i].weapons);
+                modules.push(...playerData[i].modules);
+            }
+
+            let [ weaponAvgTier, weaponAvgLevel ] = this.getAvgData(weapons, items.weapons);
+            let [ moduleAvgTier, moduleAvgLevel ] = this.getAvgData(modules, items.modules);
+
+            let allies = [];
+            let enemies = [];
+        
+            for (let i = 0; i < 4; i++) {
+                allies.push(EquipmentBuilder.create(playerData.length, shapeAvgTier, shapeAvgLevel, weaponAvgTier, weaponAvgLevel, moduleAvgTier, moduleAvgLevel));
+            }
+
+            for (let i = 0; i < 5; i++) {
+               enemies.push(EquipmentBuilder.create(playerData.length, shapeAvgTier, shapeAvgLevel, weaponAvgTier, weaponAvgLevel, moduleAvgTier, moduleAvgLevel));
+            }
+
+            for (let i = 0; i < allies.length + enemies.length; i++) {
+                let tmp = allies[i] || enemies[i - allies.length];
+
+                this.send("new", tmp, i < allies.length ? true : false);
+            }
         }
     };
 

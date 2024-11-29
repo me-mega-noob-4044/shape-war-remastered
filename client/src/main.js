@@ -48,14 +48,29 @@ function updatePlayerDisplay() {
     game.send("updatePlayerDisplay", allies, enemies);
 }
 
+function randIntCoords(e) {
+    return UTILS.randInt(e - 300, e + 300);
+}
+
 var clientEvents = {
     "new": (data, isUser) => {
         let indx = players.length;
 
-        players.push(new player(data, isUser, game, indx));
+        let tmp = new player(data, isUser, game, indx);
+        players.push(tmp);
 
-        if (isUser) {
+        if (isUser == "me") {
             game.start();
+        } else {
+            let shape = tmp.shapes[0];
+
+            if (tmp.isAlly) {
+                shape.x = randIntCoords(game.map.locations[game.spawnIndx].x);
+                shape.y = randIntCoords(game.map.locations[game.spawnIndx].y);
+            } else {
+                shape.x = randIntCoords(game.map.locations[+!game.spawnIndx].x);
+                shape.y = randIntCoords(game.map.locations[+!game.spawnIndx].y);
+            }
         }
     },
     "chooseSlot": (slot) => {
@@ -65,11 +80,11 @@ var clientEvents = {
             let shape = players[0].shapes[slot];
 
             if (players[0].isAlly) {
-                shape.x = game.map.locations[game.spawnIndx].x;
-                shape.y = game.map.locations[game.spawnIndx].y;
+                shape.x = randIntCoords(game.map.locations[game.spawnIndx].x);
+                shape.y = randIntCoords(game.map.locations[game.spawnIndx].y);
             } else {
-                shape.x = game.map.locations[+!game.spawnIndx].x;
-                shape.y = game.map.locations[+!game.spawnIndx].y;
+                shape.x = randIntCoords(game.map.locations[+!game.spawnIndx].x);
+                shape.y = randIntCoords(game.map.locations[+!game.spawnIndx].y);
             }
 
             game.send("initializeWeapons", groupWeapons(players[0]));
@@ -132,59 +147,104 @@ var game = new class {
     }
     
     updateGame() {
-        let playersData = [];
+        try {
+            let playersData = [];
 
-        for (let i = 0; i < players.length; i++) {
-            let player = players[i];
-
-            let shape = player.shapes[player.chooseIndex];
-
-            if (shape) {
-                player.update(shape, this.map, buildings);
-
-                // ID, name, x, y, dir, health, maxhealth, grayDamage
-                playersData.push(i, shape.name, shape.x, shape.y, shape.dir, shape.health, shape.maxhealth, shape.grayDamage);
+            for (let i = 0; i < players.length; i++) {
+                let player = players[i];
+    
+                let shape = player.shapes[player.chooseIndex];
+    
+                if (shape) {
+                    player.update(shape, this.map, buildings);
+    
+                    // ID, name, x, y, dir, health, maxhealth, grayDamage
+                    playersData.push(player.sid, shape.name, shape.x, shape.y, shape.dir, shape.health, shape.maxhealth, shape.grayDamage);
+                }
             }
-        }
-
-        for (let i = 0; i < projectiles.length; i++) {
-            let projectile = projectiles[i];
-
-            if (projectile && projectile.active) {
-                projectile.update(players, true);
-
-                for (let t = 0; t < buildings.length; t++) {
-                    let tmpObj = buildings[t];
-
-                    if (tmpObj) {
-                        if (tmpObj.name == "wall") {
-                            if (projectile.x >= tmpObj.x - projectile.scale && projectile.x <= tmpObj.x + tmpObj.width + projectile.scale) {
-                                if (projectile.y >= tmpObj.y - projectile.scale && projectile.y <= tmpObj.y + tmpObj.height + projectile.scale) {
-                                    let Px = Math.max(tmpObj.x + projectile.scale, Math.min(projectile.x, tmpObj.x + tmpObj.width - projectile.scale));
-                                    let Py = Math.max(tmpObj.y + projectile.scale, Math.min(projectile.y, tmpObj.y + tmpObj.height - projectile.scale));
-            
-                                    if (UTILS.getDistance({ x: Px, y: Py }, projectile) <= projectile.scale * 2) {
-                                        projectile.range = 0;
-                                        break;
+    
+            for (let i = 0; i < projectiles.length; i++) {
+                let projectile = projectiles[i];
+    
+                if (projectile && projectile.active) {
+                    projectile.update(players, true);
+    
+                    for (let t = 0; t < buildings.length; t++) {
+                        let tmpObj = buildings[t];
+    
+                        if (tmpObj) {
+                            if (tmpObj.name == "wall") {
+                                if (projectile.x >= tmpObj.x - projectile.scale && projectile.x <= tmpObj.x + tmpObj.width + projectile.scale) {
+                                    if (projectile.y >= tmpObj.y - projectile.scale && projectile.y <= tmpObj.y + tmpObj.height + projectile.scale) {
+                                        let Px = Math.max(tmpObj.x + projectile.scale, Math.min(projectile.x, tmpObj.x + tmpObj.width - projectile.scale));
+                                        let Py = Math.max(tmpObj.y + projectile.scale, Math.min(projectile.y, tmpObj.y + tmpObj.height - projectile.scale));
+                
+                                        if (UTILS.getDistance({ x: Px, y: Py }, projectile) <= projectile.scale * 2) {
+                                            projectile.range = 0;
+                                            break;
+                                        }
                                     }
                                 }
+                            } else if (tmpObj.name == "healing beacon" && UTILS.getDistance(tmpObj, projectile) <= projectile.scale + 60) {
+                                projectile.range = 0;
+                                break;
                             }
-                        } else if (tmpObj.name == "healing beacon" && UTILS.getDistance(tmpObj, projectile) <= projectile.scale + 60) {
-                            projectile.range = 0;
-                            break;
+                        }
+                    }
+    
+                    if (projectile.range <= 0) {
+                        this.send("removeProjectile", projectile.sid);
+                        projectiles.splice(i, 1);
+                        i--;
+                    }
+                }
+            }
+
+            for (let i = 0; i < buildings.length; i++) {
+                let tmpObj = buildings[i];
+    
+                if (tmpObj && tmpObj.name == "beacon") {
+                    tmpObj.changing = false;
+
+                    for (let t = 0; t < players.length; t++) {
+                        let player = players[t];
+                        let shape = player.shapes[player.chooseIndex];
+
+                        if (shape && UTILS.getDistance(shape, tmpObj) <= 400 + shape.scale) {
+                            tmpObj.changing = true;
+
+                            let tmpAdd = (player.isAlly ? 1 : -1);
+
+                            if (tmpAdd) {
+                                tmpObj.capturePoints = Math.min(6e3, tmpObj.capturePoints + (tmpAdd * config.gameUpdateSpeed));
+                            } else {
+                                tmpObj.capturePoints = Math.max(6e3, tmpObj.capturePoints + (tmpAdd * config.gameUpdateSpeed));
+                            }
+
+                            this.send("beaconUpdate", i, tmpObj.capturePoints);
+                        }
+                    }
+
+                    if (!tmpObj.changing) {
+                        if (tmpObj.capturePoints != 0 && Math.abs(tmpObj.capturePoints) != 6e3) {
+                            let wasNeg = tmpObj.capturePoints < 0 ? -1 : 1;
+
+                            if (Math.abs(tmpObj.capturePoints) <= 60) {
+                                tmpObj.capturePoints = 0;
+                            } else {
+                                tmpObj.capturePoints -= (6e3 / config.gameUpdateSpeed) * wasNeg * .25;
+                            }
+
+                            this.send("beaconUpdate", i, tmpObj.capturePoints);
                         }
                     }
                 }
-
-                if (projectile.range <= 0) {
-                    this.send("removeProjectile", projectile.sid);
-                    projectiles.splice(i, 1);
-                    i--;
-                }
             }
-        }
 
-        this.send("updatePlayers", playersData);
+            this.send("updatePlayers", playersData);
+        } catch(e) {
+            console.log(e);
+        }
     }
 
     addProjectile(x, y, dir, owner, wpn, extraSpeed) {
@@ -203,7 +263,7 @@ var game = new class {
 
         this.send("init", map, buildings);
 
-        setInterval(() => { // healing beacon
+        setInterval(() => {
             for (let i = 0; i < buildings.length; i++) {
                 let tmpObj = buildings[i];
 

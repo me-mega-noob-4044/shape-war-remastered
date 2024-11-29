@@ -185,17 +185,20 @@ function playerify(shape) {
 }
 
 var PI2 = Math.PI * 2;
+self.sids = 0;
 
 export default class {
     constructor(data, isUser, Game, indx) {
         this.Game = Game;
         this.isUser = isUser;
         this.indx = indx;
+        this.sid = indx;
+        self.sids++;
 
         this.isAlly = !!isUser;
 
         this.isAttacking = 0;
-        this.chooseIndex = -1;
+        this.chooseIndex = isUser == "me" ? -1 : 0;
         this.mothershipCharge = 0;
         this.moveDir = undefined;
         this.reloadAllWeapons = false;
@@ -363,43 +366,13 @@ export default class {
         shape.dir %= PI2;
     }
 
-    handleBuildingCollisions(shape, buildings) {
-        for (let i = 0; i < buildings.length; i++) {
-            let tmpObj = buildings[i];
-
-            if (tmpObj) {
-                if (tmpObj.name == "beacon") {
-                    if (UTILS.getDistance(shape, tmpObj) <= 400 + shape.scale) {
-                        let tmpAdd = (this.isAlly ? 1 : -1);
-
-                        tmpObj.capturePoints = Math[tmpAdd ? "min" : "max"](6e3, tmpObj.capturePoints + (tmpAdd * config.gameUpdateSpeed));
-
-                        this.Game.send("beaconUpdate", i, tmpObj.capturePoints);
-                    } else {
-                        if (tmpObj.capturePoints != 0 && Math.abs(tmpObj.capturePoints) != 6e3) {
-                            let wasNeg = tmpObj.capturePoints < 0 ? -1 : 1;
-
-                            if (Math.abs(tmpObj.capturePoints) <= 60) {
-                                tmpObj.capturePoints = 0;
-                            } else {
-                                tmpObj.capturePoints -= (6e3 / config.gameUpdateSpeed) * wasNeg * .25;
-                            }
-    
-                            this.Game.send("beaconUpdate", i, tmpObj.capturePoints);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     update(shape, map, buildings) {
         this.updateDir(shape);
 
         this.handleMovement(shape, buildings);
         this.handleBorder(shape, map);
 
-        this.handleBuildingCollisions(shape, buildings);
+        // this.handleBuildingCollisions(shape, buildings);
 
         this.manageWeapons(shape);
 
