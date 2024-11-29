@@ -4344,6 +4344,11 @@ import projectile from "../client/src/game/projectile.js";
 
     var renderer = new class {
         constructor() {
+            this.fps = 0;
+            this.fpsCount = 0;
+            this.lastUpdateFPS = Date.now();
+
+
             this.lastUpdate = 0;
             this.start = false;
             this.cam = {
@@ -4541,6 +4546,16 @@ import projectile from "../client/src/game/projectile.js";
         }
 
         render() {
+            this.fpsCount++;
+
+            if (Date.now() - this.lastUpdateFPS >= 1e3) {
+                this.lastUpdateFPS = Date.now();
+                this.fps = this.fpsCount;
+                this.fpsCount = 0;
+
+                elements.pingDisplay.innerText = `${GameManager.pingTime} ms | ${this.fps} fps`;
+            }
+
             let delta = Date.now() - this.lastUpdate;
             this.lastUpdate = Date.now();
 
@@ -4743,7 +4758,9 @@ import projectile from "../client/src/game/projectile.js";
                     // console.log(this.players);
                 },
                 "pingSocket": () => {
-                    elements.pingDisplay.innerText = `${Date.now() - this.pingLastUpdate} ms`;
+                    this.pingTime = Date.now() - this.pingLastUpdate;
+
+                    elements.pingDisplay.innerText = `${this.pingTime} ms | ${renderer.fps} fps`;
                 },
                 "initializeWeapons": (wpns) => {
                     elements.weaponsDisplay.innerHTML = "";
