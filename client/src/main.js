@@ -154,9 +154,24 @@ var game = new class {
                 let player = players[i];
     
                 let shape = player.shapes[player.chooseIndex];
-    
+
                 if (shape) {
                     player.update(shape, this.map, buildings);
+
+                    for (let t = 0; t < players.length; t++) {
+                        let player = players[t];
+                        let otherShape = player.shapes[player.chooseIndex];
+
+                        if (otherShape && shape != otherShape && UTILS.getDistance(shape, otherShape) <= shape.scale + otherShape.scale) {
+                            let tmpScale = ((UTILS.getDistance(shape, otherShape) - (shape.scale + otherShape.scale)) * -1) / 2;
+                            let tmpDir = UTILS.getDirection(shape, otherShape);
+
+                            shape.x += (tmpScale * Math.cos(tmpDir));
+                            shape.y += (tmpScale * Math.sin(tmpDir));
+                            otherShape.x -= (tmpScale * Math.cos(tmpDir));
+                            otherShape.y -= (tmpScale * Math.sin(tmpDir));
+                        }
+                    }
     
                     // ID, name, x, y, dir, health, maxhealth, grayDamage
                     playersData.push(player.sid, shape.name, shape.x, shape.y, shape.dir, shape.health, shape.maxhealth, shape.grayDamage);

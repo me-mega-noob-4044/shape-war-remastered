@@ -153,6 +153,7 @@ function playerify(shape) {
     shape.grayDamage = 0;
     shape.vel = { x: 0, y: 0 };
     shape.health = shape.maxhealth / 2;
+    shape.grayDamage = (shape.maxhealth / 2) * .4;
 
     delete shape.cost;
     delete shape.weaponHardpoints;

@@ -4694,7 +4694,7 @@ import projectile from "../client/src/game/projectile.js";
                 if (tmpObj) {
                     let tmpDiff = tmpObj.x2 - tmpObj.x1;
                     tmpObj.dt += delta;
-                    let tmpRate = tmpObj.dt / 76.5;// 66.5;
+                    let tmpRate = tmpObj.dt / 77;// 66.5;
 
                     tmpObj.x = tmpObj.x1 + (tmpDiff * tmpRate);
                     tmpDiff = (tmpObj.y2 - tmpObj.y1);
