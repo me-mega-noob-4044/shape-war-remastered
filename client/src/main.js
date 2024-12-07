@@ -213,8 +213,9 @@ var game = new class {
                         let player = players[i];
             
                         let shape = player.shapes[player.chooseIndex];
+                        let doer = players[projectile.owner];
         
-                        if (shape && shape.health > 0 && players[projectile.owner].isAlly != player.isAlly) {
+                        if (shape && shape.health > 0 && doer.isAlly != player.isAlly) {
                             let tmpScale = shape.scale;
                             let tmpSpeed = projectile.speed * config.gameUpdateSpeed;
 
@@ -228,7 +229,7 @@ var game = new class {
                                 projectile.x + (tmpSpeed * Math.cos(projectile.dir)),
                                 projectile.y + (tmpSpeed * Math.sin(projectile.dir))
                             )) {
-                                player.changeHealth(shape, -projectile.dmg);
+                                player.changeHealth(shape, -projectile.dmg, doer);
                                 projectile.range = 0;
                                 done = true;
                                 break;

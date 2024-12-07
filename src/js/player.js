@@ -213,6 +213,10 @@ export default class {
 
         this.vel = 0;
 
+        this.stats = {
+            dmg: 0
+        };
+
         this.init(data);
     }
 
@@ -263,9 +267,13 @@ export default class {
         }
     }
 
-    changeHealth(shape, value) {
+    changeHealth(shape, value, doer) {
         if (value <= 0) {
             shape.grayDamage += Math.abs(value * .4);
+
+            if (doer) {
+                doer.stats.dmg += Math.abs(value);
+            }
         }
 
         shape.health += value;
