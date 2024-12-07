@@ -1325,6 +1325,10 @@ a:-webkit-any-link {
     background-color: rgb(0, 0, 0, .4);
 }
 
+#menuButton:hover {
+    background-color: rgb(0, 0, 0, .3);
+}
+
 #healthBar {
     height: 100%;
     background-color: #00ff00;
