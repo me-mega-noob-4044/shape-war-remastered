@@ -214,7 +214,8 @@ export default class {
         this.vel = 0;
 
         this.stats = {
-            dmg: 0
+            dmg: 0,
+            kills: 0
         };
 
         this.init(data);
@@ -268,15 +269,23 @@ export default class {
     }
 
     changeHealth(shape, value, doer) {
-        if (value <= 0) {
-            shape.grayDamage += Math.abs(value * .4);
-
-            if (doer) {
-                doer.stats.dmg += Math.abs(value);
+        if (shape.health > 0) {
+            if (value <= 0) {
+                shape.grayDamage += Math.abs(value * .4);
+    
+                if (doer) {
+                    doer.stats.dmg += Math.abs(value);
+                }
+            }
+    
+            shape.health += value;
+    
+            if (shape.health <= 0) {
+                if (doer) {
+                    doer.stats.kills++;
+                }
             }
         }
-
-        shape.health += value;
     }
 
     handleMovement(shape, buildings) {
