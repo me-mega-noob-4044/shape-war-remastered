@@ -38,8 +38,10 @@ export default class {
 
         this.range -= UTILS.getDistance({ x: oldX, y: oldY }, this);
 
-        if (server) {
-            for (let i = 0; i < players.length; i++) {}
+        if (this.range <= 0) {
+            this.active = false;
         }
+
+        if (server) {}
     }
 }

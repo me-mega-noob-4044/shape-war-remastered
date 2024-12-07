@@ -4427,6 +4427,20 @@ import projectile from "../client/src/game/projectile.js";
         }
     });
 
+    CanvasRenderingContext2D.prototype.roundRect = function (x, y, width, height, radius) {
+        if (width < 2 * radius) radius = width / 2;
+        if (height < 2 * radius) radius = height / 2;
+        if (radius < 0) radius = 0;
+        this.beginPath();
+        this.moveTo(x + radius, y);
+        this.arcTo(x + width, y, x + width, y + height, radius);
+        this.arcTo(x + width, y + height, x, y + height, radius);
+        this.arcTo(x, y + height, x, y, radius);
+        this.arcTo(x, y, x + width, y, radius);
+        this.closePath();
+        return this;
+    }
+
     var renderer = new class {
         constructor() {
             this.fps = 0;
@@ -4502,6 +4516,32 @@ import projectile from "../client/src/game/projectile.js";
                     ctx.strokeStyle = "black";
                     ctx.fillStyle = tmpObj.color;
                     canvasDrawer.drawCircle(0, 0, ctx, tmpObj.scale, false, false);
+
+                    if (tmpObj.sid > 0) {
+                        let width = (tmpObj.scale + 20);
+                        let padding = 4.5;
+                        let x = -(width + padding);
+                        let y = (tmpObj.scale * 1.5);
+    
+                        ctx.fillStyle = "#000";
+                        ctx.roundRect(x, y, (width * 2) + (padding * 2), 20.4, 8);
+                        ctx.fill();
+
+                        ctx.fillStyle = "#808080";
+                        ctx.roundRect(
+                            (x + padding) + (width * 2 * (1 - (tmpObj.grayDamage / tmpObj.maxhealth))),
+                            y + padding,
+                            (width * 2) * (tmpObj.grayDamage / tmpObj.maxhealth),
+                            (20.4 - (padding * 2)),
+                            8
+                        );
+                        ctx.fill();
+
+                        ctx.fillStyle = tmpObj.isAlly ? "#0f0" : "#f00";
+                        ctx.roundRect(x + padding, y + padding, (width * 2) * (tmpObj.health / tmpObj.maxhealth), (20.4 - (padding * 2)), 8);
+                        ctx.fill();
+                    }
+
                     ctx.restore();
                 }
             }
@@ -4536,7 +4576,7 @@ import projectile from "../client/src/game/projectile.js";
             for (let i = 0; i < GameManager.projectiles.length; i++) {
                 let tmpObj = GameManager.projectiles[i];
 
-                if (tmpObj) {
+                if (tmpObj && tmpObj.active) {
                     ctx.save();
                     ctx.translate(tmpObj.x - this.offset.x, tmpObj.y - this.offset.y);
                     ctx.rotate(tmpObj.dir);
@@ -4551,6 +4591,9 @@ import projectile from "../client/src/game/projectile.js";
                     ctx.restore();
 
                     tmpObj.update([], false, delta);
+                } else if (tmpObj && !tmpObj.active) {
+                    GameManager.projectiles.splice(i, 1);
+                    i--;
                 }
             }
         }
@@ -4694,7 +4737,7 @@ import projectile from "../client/src/game/projectile.js";
                 if (tmpObj) {
                     let tmpDiff = tmpObj.x2 - tmpObj.x1;
                     tmpObj.dt += delta;
-                    let tmpRate = tmpObj.dt / 77;// 66.5;
+                    let tmpRate = tmpObj.dt / 100;// 66.5;
 
                     tmpObj.x = tmpObj.x1 + (tmpDiff * tmpRate);
                     tmpDiff = (tmpObj.y2 - tmpObj.y1);
@@ -4833,13 +4876,14 @@ import projectile from "../client/src/game/projectile.js";
                             tmpObj.health = data[i + 5];
                             tmpObj.maxhealth = data[i + 6];
                             tmpObj.grayDamage = data[i + 7];
+                            tmpObj.isAlly = data[i + 8];
 
                             if (player == tmpObj) {
                                 this.updateHealthDisplay();
                             }
                         }
 
-                        i += 8;
+                        i += 9;
                     }
                 },
                 "pingSocket": () => {
@@ -4927,10 +4971,15 @@ import projectile from "../client/src/game/projectile.js";
 
                     this.projectiles.push(tmp);
                 },
-                "removeProjectile": (sid) => {
+                "removeProjectile": (sid, time) => {
                     for (let i = 0; i < this.projectiles.length; i++) {
                         if (this.projectiles[i].sid == sid) {
-                            this.projectiles.splice(i, 1);
+                            if (time) {
+                                this.projectiles[i].range = time;
+                            } else {
+                                this.projectiles.splice(i, 1);
+                            }
+
                             break;
                         }
                     }

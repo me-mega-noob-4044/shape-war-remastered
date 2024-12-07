@@ -152,8 +152,8 @@ function playerify(shape) {
     shape.dir = 0;
     shape.grayDamage = 0;
     shape.vel = { x: 0, y: 0 };
-    shape.health = shape.maxhealth / 2;
-    shape.grayDamage = (shape.maxhealth / 2) * .4;
+    shape.health = shape.maxhealth;
+    shape.grayDamage = 0;
 
     delete shape.cost;
     delete shape.weaponHardpoints;
@@ -186,7 +186,10 @@ function playerify(shape) {
 }
 
 var PI2 = Math.PI * 2;
-self.sids = 0;
+
+function randIntCoords(e) {
+    return UTILS.randInt(e - 300, e + 300);
+}
 
 export default class {
     constructor(data, isUser, Game, indx) {
@@ -194,7 +197,6 @@ export default class {
         this.isUser = isUser;
         this.indx = indx;
         this.sid = indx;
-        self.sids++;
 
         this.isAlly = !!isUser;
 
@@ -262,6 +264,10 @@ export default class {
     }
 
     changeHealth(shape, value) {
+        if (value <= 0) {
+            shape.grayDamage += Math.abs(value * .4);
+        }
+
         shape.health += value;
     }
 
@@ -379,6 +385,25 @@ export default class {
 
         if (shape.health > shape.maxhealth - shape.grayDamage) {
             shape.health = shape.maxhealth - shape.grayDamage;
+        }
+
+        if (shape.health <= 0) {
+            if (this.indx == 0) {
+            } else {
+                this.chooseIndex++;
+
+                let shape = this.shapes[this.chooseIndex];
+
+                if (shape) {
+                    if (this.isAlly) {
+                        shape.x = randIntCoords(this.Game.map.locations[this.Game.spawnIndx].x);
+                        shape.y = randIntCoords(this.Game.map.locations[this.Game.spawnIndx].y);
+                    } else {
+                        shape.x = randIntCoords(this.Game.map.locations[+!this.Game.spawnIndx].x);
+                        shape.y = randIntCoords(this.Game.map.locations[+!this.Game.spawnIndx].y);
+                    }
+                }
+            }
         }
     }
 

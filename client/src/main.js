@@ -162,7 +162,7 @@ var game = new class {
                         let player = players[t];
                         let otherShape = player.shapes[player.chooseIndex];
 
-                        if (otherShape && shape != otherShape && UTILS.getDistance(shape, otherShape) <= shape.scale + otherShape.scale) {
+                        if (otherShape && otherShape.health > 0 && shape != otherShape && UTILS.getDistance(shape, otherShape) <= shape.scale + otherShape.scale) {
                             let tmpScale = ((UTILS.getDistance(shape, otherShape) - (shape.scale + otherShape.scale)) * -1) / 2;
                             let tmpDir = UTILS.getDirection(shape, otherShape);
 
@@ -173,8 +173,8 @@ var game = new class {
                         }
                     }
     
-                    // ID, name, x, y, dir, health, maxhealth, grayDamage
-                    playersData.push(player.sid, shape.name, shape.x, shape.y, shape.dir, shape.health, shape.maxhealth, shape.grayDamage);
+                    // ID, name, x, y, dir, health, maxhealth, grayDamage, isAlly
+                    playersData.push(player.sid, shape.name, shape.x, shape.y, shape.dir, shape.health, shape.maxhealth, shape.grayDamage, player.isAlly);
                 }
             }
     
@@ -206,9 +206,43 @@ var game = new class {
                             }
                         }
                     }
+
+                    let done = false;
+
+                    for (let i = 0; i < players.length; i++) {
+                        let player = players[i];
+            
+                        let shape = player.shapes[player.chooseIndex];
+        
+                        if (shape && shape.health > 0 && players[projectile.owner].isAlly != player.isAlly) {
+                            let tmpScale = shape.scale;
+                            let tmpSpeed = projectile.speed * config.gameUpdateSpeed;
+
+                            if (UTILS.lineInRect(
+                                shape.x - tmpScale,
+                                shape.y - tmpScale,
+                                shape.x + tmpScale,
+                                shape.y + tmpScale,
+                                projectile.x,
+                                projectile.y,
+                                projectile.x + (tmpSpeed * Math.cos(projectile.dir)),
+                                projectile.y + (tmpSpeed * Math.sin(projectile.dir))
+                            )) {
+                                player.changeHealth(shape, -projectile.dmg);
+                                projectile.range = 0;
+                                done = true;
+                                break;
+                            }
+                        }
+                    }
     
                     if (projectile.range <= 0) {
-                        this.send("removeProjectile", projectile.sid);
+                        if (done) {
+                            this.send("removeProjectile", projectile.sid, 200);
+                        } else {
+                            this.send("removeProjectile", projectile.sid);
+                        }
+
                         projectiles.splice(i, 1);
                         i--;
                     }
