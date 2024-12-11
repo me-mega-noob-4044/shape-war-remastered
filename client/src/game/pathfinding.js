@@ -1,3 +1,190 @@
-export default class Pathfinder {
+import AutoPush from "./AutoPush.js";
 
+class PathNode {
+    constructor(x, y, wall) {
+        this.x = x;
+        this.y = y;
+
+        this.walked = false;
+        this.wall = !wall;
+
+        this.fScore = Infinity;
+        this.gScore = Infinity;
+        this.hScore = Infinity;
+    }
+}
+
+export default class Pathfinder {
+    static id = 0;
+    static workers = [];
+
+    static getWorkerCode() {
+        return `
+        var openSet = [];
+        var pathMap = new Map();
+        var grid = [];
+
+        const Sqrt2 = Math.sqrt(800); // a^2 + b^2 = c^2
+        var startNode;
+        var endNode;
+
+        function distance(a, b) {
+            return Math.hypot(a.x - b.x, a.y - b.y);
+        }
+
+        function getNeighbors(bestNode) {
+            let neighbors = grid.filter(e => !e.wall && !e.walked && distance(e, bestNode) <= Sqrt2);
+    
+            return neighbors;
+        }
+
+        function tracePath(node) {
+            let path = [];
+            let current = node;
+                
+            while (current) {
+                path.push(current);
+                current = current.previous;
+            }
+            
+            path.reverse();
+            postMessage(path);
+        }
+
+        function find() {
+            startNode.gScore = 0;
+            startNode.hScore = distance(endNode, startNode);
+            startNode.fScore = startNode.gScore + startNode.hScore;
+    
+            openSet.push(startNode);
+
+            while (openSet.length > 0) {
+                let bestNode = openSet[0];
+
+                for (let i = 1; i < openSet.length; i++) {
+                    let node = openSet[i];
+
+                    if (node.fScore < bestNode.fScore || (node.fScore == bestNode.fScore && node.fScore < bestNode.fScore)) {
+                        bestNode = node;
+                    }
+                }
+    
+                bestNode.walked = true;
+    
+                let neighbors = getNeighbors(bestNode);
+    
+                for (let i = 0; i < neighbors.length; i++) {
+                    let neighbor = neighbors[i];
+    
+                    neighbor.gScore = distance(bestNode, neighbor) + bestNode.gScore;
+                    neighbor.hScore = distance(endNode, neighbor);
+                    neighbor.fScore = neighbor.gScore + neighbor.hScore;
+    
+                    if (neighbor.gScore < (pathMap.get(neighbor) || Infinity)) {
+                        neighbor.previous = bestNode;
+                        pathMap.set(neighbor, neighbor.gScore);
+                        
+                        if (neighbor == endNode) {
+                            tracePath(neighbor);
+                            openSet = [];
+                            return;
+                        }
+    
+                        if (!openSet.includes(neighbor)) {
+                            openSet.push(neighbor);
+                        }
+                    }
+                }
+    
+                let indx = openSet.findIndex(e => e == bestNode);
+                openSet.splice(indx, 1);
+            }
+
+            postMessage("No path pls");
+        }
+
+        self.onmessage = function(event) {
+            grid = event.data.grid;
+
+            let { start, end } = event.data;
+
+            startNode = grid.sort((a, b) => distance(a, start) - distance(b, start))[0];
+            endNode = grid.sort((a, b) => distance(a, end) - distance(b, end))[0];
+
+            if (startNode == endNode) {
+                postMessage("No path");
+            } else {
+                find();
+            }
+        };
+        `;
+    }
+
+    static search(start, end, { map, show }) {
+        let cellRadius = 10;
+        let grid = [];
+
+        let min = {
+            x: Math.floor(Math.min(start.x2, end.x) / cellRadius * cellRadius) - (cellRadius * 2) * 30,
+            y: Math.floor(Math.min(start.y2, end.y) / cellRadius * cellRadius) - (cellRadius * 2) * 30
+        };
+
+        let max = {
+            x: Math.floor(Math.max(start.x2, end.x) / cellRadius * cellRadius) + (cellRadius * 2) * 30,
+            y: Math.floor(Math.max(start.y2, end.y) / cellRadius * cellRadius) + (cellRadius * 2) * 30
+        };
+
+        let difference = { x: max.x - min.x, y: max.y - min.y };
+
+        let need = {
+            x: Math.ceil(difference.x / cellRadius) / 2,
+            y: Math.ceil(difference.y / cellRadius) / 2
+        };
+
+        for (let x = 0; x < need.x; x++) {
+            for (let y = 0; y < need.y; y++) {
+                let tmp = {
+                    x: min.x + cellRadius * 2 * x,
+                    y: min.y + cellRadius * 2 * y
+                };
+
+                if (tmp.x <= start.scale || tmp.x >= map.x - start.scale || tmp.y <= start.scale || tmp.y >= map.y - start.scale) continue;
+
+                grid.push(new PathNode(tmp.x, tmp.y));
+            }
+        }
+
+        if (!show) {
+            let id = this.id++;
+            let blob = new Blob([this.getWorkerCode()], { type: "application/javascript" });
+            let worker = new Worker(URL.createObjectURL(blob));
+
+            worker.postMessage({
+                grid,
+                start,
+                end
+            });
+
+            worker.onmessage = (event) => {
+                if (typeof event.data == "object") {
+                    /*if (AutoPush.pathId == id) {
+                        AutoPush.pathData = event.data;
+                        AutoPush.pathIndx = 0;
+                    }*/
+                } else {
+                    console.log("No path found.");
+
+                    /*if (AutoPush.pathId == id) {
+                        AutoPush.pathId = -1;
+                    }*/
+                }
+
+                worker.terminate();
+            };
+
+            return id;
+        } else {
+            return grid;
+        }
+    }
 }
