@@ -390,13 +390,27 @@ export default class {
         shape.dir %= PI2;
     }
 
+    aiMovement(shape, buildings) {
+        this.moveDir = undefined;
+
+        let nearestBeacon = buildings
+            .filter(e => e.name == "beacon" && (this.isAlly ? e.capturePoints < 6e3 : e.capturePoints > -6e3))
+            .sort((a, b) => UTILS.getDistance(a, shape) - UTILS.getDistance(b, shape))[0];
+
+        if (nearestBeacon && UTILS.getDistance(nearestBeacon, shape) > 300) {
+            this.moveDir = UTILS.getDirection(nearestBeacon, shape);
+        }
+    }
+
     update(shape, map, buildings) {
         this.updateDir(shape);
 
+        if (this.isUser != "me") {
+            this.aiMovement(shape, buildings);
+        }
+
         this.handleMovement(shape, buildings);
         this.handleBorder(shape, map);
-
-        // this.handleBuildingCollisions(shape, buildings);
 
         this.manageWeapons(shape);
 

@@ -42,9 +42,8 @@ import projectile from "../client/src/game/projectile.js";
 
     var indxRole = ["Tank", "Assault", "Scout", "Support"];
 
-    var storeManager = new class {
-        constructor() { }
-        setUpStoreWeapons(shape) {
+    class storeManager {
+        static setUpStoreWeapons(shape) {
             let weapons = [];
             let hardpoints = shape.weaponHardpoints;
             let weaponSlots = 0;
@@ -67,7 +66,8 @@ import projectile from "../client/src/game/projectile.js";
             if (hardpoints.heavy) { }
             return weapons;
         }
-        addItem(type, name, slot, ownerSID) {
+
+        static addItem(type, name, slot, ownerSID) {
             if (type == "shape") {
                 let tmp = items.shapes.find(e => e.name == name);
                 let tmpItem = new shape(tmp, slot);
@@ -110,37 +110,40 @@ import projectile from "../client/src/game/projectile.js";
                 userProfile.saveProfile();
             }
         }
-    };
+    }
 
     // Don't really need to use a database (MongoDB for example) for this because
     // this is only a single player game
-    var userProfile = new class {
-        constructor() {
-            this.bank = {
-                silver: 100e3 * 1e6,
-                gold: 500 * 1e3,
-                platinum: 50,
-                microchips: 0 + 1e3,
-                keys: 100,
-                powercells: 2e3,
-                tokens: 0 + 10,
-                components: {
-                    shapes: {},
-                    weapon: {},
-                    motherships: {}
-                }
-            };
-            this.shapes = [];
-            this.weapons = [];
-            this.modules = [];
-            this.pilots = [];
-            this.drones = [];
-            this.motherships = [];
-            this.leaguePoints = 0;
-            this.slotsData = [{
-                locked: false,
-                cost: 0
-            }];
+    class userProfile {
+        static bank = {
+            silver: 100e3 * 1e6,
+            gold: 500 * 1e3,
+            platinum: 50,
+            microchips: 0 + 1e3,
+            keys: 100,
+            powercells: 2e3,
+            tokens: 0 + 10,
+            components: {
+                shapes: {},
+                weapon: {},
+                motherships: {}
+            }
+        };
+
+        static shapes = [];
+        static weapons = [];
+        static modules = [];
+        static pilots = [];
+        static drones = [];
+        static motherships = [];
+
+        static leaguePoints = 0;
+        static slotsData = [{
+            locked: false,
+            cost: 0
+        }];
+
+        static init() {
             for (let i = 0; i < 7; i++) {
                 this.slotsData.push({
                     locked: true,
@@ -148,17 +151,20 @@ import projectile from "../client/src/game/projectile.js";
                 });
             }
         }
-        purchaseSlot(indx, cost) {
+
+        static purchaseSlot(indx, cost) {
             this.slotsData[indx].locked = false;
             this.changeBank("gold", -cost);
             hangerDisplay.updateHanger();
         }
-        changeBank(id, value) {
+
+        static changeBank(id, value) {
             this.bank[id] += value;
             moneyDisplayManager.updateItems();
             this.saveProfile();
         }
-        saveProfile() {
+
+        static saveProfile() {
             let { leaguePoints, bank, slotsData } = this;
 
             let shapes = [];
@@ -250,10 +256,12 @@ import projectile from "../client/src/game/projectile.js";
             let content = JSON.stringify({ slotsData, leaguePoints, bank, shapes, weapons, modules, drones, pilots, motherships });
             UTILS.saveVal("userProfile", content);
         }
-        setDefaultItems() {
+
+        static setDefaultItems() {
             storeManager.addItem("shape", "Gray Circle", 0);
         }
-        loadProfile() {
+
+        static loadProfile() {
             let content = JSON.parse(UTILS.getSavedVal("userProfile"));
             let highestSid = 0;
             this.bank = content.bank;
@@ -325,15 +333,16 @@ import projectile from "../client/src/game/projectile.js";
                 //
             }
         }
-    };
+    }
 
-    var imageManager = new class {
-        constructor() {
-            this.images = {};
-            this.iconImages = ["../src/media-files/icons/range.png", "../src/media-files/icons/reload.png", "../src/media-files/icons/damage.png", "../src/media-files/icons/health.png", "../src/media-files/icons/speed.png", "../src/media-files/icons/unequip_button.png"];
-            this.moneyIcons = ["../src/media-files/money/silver.png", "../src/media-files/money/gold.png", "../src/media-files/money/platinum.png", "../src/media-files/money/keys.png", "../src/media-files/money/powercells.png", "../src/media-files/money/microchips.png", "../src/media-files/money/tokens.png"];
-        }
-        generateWhiteImage() {
+    userProfile.init();
+
+    class imageManager {
+        static images = {};
+        static iconImages = ["../src/media-files/icons/range.png", "../src/media-files/icons/reload.png", "../src/media-files/icons/damage.png", "../src/media-files/icons/health.png", "../src/media-files/icons/speed.png", "../src/media-files/icons/unequip_button.png"];
+        static moneyIcons = ["../src/media-files/money/silver.png", "../src/media-files/money/gold.png", "../src/media-files/money/platinum.png", "../src/media-files/money/keys.png", "../src/media-files/money/powercells.png", "../src/media-files/money/microchips.png", "../src/media-files/money/tokens.png"];
+
+        static generateWhiteImage() {
             let canvas = document.createElement("canvas");
             canvas.width = canvas.height = 300;
 
@@ -343,7 +352,8 @@ import projectile from "../client/src/game/projectile.js";
 
             return canvas.toDataURL();
         }
-        cacheImage(source) {
+
+        static cacheImage(source) {
             let image = this.images[source];
             if (!image) {
                 image = new Image();
@@ -359,8 +369,10 @@ import projectile from "../client/src/game/projectile.js";
                 this.images[source] = image;
             }
         }
-        getImage(source) {
+
+        static getImage(source) {
             let originalImage = this.images[source];
+
             if (originalImage && originalImage.isLoaded) {
                 let duplicateImage = new Image();
                 duplicateImage.src = source;
@@ -371,7 +383,8 @@ import projectile from "../client/src/game/projectile.js";
                 return duplicateImage;
             }
         }
-        loadImages() {
+
+        static loadImages() {
             for (let i = 0; i < items.shapes.length; i++) {
                 let data = items.shapes[i];
                 if (data) {
@@ -416,7 +429,7 @@ import projectile from "../client/src/game/projectile.js";
                 }
             }
         }
-    };
+    }
 
     window.generateWhiteImage = imageManager.generateWhiteImage;
 
@@ -431,20 +444,18 @@ import projectile from "../client/src/game/projectile.js";
         }, 50);
     }
 
-    var canvasDrawer = new class {
-        constructor() {
-            this.bulletImages = {};
-            this.bulletSprites = {};
-        }
+    class canvasDrawer {
+        static bulletImages = {};
+        static bulletSprites = {};
 
-        drawCircle(x, y, tmpContext, scale, dontStroke, dontFill) {
+        static drawCircle(x, y, tmpContext, scale, dontStroke, dontFill) {
             tmpContext.beginPath();
             tmpContext.arc(x, y, scale, 0, Math.PI * 2);
             if (!dontFill) tmpContext.fill();
             if (!dontStroke) tmpContext.stroke();
         }
 
-        createUIItem(tmpObj) {
+        static createUIItem(tmpObj) {
             if (tmpObj.visualData) tmpObj = tmpObj.visualData;
 
             let tmpCanvas = document.createElement("canvas");
@@ -464,7 +475,7 @@ import projectile from "../client/src/game/projectile.js";
             return tmpCanvas;
         }
 
-        getBulletSprite(tmpObj) {
+        static getBulletSprite(tmpObj) {
             let tmp = this.bulletSprites[tmpObj.imageSource];
 
             if (!tmp) {
@@ -480,7 +491,7 @@ import projectile from "../client/src/game/projectile.js";
             if (tmp.isLoaded) return tmp;
         }
 
-        getBulletImage(tmpObj) {
+        static getBulletImage(tmpObj) {
             let image = this.bulletImages[tmpObj.imageSource];
 
             if (!image) {
@@ -504,18 +515,17 @@ import projectile from "../client/src/game/projectile.js";
 
             return image;
         }
-    };
+    }
 
-    var game = new class {
-        constructor() {
-            this.screenSize = {
-                x: config.defaultScreenX,
-                y: config.defaultScreenY
-            }
-            this.menuLoaderInterval = null;
-            this.doMenuLoading();
-        }
-        loadUserProfile() {
+    class game {
+        static screenSize = {
+            x: config.defaultScreenX,
+            y: config.defaultScreenY
+        };
+
+        static menuLoaderInterval = null;
+
+        static loadUserProfile() {
             let savedProfile = UTILS.getSavedVal("userProfile");
             if (savedProfile) {
                 userProfile.loadProfile();
@@ -523,7 +533,8 @@ import projectile from "../client/src/game/projectile.js";
                 userProfile.setDefaultItems();
             }
         }
-        doMenuLoading() {
+
+        static doMenuLoading() {
             let counter = 0;
             let loadingContent = [".", "..", "...", ""];
 
@@ -532,12 +543,14 @@ import projectile from "../client/src/game/projectile.js";
                 counter++;
             }, 500);
         }
-        finishLoading() {
+
+        static finishLoading() {
             elements.gameLoad.style.display = "none";
             elements.hangerUI.style.display = "block";
             hangerDisplay.updateHanger();
         }
-        init() {
+
+        static init() {
             this.loadUserProfile();
             imageManager.loadImages();
             setTimeout(() => {
@@ -545,10 +558,12 @@ import projectile from "../client/src/game/projectile.js";
                 this.finishLoading();
             }, 1e3);
         }
-    };
+    }
 
-    var upgraderManager = new class {
-        upgradeShape(shape, dontSaveData) {
+    game.doMenuLoading();
+
+    class upgraderManager {
+        static upgradeShape(shape, dontSaveData) {
             let item = items.shapes.find(e => e.name == shape.name);
             if (item.healthData) {
                 let value = item.healthData.level[shape.level];
@@ -573,7 +588,8 @@ import projectile from "../client/src/game/projectile.js";
             shape.level++;
             if (!dontSaveData) userProfile.saveProfile();
         }
-        upgradeWeapon(weapon, dontSaveData) {
+
+        static upgradeWeapon(weapon, dontSaveData) {
             let item = items.weapons.find(e => e.name == weapon.name);
             if (item.damageData) {
                 let value = item.damageData.level[weapon.level];
@@ -591,7 +607,8 @@ import projectile from "../client/src/game/projectile.js";
             weapon.level++;
             if (!dontSaveData) userProfile.saveProfile();
         }
-        upgradeModule(module, dontSaveData) {
+
+        static upgradeModule(module, dontSaveData) {
             let item = items.modules.find(e => e.name == module.name);
             if (item.healthIncreaseData) {
                 module.healthIncrease += item.healthIncreaseData.level[module.level];
@@ -600,7 +617,8 @@ import projectile from "../client/src/game/projectile.js";
             module.level++;
             if (!dontSaveData) userProfile.saveProfile();
         }
-        upgradeDrone(drone, dontSaveData) {
+
+        static upgradeDrone(drone, dontSaveData) {
             let item = items.drones.find(e => e.name == drone.name);
 
             for (let i = 0; i < drone.abilities.length; i++) {
@@ -623,7 +641,7 @@ import projectile from "../client/src/game/projectile.js";
             drone.level++;
             if (!dontSaveData) userProfile.saveProfile();
         }
-    };
+    }
 
     document.addEventListener("wheel", function (event) {
         if (event.deltaX !== 0) {
@@ -631,23 +649,18 @@ import projectile from "../client/src/game/projectile.js";
         }
     }, { passive: false });
 
-    var moneyConverter = new class {
-        convertSilverToGold(amount) {
+    class moneyConverter {
+        static convertSilverToGold(amount) {
             return Math.ceil(amount / 1250);
         }
-        convertMicrochipsToGold(amount) {
+
+        static convertMicrochipsToGold(amount) {
             return Math.ceil(amount * 255);
         }
-    };
+    }
 
-    var errorEventManager = new class {
-
-        /**
-         * shows a popup error message
-         * @param {string} text 
-         */
-
-        error(text) {
+    class errorEventManager {
+        static error(text) {
             let element = document.createElement("div");
             element.style = `
             z-index: 1001;
@@ -682,14 +695,14 @@ import projectile from "../client/src/game/projectile.js";
 
             document.body.appendChild(element);
         }
-    };
+    }
 
-    var pilotSkillManager = new class {
-        getSkills(pilot) {
+    class pilotSkillManager {
+        static getSkills(pilot) {
             let skills = [];
             let pilotSkills = pilot.skills;
 
-            for (let i = 0; i < pilot.skills.length; i++) {}
+            for (let i = 0; i < pilot.skills.length; i++) { }
             for (let i = 0; i < items.skills.length; i++) {
                 let skill = items.skills[i];
                 let hasSkill = pilotSkills.find(e => e.name == skill.name);
@@ -701,7 +714,8 @@ import projectile from "../client/src/game/projectile.js";
 
             return skills;
         }
-        styleSkillValue(skill) {
+
+        static styleSkillValue(skill) {
             let value = skill[skill.main];
 
             if (value == .07) {
@@ -712,149 +726,148 @@ import projectile from "../client/src/game/projectile.js";
 
             return value + "%";
         }
-    };
+    }
 
-    var hangerDisplay = new class {
-        constructor() {
-            this.shapeViewUI = elements.shapeViewUI;
-            this.shapeViewItemInfoImage = UTILS.getElement("shape-view-item-info-image");
-            this.changeShapeItemBarDisplay = UTILS.getElement("change-shape-item-bar-display");
-            this.shapeViewBackButton = UTILS.getElement("shape-view-back-button");
-            this.imageElement = UTILS.getElement("imageView");
-            this.levelDisplay = UTILS.getElement("shape-view-level");
-            this.nameDisplay = UTILS.getElement("shape-view-name");
-            this.rightSideDisplay = UTILS.getElement("right-view-display");
-            this.industryDisplay = UTILS.getElement("shape-view-industry-name");
-            this.shapeElements = ["pentagon-shape", "circle-shape"];
-            this.statsDisplay = UTILS.getElement("view-shape-stats");
-            this.viewWeaponsButton = UTILS.getElement("right-view-weapons");
-            this.viewModulesButton = UTILS.getElement("right-view-modules");
-            this.shapeViewUpgradeButton = UTILS.getElement("shape-view-upgrade-button");
-            this.shapeAbilityViewImage = UTILS.getElement("shape-ability-view-image");
-            this.shapeAbilityViewName = UTILS.getElement("shape-ability-view-name");
-            this.shapeAbilityView = UTILS.getElement("shape-ability-view");
-            this.shapeViewUnequipButton = UTILS.getElement("shape-view-unequip-button");
-            this.shapeViewInfoMenu = UTILS.getElement("shape-view-info-menu");
-            this.shapeUpgradeViewMenu = UTILS.getElement("shape-view-upgrade-menu");
-            this.upgradeImageElement = UTILS.getElement("shape-view-upgrade-image");
-            this.shapeViewUpgradeRightDisplay = UTILS.getElement("shape-view-upgrade-right-display");
-            this.shapeViewUpgradeMoneyDisplay = UTILS.getElement("shape-view-upgrade-money-display");
-            this.shapeViewUpgradeMoneyIcon = UTILS.getElement("shape-view-upgrade-money-icon");
-            this.shapeViewUpgradeButton2 = UTILS.getElement("shape-view-upgrade-button-2");
-            this.shapeViewUpgradeName = UTILS.getElement("shape-view-upgrade-name");
-            this.shapeViewUpgradeBackButton = UTILS.getElement("shape-view-upgrade-back-button");
-            this.shapeViewUpgradeText = UTILS.getElement("shape-view-upgrade-text");
-            this.changeShapeStoreButton = UTILS.getElement("change-shape-store-button");
-            this.changeShapeInventoryButton = UTILS.getElement("change-shape-inventory-button");
-            this.changeShapeDisplay = UTILS.getElement("change-shape-display");
-            this.shapeViewChangeButton = UTILS.getElement("shape-view-change-button");
-            this.shapeViewBuyButton = UTILS.getElement("shape-view-buy-button");
-            this.shapeViewBuyMoneyIcon = UTILS.getElement("shape-view-buy-money-icon");
-            this.shapeViewBuyMoneyDisplay = UTILS.getElement("shape-view-buy-money-display");
-            this.shapeViewBackButton2 = UTILS.getElement("shape-view-back-button-2");
-            this.shapeViewEquipButton = UTILS.getElement("shape-view-equip-button");
-            this.changeShapeReplacingHolder = UTILS.getElement("change-shape-replacing-holder");
-            this.shapeViewMoreInfo = UTILS.getElement("shape-view-more-info");
-            this.shapeViewInfoBackButton = UTILS.getElement("shape-view-info-back-button");
-            this.shapeViewInfoImage = UTILS.getElement("shape-view-info-image");
-            this.shapeViewInfoRightDisplay = UTILS.getElement("shape-view-info-right-display");
-            this.shapeViewInfoName = UTILS.getElement("shape-view-info-name");
-            this.shapeItemsUI = UTILS.getElement("shapeItemsUI");
-            this.shapeInDepthViewInventoryButton = UTILS.getElement("shape-in-depth-view-inventory-button");
-            this.shapeInDepthViewStoreButton = UTILS.getElement("shape-in-depth-view-store-button");
-            this.changeShapeItemReplacingHolder = UTILS.getElement("change-shape-item-replacing-holder");
-            this.changeShapeItemDisplay = UTILS.getElement("change-shape-item-display");
-            this.shapeItemViewBuyButton = UTILS.getElement("shape-item-view-buy-button");
-            this.shapeItemViewUpgradeButton = UTILS.getElement("shape-item-view-upgrade-button");
-            this.shapeItemViewBuyMoneyIcon = UTILS.getElement("shape-item-view-buy-money-icon");
-            this.shapeItemViewBuyMoneyDisplay = UTILS.getElement("shape-item-view-buy-money-display");
-            this.shapeViewBackButton3 = UTILS.getElement("shape-view-back-button-3");
-            this.shapeViewItemUpgradeButton = UTILS.getElement("shape-item-view-upgrade-button");
-            this.shapeViewItemUpgradeMenu = UTILS.getElement("shape-view-item-upgrade-menu");
-            this.shapeViewItemUpgradeImage = UTILS.getElement("shape-view-item-upgrade-image");
-            this.shapeViewItemUpgradeMoneyIcon = UTILS.getElement("shape-view-item-upgrade-money-icon");
-            this.shapeViewItemUpgradeMoneyDisplay = UTILS.getElement("shape-view-item-upgrade-money-display");
-            this.shapeViewItemUpgradeText = UTILS.getElement("shape-view-item-upgrade-text");
-            this.shapeViewItemUpgradeName = UTILS.getElement("shape-view-item-upgrade-name");
-            this.shapeViewItemUpgradeRightDisplay = UTILS.getElement("shape-view-item-upgrade-right-display");
-            this.shapeViewItemUpgradeButton2 = UTILS.getElement("shape-view-item-upgrade-button-2");
-            this.shapeViewItemUpgradeBackButton = UTILS.getElement("shape-view-item-upgrade-back-button");
-            this.shapeItemViewEquipButton = UTILS.getElement("shape-item-view-equip-button");
-            this.shapeItemViewUnequipButton = UTILS.getElement("shape-item-view-unequip-button");
-            this.shapeViewItemInfoMenu = UTILS.getElement("shape-view-item-info-menu");
-            this.shapeViewItemInfoName = UTILS.getElement("shape-view-item-info-name");
-            this.shapeViewItemInfoBackButton = UTILS.getElement("shape-view-item-info-back-button");
-            this.shapeViewItemInfoRightDisplay = UTILS.getElement("shape-view-item-info-right-display");
-            this.droneViewNameLabel = UTILS.getElement("droneViewNameLabel");
-            this.droneImageView = UTILS.getElement("droneImageView");
-            this.droneViewEquipButton = UTILS.getElement("drone-view-equip-button");
-            this.droneViewChangeButton = UTILS.getElement("drone-view-change-button");
-            this.droneViewUnequipButton = UTILS.getElement("drone-view-unequip-button");
-            this.droneViewUpgradeButton = UTILS.getElement("drone-view-upgrade-button");
-            this.droneViewBuyButton = UTILS.getElement("drone-view-buy-button");
-            this.droneViewBuyMoneyIcon = UTILS.getElement("drone-view-buy-money-icon");
-            this.droneViewBuyMoneyDisplay = UTILS.getElement("drone-view-buy-money-display");
-            this.droneItemViewLeft = UTILS.getElement("drone-item-view-left");
-            this.droneItemViewRight = UTILS.getElement("drone-item-view-right");
-            this.droneViewBackButton = UTILS.getElement("drone-view-back-button");
-            this.droneAbilityInfoMenu = UTILS.getElement("drone-ability-info-menu");
-            this.droneAbilityInfoName = UTILS.getElement("drone-ability-info-name");
-            this.droneAbilityInfoImage = UTILS.getElement("drone-ability-info-image");
-            this.droneAbilityInfoRightDisplay = UTILS.getElement("drone-ability-info-right-display");
-            this.droneAbilityInfoBackButton = UTILS.getElement("drone-ability-info-back-button");
-            this.droneViewUpgradeMenu = UTILS.getElement("drone-view-upgrade-menu");
-            this.droneViewUpgradeName = UTILS.getElement("drone-view-upgrade-name");
-            this.droneViewUpgradeImage = UTILS.getElement("drone-view-upgrade-image");
-            this.droneViewUpgradeRightDisplay = UTILS.getElement("drone-view-upgrade-right-display");
-            this.droneViewUpgradeMoneyDisplay = UTILS.getElement("drone-view-upgrade-money-display");
-            this.droneViewUpgradeMoneyIcon = UTILS.getElement("drone-view-upgrade-money-icon");
-            this.droneViewUpgradeBackButton = UTILS.getElement("drone-view-upgrade-back-button");
-            this.droneViewUpgradeButton2 = UTILS.getElement("drone-view-upgrade-button-2");
-            this.pilotDisplayName = UTILS.getElement("pilot-display-name");
-            this.pilotViewEquipButton = UTILS.getElement("pilot-view-equip-button");
-            this.pilotViewUnequipButton = UTILS.getElement("pilot-view-unequip-button");
-            this.pilotViewUpgradeButton = UTILS.getElement("pilot-view-upgrade-button");
-            this.pilotViewBuyButton = UTILS.getElement("pilot-view-buy-button");
-            this.pilotViewChangeButton = UTILS.getElement("pilot-view-change-button");
-            this.pilotViewBuyMoneyDisplay = UTILS.getElement("pilot-view-buy-money-display");
-            this.pilotDisplayImage = UTILS.getElement("pilot-display-image");
-            this.pilotRightSideDisplay = UTILS.getElement("pilot-right-side-display");
-            this.pilotStoryDisplay = UTILS.getElement("pilot-story-display");
-            this.pilotOperatesHeader = UTILS.getElement("pilot-operates-header");
-            this.pilotHeaderDisplayLevel = UTILS.getElement("pilot-header-display-level");
-            this.pilotHeaderDisplayName = UTILS.getElement("pilot-header-display-name");
-            this.pilotSkillHeaderActiveSkills = UTILS.getElement("pilot-skill-header-active-skills");
-            this.pilotSkillHeaderMaxSkills = UTILS.getElement("pilot-skill-header-max-skills");
-            this.pilotSkillsDisplay = UTILS.getElement("pilot-skills-display");
-            this.pilotViewUpgradeMoneyDisplay = UTILS.getElement("pilot-view-upgrade-money-display");
-            this.changePilotSkillButton = UTILS.getElement("change-pilot-skill-button");
-            this.pilotViewBackButton = UTILS.getElement("pilot-view-back-button");
-            this.pilotSkillsLeftSideDisplay = UTILS.getElement("pilot-skills-left-side-display");
-            this.pilotSkillsRightSideDisplay = UTILS.getElement("pilot-skills-right-side-display");
-            this.pilotSkillsViewBackButton = UTILS.getElement("pilot-skills-view-back-button");
-            this.dataToImage = {
-                "healthData": "../src/media-files/icons/health.png",
-                "speedData": "../src/media-files/icons/speed.png",
-                "damageData": "../src/media-files/icons/damage.png",
-                "rangeData": "../src/media-files/icons/range.png",
-                "reloadData": "../src/media-files/icons/reload.png",
-                "healthIncreaseData": "../src/media-files/modules/armor_kit.png",
-                "duration": "../src/media-files/icons/cooldown.png",
-                "regenData": "../src/media-files/modules/repair_unit.png"
-            };
-            this.dataToDescription = {
-                "healthData": "Hit points",
-                "speedData": "Speed",
-                "damageData": "Damage",
-                "reloadData": "Reload",
-                "rangeData": "Range",
-                "healthIncreaseData": "Health Boost",
-                "duration": "Duration",
-                "regenData": "Regeneration Power"
-            };
-            this.tmpElements = [];
-        }
-        showImageBadge(name) {
+    class hangerDisplay {
+        static shapeViewUI = elements.shapeViewUI;
+        static shapeViewItemInfoImage = UTILS.getElement("shape-view-item-info-image");
+        static changeShapeItemBarDisplay = UTILS.getElement("change-shape-item-bar-display");
+        static shapeViewBackButton = UTILS.getElement("shape-view-back-button");
+        static imageElement = UTILS.getElement("imageView");
+        static levelDisplay = UTILS.getElement("shape-view-level");
+        static nameDisplay = UTILS.getElement("shape-view-name");
+        static rightSideDisplay = UTILS.getElement("right-view-display");
+        static industryDisplay = UTILS.getElement("shape-view-industry-name");
+        static shapeElements = ["pentagon-shape", "circle-shape"];
+        static statsDisplay = UTILS.getElement("view-shape-stats");
+        static viewWeaponsButton = UTILS.getElement("right-view-weapons");
+        static viewModulesButton = UTILS.getElement("right-view-modules");
+        static shapeViewUpgradeButton = UTILS.getElement("shape-view-upgrade-button");
+        static shapeAbilityViewImage = UTILS.getElement("shape-ability-view-image");
+        static shapeAbilityViewName = UTILS.getElement("shape-ability-view-name");
+        static shapeAbilityView = UTILS.getElement("shape-ability-view");
+        static shapeViewUnequipButton = UTILS.getElement("shape-view-unequip-button");
+        static shapeViewInfoMenu = UTILS.getElement("shape-view-info-menu");
+        static shapeUpgradeViewMenu = UTILS.getElement("shape-view-upgrade-menu");
+        static upgradeImageElement = UTILS.getElement("shape-view-upgrade-image");
+        static shapeViewUpgradeRightDisplay = UTILS.getElement("shape-view-upgrade-right-display");
+        static shapeViewUpgradeMoneyDisplay = UTILS.getElement("shape-view-upgrade-money-display");
+        static shapeViewUpgradeMoneyIcon = UTILS.getElement("shape-view-upgrade-money-icon");
+        static shapeViewUpgradeButton2 = UTILS.getElement("shape-view-upgrade-button-2");
+        static shapeViewUpgradeName = UTILS.getElement("shape-view-upgrade-name");
+        static shapeViewUpgradeBackButton = UTILS.getElement("shape-view-upgrade-back-button");
+        static shapeViewUpgradeText = UTILS.getElement("shape-view-upgrade-text");
+        static changeShapeStoreButton = UTILS.getElement("change-shape-store-button");
+        static changeShapeInventoryButton = UTILS.getElement("change-shape-inventory-button");
+        static changeShapeDisplay = UTILS.getElement("change-shape-display");
+        static shapeViewChangeButton = UTILS.getElement("shape-view-change-button");
+        static shapeViewBuyButton = UTILS.getElement("shape-view-buy-button");
+        static shapeViewBuyMoneyIcon = UTILS.getElement("shape-view-buy-money-icon");
+        static shapeViewBuyMoneyDisplay = UTILS.getElement("shape-view-buy-money-display");
+        static shapeViewBackButton2 = UTILS.getElement("shape-view-back-button-2");
+        static shapeViewEquipButton = UTILS.getElement("shape-view-equip-button");
+        static changeShapeReplacingHolder = UTILS.getElement("change-shape-replacing-holder");
+        static shapeViewMoreInfo = UTILS.getElement("shape-view-more-info");
+        static shapeViewInfoBackButton = UTILS.getElement("shape-view-info-back-button");
+        static shapeViewInfoImage = UTILS.getElement("shape-view-info-image");
+        static shapeViewInfoRightDisplay = UTILS.getElement("shape-view-info-right-display");
+        static shapeViewInfoName = UTILS.getElement("shape-view-info-name");
+        static shapeItemsUI = UTILS.getElement("shapeItemsUI");
+        static shapeInDepthViewInventoryButton = UTILS.getElement("shape-in-depth-view-inventory-button");
+        static shapeInDepthViewStoreButton = UTILS.getElement("shape-in-depth-view-store-button");
+        static changeShapeItemReplacingHolder = UTILS.getElement("change-shape-item-replacing-holder");
+        static changeShapeItemDisplay = UTILS.getElement("change-shape-item-display");
+        static shapeItemViewBuyButton = UTILS.getElement("shape-item-view-buy-button");
+        static shapeItemViewUpgradeButton = UTILS.getElement("shape-item-view-upgrade-button");
+        static shapeItemViewBuyMoneyIcon = UTILS.getElement("shape-item-view-buy-money-icon");
+        static shapeItemViewBuyMoneyDisplay = UTILS.getElement("shape-item-view-buy-money-display");
+        static shapeViewBackButton3 = UTILS.getElement("shape-view-back-button-3");
+        static shapeViewItemUpgradeButton = UTILS.getElement("shape-item-view-upgrade-button");
+        static shapeViewItemUpgradeMenu = UTILS.getElement("shape-view-item-upgrade-menu");
+        static shapeViewItemUpgradeImage = UTILS.getElement("shape-view-item-upgrade-image");
+        static shapeViewItemUpgradeMoneyIcon = UTILS.getElement("shape-view-item-upgrade-money-icon");
+        static shapeViewItemUpgradeMoneyDisplay = UTILS.getElement("shape-view-item-upgrade-money-display");
+        static shapeViewItemUpgradeText = UTILS.getElement("shape-view-item-upgrade-text");
+        static shapeViewItemUpgradeName = UTILS.getElement("shape-view-item-upgrade-name");
+        static shapeViewItemUpgradeRightDisplay = UTILS.getElement("shape-view-item-upgrade-right-display");
+        static shapeViewItemUpgradeButton2 = UTILS.getElement("shape-view-item-upgrade-button-2");
+        static shapeViewItemUpgradeBackButton = UTILS.getElement("shape-view-item-upgrade-back-button");
+        static shapeItemViewEquipButton = UTILS.getElement("shape-item-view-equip-button");
+        static shapeItemViewUnequipButton = UTILS.getElement("shape-item-view-unequip-button");
+        static shapeViewItemInfoMenu = UTILS.getElement("shape-view-item-info-menu");
+        static shapeViewItemInfoName = UTILS.getElement("shape-view-item-info-name");
+        static shapeViewItemInfoBackButton = UTILS.getElement("shape-view-item-info-back-button");
+        static shapeViewItemInfoRightDisplay = UTILS.getElement("shape-view-item-info-right-display");
+        static droneViewNameLabel = UTILS.getElement("droneViewNameLabel");
+        static droneImageView = UTILS.getElement("droneImageView");
+        static droneViewEquipButton = UTILS.getElement("drone-view-equip-button");
+        static droneViewChangeButton = UTILS.getElement("drone-view-change-button");
+        static droneViewUnequipButton = UTILS.getElement("drone-view-unequip-button");
+        static droneViewUpgradeButton = UTILS.getElement("drone-view-upgrade-button");
+        static droneViewBuyButton = UTILS.getElement("drone-view-buy-button");
+        static droneViewBuyMoneyIcon = UTILS.getElement("drone-view-buy-money-icon");
+        static droneViewBuyMoneyDisplay = UTILS.getElement("drone-view-buy-money-display");
+        static droneItemViewLeft = UTILS.getElement("drone-item-view-left");
+        static droneItemViewRight = UTILS.getElement("drone-item-view-right");
+        static droneViewBackButton = UTILS.getElement("drone-view-back-button");
+        static droneAbilityInfoMenu = UTILS.getElement("drone-ability-info-menu");
+        static droneAbilityInfoName = UTILS.getElement("drone-ability-info-name");
+        static droneAbilityInfoImage = UTILS.getElement("drone-ability-info-image");
+        static droneAbilityInfoRightDisplay = UTILS.getElement("drone-ability-info-right-display");
+        static droneAbilityInfoBackButton = UTILS.getElement("drone-ability-info-back-button");
+        static droneViewUpgradeMenu = UTILS.getElement("drone-view-upgrade-menu");
+        static droneViewUpgradeName = UTILS.getElement("drone-view-upgrade-name");
+        static droneViewUpgradeImage = UTILS.getElement("drone-view-upgrade-image");
+        static droneViewUpgradeRightDisplay = UTILS.getElement("drone-view-upgrade-right-display");
+        static droneViewUpgradeMoneyDisplay = UTILS.getElement("drone-view-upgrade-money-display");
+        static droneViewUpgradeMoneyIcon = UTILS.getElement("drone-view-upgrade-money-icon");
+        static droneViewUpgradeBackButton = UTILS.getElement("drone-view-upgrade-back-button");
+        static droneViewUpgradeButton2 = UTILS.getElement("drone-view-upgrade-button-2");
+        static pilotDisplayName = UTILS.getElement("pilot-display-name");
+        static pilotViewEquipButton = UTILS.getElement("pilot-view-equip-button");
+        static pilotViewUnequipButton = UTILS.getElement("pilot-view-unequip-button");
+        static pilotViewUpgradeButton = UTILS.getElement("pilot-view-upgrade-button");
+        static pilotViewBuyButton = UTILS.getElement("pilot-view-buy-button");
+        static pilotViewChangeButton = UTILS.getElement("pilot-view-change-button");
+        static pilotViewBuyMoneyDisplay = UTILS.getElement("pilot-view-buy-money-display");
+        static pilotDisplayImage = UTILS.getElement("pilot-display-image");
+        static pilotRightSideDisplay = UTILS.getElement("pilot-right-side-display");
+        static pilotStoryDisplay = UTILS.getElement("pilot-story-display");
+        static pilotOperatesHeader = UTILS.getElement("pilot-operates-header");
+        static pilotHeaderDisplayLevel = UTILS.getElement("pilot-header-display-level");
+        static pilotHeaderDisplayName = UTILS.getElement("pilot-header-display-name");
+        static pilotSkillHeaderActiveSkills = UTILS.getElement("pilot-skill-header-active-skills");
+        static pilotSkillHeaderMaxSkills = UTILS.getElement("pilot-skill-header-max-skills");
+        static pilotSkillsDisplay = UTILS.getElement("pilot-skills-display");
+        static pilotViewUpgradeMoneyDisplay = UTILS.getElement("pilot-view-upgrade-money-display");
+        static changePilotSkillButton = UTILS.getElement("change-pilot-skill-button");
+        static pilotViewBackButton = UTILS.getElement("pilot-view-back-button");
+        static pilotSkillsLeftSideDisplay = UTILS.getElement("pilot-skills-left-side-display");
+        static pilotSkillsRightSideDisplay = UTILS.getElement("pilot-skills-right-side-display");
+        static pilotSkillsViewBackButton = UTILS.getElement("pilot-skills-view-back-button");
+        static dataToImage = {
+            "healthData": "../src/media-files/icons/health.png",
+            "speedData": "../src/media-files/icons/speed.png",
+            "damageData": "../src/media-files/icons/damage.png",
+            "rangeData": "../src/media-files/icons/range.png",
+            "reloadData": "../src/media-files/icons/reload.png",
+            "healthIncreaseData": "../src/media-files/modules/armor_kit.png",
+            "duration": "../src/media-files/icons/cooldown.png",
+            "regenData": "../src/media-files/modules/repair_unit.png"
+        };
+        static dataToDescription = {
+            "healthData": "Hit points",
+            "speedData": "Speed",
+            "damageData": "Damage",
+            "reloadData": "Reload",
+            "rangeData": "Range",
+            "healthIncreaseData": "Health Boost",
+            "duration": "Duration",
+            "regenData": "Regeneration Power"
+        };
+        static tmpElements = [];
+
+        static showImageBadge(name) {
             for (let i = 0; i < this.shapeElements.length; i++) {
                 let id = this.shapeElements[i];
                 if (id.includes(name)) {
@@ -864,7 +877,8 @@ import projectile from "../client/src/game/projectile.js";
                 }
             }
         }
-        doStatWidthMath(tmpObj, tmp, amount, isUpgradeStat, isUpgrading, data) {
+
+        static doStatWidthMath(tmpObj, tmp, amount, isUpgradeStat, isUpgrading, data) {
             let item = items.shapes.find(e => e.name == tmpObj.name);
             if (tmpObj.typeOfObj == "weapon") {
                 item = items.weapons.find(e => e.name == tmpObj.name);
@@ -928,7 +942,8 @@ import projectile from "../client/src/game/projectile.js";
 
             return ((amount - addOn) / maxNumber) * 100;
         }
-        styleAmountData(amount, data) {
+
+        static styleAmountData(amount, data) {
             if (data == "speedData") {
                 amount = Math.floor(amount * 1e4) + " px/s";
             } else if (["healthIncreaseData"].includes(data)) {
@@ -941,7 +956,8 @@ import projectile from "../client/src/game/projectile.js";
             }
             return amount;
         }
-        upgradeAmountData(tmpObj, itemData, data) {
+
+        static upgradeAmountData(tmpObj, itemData, data) {
             let amount = itemData.level[tmpObj.level];
             if (["healthData", "damageData"].includes(data) && tmpObj.level > 12 && tmpObj.level < 25) {
                 if (tmpObj.level == 24) {
@@ -961,7 +977,8 @@ import projectile from "../client/src/game/projectile.js";
             }
             return "+" + UTILS.styleNumberWithComma(amount);
         }
-        getMk3Amount(tmp) {
+
+        static getMk3Amount(tmp) {
             let maxNumber = tmp.base;
             for (let i = 0; i < tmp.level.length; i++) {
                 maxNumber += tmp.level[i];
@@ -970,7 +987,8 @@ import projectile from "../client/src/game/projectile.js";
 
             return mk3Increase;
         }
-        getMk2Amount(tmpObj, tmp, type) {
+
+        static getMk2Amount(tmpObj, tmp, type) {
             let item = items.shapes.find(e => e.name == tmpObj.name);
             if (type == "weapon") {
                 item = items.weapons.find(e => e.name == tmpObj.name);
@@ -991,7 +1009,8 @@ import projectile from "../client/src/game/projectile.js";
 
             return total / 11;
         }
-        showStat(type, tmpObj, data, isUpgradeStat, isUpgrading) {
+
+        static showStat(type, tmpObj, data, isUpgradeStat, isUpgrading) {
             let element = document.createElement("div");
             element.style = `display: flex; align-items: center; width: 100%; height: ${isUpgradeStat ? 60 : 40}px;`;
             let item = items.shapes.find(e => e.name == tmpObj.name);
@@ -1065,7 +1084,8 @@ import projectile from "../client/src/game/projectile.js";
                 return element;
             }
         }
-        addMissingItemSlot(parentElement, wpnType, height) {
+
+        static addMissingItemSlot(parentElement, wpnType, height) {
             let offsetValue = height + 60;
             let nameDisplayHolder = document.createElement("div");
             let nameDisplay = document.createElement("div");
@@ -1084,7 +1104,8 @@ import projectile from "../client/src/game/projectile.js";
             nameDisplayHolder.appendChild(nameDisplay);
             parentElement.appendChild(nameDisplayHolder);
         }
-        addWpnDisplayData(item, parentElement, height, isStore, itemType) {
+
+        static addWpnDisplayData(item, parentElement, height, isStore, itemType) {
             let image = imageManager.getImage(item.imageSource);
             image.style = `position: absolute; right: 50px; top: 0px; width: ${height}px; height: ${height}px;`;
             parentElement.appendChild(image);
@@ -1134,7 +1155,8 @@ import projectile from "../client/src/game/projectile.js";
                 parentElement.appendChild(moreInfoButton);
             }
         }
-        doShapeItemMoreInfo(item) {
+
+        static doShapeItemMoreInfo(item) {
             doDarkModeTransition();
             moneyDisplayManager.displayItems([]);
             this.shapeViewItemInfoMenu.style.display = "block";
@@ -1172,7 +1194,8 @@ import projectile from "../client/src/game/projectile.js";
                 moneyDisplayManager.displayItems(["powercells", "gold", "silver"]);
             };
         }
-        doShapeItemDescriptionDisplay(item, DifferentMode) {
+
+        static doShapeItemDescriptionDisplay(item, DifferentMode) {
             this.shapeViewItemInfoRightDisplay.innerHTML = "";
             let industryName = item.industryName;
 
@@ -1306,7 +1329,8 @@ import projectile from "../client/src/game/projectile.js";
                 this.shapeViewItemInfoRightDisplay.appendChild(element);
             }
         }
-        doShapeDescriptionDisplay(shape) {
+
+        static doShapeDescriptionDisplay(shape) {
             this.shapeViewInfoRightDisplay.innerHTML = "";
             let splitData = shape.name.split(" ");
             let industryName = splitData[splitData.length - 1];
@@ -1379,7 +1403,8 @@ import projectile from "../client/src/game/projectile.js";
                 this.shapeViewInfoRightDisplay.appendChild(element);
             }
         }
-        displayShapeItems(itemsData, indx, slotId, ownerSID, isStore, isModuleData, itemType) {
+
+        static displayShapeItems(itemsData, indx, slotId, ownerSID, isStore, isModuleData, itemType) {
             let isUpgrading = false;
             let height = window.innerHeight * .72;
             this.changeShapeItemDisplay.innerHTML = "";
@@ -1953,7 +1978,8 @@ import projectile from "../client/src/game/projectile.js";
                 this.changeShapeItemDisplay.appendChild(element);
             }
         }
-        doInDepthShapeItem(shape, oldWpn, slot, currentIndx = 0, isStore = "SUPERMAN", itemType) {
+
+        static doInDepthShapeItem(shape, oldWpn, slot, currentIndx = 0, isStore = "SUPERMAN", itemType) {
             let isModuleData = false;
             if (itemType || oldWpn.type == "Active") {
                 isModuleData = itemType || oldWpn.type;
@@ -2177,7 +2203,8 @@ import projectile from "../client/src/game/projectile.js";
                 this.viewInDepth(shape, false, false, (shape.slot == null || shape.slot == undefined), (isModuleData || "false"));
             };
         }
-        drawRightDisplay(shape, type, Items, isStore) {
+
+        static drawRightDisplay(shape, type, Items, isStore) {
             this.rightSideDisplay.innerHTML = "";
 
             let displayHeight = this.rightSideDisplay.clientHeight;
@@ -2285,7 +2312,8 @@ import projectile from "../client/src/game/projectile.js";
                 this.rightSideDisplay.appendChild(fillRestElement);
             }
         }
-        viewDroneAbilityDescription(ability) {
+
+        static viewDroneAbilityDescription(ability) {
             doDarkModeTransition();
             this.droneAbilityInfoMenu.style.display = "block";
             moneyDisplayManager.displayItems([]);
@@ -2410,7 +2438,8 @@ import projectile from "../client/src/game/projectile.js";
                 moneyDisplayManager.displayItems(["microchips"]);
             };
         }
-        purchaseDrone(drone, dontUpdateCost, slotId) {
+
+        static purchaseDrone(drone, dontUpdateCost, slotId) {
             if (!dontUpdateCost) {
                 userProfile.changeBank("microchips", -drone.cost);
             }
@@ -2424,8 +2453,9 @@ import projectile from "../client/src/game/projectile.js";
 
             this.viewInDepth(shape, false, shape.slot, shape.slot);
         }
+
         // isUpgrading allows the function/method to do a nice upgrading animation
-        doDroneUpgradeProcessBar(drone, ability, abilityIndx, parentElement, isUpgrading) {
+        static doDroneUpgradeProcessBar(drone, ability, abilityIndx, parentElement, isUpgrading) {
             let droneItem = items.drones.find(e => e.name == drone.name);
 
             for (let i = 0; i < ability.statTitles.length; i++) {
@@ -2438,7 +2468,7 @@ import projectile from "../client/src/game/projectile.js";
                 if (title) {
                     let element = document.createElement("div");
                     element.style = "display: flex; align-items: center; width: 100%; height: 60px;";
-    
+
                     let iconDisplay = document.createElement("div");
                     iconDisplay.style = `position: absolute; width: 40px; height: 40px; background-size: 40px 40px; background-image: url('${icon}');`;
                     element.appendChild(iconDisplay);
@@ -2454,7 +2484,7 @@ import projectile from "../client/src/game/projectile.js";
                         lastProgress = statData.level[drone.level - 1];
                         nextProgress = statData.level[drone.level];
 
-                        for (let i = 0 ; i < statData.level.length; i++) {
+                        for (let i = 0; i < statData.level.length; i++) {
                             totalStat += statData.level[i];
                         }
                     }
@@ -2463,7 +2493,7 @@ import projectile from "../client/src/game/projectile.js";
                     statHolder.classList.add("stat-amount");
                     statHolder.innerHTML = UTILS.styleNumberWithComma(stat);
                     barHolder.appendChild(statHolder);
-                    
+
                     if (drone.level < drone.maxlevel && nextProgress > 0) {
                         let nextProgressDisplay = document.createElement("div");
                         nextProgressDisplay.style = "position: absolute; color: #00ff00; top: 0px; right: 18px;";
@@ -2521,7 +2551,8 @@ import projectile from "../client/src/game/projectile.js";
                 }
             }
         }
-        viewDroneInDepth(drone, isStore, isChanging, slotId) { // slotId is for locating the owner shape
+
+        static viewDroneInDepth(drone, isStore, isChanging, slotId) { // slotId is for locating the owner shape
             moneyDisplayManager.displayItems(["microchips"]);
             elements.droneViewUI.style.display = "block";
 
@@ -2847,7 +2878,8 @@ import projectile from "../client/src/game/projectile.js";
             };
 
         }
-        buildPilotSkillDisplay(type, indx, tier, skill, pilotLevel) {
+
+        static buildPilotSkillDisplay(type, indx, tier, skill, pilotLevel) {
             let element = document.createElement("div");
             element.style = "position: relative; display: flex; align-items: center; width: 100%; height: 65px; margin-top: 7px; background-color: rgba(0, 0, 0, .15); border-radius: 4px;";
 
@@ -2879,7 +2911,7 @@ import projectile from "../client/src/game/projectile.js";
                         add
                     </span>
                     `;
-    
+
                     element.appendChild(addIconHolder);
 
                     element.onmouseover = () => {
@@ -2898,7 +2930,7 @@ import projectile from "../client/src/game/projectile.js";
                     lock
                 </span>
                 `;
-    
+
                 element.appendChild(addIconHolder);
 
                 let unlockDisplayHolder = document.createElement("div");
@@ -2923,7 +2955,7 @@ import projectile from "../client/src/game/projectile.js";
                     }
                 }
 
-                let rgb =  UTILS.hexToRgb(config.tierColors[skill.tier])
+                let rgb = UTILS.hexToRgb(config.tierColors[skill.tier])
                 element.style.backgroundColor = `rgba(${rgb}, .75)`;
 
                 let iconDisplay = document.createElement("div");
@@ -2964,7 +2996,8 @@ import projectile from "../client/src/game/projectile.js";
 
             return element;
         }
-        modifyPilotSkill(type, pilot, slot) {
+
+        static modifyPilotSkill(type, pilot, slot) {
             let skills = pilotSkillManager.getSkills(pilot);
             if (type == "empty") {
                 pilot.skills.push(new skill(skills[Math.floor(Math.random() * skills.length)], slot));
@@ -2972,7 +3005,8 @@ import projectile from "../client/src/game/projectile.js";
                 userProfile.saveProfile();
             }
         }
-        changePilotSkill(pilot, callback) {
+
+        static changePilotSkill(pilot, callback) {
             moneyDisplayManager.displayItems(["gold"]);
 
             doDarkModeTransition();
@@ -3045,7 +3079,8 @@ import projectile from "../client/src/game/projectile.js";
                 moneyDisplayManager.displayItems(["gold", "tokens"]);
             };
         }
-        viewPilotInDepth(pilot, isStore, isChanging, slotId) { // slotId is for locating the owner shape
+
+        static viewPilotInDepth(pilot, isStore, isChanging, slotId) { // slotId is for locating the owner shape
             moneyDisplayManager.displayItems(["gold", "tokens"]);
             elements.pilotViewUI.style.display = "block";
 
@@ -3119,7 +3154,7 @@ import projectile from "../client/src/game/projectile.js";
                 if (parentShape.level == 25) {
                     this.pilotHeaderDisplayName.innerHTML = `${parentShape.name} <span style="color: #ffff00;">MK3</span>`;
                 } else if (parentShape.level > 12) {
-                    this.pilotHeaderDisplayName.innerHTML = `${parentShape.name} <span style="color: #00ff00;">MK2</span>` ;
+                    this.pilotHeaderDisplayName.innerHTML = `${parentShape.name} <span style="color: #00ff00;">MK2</span>`;
                 } else {
                     this.pilotHeaderDisplayName.innerHTML = parentShape.name;
                 }
@@ -3201,7 +3236,7 @@ import projectile from "../client/src/game/projectile.js";
                     this.pilotViewEquipButton.onclick = () => {
                         doDarkModeTransition();
                         elements.pilotViewUI.style.display = "none";
-                        
+
                         let oldPilot = userProfile.pilots.find(e => e.owner == slotId);
                         if (oldPilot) {
                             oldPilot.owner = null;
@@ -3273,13 +3308,14 @@ import projectile from "../client/src/game/projectile.js";
                 }
             };
         }
-        needToBeEquippedMessage(buttonPressed) {
+
+        static needToBeEquippedMessage(buttonPressed) {
             let mainBody = document.createElement("div");
             mainBody.style = "position: absolute; top: 0px; left: 0px; width: 100%; height: 100%;";
 
             let needToBeEquipped = document.createElement("div");
             needToBeEquipped.style = "position: absolute; display: flex; align-items: center; justify-content: center; flex-direction: column; left: 0px; top: 50%; transform: translateY(-50%); width: 100%; height: 500px;";
-            
+
             mainBody.appendChild(needToBeEquipped);
             document.body.appendChild(mainBody);
 
@@ -3311,7 +3347,8 @@ import projectile from "../client/src/game/projectile.js";
                 mainBody.remove();
             };
         }
-        viewInDepth(shape, isStore, isChanging, slotId, isModuleData) {
+
+        static viewInDepth(shape, isStore, isChanging, slotId, isModuleData) {
             let isUpgrading = false;
 
             doDarkModeTransition();
@@ -3804,7 +3841,8 @@ import projectile from "../client/src/game/projectile.js";
                 }
             }
         }
-        drawChooseShapeDisplay(item, statsDisplay, statAmount, type) {
+
+        static drawChooseShapeDisplay(item, statsDisplay, statAmount, type) {
             let data = ["healthData", "speedData"];
 
             if (type == "drone") {
@@ -3863,7 +3901,8 @@ import projectile from "../client/src/game/projectile.js";
                 }
             }
         }
-        displayChangeSlot(tmpItems, createObjs, slot, oldShape, type) {
+
+        static displayChangeSlot(tmpItems, createObjs, slot, oldShape, type) {
             let items = createObjs ? [] : tmpItems;
 
             if (createObjs) {
@@ -3995,7 +4034,8 @@ import projectile from "../client/src/game/projectile.js";
                 this.changeShapeDisplay.appendChild(element);
             }
         }
-        changeSlot(slot, oldShape, type, nextPG) {
+
+        static changeSlot(slot, oldShape, type, nextPG) {
             doDarkModeTransition();
             if (type == "drone") {
                 moneyDisplayManager.displayItems(["microchips"]);
@@ -4072,15 +4112,15 @@ import projectile from "../client/src/game/projectile.js";
                 doDarkModeTransition();
                 if (nextPG) {
                     if (type == "pilot") {
-                        
+
                         elements.chooseShapesUI.style.display = "none";
                         elements.pilotViewUI.style.display = "block";
-    
+
                         this.viewPilotInDepth(nextPG, false, false, nextPG.owner);
                     } else {
                         elements.chooseShapesUI.style.display = "none";
                         elements.droneViewUI.style.display = "block";
-    
+
                         this.viewDroneInDepth(nextPG, false, false, nextPG.owner);
                     }
                 } else if (oldShape) {
@@ -4095,7 +4135,8 @@ import projectile from "../client/src/game/projectile.js";
                 }
             };
         }
-        updateHanger() {
+
+        static updateHanger() {
             elements.hangerUI.innerHTML = "";
             moneyDisplayManager.displayItems(["gold", "silver", "platinum"]);
             moneyDisplayManager.holderElement.style.top = null;
@@ -4184,17 +4225,17 @@ import projectile from "../client/src/game/projectile.js";
                 elements.hangerUI.appendChild(squareItem);
             }
         }
-    };
+    }
 
-    var moneyDisplayManager = new class {
-        constructor() {
-            this.holderElement = UTILS.getElement("moneyDisplayHolder");
-            this.items = [];
-        }
-        updateItems() {
+    class moneyDisplayManager {
+        static holderElement = UTILS.getElement("moneyDisplayHolder");
+        static items = [];
+
+        static updateItems() {
             this.displayItems(this.items);
         }
-        displayItems(items) {
+
+        static displayItems(items) {
             this.items = items;
             this.holderElement.innerHTML = "";
             if (!items.length) {
@@ -4219,16 +4260,16 @@ import projectile from "../client/src/game/projectile.js";
                 this.holderElement.appendChild(tmpElement);
             }
         }
-    };
+    }
 
-    var EquipmentBuilder = new class {
+    class EquipmentBuilder {
 
         /**
          * compresses the userProfile to a readable array for the Worker to process :)
          * @returns {array}
          */
 
-        player() {
+        static player() {
             let shapes = [];
 
             let equippedShape = userProfile.shapes.filter(e => e.slot >= 0);
@@ -4288,7 +4329,7 @@ import projectile from "../client/src/game/projectile.js";
             return shapes;
         }
 
-        fetchRandWeapon(type, weaponAvgTier, weaponAvgLevel, W) {
+        static fetchRandWeapon(type, weaponAvgTier, weaponAvgLevel, W) {
             let weapons = items.weapons.filter(e => e.type == type && e.tier == weaponAvgTier);
 
             while (!weapons.length) {
@@ -4308,7 +4349,7 @@ import projectile from "../client/src/game/projectile.js";
             };
         }
 
-        fetchRandModule(type, moduleAvgTier, moduleAvgLevel) {
+        static fetchRandModule(type, moduleAvgTier, moduleAvgLevel) {
             let modules = items.modules.filter(e => (type == "Universal" ? true : e.type == type) && e.tier == moduleAvgTier);
 
             while (!modules.length) {
@@ -4325,7 +4366,7 @@ import projectile from "../client/src/game/projectile.js";
             };;
         }
 
-        create(hangerSlots, shapeAvgTier, shapeAvgLevel, weaponAvgTier, weaponAvgLevel, moduleAvgTier, moduleAvgLevel) {
+        static create(hangerSlots, shapeAvgTier, shapeAvgLevel, weaponAvgTier, weaponAvgLevel, moduleAvgTier, moduleAvgLevel) {
             let allShapes = [];
             let shapes = items.shapes.filter(e => e.tier == shapeAvgTier);
 
@@ -4371,7 +4412,7 @@ import projectile from "../client/src/game/projectile.js";
 
             return allShapes;
         }
-    };
+    }
 
     var keys = {};
     var moveKeys = {
@@ -4439,34 +4480,31 @@ import projectile from "../client/src/game/projectile.js";
         return this;
     }
 
-    var renderer = new class {
-        constructor() {
-            this.fps = 0;
-            this.fpsCount = 0;
-            this.lastUpdateFPS = Date.now();
+    class renderer {
+        static fps = 0;
+        static fpsCount = 0;
+        static lastUpdateFPS = Date.now();
 
+        static lastUpdate = 0;
+        static start = false;
+        static cam = {
+            x: 0,
+            y: 0
+        };
 
-            this.lastUpdate = 0;
-            this.start = false;
-            this.cam = {
-                x: 0,
-                y: 0
-            };
+        static offset = {
+            x: 0,
+            y: 0
+        };
 
-            this.offset = {
-                x: 0,
-                y: 0
-            };
+        static screenSize = {
+            x: config.maxScreenWidth,
+            y: config.maxScreenHeight
+        };
 
-            this.screenSize = {
-                x: config.maxScreenWidth,
-                y: config.maxScreenHeight
-            };
+        static aimSendDate = 100;
 
-            this.aimSendDate = 100;
-        }
-
-        resize() {
+        static resize() {
             let maxScreenWidth = this.screenSize.x;
             let maxScreenHeight = this.screenSize.y;
             let screenWidth = window.innerWidth;
@@ -4488,7 +4526,7 @@ import projectile from "../client/src/game/projectile.js";
             );
         }
 
-        renderBorders() {
+        static renderBorders() {
             ctx.fillStyle = "#000";
             ctx.globalAlpha = 0.18;
             if (this.offset.x <= 0) {
@@ -4515,7 +4553,7 @@ import projectile from "../client/src/game/projectile.js";
             }
         }
 
-        renderPlayers() {
+        static renderPlayers() {
             ctx.globalAlpha = 1;
             for (let i = 0; i < GameManager.players.length; i++) {
                 let tmpObj = GameManager.players[i];
@@ -4557,7 +4595,7 @@ import projectile from "../client/src/game/projectile.js";
             }
         }
 
-        renderGrid() {
+        static renderGrid() {
             ctx.lineWidth = 4;
             ctx.strokeStyle = "#000";
             ctx.globalAlpha = 0.06;
@@ -4580,7 +4618,7 @@ import projectile from "../client/src/game/projectile.js";
             ctx.stroke();
         }
 
-        renderProjectiles(delta) {
+        static renderProjectiles(delta) {
             ctx.globalAlpha = 1;
 
             for (let i = 0; i < GameManager.projectiles.length; i++) {
@@ -4608,7 +4646,7 @@ import projectile from "../client/src/game/projectile.js";
             }
         }
 
-        renderBuildings(delta, layer) {
+        static renderBuildings(delta, layer) {
             ctx.globalAlpha = 1;
 
             for (let i = 0; i < GameManager.buildings.length; i++) {
@@ -4683,7 +4721,7 @@ import projectile from "../client/src/game/projectile.js";
             }
         }
 
-        render() {
+        static render() {
             this.fpsCount++;
 
             if (Date.now() - this.lastUpdateFPS >= 1e3) {
@@ -4832,245 +4870,243 @@ import projectile from "../client/src/game/projectile.js";
     var beaconBarDisplays = ["allyBeaconProgress", "enemyBeaconProgress"];
     var playersVisualDisplays = ["allyAliveDisplay", "enemyAliveDisplay"];
 
-    var GameManager = new class {
-        constructor() {
-            this.lastMoveDir;
-            this.players = [];
-            this.buildings = [];
-            this.projectiles = [];
-            this.weaponElements = [];
-            this.wpnParents = [];
-            this.map = {};
-            this.pingInterval = null;
-            this.pingLastUpdate = 0;
+    class GameManager {
+        static lastMoveDir;
+        static players = [];
+        static buildings = [];
+        static projectiles = [];
+        static weaponElements = [];
+        static wpnParents = [];
+        static map = {};
+        static pingInterval = null;
+        static pingLastUpdate = 0;
 
-            this.durationOfGame = 5 * 60 * 1e3;
+        static durationOfGame = 5 * 60 * 1e3;
 
-            this.healthText = UTILS.getElement("healthText");
-            this.healthBar = UTILS.getElement("healthBar");
-            this.grayDamageBar = UTILS.getElement("grayDamageBar");
+        static healthText = UTILS.getElement("healthText");
+        static healthBar = UTILS.getElement("healthBar");
+        static grayDamageBar = UTILS.getElement("grayDamageBar");
 
-            this.serverEvents = {
-                "init": (map, buildings) => {
-                    this.map = map;
-                    this.buildings = buildings;
-                    
-                    this.setUpChooseSlots();
-                    this.startRendering();
-                    updateBeacons();
-                },
-                "updatePlayers": (data) => {
-                    for (let i = 0; i < data.length;) {
-                        let tmpObj = this.players.find(e => e.sid == data[i]);
+        static serverEvents = {
+            "init": (map, buildings) => {
+                this.map = map;
+                this.buildings = buildings;
 
-                        if (!tmpObj) {
-                            tmpObj = new shape(items.shapes.find(e => e.name == data[i + 1]), undefined, true);
+                this.setUpChooseSlots();
+                this.startRendering();
+                updateBeacons();
+            },
+            "updatePlayers": (data) => {
+                for (let i = 0; i < data.length;) {
+                    let tmpObj = this.players.find(e => e.sid == data[i]);
 
-                            if (data[i] == 0) {
-                                player = tmpObj;
-                            }
+                    if (!tmpObj) {
+                        tmpObj = new shape(items.shapes.find(e => e.name == data[i + 1]), undefined, true);
 
-                            tmpObj.sid = data[i];
-                            tmpObj.x = data[i + 2];
-                            tmpObj.y = data[i + 3];
-
-                            this.players.push(tmpObj);
+                        if (data[i] == 0) {
+                            player = tmpObj;
                         }
 
-                        if (tmpObj) {
-                            tmpObj.x1 = tmpObj.x;
-                            tmpObj.y1 = tmpObj.y;
-                            tmpObj.dt = 0;
-                            tmpObj.x2 = data[i + 2];
-                            tmpObj.y2 = data[i + 3];
-                            tmpObj.dir = data[i + 4];
-                            tmpObj.health = data[i + 5];
-                            tmpObj.maxhealth = data[i + 6];
-                            tmpObj.grayDamage = data[i + 7];
-                            tmpObj.isAlly = data[i + 8];
+                        tmpObj.sid = data[i];
+                        tmpObj.x = data[i + 2];
+                        tmpObj.y = data[i + 3];
 
-                            if (player == tmpObj) {
-                                this.updateHealthDisplay();
-                            }
-                        }
-
-                        i += 9;
+                        this.players.push(tmpObj);
                     }
-                },
-                "pingSocket": () => {
-                    this.pingTime = Date.now() - this.pingLastUpdate;
 
-                    elements.pingDisplay.innerText = `${this.pingTime} ms | ${renderer.fps} fps`;
-                },
-                "initializeWeapons": (wpns) => {
-                    elements.weaponsDisplay.innerHTML = "";
-                    this.weaponElements = [];
+                    if (tmpObj) {
+                        tmpObj.x1 = tmpObj.x;
+                        tmpObj.y1 = tmpObj.y;
+                        tmpObj.dt = 0;
+                        tmpObj.x2 = data[i + 2];
+                        tmpObj.y2 = data[i + 3];
+                        tmpObj.dir = data[i + 4];
+                        tmpObj.health = data[i + 5];
+                        tmpObj.maxhealth = data[i + 6];
+                        tmpObj.grayDamage = data[i + 7];
+                        tmpObj.isAlly = data[i + 8];
 
-                    for (let i = 0; i < wpns.length; i++) {
-                        let wpn = wpns[i];
-
-                        let element = document.createElement("div");
-                        element.style = `position: absolute; bottom: ${(115 * i) + 15}px; left: 15px; width: 105px; height: 100px; background-color: rgba(0, 0, 0, .35);`;
-
-                        let iconDisplay = document.createElement("div");
-                        iconDisplay.style = `position: absolute; top: 0px; left: 0px; width: 100px; height; 100px;`;
-
-                        let image = imageManager.getImage(wpn.imageSource);
-                        image.style = "width: 100%; height: 100%;";
-                        iconDisplay.appendChild(image);
-                        element.appendChild(iconDisplay);
-
-                        let ammoHolder = document.createElement("div");
-                        ammoHolder.style = "position: absolute; right: 0px; top: 0px; width: 5px; height: 100%; background-color: rgba(0, 0, 0, .15);";
-
-                        let ammoDisplay = document.createElement("div");
-                        ammoDisplay.style = "position: absolute; bottom: 0px; left: 0px; background-color: white; width: 100%; height: 100%;";
-                        ammoHolder.appendChild(ammoDisplay);
-
-                        element.appendChild(ammoHolder);
-
-                        this.wpnParents.push(element);
-                        this.weaponElements.push(ammoDisplay);
-                        elements.weaponsDisplay.appendChild(element);
-                    }
-                },
-                "updateWeapons": (Data) => {
-                    for (let i = 0; i < Data.length; i++) {
-                        let data = Data[i];
-
-                        this.weaponElements[data[0]].style.height = `${data[1] * 100}%`;
-                    }
-                },
-                "reloadWeapon": (id, duration) => {
-                    let element = document.createElement("canvas");
-                    element.width = element.height = 500;
-                    element.style = `position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 100px; height: 100px;`;
-
-                    let ctx = element.getContext("2d");
-
-                    let delta = 0;
-                    let lastUpdate = Date.now();
-
-                    let update = () => {
-                        let d = Date.now() - lastUpdate;
-                        lastUpdate = Date.now();
-                        delta += d;
-
-                        ctx.clearRect(0, 0, 500, 500);
-                        ctx.shadowBlur = 12.5;
-                        ctx.shadowColor = "black";
-                        ctx.strokeStyle = "white";
-                        ctx.lineWidth = 35;
-                        ctx.beginPath();
-                        ctx.arc(250, 250, 200, 0, (Math.PI * 2) * (delta / duration));
-                        ctx.stroke();
-
-                        if (delta < duration) {
-                            window.requestAnimationFrame(update);
-                        } else {
-                            element.remove();
-                        }
-                    };
-                    window.requestAnimationFrame(update);
-
-                    this.wpnParents[id].appendChild(element);
-                },
-                "addProjectile": (x, y, dir, owner, data) => {
-                    let tmp = new projectile(x, y, data.name, data.projectileId, data.range, dir, owner, data.dmg, true);
-                    tmp.sid = data.sid;
-                    tmp.speed += data.extraSpeed;
-
-                    this.projectiles.push(tmp);
-                },
-                "removeProjectile": (sid, time) => {
-                    for (let i = 0; i < this.projectiles.length; i++) {
-                        if (this.projectiles[i].sid == sid) {
-                            if (time) {
-                                this.projectiles[i].range = time;
-                            } else {
-                                this.projectiles.splice(i, 1);
-                            }
-
-                            break;
+                        if (player == tmpObj) {
+                            this.updateHealthDisplay();
                         }
                     }
-                },
-                "beaconUpdate": (sid, points) => {
-                    let tmpObj = this.buildings[sid];
 
-                    tmpObj.capturePoints = (tmpObj.targetCapturePoints || 0);
-                    tmpObj.targetCapturePoints = points;
-                    tmpObj.deltaTime = 0;
+                    i += 9;
+                }
+            },
+            "pingSocket": () => {
+                this.pingTime = Date.now() - this.pingLastUpdate;
 
-                    updateBeacons();
-                },
-                "updateBeaconBars": (indx, points) => {
-                    let element = UTILS.getElement(beaconBarDisplays[indx]);
-                    element.innerHTML = "";
+                elements.pingDisplay.innerText = `${this.pingTime} ms | ${renderer.fps} fps`;
+            },
+            "initializeWeapons": (wpns) => {
+                elements.weaponsDisplay.innerHTML = "";
+                this.weaponElements = [];
 
-                    let bar = document.createElement("div");
-                    bar.style = "position: absolute; top: 0px; height: 100%;";
-                    bar.style.width = `${(points / 300) * 100}%`;
+                for (let i = 0; i < wpns.length; i++) {
+                    let wpn = wpns[i];
 
-                    let num = document.createElement("div");
-                    num.style = "z-index: 213; font-size: 18px; font-weight: 600; color: white;";
-                    num.innerHTML = UTILS.styleNumberWithSpace(points);
+                    let element = document.createElement("div");
+                    element.style = `position: absolute; bottom: ${(115 * i) + 15}px; left: 15px; width: 105px; height: 100px; background-color: rgba(0, 0, 0, .35);`;
 
-                    if (indx == 0) {
-                        num.style.marginLeft = "6px";
-                        num.style.float = "left";
-                        bar.style.left = "0px";
-                        bar.style.backgroundColor = "#00f";
+                    let iconDisplay = document.createElement("div");
+                    iconDisplay.style = `position: absolute; top: 0px; left: 0px; width: 100px; height; 100px;`;
+
+                    let image = imageManager.getImage(wpn.imageSource);
+                    image.style = "width: 100%; height: 100%;";
+                    iconDisplay.appendChild(image);
+                    element.appendChild(iconDisplay);
+
+                    let ammoHolder = document.createElement("div");
+                    ammoHolder.style = "position: absolute; right: 0px; top: 0px; width: 5px; height: 100%; background-color: rgba(0, 0, 0, .15);";
+
+                    let ammoDisplay = document.createElement("div");
+                    ammoDisplay.style = "position: absolute; bottom: 0px; left: 0px; background-color: white; width: 100%; height: 100%;";
+                    ammoHolder.appendChild(ammoDisplay);
+
+                    element.appendChild(ammoHolder);
+
+                    this.wpnParents.push(element);
+                    this.weaponElements.push(ammoDisplay);
+                    elements.weaponsDisplay.appendChild(element);
+                }
+            },
+            "updateWeapons": (Data) => {
+                for (let i = 0; i < Data.length; i++) {
+                    let data = Data[i];
+
+                    this.weaponElements[data[0]].style.height = `${data[1] * 100}%`;
+                }
+            },
+            "reloadWeapon": (id, duration) => {
+                let element = document.createElement("canvas");
+                element.width = element.height = 500;
+                element.style = `position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 100px; height: 100px;`;
+
+                let ctx = element.getContext("2d");
+
+                let delta = 0;
+                let lastUpdate = Date.now();
+
+                let update = () => {
+                    let d = Date.now() - lastUpdate;
+                    lastUpdate = Date.now();
+                    delta += d;
+
+                    ctx.clearRect(0, 0, 500, 500);
+                    ctx.shadowBlur = 12.5;
+                    ctx.shadowColor = "black";
+                    ctx.strokeStyle = "white";
+                    ctx.lineWidth = 35;
+                    ctx.beginPath();
+                    ctx.arc(250, 250, 200, 0, (Math.PI * 2) * (delta / duration));
+                    ctx.stroke();
+
+                    if (delta < duration) {
+                        window.requestAnimationFrame(update);
                     } else {
-                        num.style.marginRight = "6px";
-                        num.style.float = "right";
-                        bar.style.right = "0px";
-                        bar.style.backgroundColor = "#f00";
+                        element.remove();
                     }
+                };
+                window.requestAnimationFrame(update);
 
-                    element.appendChild(num);
-                    element.appendChild(bar);
-                },
-                "updatePlayerDisplay": (allies, enemies) => {
-                    for (let i = 0; i < playersVisualDisplays.length; i++) {
-                        let element = UTILS.getElement(playersVisualDisplays[i]);
+                this.wpnParents[id].appendChild(element);
+            },
+            "addProjectile": (x, y, dir, owner, data) => {
+                let tmp = new projectile(x, y, data.name, data.projectileId, data.range, dir, owner, data.dmg, true);
+                tmp.sid = data.sid;
+                tmp.speed += data.extraSpeed;
 
-                        element.innerHTML = "";
-
-                        for (let t = 0; t < 5; t++) {
-                            let box = document.createElement("div");
-                            box.style = "width: 30px; height: 30px; border-radius: 4px; background-color: rgb(0, 0, 0, .4);";
-
-                            if (i) {
-                                box.style.marginLeft = "4px";
-                            } else {
-                                box.style.marginRight = "4px";
-                            }
-
-                            if ((i ? enemies : allies) > 0) {
-                                if (i) {
-                                    box.style.backgroundColor = "#f00";
-                                    enemies--;
-                                } else {
-                                    box.style.backgroundColor = "#00f";
-                                    allies--;
-                                }
-                            }
-
-                            element.appendChild(box);
+                this.projectiles.push(tmp);
+            },
+            "removeProjectile": (sid, time) => {
+                for (let i = 0; i < this.projectiles.length; i++) {
+                    if (this.projectiles[i].sid == sid) {
+                        if (time) {
+                            this.projectiles[i].range = time;
+                        } else {
+                            this.projectiles.splice(i, 1);
                         }
+
+                        break;
                     }
                 }
-            };
-        }
+            },
+            "beaconUpdate": (sid, points) => {
+                let tmpObj = this.buildings[sid];
 
-        updateHealthDisplay() {
+                tmpObj.capturePoints = (tmpObj.targetCapturePoints || 0);
+                tmpObj.targetCapturePoints = points;
+                tmpObj.deltaTime = 0;
+
+                updateBeacons();
+            },
+            "updateBeaconBars": (indx, points) => {
+                let element = UTILS.getElement(beaconBarDisplays[indx]);
+                element.innerHTML = "";
+
+                let bar = document.createElement("div");
+                bar.style = "position: absolute; top: 0px; height: 100%;";
+                bar.style.width = `${(points / 300) * 100}%`;
+
+                let num = document.createElement("div");
+                num.style = "z-index: 213; font-size: 18px; font-weight: 600; color: white;";
+                num.innerHTML = UTILS.styleNumberWithSpace(points);
+
+                if (indx == 0) {
+                    num.style.marginLeft = "6px";
+                    num.style.float = "left";
+                    bar.style.left = "0px";
+                    bar.style.backgroundColor = "#00f";
+                } else {
+                    num.style.position = "absolute";
+                    num.style.right = "6px";
+                    bar.style.right = "0px";
+                    bar.style.backgroundColor = "#f00";
+                }
+
+                element.appendChild(num);
+                element.appendChild(bar);
+            },
+            "updatePlayerDisplay": (allies, enemies) => {
+                for (let i = 0; i < playersVisualDisplays.length; i++) {
+                    let element = UTILS.getElement(playersVisualDisplays[i]);
+
+                    element.innerHTML = "";
+
+                    for (let t = 0; t < 5; t++) {
+                        let box = document.createElement("div");
+                        box.style = "width: 30px; height: 30px; border-radius: 4px; background-color: rgb(0, 0, 0, .4);";
+
+                        if (i) {
+                            box.style.marginLeft = "4px";
+                        } else {
+                            box.style.marginRight = "4px";
+                        }
+
+                        if ((i ? enemies : allies) > 0) {
+                            if (i) {
+                                box.style.backgroundColor = "#f00";
+                                enemies--;
+                            } else {
+                                box.style.backgroundColor = "#00f";
+                                allies--;
+                            }
+                        }
+
+                        element.appendChild(box);
+                    }
+                }
+            }
+        };
+
+        static updateHealthDisplay() {
             this.grayDamageBar.style.width = `${(player.grayDamage / player.maxhealth) * 100}%`;
             this.healthBar.style.width = `${(player.health / player.maxhealth) * 100}%`;
             this.healthText.innerText = UTILS.styleNumberWithSpace(player.health);
         }
 
-        updateMovement() {
+        static updateMovement() {
             let dx = 0;
             let dy = 0;
 
@@ -5088,12 +5124,12 @@ import projectile from "../client/src/game/projectile.js";
             }
         }
 
-        startRendering() {
+        static startRendering() {
             renderer.start = true;
             renderer.render();
         }
 
-        setUpChooseSlots() {
+        static setUpChooseSlots() {
             let containerWidth = window.innerWidth - 200;
             let containerHeight = window.innerHeight;
             let gap = 10;
@@ -5163,14 +5199,14 @@ import projectile from "../client/src/game/projectile.js";
             }
         }
 
-        send(type) {
+        static send(type) {
             let data = Array.prototype.slice.call(arguments, 1);
             let binary = msgpack.encode([type, data]);
 
             this.socket.postMessage(binary);
         }
 
-        getAvgData(Data, items) {
+        static getAvgData(Data, items) {
             let avgTier = 0;
             let avgLevel = 0;
 
@@ -5189,7 +5225,7 @@ import projectile from "../client/src/game/projectile.js";
             return [(avgTier || 0), (avgLevel || 0)];
         }
 
-        start() {
+        static start() {
             console.clear();
             let playerData = EquipmentBuilder.player();
 

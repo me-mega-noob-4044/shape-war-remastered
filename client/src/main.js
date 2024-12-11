@@ -265,10 +265,10 @@ var game = new class {
 
                             let tmpAdd = (player.isAlly ? 1 : -1);
 
-                            if (tmpAdd) {
+                            if (tmpAdd == 1) {
                                 tmpObj.capturePoints = Math.min(6e3, tmpObj.capturePoints + (tmpAdd * config.gameUpdateSpeed));
                             } else {
-                                tmpObj.capturePoints = Math.max(6e3, tmpObj.capturePoints + (tmpAdd * config.gameUpdateSpeed));
+                                tmpObj.capturePoints = Math.max(-6e3, tmpObj.capturePoints + (tmpAdd * config.gameUpdateSpeed));
                             }
 
                             this.send("beaconUpdate", i, tmpObj.capturePoints);
@@ -319,7 +319,7 @@ var game = new class {
 
                 if (tmpObj.name == "beacon") {
                     if (Math.abs(tmpObj.capturePoints) == 6e3) {
-                        let indx = (tmpObj.capturePoints == -6) * 1;
+                        let indx = (tmpObj.capturePoints == -6e3) * 1;
 
                         this.points[indx] = Math.min(this.points[indx] + 1, 300);
                         this.send("updateBeaconBars", indx, this.points[indx]);
