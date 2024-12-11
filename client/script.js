@@ -15,7 +15,6 @@ import projectile from "../client/src/game/projectile.js";
     var elements = {
         loadingText: UTILS.getElement("loadingText"),
         gameLoad: UTILS.getElement("gameLoad"),
-        gameCanvas: UTILS.getElement("gameCanvas"),
         hangerUI: UTILS.getElement("hangerUI"),
         shapeViewUI: UTILS.getElement("shapeViewUI"),
         darkFadeTransition: UTILS.getElement("darkFadeTransition"),
@@ -434,7 +433,6 @@ import projectile from "../client/src/game/projectile.js";
 
     var canvasDrawer = new class {
         constructor() {
-            this.mainContext = elements.gameCanvas.getContext("2d");
             this.bulletImages = {};
             this.bulletSprites = {};
         }
@@ -4469,13 +4467,25 @@ import projectile from "../client/src/game/projectile.js";
         }
 
         resize() {
-            gameCanvas.width = window.innerWidth;
-            gameCanvas.height = window.innerHeight;
-            // gameCanvas.style.width = `${window.innerWidth}px`;
-            // gameCanvas.style.height = `${window.innerHeight}px`;
+            let maxScreenWidth = this.screenSize.x;
+            let maxScreenHeight = this.screenSize.y;
+            let screenWidth = window.innerWidth;
+            let screenHeight = window.innerHeight;
 
-            let scaleFillNative = Math.max(window.innerWidth / this.screenSize.x, window.innerHeight / this.screenSize.y);
-            ctx.setTransform(scaleFillNative, 0, 0, scaleFillNative, (window.innerWidth - (this.screenSize.x * scaleFillNative)) / 2,(window.innerHeight - (this.screenSize.y * scaleFillNative)) / 2);
+            let scaleFillNative = Math.max(screenWidth / maxScreenWidth, screenHeight / maxScreenHeight);
+
+            gameCanvas.width = screenWidth;
+            gameCanvas.height = screenHeight;
+            gameCanvas.style.width = screenWidth + "px";
+            gameCanvas.style.height = screenHeight + "px";
+
+            ctx.setTransform(
+                scaleFillNative, 0,
+                0,
+                scaleFillNative,
+                (screenWidth - (maxScreenWidth * scaleFillNative)) / 2,
+                (screenHeight - (maxScreenHeight * scaleFillNative)) / 2
+            );
         }
 
         renderBorders() {
@@ -4775,6 +4785,7 @@ import projectile from "../client/src/game/projectile.js";
         if (elements.hangerUI.style.display == "block") {
             hangerDisplay.updateHanger();
         }
+
         renderer.resize();
     }
     window.addEventListener("resize", resize);
