@@ -1,5 +1,3 @@
-import AutoPush from "./AutoPush.js";
-
 class PathNode {
     constructor(x, y, wall) {
         this.x = x;
@@ -120,7 +118,7 @@ export default class Pathfinder {
         `;
     }
 
-    static search(start, end, { map, show }) {
+    static search(start, end, { map, show, gameObjects }) {
         let cellRadius = 10;
         let grid = [];
 
@@ -150,7 +148,11 @@ export default class Pathfinder {
 
                 if (tmp.x <= start.scale || tmp.x >= map.x - start.scale || tmp.y <= start.scale || tmp.y >= map.y - start.scale) continue;
 
-                grid.push(new PathNode(tmp.x, tmp.y));
+                if (gameObjects.find(e => tmp.x >= e.x - start.scale && tmp.x <= e.x + e.width + start.scale && tmp.y >= e.y - start.scale && tmp.y <= e.y + e.height + start.scale)) {
+                    grid.push(new PathNode(tmp.x, tmp.y, true));
+                } else {
+                    grid.push(new PathNode(tmp.x, tmp.y));
+                }
             }
         }
 

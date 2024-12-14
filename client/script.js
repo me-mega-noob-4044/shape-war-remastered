@@ -10,6 +10,7 @@ import pilot from "../src/js/pilot.js";
 import skill from "../src/js/skill.js";
 import msgpack from "../src/js/msgpack.js";
 import projectile from "../client/src/game/projectile.js";
+import pathfinding from "../client/src/game/pathfinding.js";
 
 (function () {
     var elements = {
@@ -4811,6 +4812,20 @@ import projectile from "../client/src/game/projectile.js";
             ctx.fillStyle = "rgba(0, 0, 70, 0.35)";
             ctx.fillRect(0, 0, this.screenSize.x, this.screenSize.y);
 
+            if (GameManager.grid) {
+                ctx.globalAlpha = 1;
+    
+                for (let i = 0; i < GameManager.grid.length; i++) {
+                    let data = GameManager.grid[i];
+    
+                    ctx.save();
+                    ctx.translate(data.x - this.offset.x, data.y - this.offset.y);
+                    ctx.fillStyle = data.path ? "rgb(0, 255, 0, .6)" : data.wall ? "rgb(255, 255, 255, .4)" : "rgb(0, 0, 0, .4)";
+                    canvasDrawer.drawCircle(0, 0, ctx, 10, true, false);
+                    ctx.restore();
+                }
+            }
+
             if (renderer.start) {
                 window.requestAnimationFrame(() => {
                     this.render();
@@ -5288,7 +5303,20 @@ import projectile from "../client/src/game/projectile.js";
                 this.send("new", tmp, i < allies.length ? true : false);
             }
         }
-    };
+    }
+
+    document.addEventListener("keydown", (event) => {
+        if (event.key == "P") {
+            GameManager.grid = pathfinding.search(player, {
+                x: player.x + 1e3,
+                y: player.y
+            }, {
+                show: true,
+                map: GameManager.map,
+                gameObjects: GameManager.buildings
+            });
+        }
+    })
 
     elements.toBattleButton.onclick = () => {
         GameManager.start();
