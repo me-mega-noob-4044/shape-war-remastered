@@ -1,3 +1,6 @@
+import * as UTILS from "../../../src/js/utils.js";
+import { players } from "../main.js";
+
 class PathNode {
     constructor(x, y, wall) {
         this.x = x;
@@ -119,17 +122,17 @@ export default class Pathfinder {
     }
 
     static search(start, end, { map, show, gameObjects }) {
-        let cellRadius = 10;
+        let cellRadius = 15;
         let grid = [];
 
         let min = {
-            x: Math.floor(Math.min(start.x2, end.x) / cellRadius * cellRadius) - (cellRadius * 2) * 30,
-            y: Math.floor(Math.min(start.y2, end.y) / cellRadius * cellRadius) - (cellRadius * 2) * 30
+            x: Math.floor(Math.min(start.x2, end.x) / cellRadius * cellRadius) - (cellRadius * 2) * 15,
+            y: Math.floor(Math.min(start.y2, end.y) / cellRadius * cellRadius) - (cellRadius * 2) * 15
         };
 
         let max = {
-            x: Math.floor(Math.max(start.x2, end.x) / cellRadius * cellRadius) + (cellRadius * 2) * 30,
-            y: Math.floor(Math.max(start.y2, end.y) / cellRadius * cellRadius) + (cellRadius * 2) * 30
+            x: Math.floor(Math.max(start.x2, end.x) / cellRadius * cellRadius) + (cellRadius * 2) * 15,
+            y: Math.floor(Math.max(start.y2, end.y) / cellRadius * cellRadius) + (cellRadius * 2) * 15
         };
 
         let difference = { x: max.x - min.x, y: max.y - min.y };
@@ -150,6 +153,8 @@ export default class Pathfinder {
 
                 if (gameObjects.find(e => tmp.x >= e.x - start.scale && tmp.x <= e.x + e.width + start.scale && tmp.y >= e.y - start.scale && tmp.y <= e.y + e.height + start.scale)) {
                     grid.push(new PathNode(tmp.x, tmp.y, true));
+                } else if (gameObjects.find(e => e.name == "healing beacon" && UTILS.getDistance(e, tmp) <= start.scale + 60)) {
+                    grid.push(new PathNode(tmp.x, tmp.y, true));
                 } else {
                     grid.push(new PathNode(tmp.x, tmp.y));
                 }
@@ -169,16 +174,20 @@ export default class Pathfinder {
 
             worker.onmessage = (event) => {
                 if (typeof event.data == "object") {
-                    /*if (AutoPush.pathId == id) {
-                        AutoPush.pathData = event.data;
-                        AutoPush.pathIndx = 0;
-                    }*/
+                    let client = players.find(e => e.pathId == id);
+
+                    if (client) {
+                        client.pathData = event.data;
+                        client.pathIndx = 0;
+                    }
                 } else {
+                    let client = players.find(e => e.pathId == id);
+
                     console.log("No path found.");
 
-                    /*if (AutoPush.pathId == id) {
-                        AutoPush.pathId = -1;
-                    }*/
+                    if (AutoPush.pathId == id) {
+                        client.pathId = -1;
+                    }
                 }
 
                 worker.terminate();

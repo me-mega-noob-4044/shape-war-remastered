@@ -5,9 +5,9 @@ import config from "../../src/js/config.js";
 import projectile from "./game/projectile.js";
 import * as UTILS from "../../src/js/utils.js";
 
-var players = [];
-var buildings = [];
-var projectiles = [];
+export const players = [];
+const buildings = [];
+const projectiles = [];
 
 function groupWeapons(player) {
     let data = [];

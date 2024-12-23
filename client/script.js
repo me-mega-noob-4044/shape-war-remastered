@@ -4821,7 +4821,7 @@ import pathfinding from "../client/src/game/pathfinding.js";
                     ctx.save();
                     ctx.translate(data.x - this.offset.x, data.y - this.offset.y);
                     ctx.fillStyle = data.path ? "rgb(0, 255, 0, .6)" : data.wall ? "rgb(255, 255, 255, .4)" : "rgb(0, 0, 0, .4)";
-                    canvasDrawer.drawCircle(0, 0, ctx, 10, true, false);
+                    canvasDrawer.drawCircle(0, 0, ctx, 15, true, false);
                     ctx.restore();
                 }
             }
