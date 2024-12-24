@@ -4,6 +4,7 @@ import config from "./config.js";
 import weapon from "./weapon.js";
 import module from "./module.js";
 import * as UTILS from "./utils.js";
+import Pathfinder from "../../client/src/game/pathfinding.js";
 
 function getMk3Amount(tmp) {
     let maxNumber = tmp.base;
@@ -198,6 +199,10 @@ export default class {
         this.indx = indx;
         this.sid = indx;
 
+        this.pathData = null;
+        this.pathId = null;
+        this.pathType = "";
+
         this.isAlly = !!isUser;
 
         this.isAttacking = 0;
@@ -390,7 +395,32 @@ export default class {
         shape.dir %= PI2;
     }
 
-    aiMovement(shape, buildings) {
+    movePathfind(player) {
+        let nearestDistance = Infinity;
+        this.pathIndx = Infinity;
+
+        for (let i = 0; i < this.pathData.length; i++) {
+            let data = this.pathData[i];
+            let tmpDistance = UTILS.getDistance(data, player);
+
+            if (tmpDistance <= nearestDistance) {
+                this.pathIndx = i;
+                nearestDistance = tmpDistance;
+            }
+        }
+
+        this.pathIndx++;
+
+        let tmp = this.pathData[this.pathIndx];
+
+        if (tmp && player) {
+            return UTILS.getDirection(tmp, player);
+        } else {
+            return undefined;
+        }
+    }
+
+    aiMovement(shape, map, buildings) {
         this.moveDir = undefined;
 
         let nearestBeacon = buildings
@@ -398,7 +428,21 @@ export default class {
             .sort((a, b) => UTILS.getDistance(a, shape) - UTILS.getDistance(b, shape))[0];
 
         if (nearestBeacon && UTILS.getDistance(nearestBeacon, shape) > 300) {
-            this.moveDir = UTILS.getDirection(nearestBeacon, shape);
+            if (this.pathType == `beacon${nearestBeacon.sid}`) {
+                if (this.pathData) {
+                    this.moveDir = this.movePathfind(shape);
+                } else {
+                    this.moveDir = UTILS.getDirection(nearestBeacon, shape);
+                }
+            } else {
+                let id = Pathfinder.search(shape, nearestBeacon, {
+                    map
+                });
+
+                this.pathData = null;
+                this.pathId = id;
+                this.pathType = `beacon${nearestBeacon.sid}`;
+            }
         }
     }
 
@@ -406,7 +450,7 @@ export default class {
         this.updateDir(shape);
 
         if (this.isUser != "me") {
-            this.aiMovement(shape, buildings);
+            this.aiMovement(shape, map, buildings);
         }
 
         this.handleMovement(shape, buildings);
@@ -426,6 +470,10 @@ export default class {
                 let shape = this.shapes[this.chooseIndex];
 
                 if (shape) {
+                    this.pathData = null;
+                    this.pathId = -1;
+                    this.pathType = "";
+
                     if (this.isAlly) {
                         shape.x = randIntCoords(this.Game.map.locations[this.Game.spawnIndx].x);
                         shape.y = randIntCoords(this.Game.map.locations[this.Game.spawnIndx].y);

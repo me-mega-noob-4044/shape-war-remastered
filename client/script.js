@@ -5307,14 +5307,14 @@ import pathfinding from "../client/src/game/pathfinding.js";
 
     document.addEventListener("keydown", (event) => {
         if (event.key == "P") {
-            GameManager.grid = pathfinding.search(player, {
-                x: player.x + 1e3,
-                y: player.y
+            /*GameManager.grid = pathfinding.search(player, {
+                x: player.x + 3e3,
+                y: player.y + 3e3
             }, {
                 show: true,
                 map: GameManager.map,
                 gameObjects: GameManager.buildings
-            });
+            });*/
         }
     })
 

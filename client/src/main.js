@@ -6,8 +6,8 @@ import projectile from "./game/projectile.js";
 import * as UTILS from "../../src/js/utils.js";
 
 export const players = [];
-const buildings = [];
-const projectiles = [];
+export const buildings = [];
+export const projectiles = [];
 
 function groupWeapons(player) {
     let data = [];
@@ -52,9 +52,16 @@ function randIntCoords(e) {
     return UTILS.randInt(e - 300, e + 300);
 }
 
+var done = false;
+
 var clientEvents = {
     "new": (data, isUser) => {
         let indx = players.length;
+
+        if (isUser != "me") {
+            if (done) return;
+            done = true;
+        }
 
         let tmp = new player(data, isUser, game, indx);
         players.push(tmp);

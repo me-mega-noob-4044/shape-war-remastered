@@ -1,5 +1,5 @@
 import * as UTILS from "../../../src/js/utils.js";
-import { players } from "../main.js";
+import { players, buildings } from "../main.js";
 
 class PathNode {
     constructor(x, y, wall) {
@@ -7,7 +7,7 @@ class PathNode {
         this.y = y;
 
         this.walked = false;
-        this.wall = !wall;
+        this.wall = wall;
 
         this.fScore = Infinity;
         this.gScore = Infinity;
@@ -25,7 +25,7 @@ export default class Pathfinder {
         var pathMap = new Map();
         var grid = [];
 
-        const Sqrt2 = Math.sqrt(800); // a^2 + b^2 = c^2
+        const Sqrt2 = Math.sqrt(3200); // a^2 + b^2 = c^2
         var startNode;
         var endNode;
 
@@ -60,15 +60,7 @@ export default class Pathfinder {
             openSet.push(startNode);
 
             while (openSet.length > 0) {
-                let bestNode = openSet[0];
-
-                for (let i = 1; i < openSet.length; i++) {
-                    let node = openSet[i];
-
-                    if (node.fScore < bestNode.fScore || (node.fScore == bestNode.fScore && node.fScore < bestNode.fScore)) {
-                        bestNode = node;
-                    }
-                }
+                let bestNode = openSet.sort((a, b) => a.fScore - b.fScore)[0];
     
                 bestNode.walked = true;
     
@@ -78,7 +70,7 @@ export default class Pathfinder {
                     let neighbor = neighbors[i];
     
                     neighbor.gScore = distance(bestNode, neighbor) + bestNode.gScore;
-                    neighbor.hScore = distance(endNode, neighbor);
+                    neighbor30Score = distance(endNode, neighbor);
                     neighbor.fScore = neighbor.gScore + neighbor.hScore;
     
                     if (neighbor.gScore < (pathMap.get(neighbor) || Infinity)) {
@@ -122,17 +114,17 @@ export default class Pathfinder {
     }
 
     static search(start, end, { map, show, gameObjects }) {
-        let cellRadius = 15;
+        let cellRadius = 20;
         let grid = [];
 
         let min = {
-            x: Math.floor(Math.min(start.x2, end.x) / cellRadius * cellRadius) - (cellRadius * 2) * 15,
-            y: Math.floor(Math.min(start.y2, end.y) / cellRadius * cellRadius) - (cellRadius * 2) * 15
+            x: Math.floor(Math.min(start.x, end.x) / cellRadius * cellRadius) - (cellRadius * 2) * 30,
+            y: Math.floor(Math.min(start.y, end.y) / cellRadius * cellRadius) - (cellRadius * 2) * 30
         };
 
         let max = {
-            x: Math.floor(Math.max(start.x2, end.x) / cellRadius * cellRadius) + (cellRadius * 2) * 15,
-            y: Math.floor(Math.max(start.y2, end.y) / cellRadius * cellRadius) + (cellRadius * 2) * 15
+            x: Math.floor(Math.max(start.x, end.x) / cellRadius * cellRadius) + (cellRadius * 2) * 30,
+            y: Math.floor(Math.max(start.y, end.y) / cellRadius * cellRadius) + (cellRadius * 2) * 30
         };
 
         let difference = { x: max.x - min.x, y: max.y - min.y };
@@ -151,9 +143,9 @@ export default class Pathfinder {
 
                 if (tmp.x <= start.scale || tmp.x >= map.x - start.scale || tmp.y <= start.scale || tmp.y >= map.y - start.scale) continue;
 
-                if (gameObjects.find(e => tmp.x >= e.x - start.scale && tmp.x <= e.x + e.width + start.scale && tmp.y >= e.y - start.scale && tmp.y <= e.y + e.height + start.scale)) {
+                if ((gameObjects || buildings).find(e => tmp.x >= e.x - start.scale && tmp.x <= e.x + e.width + start.scale && tmp.y >= e.y - start.scale && tmp.y <= e.y + e.height + start.scale)) {
                     grid.push(new PathNode(tmp.x, tmp.y, true));
-                } else if (gameObjects.find(e => e.name == "healing beacon" && UTILS.getDistance(e, tmp) <= start.scale + 60)) {
+                } else if ((gameObjects || buildings).find(e => e.name == "healing beacon" && UTILS.getDistance(e, tmp) <= start.scale + 60)) {
                     grid.push(new PathNode(tmp.x, tmp.y, true));
                 } else {
                     grid.push(new PathNode(tmp.x, tmp.y));
@@ -183,11 +175,11 @@ export default class Pathfinder {
                 } else {
                     let client = players.find(e => e.pathId == id);
 
-                    console.log("No path found.");
-
-                    if (AutoPush.pathId == id) {
+                    if (client) {
                         client.pathId = -1;
                     }
+
+                    console.log("No path found.");
                 }
 
                 worker.terminate();

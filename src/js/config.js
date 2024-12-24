@@ -1,8 +1,8 @@
 export default {
     gameUpdateRate: 20,
     gameUpdateSpeed: 1e3 / 20,
-    defaultScreenX: 1980,
-    defaultScreenY: 1080,
+    maxScreenWidth: 1920,
+    maxScreenHeight: 1080,
     tierColors: ["#d3d3d3", "#38b0f5", "#7702bf", "#fcdf00", "#fa0032"],
     droneCost: [0, 40, 60, 90, 100, 100, 100, 120, 120, 130, 140, 1],
     pilotCost: [0, 250, 500, 1e3, 2e3, 4e3, 8e3, 1],
@@ -16,8 +16,6 @@ export default {
         weapons: [0, 4e6, 4.5e6, 5e6, 5.5e6, 6e6, 6.5e6, 7e6, 7.5e6, 8e6, 8.5e6, 9e6]
     }],
     playerDecel: 0.99,
-    maxScreenWidth: 1920,
-    maxScreenHeight: 1080,
     mk2UpgradeCost: 500,
     mk3UpgradeCost: [1, 1, 2, 3, 4],
     mk3EnchantmentIncrease: .1,

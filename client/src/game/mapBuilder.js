@@ -19,6 +19,7 @@ var mapBuilder = new class {
         if (indx == 0) {
             buildings.push({
                 name: "beacon",
+                sid: 0,
                 layer: 0,
                 x: 1700,
                 y: map.height * .75,
@@ -27,6 +28,7 @@ var mapBuilder = new class {
 
             buildings.push({
                 name: "beacon",
+                sid: 1,
                 layer: 0,
                 x: map.width / 2,
                 y: map.height * .25,
@@ -35,6 +37,7 @@ var mapBuilder = new class {
 
             buildings.push({
                 name: "beacon",
+                sid: 2,
                 layer: 0,
                 x: map.width / 2,
                 y: map.height * .75,
@@ -43,6 +46,7 @@ var mapBuilder = new class {
 
             buildings.push({
                 name: "beacon",
+                sid: 3,
                 layer: 0,
                 x: 6300,
                 y: map.height * .25,
@@ -51,6 +55,7 @@ var mapBuilder = new class {
 
             buildings.push({
                 name: "beacon",
+                sid: 4,
                 layer: 0,
                 x: 7015,
                 y: 3785,
