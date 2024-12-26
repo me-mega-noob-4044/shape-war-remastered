@@ -546,6 +546,8 @@ export default class {
                     }
                 }
             }
+
+            this.Game.send("removePlayer", this.sid);
         }
     }
 

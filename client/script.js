@@ -4915,6 +4915,14 @@ import pathfinding from "../client/src/game/pathfinding.js";
                 elements.inGameUI.style.display = "none";
                 elements.chooseShapeUI.style.display = "block";
             },
+            "removePlayer": (sid) => {
+                for (let i = 0; i < this.players.length; i++) {
+                    if (this.players[i].sid == sid) {
+                        this.players.splice(i, 1);
+                        break;
+                    }
+                }
+            },
             "updatePlayers": (data) => {
                 for (let i = 0; i < data.length;) {
                     let tmpObj = this.players.find(e => e.sid == data[i]);
