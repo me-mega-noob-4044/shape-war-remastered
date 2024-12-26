@@ -39,7 +39,7 @@ import pathfinding from "../client/src/game/pathfinding.js";
             elements.hangerButtonsUI.style.display = "none";
         }
     });
-    hangerUIObserver.observe(elements.hangerUI, { attributes: true});
+    hangerUIObserver.observe(elements.hangerUI, { attributes: true });
 
     var indxRole = ["Tank", "Assault", "Scout", "Support"];
 
@@ -664,25 +664,25 @@ import pathfinding from "../client/src/game/pathfinding.js";
         static error(text) {
             let element = document.createElement("div");
             element.style = `
-            z-index: 1001;
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            width: 550px;
-            height: 300px;
-            background-color: rgb(0, 0, 0, .85);
-            border-radius: 6px;
-            `;
+                z-index: 1001;
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                width: 550px;
+                height: 300px;
+                background-color: rgb(0, 0, 0, .85);
+                border-radius: 6px;
+                `;
 
             element.innerHTML = `
-            <div style="font-weight: 600; display: flex; align-items: center; justify-content: center; position: absolute; color: #fff; text-align: center; font-size: 35px; top: 0px; left: 0px; width: 100%; height: 50px; background: linear-gradient(to right, transparent 0%, transparent 20%, rgb(255, 255, 255, .4) 50%, transparent 80%, transparent 100%);">
-            ATTENTION
-            </div>
-            <div style="color: white; font-weight: 600; font-size: 16px; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);">
-            ${text}
-            </div>
-            `;
+                <div style="font-weight: 600; display: flex; align-items: center; justify-content: center; position: absolute; color: #fff; text-align: center; font-size: 35px; top: 0px; left: 0px; width: 100%; height: 50px; background: linear-gradient(to right, transparent 0%, transparent 20%, rgb(255, 255, 255, .4) 50%, transparent 80%, transparent 100%);">
+                ATTENTION
+                </div>
+                <div style="color: white; font-weight: 600; font-size: 16px; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);">
+                ${text}
+                </div>
+                `;
 
             let button = document.createElement("div");
             button.style = "font-weight: 600; display: flex; align-items: center; justify-content: center; color: white; font-size: 18px; border-radius: 4px; width: 200px; height: 50px; background-color: rgb(255, 255, 255, .75); cursor: pointer; position: absolute; left: 50%; bottom: 10px; transform: translateX(-50%);";
@@ -1093,9 +1093,9 @@ import pathfinding from "../client/src/game/pathfinding.js";
             nameDisplayHolder.style = `position: absolute; display: flex; align-items: center; font-size: 24px; top: 10px; left: 10px; width: calc(100% - ${offsetValue}px);`;
             nameDisplay.style = `margin-left: 8px; display: flex; align-items: center;`;
             nameDisplay.innerHTML = `
-            <span style="color: white;" class="material-symbols-outlined">warning</span>
-            <span style="margin-left: 8px;">${UTILS.capitalizeFirstLetter(wpnType)}</span>
-            `;
+                <span style="color: white;" class="material-symbols-outlined">warning</span>
+                <span style="margin-left: 8px;">${UTILS.capitalizeFirstLetter(wpnType)}</span>
+                `;
 
             let equipCircleElement = document.createElement("div");
             equipCircleElement.style = `position: absolute; top: 15px; right: 15px; height: ${height - 30}px; width: ${height - 30}px; display: flex; align-items: center; justify-content: center; border-radius: 100%; background-color: rgb(0, 0, 0, .25);`;
@@ -1225,8 +1225,8 @@ import pathfinding from "../client/src/game/pathfinding.js";
 
 
             this.shapeViewItemInfoRightDisplay.innerHTML += `
-                <div style="font-weight: 600;">${item.description}</div>
-            `;
+                    <div style="font-weight: 600;">${item.description}</div>
+                `;
 
             let data = ["damageData", "rangeData", "reloadData"];
             let statAmount = 3;
@@ -1353,8 +1353,8 @@ import pathfinding from "../client/src/game/pathfinding.js";
             this.shapeViewInfoRightDisplay.appendChild(industryDisplayHolder);
 
             this.shapeViewInfoRightDisplay.innerHTML += `
-                ${shape.description}
-            `;
+                    ${shape.description}
+                `;
 
             if (shape.abilities.length) {
                 this.shapeViewInfoRightDisplay.innerHTML += `<br><br>Abilit${shape.abilities.length > 1 ? "ities" : "y"}:`
@@ -1362,14 +1362,14 @@ import pathfinding from "../client/src/game/pathfinding.js";
                     let ability = shape.abilities[i];
 
                     this.shapeViewInfoRightDisplay.innerHTML += `
-                    <div style="color: white;">${ability.name} <span style="color: black;">${ability.description}</span></div>
-                    `;
+                        <div style="color: white;">${ability.name} <span style="color: black;">${ability.description}</span></div>
+                        `;
 
                     this.shapeViewInfoRightDisplay.innerHTML += `
-                    <br>Ability Stats (${ability.name}):<br>
-                    ${ability.duration ? `Duration: ${(ability.duration / 1e3)} sec<br>` : ""}
-                    ${ability.reload ? `Cooldown: ${(ability.reload / 1e3)} sec<br>` : ""}
-                    `;
+                        <br>Ability Stats (${ability.name}):<br>
+                        ${ability.duration ? `Duration: ${(ability.duration / 1e3)} sec<br>` : ""}
+                        ${ability.reload ? `Cooldown: ${(ability.reload / 1e3)} sec<br>` : ""}
+                        `;
                 }
             }
 
@@ -1486,10 +1486,10 @@ import pathfinding from "../client/src/game/pathfinding.js";
                         powercellCostDisplay.style = `position: absolute; font-size: 12px; display: flex; align-items: center; top: ${((height / 2) - 20) - ((imgSize / 2) - 5)}px; left: 50%; transform: translateX(-50%); height: 30px;`;
                         if (isModuleData == "Active") {
                             powercellCostDisplay.innerHTML = `
-                            Activate with powercells:
-                            <div style="width: 20px; height: 20px; background-size: 20px 20px; background-image: url('../src/media-files/money/powercells.png');"></div>
-                            ${data.cost}
-                            `;
+                                Activate with powercells:
+                                <div style="width: 20px; height: 20px; background-size: 20px 20px; background-image: url('../src/media-files/money/powercells.png');"></div>
+                                ${data.cost}
+                                `;
                         }
                         element.appendChild(powercellCostDisplay);
 
@@ -1678,9 +1678,9 @@ import pathfinding from "../client/src/game/pathfinding.js";
                                 let element = document.createElement("div");
                                 element.style = "display: flex; font-size: 18px; color: white; align-items: center; height: 50px;";
                                 element.innerHTML = `
-                                    <div class="circle-shape" style="margin: 0px 10px 0px 5px; width: 45px; height: 45px;"></div>
-                                    ${dataValue}
-                                    `;
+                                        <div class="circle-shape" style="margin: 0px 10px 0px 5px; width: 45px; height: 45px;"></div>
+                                        ${dataValue}
+                                        `;
 
                                 leftSideDisplay.appendChild(element);
                             } else if (dataValue != null && dataValue != undefined) {
@@ -1688,9 +1688,9 @@ import pathfinding from "../client/src/game/pathfinding.js";
                                 let offsetLeft = data == "dmg" ? -2.5 : 0;
                                 element.style = `display: flex; margin-left: ${offsetLeft}px; font-size: 18px; color: white; align-items: center; height: 50px;`;
                                 element.innerHTML = `
-                                    <div style="width: 60px; height: 60px; background-size: 60px 60px; background-image: url('${icon}');"></div>
-                                    ${typeof dataValue == "string" ? dataValue : UTILS.styleNumberWithComma(dataValue)}
-                                    `;
+                                        <div style="width: 60px; height: 60px; background-size: 60px 60px; background-image: url('${icon}');"></div>
+                                        ${typeof dataValue == "string" ? dataValue : UTILS.styleNumberWithComma(dataValue)}
+                                        `;
 
                                 leftSideDisplay.appendChild(element);
                             }
@@ -1877,10 +1877,10 @@ import pathfinding from "../client/src/game/pathfinding.js";
                                                 let alertElement = document.createElement("div");
                                                 alertElement.style = "color: white; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-direction: column; width: 550px; height: 325px; border-radius: 4px; background-color: rgb(0, 0, 0, .6);";
                                                 alertElement.innerHTML = `
-                                                <div style="font-size: 24px;">ATTENTION</div>
-                                                <div>You are missing <span style="color: yellow;">${UTILS.styleNumberWithComma(amountNeed)}</span> silver to purchase the upgrade.</div>
-                                                <div>You can use <span style="color: yellow;">gold</span> as a replacement for the missing silver.</div>
-                                                `;
+                                                    <div style="font-size: 24px;">ATTENTION</div>
+                                                    <div>You are missing <span style="color: yellow;">${UTILS.styleNumberWithComma(amountNeed)}</span> silver to purchase the upgrade.</div>
+                                                    <div>You can use <span style="color: yellow;">gold</span> as a replacement for the missing silver.</div>
+                                                    `;
                                                 goldAndSilverElement.appendChild(alertElement);
 
                                                 let buttonsHolder = document.createElement("div");
@@ -1902,12 +1902,12 @@ import pathfinding from "../client/src/game/pathfinding.js";
                                                 let confirmButton = document.createElement("div");
                                                 confirmButton.style = "display: flex; align-items: center; justify-content: center; flex-direction: column; font-weight: 700; font-size: 18px; color: white; margin-left: 10px; width: calc(50% - 5px); height: 100%; background-color: #0f0; border-radius: 4px; cursor: pointer;";
                                                 confirmButton.innerHTML = `
-                                                <div>CONFIRM</div>
-                                                <div style="display: flex; align-items: center; justify-content: center;">
-                                                    <div style="width: 20px; height: 20px; background-size: 20px 20px; background-image: url('../src/media-files/money/gold.png');"></div>
-                                                    <span>${UTILS.styleNumberWithComma(goldCost)}</span>
-                                                </div>
-                                                `;
+                                                    <div>CONFIRM</div>
+                                                    <div style="display: flex; align-items: center; justify-content: center;">
+                                                        <div style="width: 20px; height: 20px; background-size: 20px 20px; background-image: url('../src/media-files/money/gold.png');"></div>
+                                                        <span>${UTILS.styleNumberWithComma(goldCost)}</span>
+                                                    </div>
+                                                    `;
                                                 buttonsHolder.appendChild(confirmButton);
 
                                                 confirmButton.onmouseover = () => {
@@ -2338,10 +2338,10 @@ import pathfinding from "../client/src/game/pathfinding.js";
             this.droneAbilityInfoName.appendChild(name);
 
             this.droneAbilityInfoRightDisplay.innerHTML = `
-            <div class="drone-ability-info-display-header"><div style="margin-left: 4px;">DRONE ABILITY</div></div>
-            <div style="margin-top: 4px; margin-bottom: 4px; margin-left: 4px; font-weight: 600;">${ability.description}</div>
-            <div class="drone-ability-info-display-header"><div style="margin-left: 4px;">CHARACTERISTICS</div></div>
-            `;
+                <div class="drone-ability-info-display-header"><div style="margin-left: 4px;">DRONE ABILITY</div></div>
+                <div style="margin-top: 4px; margin-bottom: 4px; margin-left: 4px; font-weight: 600;">${ability.description}</div>
+                <div class="drone-ability-info-display-header"><div style="margin-left: 4px;">CHARACTERISTICS</div></div>
+                `;
 
             let characteristicsHolder = document.createElement("div");
             characteristicsHolder.style = "margin-top: 4px; margin-bottom: 4px;";
@@ -2393,8 +2393,8 @@ import pathfinding from "../client/src/game/pathfinding.js";
             this.droneAbilityInfoRightDisplay.appendChild(characteristicsHolder);
 
             this.droneAbilityInfoRightDisplay.innerHTML += `
-            <div class="drone-ability-info-display-header"><div style="margin-left: 4px;">PROPERTIES</div></div>
-            `;
+                <div class="drone-ability-info-display-header"><div style="margin-left: 4px;">PROPERTIES</div></div>
+                `;
 
             let propertiesHolder = document.createElement("div");
             propertiesHolder.style = "margin-top: 4px; margin-bottom: 4px;";
@@ -2726,10 +2726,10 @@ import pathfinding from "../client/src/game/pathfinding.js";
                         let alertElement = document.createElement("div");
                         alertElement.style = "color: white; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-direction: column; width: 550px; height: 325px; border-radius: 4px; background-color: rgb(0, 0, 0, .6);";
                         alertElement.innerHTML = `
-                        <div style="font-size: 24px;">ATTENTION</div>
-                        <div>You are missing <span style="color: yellow;">${UTILS.styleNumberWithComma(amountNeed)}</span> microchips to purchase the item.</div>
-                        <div>You can use <span style="color: yellow;">gold</span> as a replacement for the missing microchips.</div>
-                        `;
+                            <div style="font-size: 24px;">ATTENTION</div>
+                            <div>You are missing <span style="color: yellow;">${UTILS.styleNumberWithComma(amountNeed)}</span> microchips to purchase the item.</div>
+                            <div>You can use <span style="color: yellow;">gold</span> as a replacement for the missing microchips.</div>
+                            `;
                         goldAndMicrochipsElement.appendChild(alertElement);
 
                         let buttonsHolder = document.createElement("div");
@@ -2751,12 +2751,12 @@ import pathfinding from "../client/src/game/pathfinding.js";
                         let confirmButton = document.createElement("div");
                         confirmButton.style = "display: flex; align-items: center; justify-content: center; flex-direction: column; font-weight: 700; font-size: 18px; color: white; margin-left: 10px; width: calc(50% - 5px); height: 100%; background-color: #0f0; border-radius: 4px; cursor: pointer;";
                         confirmButton.innerHTML = `
-                        <div>CONFIRM</div>
-                        <div style="display: flex; align-items: center; justify-content: center;">
-                        <div style="width: 20px; height: 20px; background-size: 20px 20px; background-image: url('../src/media-files/money/gold.png');"></div>
-                            <span>${UTILS.styleNumberWithComma(goldCost)}</span>
-                        </div>
-                                    `;
+                            <div>CONFIRM</div>
+                            <div style="display: flex; align-items: center; justify-content: center;">
+                            <div style="width: 20px; height: 20px; background-size: 20px 20px; background-image: url('../src/media-files/money/gold.png');"></div>
+                                <span>${UTILS.styleNumberWithComma(goldCost)}</span>
+                            </div>
+                                        `;
                         buttonsHolder.appendChild(confirmButton);
 
                         confirmButton.onmouseover = () => {
@@ -2891,10 +2891,10 @@ import pathfinding from "../client/src/game/pathfinding.js";
                 let weirdIcon = document.createElement("div");
                 weirdIcon.style = "pointer-events: none; overflow: hidden; display: flex; align-items: center; justify-content: center; margin-left: 5px; width: 45px; height: 45px; border-radius: 2px; background-color: rgba(0, 255, 0, .25);";
                 weirdIcon.innerHTML = `
-                <span style="font-size: 80px; color: rgba(0, 255, 0, .45); font-weight: 400;" class="material-symbols-outlined">
-                    close
-                </span>
-                `;
+                    <span style="font-size: 80px; color: rgba(0, 255, 0, .45); font-weight: 400;" class="material-symbols-outlined">
+                        close
+                    </span>
+                    `;
                 element.appendChild(weirdIcon);
 
                 let textDisplay = document.createElement("div");
@@ -2908,10 +2908,10 @@ import pathfinding from "../client/src/game/pathfinding.js";
                     let addIconHolder = document.createElement("div");
                     addIconHolder.style = "position: absolute; display: flex; align-items: center; justify-content: center; width: 65px; height: 65px; right: 15px; top: 0px;";
                     addIconHolder.innerHTML = `
-                    <span style="font-size: 80px; color: #00ff00;" class="material-symbols-outlined">
-                        add
-                    </span>
-                    `;
+                        <span style="font-size: 80px; color: #00ff00;" class="material-symbols-outlined">
+                            add
+                        </span>
+                        `;
 
                     element.appendChild(addIconHolder);
 
@@ -2927,24 +2927,24 @@ import pathfinding from "../client/src/game/pathfinding.js";
                 let addIconHolder = document.createElement("div");
                 addIconHolder.style = "position: absolute; display: flex; align-items: center; justify-content: center; width: 65px; height: 65px; left: 5px; top: 0px;";
                 addIconHolder.innerHTML = `
-                <span style="font-size: 50px; color: #3d3d3d;" class="material-symbols-outlined">
-                    lock
-                </span>
-                `;
+                    <span style="font-size: 50px; color: #3d3d3d;" class="material-symbols-outlined">
+                        lock
+                    </span>
+                    `;
 
                 element.appendChild(addIconHolder);
 
                 let unlockDisplayHolder = document.createElement("div");
                 unlockDisplayHolder.style = "display: flex; align-items: center; justify-content: center; font-size: 18px; position: absolute; left: 65px; top: 0px; height: 65px;";
                 unlockDisplayHolder.innerHTML = `
-                <span class="material-symbols-outlined">
-                    add
-                </span>
-                skill at level
-                <div style="display: flex; align-items: center; justify-content: center; margin-left: 4px; border-radius: 100%; width: 25px; height: 25px; background-color: ${config.tierColors[tier]};">
-                ${indx + 1}
-                </div>
-                `;
+                    <span class="material-symbols-outlined">
+                        add
+                    </span>
+                    skill at level
+                    <div style="display: flex; align-items: center; justify-content: center; margin-left: 4px; border-radius: 100%; width: 25px; height: 25px; background-color: ${config.tierColors[tier]};">
+                    ${indx + 1}
+                    </div>
+                    `;
                 element.appendChild(unlockDisplayHolder);
             } else if (type == "skill" || type == "selector" || type == "purchase") {
                 if (type == "selector" || type == "purchase") {
@@ -2986,12 +2986,12 @@ import pathfinding from "../client/src/game/pathfinding.js";
                 let dataHolder = document.createElement("div");
                 dataHolder.style = "position: absolute; display: flex; justify-content: center; flex-direction: column; top: 0px; left: 75px; height: 65px; width: calc(100% - 75px);";
                 dataHolder.innerHTML = `
-                <div style="position: relative; color: white; height: 24.5px; font-size: 18px;">
-                    <div style="position: absolute; left: 0px;">${skill.name}</div>
-                    <div style="position: absolute; right: 15px;">${pilotSkillManager.styleSkillValue(skill)}</div>
-                </div>
-                <div style="color: white; margin-top: -5px; font-weight: 500; font-size: 12px;">${skill.description}</div>
-                `;
+                    <div style="position: relative; color: white; height: 24.5px; font-size: 18px;">
+                        <div style="position: absolute; left: 0px;">${skill.name}</div>
+                        <div style="position: absolute; right: 15px;">${pilotSkillManager.styleSkillValue(skill)}</div>
+                    </div>
+                    <div style="color: white; margin-top: -5px; font-weight: 500; font-size: 12px;">${skill.description}</div>
+                    `;
                 element.appendChild(dataHolder);
             }
 
@@ -3323,10 +3323,10 @@ import pathfinding from "../client/src/game/pathfinding.js";
             let alertElement = document.createElement("div");
             alertElement.style = "color: white; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-direction: column; width: 550px; height: 325px; border-radius: 4px; background-color: rgb(0, 0, 0, .6);";
             alertElement.innerHTML = `
-            <div style="font-size: 24px;">ATTENTION</div>
-            <div style="text-align: center;">Shapes have to be equipped in the hanger before you can change ${buttonPressed}.</div>
-            <div>Please equip the shape into your hanger.</div>
-            `;
+                <div style="font-size: 24px;">ATTENTION</div>
+                <div style="text-align: center;">Shapes have to be equipped in the hanger before you can change ${buttonPressed}.</div>
+                <div>Please equip the shape into your hanger.</div>
+                `;
             needToBeEquipped.appendChild(alertElement);
 
             let buttonsHolder = document.createElement("div");
@@ -3676,10 +3676,10 @@ import pathfinding from "../client/src/game/pathfinding.js";
                                     let alertElement = document.createElement("div");
                                     alertElement.style = "color: white; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-direction: column; width: 550px; height: 325px; border-radius: 4px; background-color: rgb(0, 0, 0, .6);";
                                     alertElement.innerHTML = `
-                                    <div style="font-size: 24px;">ATTENTION</div>
-                                    <div>You are missing <span style="color: yellow;">${UTILS.styleNumberWithComma(amountNeed)}</span> silver to purchase the upgrade.</div>
-                                    <div>You can use <span style="color: yellow;">gold</span> as a replacement for the missing silver.</div>
-                                    `;
+                                        <div style="font-size: 24px;">ATTENTION</div>
+                                        <div>You are missing <span style="color: yellow;">${UTILS.styleNumberWithComma(amountNeed)}</span> silver to purchase the upgrade.</div>
+                                        <div>You can use <span style="color: yellow;">gold</span> as a replacement for the missing silver.</div>
+                                        `;
                                     goldAndSilverElement.appendChild(alertElement);
 
                                     let buttonsHolder = document.createElement("div");
@@ -3701,12 +3701,12 @@ import pathfinding from "../client/src/game/pathfinding.js";
                                     let confirmButton = document.createElement("div");
                                     confirmButton.style = "display: flex; align-items: center; justify-content: center; flex-direction: column; font-weight: 700; font-size: 18px; color: white; margin-left: 10px; width: calc(50% - 5px); height: 100%; background-color: #0f0; border-radius: 4px; cursor: pointer;";
                                     confirmButton.innerHTML = `
-                                    <div>CONFIRM</div>
-                                    <div style="display: flex; align-items: center; justify-content: center;">
-                                        <div style="width: 20px; height: 20px; background-size: 20px 20px; background-image: url('../src/media-files/money/gold.png');"></div>
-                                        <span>${UTILS.styleNumberWithComma(goldCost)}</span>
-                                    </div>
-                                    `;
+                                        <div>CONFIRM</div>
+                                        <div style="display: flex; align-items: center; justify-content: center;">
+                                            <div style="width: 20px; height: 20px; background-size: 20px 20px; background-image: url('../src/media-files/money/gold.png');"></div>
+                                            <span>${UTILS.styleNumberWithComma(goldCost)}</span>
+                                        </div>
+                                        `;
                                     buttonsHolder.appendChild(confirmButton);
 
                                     confirmButton.onmouseover = () => {
@@ -4170,9 +4170,9 @@ import pathfinding from "../client/src/game/pathfinding.js";
                         goldImage.style = "width: 40px";
                         if (userProfile.bank.gold - slotData.cost >= 0) squareItem.style.cursor = "pointer";
                         squareItem.innerHTML = `
-                            <div class="hanger-slot-container"><span class="material-symbols-outlined" style="font-size: 96px;">lock</span></div>
-                            <div class="hanger-slot-container" style="font-size: 36px;"></div>
-                            `;
+                                <div class="hanger-slot-container"><span class="material-symbols-outlined" style="font-size: 96px;">lock</span></div>
+                                <div class="hanger-slot-container" style="font-size: 36px;"></div>
+                                `;
                         let element = squareItem.querySelectorAll('.hanger-slot-container')[1];
                         element.appendChild(goldImage);
                         element.innerHTML += UTILS.abbreviateNumber(slotData.cost);
@@ -4189,15 +4189,15 @@ import pathfinding from "../client/src/game/pathfinding.js";
                     squareItem.style.cursor = "pointer";
                     shapeImage.style = "width: 100%; height: 100%;";
                     squareItem.innerHTML = `
-                        <div class="hanger-shape-name" style="color: white;">
-                            <div class="hanger-level-style-display" style="background-color: ${config.tierColors[shape.tier]}">
-                                ${shape.level - (shape.level == 25 ? 24 : shape.level > 12 ? 12 : 0)}
+                            <div class="hanger-shape-name" style="color: white;">
+                                <div class="hanger-level-style-display" style="background-color: ${config.tierColors[shape.tier]}">
+                                    ${shape.level - (shape.level == 25 ? 24 : shape.level > 12 ? 12 : 0)}
+                                </div>
+                                <div style="margin-left: 30px;">
+                                    ${shape.name} ${shape.level == 25 ? `<span style="color: #ffff00">MK3</span>` : shape.level > 12 ? `<span style="color: #00ff00">MK2</span>` : ""}
+                                </div>
                             </div>
-                            <div style="margin-left: 30px;">
-                                ${shape.name} ${shape.level == 25 ? `<span style="color: #ffff00">MK3</span>` : shape.level > 12 ? `<span style="color: #00ff00">MK2</span>` : ""}
-                            </div>
-                        </div>
-                        `;
+                            `;
                     let weapons = userProfile.weapons.filter(e => e.owner == shape.sid).sort((a, b) => a.slot - b.slot);
                     for (let t = 0; t < weapons.length; t++) {
                         let wpn = weapons[t];
@@ -4214,10 +4214,10 @@ import pathfinding from "../client/src/game/pathfinding.js";
                 } else {
                     squareItem.style.cursor = "pointer";
                     squareItem.innerHTML = `
-                        <span class="material-symbols-outlined" style="font-size: 175px;">
-                        add
-                        </span>
-                        `;
+                            <span class="material-symbols-outlined" style="font-size: 175px;">
+                            add
+                            </span>
+                            `;
                     squareItem.onclick = () => {
                         this.changeSlot(i, undefined);
                     };
@@ -4373,10 +4373,10 @@ import pathfinding from "../client/src/game/pathfinding.js";
 
             for (let ii = 0; ii < hangerSlots; ii++) {
                 let shape = shapes[Math.floor(Math.random() * shapes.length)];
-    
+
                 let wpns = { slot: 0 };
                 let weapons = [];
-    
+
                 if (shape.weaponHardpoints.light) {
                     for (let i = 0; i < shape.weaponHardpoints.light; i++) {
                         weapons.push(this.fetchRandWeapon("light", weaponAvgTier, weaponAvgLevel, wpns));
@@ -4392,9 +4392,9 @@ import pathfinding from "../client/src/game/pathfinding.js";
                         weapons.push(this.fetchRandWeapon("heavy", weaponAvgTier, weaponAvgLevel, wpns));
                     }
                 }
-    
+
                 let modules = [];
-    
+
                 if (shape.moduleHardpoints.defense) modules.push(this.fetchRandModule("Defense", moduleAvgTier, moduleAvgLevel));
                 if (shape.moduleHardpoints.assault) modules.push(this.fetchRandModule("Assault", moduleAvgTier, moduleAvgLevel));
                 if (shape.moduleHardpoints.universal) modules.push(this.fetchRandModule("Universal", moduleAvgTier, moduleAvgLevel));
@@ -4436,7 +4436,7 @@ import pathfinding from "../client/src/game/pathfinding.js";
         mouseX = event.clientX;
         mouseY = event.clientY;
     });
-    
+
     var gameCanvas = document.getElementById("gameCanvas");
     var ctx = gameCanvas.getContext("2d");
 
@@ -4542,7 +4542,7 @@ import pathfinding from "../client/src/game/pathfinding.js";
             if (this.offset.y <= 0) {
                 ctx.fillRect(-this.offset.x, 0, this.screenSize.x + this.offset.x, -this.offset.y);
             }
-            
+
             if (GameManager.map.height - this.offset.y <= this.screenSize.y) {
                 let tmpX = Math.max(0, -this.offset.x);
                 let tmpMin = 0;
@@ -4571,7 +4571,7 @@ import pathfinding from "../client/src/game/pathfinding.js";
                         let padding = 4.5;
                         let x = -(width + padding);
                         let y = (tmpObj.scale * 1.5);
-    
+
                         ctx.fillStyle = "#000";
                         ctx.roundRect(x, y, (width * 2) + (padding * 2), 20.4, 8);
                         ctx.fill();
@@ -4602,7 +4602,7 @@ import pathfinding from "../client/src/game/pathfinding.js";
             ctx.globalAlpha = 0.06;
             ctx.beginPath();
 
-            let x, y; 
+            let x, y;
 
             for (x = -this.cam.x; x < this.screenSize.x; x += this.screenSize.y / 4) {
                 if (x > 0) {
@@ -4768,7 +4768,7 @@ import pathfinding from "../client/src/game/pathfinding.js";
                     let x3 = this.screenSize.x / 2;
                     let y3 = this.screenSize.y / 2;
 
-                    let dist = UTILS.getDistance({ x: x3, y: y3}, { x: x2, y: y2 });
+                    let dist = UTILS.getDistance({ x: x3, y: y3 }, { x: x2, y: y2 });
 
                     GameManager.send("aim", getAimDir(), dist);
                     this.aimSendDate = 100;
@@ -4814,10 +4814,10 @@ import pathfinding from "../client/src/game/pathfinding.js";
 
             if (GameManager.grid) {
                 ctx.globalAlpha = 1;
-    
+
                 for (let i = 0; i < GameManager.grid.length; i++) {
                     let data = GameManager.grid[i];
-    
+
                     ctx.save();
                     ctx.translate(data.x - this.offset.x, data.y - this.offset.y);
                     ctx.fillStyle = data.path ? "rgb(0, 255, 0, .6)" : data.wall ? "rgb(255, 255, 255, .4)" : "rgb(0, 0, 0, .4)";
@@ -4910,6 +4910,10 @@ import pathfinding from "../client/src/game/pathfinding.js";
                 this.setUpChooseSlots();
                 this.startRendering();
                 updateBeacons();
+            },
+            "chooseSlot": () => {
+                elements.inGameUI.style.display = "none";
+                elements.chooseShapeUI.style.display = "block";
             },
             "updatePlayers": (data) => {
                 for (let i = 0; i < data.length;) {
@@ -5116,9 +5120,11 @@ import pathfinding from "../client/src/game/pathfinding.js";
         };
 
         static updateHealthDisplay() {
+            let health = Math.max(0, player.health);
+
             this.grayDamageBar.style.width = `${(player.grayDamage / player.maxhealth) * 100}%`;
-            this.healthBar.style.width = `${(player.health / player.maxhealth) * 100}%`;
-            this.healthText.innerText = UTILS.styleNumberWithSpace(player.health);
+            this.healthBar.style.width = `${(health / player.maxhealth) * 100}%`;
+            this.healthText.innerText = UTILS.styleNumberWithSpace(health);
         }
 
         static updateMovement() {
@@ -5171,14 +5177,14 @@ import pathfinding from "../client/src/game/pathfinding.js";
                     squareItem.style.cursor = "pointer";
                     shapeImage.style = "width: 100%; height: 100%;";
                     squareItem.innerHTML = `
-                    <div class="hanger-shape-name" style="color: white;">
-                        <div class="hanger-level-style-display" style="background-color: ${config.tierColors[shape.tier]}">
-                            ${shape.level - (shape.level == 25 ? 24 : shape.level > 12 ? 12 : 0)}
+                        <div class="hanger-shape-name" style="color: white;">
+                            <div class="hanger-level-style-display" style="background-color: ${config.tierColors[shape.tier]}">
+                                ${shape.level - (shape.level == 25 ? 24 : shape.level > 12 ? 12 : 0)}
+                            </div>
+                            <div style="margin-left: 30px;">
+                                ${shape.name} ${shape.level == 25 ? `<span style="color: #ffff00">MK3</span>` : shape.level > 12 ? `<span style="color: #00ff00">MK2</span>` : ""}
+                            </div>
                         </div>
-                        <div style="margin-left: 30px;">
-                            ${shape.name} ${shape.level == 25 ? `<span style="color: #ffff00">MK3</span>` : shape.level > 12 ? `<span style="color: #00ff00">MK2</span>` : ""}
-                        </div>
-                    </div>
                     `;
                     let weapons = userProfile.weapons.filter(e => e.owner == shape.sid).sort((a, b) => a.slot - b.slot);
                     for (let t = 0; t < weapons.length; t++) {
@@ -5200,14 +5206,18 @@ import pathfinding from "../client/src/game/pathfinding.js";
                         elements.inGameUI.style.display = "block";
                         elements.chooseShapeUI.style.display = "none";
                         this.send("chooseSlot", i);
+
+                        squareItem.onclick = null;
+                        squareItem.style.pointerEvents = "none";
+                        squareItem.style.backgroundColor = "rgba(0, 0, 0, .5)";
                     };
                 } else {
                     squareItem.style.pointerEvents = "none";
                     squareItem.innerHTML = `
-                    <span class="material-symbols-outlined" style="font-size: 175px;">
-                    lock
-                    </span>
-                    `;
+                        <span class="material-symbols-outlined" style="font-size: 175px;">
+                        lock
+                        </span>
+                        `;
                 }
 
                 elements.chooseShapeUI.appendChild(squareItem);
@@ -5235,7 +5245,7 @@ import pathfinding from "../client/src/game/pathfinding.js";
             avgTier /= Data.length;
             avgTier = Math.floor(avgTier);
             avgLevel /= Data.length;
-            avgLevel =  Math.floor(avgLevel);
+            avgLevel = Math.floor(avgLevel);
 
             return [(avgTier || 0), (avgLevel || 0)];
         }
@@ -5273,7 +5283,7 @@ import pathfinding from "../client/src/game/pathfinding.js";
 
             this.send("new", playerData, "me");
 
-            let [ shapeAvgTier, shapeAvgLevel ] = this.getAvgData(playerData, items.shapes);
+            let [shapeAvgTier, shapeAvgLevel] = this.getAvgData(playerData, items.shapes);
 
             let weapons = [];
             let modules = [];
@@ -5283,18 +5293,18 @@ import pathfinding from "../client/src/game/pathfinding.js";
                 modules.push(...playerData[i].modules);
             }
 
-            let [ weaponAvgTier, weaponAvgLevel ] = this.getAvgData(weapons, items.weapons);
-            let [ moduleAvgTier, moduleAvgLevel ] = this.getAvgData(modules, items.modules);
+            let [weaponAvgTier, weaponAvgLevel] = this.getAvgData(weapons, items.weapons);
+            let [moduleAvgTier, moduleAvgLevel] = this.getAvgData(modules, items.modules);
 
             let allies = [];
             let enemies = [];
-        
+
             for (let i = 0; i < 4; i++) {
                 allies.push(EquipmentBuilder.create(playerData.length, shapeAvgTier, shapeAvgLevel, weaponAvgTier, weaponAvgLevel, moduleAvgTier, moduleAvgLevel));
             }
 
             for (let i = 0; i < 5; i++) {
-               enemies.push(EquipmentBuilder.create(playerData.length, shapeAvgTier, shapeAvgLevel, weaponAvgTier, weaponAvgLevel, moduleAvgTier, moduleAvgLevel));
+                enemies.push(EquipmentBuilder.create(playerData.length, shapeAvgTier, shapeAvgLevel, weaponAvgTier, weaponAvgLevel, moduleAvgTier, moduleAvgLevel));
             }
 
             for (let i = 0; i < allies.length + enemies.length; i++) {
@@ -5326,7 +5336,7 @@ import pathfinding from "../client/src/game/pathfinding.js";
         game.init();
     };
 
-    window.onbeforeunload = function(event) {
+    window.onbeforeunload = function (event) {
         event.preventDefault();
     };
 }());

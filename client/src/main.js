@@ -52,16 +52,9 @@ function randIntCoords(e) {
     return UTILS.randInt(e - 300, e + 300);
 }
 
-var done = false;
-
 var clientEvents = {
     "new": (data, isUser) => {
         let indx = players.length;
-
-        if (isUser != "me") {
-            if (done) return;
-            done = true;
-        }
 
         let tmp = new player(data, isUser, game, indx);
         players.push(tmp);
@@ -163,7 +156,7 @@ var game = new class {
                 let shape = player.shapes[player.chooseIndex];
 
                 if (shape) {
-                    player.update(shape, this.map, buildings);
+                    player.update(shape, this.map, buildings, players);
 
                     for (let t = 0; t < players.length; t++) {
                         let player = players[t];

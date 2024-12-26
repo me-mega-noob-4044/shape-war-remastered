@@ -446,7 +446,65 @@ export default class {
         }
     }
 
-    update(shape, map, buildings) {
+    canHit(shape, target, buildings) {
+        for (let i = 0; i < buildings.length; i++) {
+            let tmpObj = buildings[i];
+
+            if (tmpObj.name == "wall") {
+                if (UTILS.lineInRect(
+                    tmpObj.x,
+                    tmpObj.y,
+                    tmpObj.x + tmpObj.width,
+                    tmpObj.y + tmpObj.height,
+                    shape.x,
+                    shape.y,
+                    target.x,
+                    target.y)
+                ) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    aiWeaponFire(shape, buildings, players) {
+        if (this.isUser == "me") return;
+
+        let possibleTargets = [];
+        
+        for (let i = 0; i < players.length; i++) {
+            let player = players[i];
+            let shape = player.shapes[player.chooseIndex];
+
+            if (shape && player.isAlly != this.isAlly) {
+                possibleTargets.push(shape);
+            }
+        }
+
+        let target = possibleTargets.filter(e => e.health > 0 && this.canHit(shape, e, buildings)).sort((a, b) => UTILS.getDistance(a, shape) - UTILS.getDistance(b, shape))[0];
+
+        if (target) {
+            let shortestWeapon = shape.weapons.sort((a, b) => a.range - b.range)[0];
+
+            if (UTILS.getDistance(target, shape) <= shortestWeapon.range) {
+                let dir = UTILS.getDirection(target, shape);
+
+                this.targetDir = dir;
+                this.target = target;
+                this.isAttacking = 1;
+            } else {
+                this.target = null;
+                this.isAttacking = 0;
+            }
+        } else {
+            this.target = null;
+            this.isAttacking = 0;
+        }
+    }
+
+    update(shape, map, buildings, players) {
         this.updateDir(shape);
 
         if (this.isUser != "me") {
@@ -456,6 +514,8 @@ export default class {
         this.handleMovement(shape, buildings);
         this.handleBorder(shape, map);
 
+        this.aiWeaponFire(shape, buildings, players);
+
         this.manageWeapons(shape);
 
         if (shape.health > shape.maxhealth - shape.grayDamage) {
@@ -464,6 +524,9 @@ export default class {
 
         if (shape.health <= 0) {
             if (this.indx == 0) {
+                this.chooseIndex = -1;
+
+                this.Game.send("chooseSlot");
             } else {
                 this.chooseIndex++;
 
@@ -529,13 +592,15 @@ export default class {
             }
         }
 
-        if (this.isUser) {
+        if (this.isUser == "me") {
             let loc = {
                 x: shape.x + Math.cos(shape.dir) * this.mouseDistance,
                 y: shape.y + Math.sin(shape.dir) * this.mouseDistance
             };
 
             dir = UTILS.getDirection(loc, { x: x, y: y });
+        } else if (this.target) {
+            dir = UTILS.getDirection(this.target, { x: x, y: y });
         }
 
         if (wpn.spread) dir += UTILS.randDirectionSpread(wpn.spread);
@@ -566,7 +631,7 @@ export default class {
                         fired.push([i, wpn.ammo / wpn.maxammo]);
                     }
                 } else {
-                    if (wpn.reloaded) {
+                    if (wpn.reloaded && this.isUser == "me") {
                         game.send("reloadWeapon", i, wpn.reload);
                     }
 
@@ -585,7 +650,7 @@ export default class {
 
         this.reloadAllWeapons = false;
 
-        if (fired.length) {
+        if (fired.length && this.isUser == "me") {
             game.send("updateWeapons", fired);
         }
     }
