@@ -46,12 +46,18 @@ class ScoreCounter {
         this.honor += Math.floor(data.kills / 3) * 7;
         this.results.push([Math.floor(data.kills / 3) * 7, "Every 3 shapes destroyed"]);
 
+        this.honor += Math.floor(data.kills / 6) * 20;
+        this.results.push([Math.floor(data.kills / 6) * 20, "Every 6 shapes destroyed"]);
+
         this.kills = data.kills;
         this.dmg = data.dmg;
         this.beacons = data.beacons;
 
         this.honor += data.beacons * 20;
-        this.results.push([data.beacons * 20, "Beacon captured"]);
+        this.results.push([data.beacons * 20, "Every beacon captured"]);
+
+        this.honor += Math.floor(data.beacons / 4) * 20;
+        this.results.push([Math.floor(data.beacons / 4) * 20, "Every 4 beacons captured"]);
 
         if (isWin) {
             this.honor += 300;
@@ -73,7 +79,7 @@ class ScoreCounter {
 
         for (let i = 0; i < 3; i++) {
             sorted[i].honor += rewared[i];
-            sorted[i].push([rewared[i], `Reaching ${placement[i]} place in top damage`]);
+            sorted[i].results.push([rewared[i], `Reaching ${placement[i]} place in top damage`]);
         }
     }
 
@@ -85,7 +91,7 @@ class ScoreCounter {
 
         for (let i = 0; i < 3; i++) {
             sorted[i].honor += rewared[i];
-            sorted[i].push([rewared[i], `Reaching ${placement[i]} place in top beacons captured`]);
+            sorted[i].results.push([rewared[i], `Reaching ${placement[i]} place in top beacons captured`]);
         }
     }
 
@@ -97,7 +103,7 @@ class ScoreCounter {
 
         for (let i = 0; i < 3; i++) {
             sorted[i].honor += rewared[i];
-            sorted[i].push([rewared[i], `Reaching ${placement[i]} place in top kills`]);
+            sorted[i].results.push([rewared[i], `Reaching ${placement[i]} place in top kills`]);
         }
     }
 }
@@ -113,7 +119,7 @@ function endGame(isWin, reason) {
     for (let i = 0; i < players.length; i++) {
         players[i].moveDir = undefined;
         if (players[i].isAlly) {
-            allies.push(new ScoreCounter(players[i].isUser == "me" ? "player" : `Bot ${i}` , players[i].stats, isWin));
+            allies.push(new ScoreCounter(players[i].isUser == "me" ? "Player" : `Bot ${i}` , players[i].stats, isWin));
         } else {
             enemies.push(new ScoreCounter(`Bot ${i - 4}`, players[i].stats, !isWin));
         }
