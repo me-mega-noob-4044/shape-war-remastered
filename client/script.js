@@ -5300,7 +5300,7 @@ import pathfinding from "../client/src/game/pathfinding.js";
                 this.pingLastUpdate = Date.now();
             }, 1e3);
 
-            this.send("new", playerData, "me");
+            this.send("new", playerData, "me", userProfile.leaguePoints);
 
             let [shapeAvgTier, shapeAvgLevel] = this.getAvgData(playerData, items.shapes);
 

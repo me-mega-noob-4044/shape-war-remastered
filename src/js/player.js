@@ -148,13 +148,13 @@ function setBonuses(shape, skills) {
     }
 }
 
-function playerify(shape) {
+function playerify(shape, easyMode) {
     shape.x = 0;
     shape.y = 0;
     shape.dir = 0;
     shape.grayDamage = 0;
     shape.vel = { x: 0, y: 0 };
-    shape.health = shape.maxhealth;
+    shape.health = shape.maxhealth *= (easyMode ? 1.2 : 1);
     shape.grayDamage = 0;
 
     delete shape.cost;
@@ -166,6 +166,7 @@ function playerify(shape) {
         let wpn = shape.weapons[i];
 
         wpn.fireRateTimer = 0;
+        wpn.dmg *= (easyMode ? 10 : 1)
         delete wpn.cost;
         delete wpn.attributes;
         delete wpn.description;
@@ -194,7 +195,7 @@ function randIntCoords(e) {
 }
 
 export default class {
-    constructor(data, isUser, Game, indx) {
+    constructor(data, isUser, Game, indx, leaguePoints) {
         this.Game = Game;
         this.isUser = isUser;
         this.indx = indx;
@@ -225,10 +226,16 @@ export default class {
             beacons: 0
         };
 
-        this.init(data);
+        this.init(data, leaguePoints);
     }
 
-    init(Data) {
+    init(Data, leaguePoints) {
+        let easyMode = false;
+
+        if (this.isUser == "me" && leaguePoints < 1e3) {
+            easyMode = true;
+        }
+
         for (let i = 0; i < Data.length; i++) {
             let data = Data[i];
 
@@ -269,7 +276,7 @@ export default class {
             }
 
             setBonuses(Shape, data.skills);
-            playerify(Shape);
+            playerify(Shape, easyMode);
 
             this.shapes.push(Shape);
         }

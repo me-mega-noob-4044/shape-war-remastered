@@ -54,10 +54,10 @@ function randIntCoords(e) {
 }
 
 var clientEvents = {
-    "new": (data, isUser) => {
+    "new": (data, isUser, leaguePoints) => {
         let indx = players.length;
 
-        let tmp = new player(data, isUser, game, indx);
+        let tmp = new player(data, isUser, game, indx, leaguePoints);
         players.push(tmp);
 
         if (isUser == "me") {
@@ -296,7 +296,9 @@ var game = new class {
                             tmpObj.isCaptured = true;
                         }
                     } else {
-                        if (Math.abs(tmpObj.capturePoints) <= 100) tmpObj.isCaptured = false;
+                        if (tmpObj.isCaptured && Math.abs(tmpObj.capturePoints) <= 100) {
+                            tmpObj.isCaptured = false;
+                        }
                     }
 
                     if (!tmpObj.changing) {
