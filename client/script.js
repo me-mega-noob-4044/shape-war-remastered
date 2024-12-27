@@ -4122,7 +4122,9 @@ import pathfinding from "../client/src/game/pathfinding.js";
                         elements.chooseShapesUI.style.display = "none";
                         elements.droneViewUI.style.display = "block";
 
-                        this.viewDroneInDepth(nextPG, false, false, nextPG.owner);
+                        console.log(slot, oldShape, type, nextPG);
+
+                        this.viewDroneInDepth(nextPG, false, true, nextPG.owner);
                     }
                 } else if (oldShape) {
                     elements.chooseShapesUI.style.display = "none";
