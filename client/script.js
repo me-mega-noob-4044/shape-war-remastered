@@ -4910,6 +4910,10 @@ import pathfinding from "../client/src/game/pathfinding.js";
                 this.setUpChooseSlots();
                 this.startRendering();
                 updateBeacons();
+
+                if (userProfile.leaguePoints < config.easyModePoints) {
+                    // 
+                }
             },
             "chooseSlot": () => {
                 elements.inGameUI.style.display = "none";
@@ -5135,6 +5139,24 @@ import pathfinding from "../client/src/game/pathfinding.js";
                 setTimeout(() => {
                     element.style.display = "none";
                 }, 1500);
+            },
+            "killAnnouncement": (kills) => {
+                let element = document.getElementById("killsAnnouncement");
+
+                element.style.display = "block";
+                element.innerHTML = `KILL X${kills}`;
+
+                setTimeout(() => {
+                    element.style.display = "none";
+                }, 1500);
+            },
+            "endGame": (allies, enemies) => {
+                this.socket.terminate();
+                renderer.start = false;
+
+                elements.gameUI.style.display = "none";
+
+                console.log(allies, enemies);
             }
         };
 

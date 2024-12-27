@@ -154,7 +154,7 @@ function playerify(shape, easyMode) {
     shape.dir = 0;
     shape.grayDamage = 0;
     shape.vel = { x: 0, y: 0 };
-    shape.health = shape.maxhealth *= (easyMode ? 1.2 : 1);
+    shape.health = shape.maxhealth *= (easyMode ? 2.5 : 1);
     shape.grayDamage = 0;
 
     delete shape.cost;
@@ -232,7 +232,7 @@ export default class {
     init(Data, leaguePoints) {
         let easyMode = false;
 
-        if (this.isUser == "me" && leaguePoints < 1e3) {
+        if (this.isUser == "me" && leaguePoints < config.easyModePoints) {
             easyMode = true;
         }
 
@@ -297,6 +297,10 @@ export default class {
             if (shape.health <= 0) {
                 if (doer) {
                     doer.stats.kills++;
+
+                    if (doer.isUser == "me") {
+                        this.Game.send("killAnnouncement", doer.stats.kills);
+                    }
                 }
             }
         }

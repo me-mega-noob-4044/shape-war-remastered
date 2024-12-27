@@ -9,6 +9,10 @@ export const players = [];
 export const buildings = [];
 export const projectiles = [];
 
+var gameUpdateLoop;
+var healingBeaconLoop;
+var beaconPointsLoop;
+
 function groupWeapons(player) {
     let data = [];
     let shape = player.shapes[player.chooseIndex];
@@ -29,6 +33,87 @@ function groupWeapons(player) {
     return data;
 }
 
+class ScoreCounter {
+    constructor(name, data, isWin) {
+        data.dmg = Math.floor(data.dmg);
+
+        this.name = name;
+
+        this.honor = data.kills * 7;
+        this.honor += Math.floor(data.kills / 3) * 7;
+
+        this.kills = data.kills;
+        this.dmg = data.dmg;
+        this.beacons = data.beacons;
+
+        this.honor += data.beacons * 20;
+
+        if (isWin) {
+            this.honor += 300;
+        }
+
+        this.honor += Math.ceil(data.dmg / 1e3);
+    }
+
+    static rewardHighestDamage(players) {
+        let sorted = players.sort((a, b) => b.dmg - a.dmg);
+
+        let rewared = [300, 150, 50];
+
+        for (let i = 0; i < 3; i++) {
+            sorted[i].honor += rewared[i];
+        }
+    }
+
+    static rewardHighestBeacons(players) {
+        let sorted = players.sort((a, b) => b.beacons - a.beacons);
+
+        let rewared = [300, 200, 100];
+
+        for (let i = 0; i < 3; i++) {
+            sorted[i].honor += rewared[i];
+        }
+    }
+
+    static rewardHighestKills(players) {
+        let sorted = players.sort((a, b) => b.kills - a.kills);
+
+        let rewared = [200, 150, 100];
+
+        for (let i = 0; i < 3; i++) {
+            sorted[i].honor += rewared[i];
+        }
+    }
+}
+
+function endGame(isWin) {
+    clearInterval(gameUpdateLoop);
+    clearInterval(healingBeaconLoop);
+    clearInterval(beaconPointsLoop);
+
+    let allies = [];
+    let enemies = [];
+
+    for (let i = 0; i < players.length; i++) {
+        players[i].moveDir = undefined;
+        if (players[i].isAlly) {
+            allies.push(new ScoreCounter(players[i].isUser == "me" ? "player" : `Bot ${i}` , players[i].stats, isWin));
+        } else {
+            enemies.push(new ScoreCounter(`Bot ${i - 4}`, players[i].stats, !isWin));
+        }
+    }
+
+    ScoreCounter.rewardHighestBeacons(allies);
+    ScoreCounter.rewardHighestDamage(allies);
+    ScoreCounter.rewardHighestKills(allies);
+
+    ScoreCounter.rewardHighestBeacons(enemies);
+    ScoreCounter.rewardHighestDamage(enemies);
+    ScoreCounter.rewardHighestKills(enemies);
+
+    game.send("endGame", allies, enemies);
+}
+
 export function updatePlayerDisplay() {
     let allies = 0;
     let enemies = 0;
@@ -46,12 +131,24 @@ export function updatePlayerDisplay() {
         }
     }
 
+    if (allies <= 0) {
+        setTimeout(() => {
+            endGame();
+        }, 2e3);
+    } else if (enemies <= 0) {
+        setTimeout(() => {
+            endGame(true);
+        }, 2e3);
+    }
+
     game.send("updatePlayerDisplay", allies, enemies);
 }
 
 function randIntCoords(e) {
     return UTILS.randInt(e - 300, e + 300);
 }
+
+var onFirstStart = true;
 
 var clientEvents = {
     "new": (data, isUser, leaguePoints) => {
@@ -79,6 +176,8 @@ var clientEvents = {
             players[0].chooseIndex = slot;
 
             let shape = players[0].shapes[slot];
+
+            onFirstStart = false;
 
             if (players[0].isAlly) {
                 shape.x = randIntCoords(game.map.locations[game.spawnIndx].x);
@@ -339,7 +438,9 @@ var game = new class {
 
         this.send("init", map, buildings);
 
-        setInterval(() => {
+        beaconPointsLoop = setInterval(() => {
+            if (onFirstStart) return;
+
             for (let i = 0; i < buildings.length; i++) {
                 let tmpObj = buildings[i];
 
@@ -358,7 +459,9 @@ var game = new class {
             }
         }, 1e3);
 
-        setInterval(() => { // healing beacon
+        healingBeaconLoop = setInterval(() => { // healing beacon
+            if (onFirstStart) return;
+
             for (let i = 0; i < buildings.length; i++) {
                 let tmpObj = buildings[i];
 
@@ -376,7 +479,9 @@ var game = new class {
             }
         }, 2e3);
 
-        setInterval(() => {
+        gameUpdateLoop = setInterval(() => {
+            if (onFirstStart) return;
+
             this.updateGame();
         }, config.gameUpdateSpeed);
     }

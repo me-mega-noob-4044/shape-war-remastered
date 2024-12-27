@@ -19,6 +19,7 @@ export default {
     mk2UpgradeCost: 500,
     mk3UpgradeCost: [1, 1, 2, 3, 4],
     mk3EnchantmentIncrease: .1,
+    easyModePoints: 300,
     attrubutesDescription: {
         "Kinetic": "Fires with kinetic shells",
         "Explosive": "Fires with explosive shells",
