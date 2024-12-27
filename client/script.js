@@ -4888,6 +4888,7 @@ import pathfinding from "../client/src/game/pathfinding.js";
     var endGame = {
         gameResults: UTILS.getElement("gameResults"),
         gameResultDisplay: UTILS.getElement("gameResultDisplay"),
+        gameResultOverview: UTILS.getElement("gameResultOverview")
     }
 
     class GameManager {
@@ -5161,10 +5162,15 @@ import pathfinding from "../client/src/game/pathfinding.js";
 
                 elements.inGameUI.style.display = "none";
                 endGame.gameResults.style.display = "flex";
+                endGame.gameResultOverview.style.display = "none";
                 endGame.gameResultDisplay.innerHTML = `
                 <div class="result-title">${isWin ? "VICTORY" : "DEFEAT"}</div>
                 <div class="result-description">${reason}</div>
                 `;
+
+                setTimeout(() => {
+                    endGame.gameResultOverview.style.display = "block";
+                }, 2e3);
 
                 console.log(allies, enemies, reason);
             }
