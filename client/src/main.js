@@ -38,30 +38,42 @@ class ScoreCounter {
         data.dmg = Math.floor(data.dmg);
 
         this.name = name;
+        this.results = [];
 
         this.honor = data.kills * 7;
+        this.results.push([data.kills * 7, "Every shape destroyed"]);
+
         this.honor += Math.floor(data.kills / 3) * 7;
+        this.results.push([Math.floor(data.kills / 3) * 7, "Every 3 shapes destroyed"]);
 
         this.kills = data.kills;
         this.dmg = data.dmg;
         this.beacons = data.beacons;
 
         this.honor += data.beacons * 20;
+        this.results.push([data.beacons * 20, "Beacon captured"]);
 
         if (isWin) {
             this.honor += 300;
+            this.results.push([300, "Winning the match"]);
         }
 
-        this.honor += Math.ceil(data.dmg / 1e3);
+        this.honor += Math.ceil(data.dmg / 5e3);
+        this.results.push([Math.ceil(data.dmg / 5e3), "Every 5k damage dealt"]);
+
+        this.honor += Math.floor(data.dmg / 100e3) * 5;
+        this.results.push([Math.floor(data.dmg / 100e3) * 5, "Every 100k damage dealt"]);
     }
 
     static rewardHighestDamage(players) {
         let sorted = players.sort((a, b) => b.dmg - a.dmg);
 
         let rewared = [300, 150, 50];
+        let placement = ["1st", "2nd", "3rd"];
 
         for (let i = 0; i < 3; i++) {
             sorted[i].honor += rewared[i];
+            sorted[i].push([rewared[i], `Reaching ${placement[i]} place in top damage`]);
         }
     }
 
@@ -69,9 +81,11 @@ class ScoreCounter {
         let sorted = players.sort((a, b) => b.beacons - a.beacons);
 
         let rewared = [300, 200, 100];
+        let placement = ["1st", "2nd", "3rd"];
 
         for (let i = 0; i < 3; i++) {
             sorted[i].honor += rewared[i];
+            sorted[i].push([rewared[i], `Reaching ${placement[i]} place in top beacons captured`]);
         }
     }
 
@@ -79,9 +93,11 @@ class ScoreCounter {
         let sorted = players.sort((a, b) => b.kills - a.kills);
 
         let rewared = [200, 150, 100];
+        let placement = ["1st", "2nd", "3rd"];
 
         for (let i = 0; i < 3; i++) {
             sorted[i].honor += rewared[i];
+            sorted[i].push([rewared[i], `Reaching ${placement[i]} place in top kills`]);
         }
     }
 }

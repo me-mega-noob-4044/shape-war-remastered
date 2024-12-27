@@ -154,6 +154,7 @@ function playerify(shape, easyMode) {
     shape.dir = 0;
     shape.grayDamage = 0;
     shape.vel = { x: 0, y: 0 };
+    shape.speed *= easyMode ? 15 : 1;
     shape.health = shape.maxhealth *= (easyMode ? 2.5 : 1);
     shape.grayDamage = 0;
 
@@ -166,7 +167,7 @@ function playerify(shape, easyMode) {
         let wpn = shape.weapons[i];
 
         wpn.fireRateTimer = 0;
-        wpn.dmg *= (easyMode ? 4 : 1)
+        wpn.dmg *= (easyMode ? 40 : 1)
         delete wpn.cost;
         delete wpn.attributes;
         delete wpn.description;

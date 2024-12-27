@@ -4888,7 +4888,77 @@ import pathfinding from "../client/src/game/pathfinding.js";
     var endGame = {
         gameResults: UTILS.getElement("gameResults"),
         gameResultDisplay: UTILS.getElement("gameResultDisplay"),
-        gameResultOverview: UTILS.getElement("gameResultOverview")
+        gameResultOverview: UTILS.getElement("gameResultOverview"),
+        allyTableBody: UTILS.getElement("ally-table-body"),
+        enemyTableBody: UTILS.getElement("enemy-table-body")
+    };
+
+    function buildEndGameTable(allies, enemies) {
+        let player;
+
+        endGame.allyTableBody.innerHTML = "";
+
+        for (let i = 0; i < allies.length; i++) {
+            if (allies[i].name == "Player") player = allies[i];
+
+            let row = document.createElement("tr");
+            row.classList.add(`ally-row-background-${(i % 2) + 1}`);
+
+            let name = document.createElement("td");
+            name.innerHTML = `<div style="margin-left: 10px;">${allies[i].name}</div>`;
+
+            let honor = document.createElement("td");
+            honor.innerHTML = `<div class="centered-stat">${allies[i].honor}</div>`;
+
+            let damage = document.createElement("td");
+            damage.innerHTML = `<div class="centered-stat">${allies[i].dmg}</div>`;
+
+            let kills = document.createElement("td");
+            kills.innerHTML = `<div class="centered-stat">${allies[i].kills}</div>`;
+
+            let beacons = document.createElement("td");
+            beacons.innerHTML = `<div class="centered-stat">${allies[i].beacons}</div>`;
+
+            row.appendChild(name);
+            row.appendChild(honor);
+            row.appendChild(damage);
+            row.appendChild(kills);
+            row.appendChild(beacons);
+
+            endGame.allyTableBody.appendChild(row);
+        }
+
+        endGame.enemyTableBody.innerHTML = "";
+
+        for (let i = 0; i < enemies.length; i++) {
+            let row = document.createElement("tr");
+            row.classList.add(`enemy-row-background-${(i % 2) + 1}`);
+
+            let name = document.createElement("td");
+            name.innerHTML = `<div style="margin-left: 10px;">${enemies[i].name}</div>`;
+
+            let honor = document.createElement("td");
+            honor.innerHTML = `<div class="centered-stat">${enemies[i].honor}</div>`;
+
+            let damage = document.createElement("td");
+            damage.innerHTML = `<div class="centered-stat">${enemies[i].dmg}</div>`;
+
+            let kills = document.createElement("td");
+            kills.innerHTML = `<div class="centered-stat">${enemies[i].kills}</div>`;
+
+            let beacons = document.createElement("td");
+            beacons.innerHTML = `<div class="centered-stat">${enemies[i].beacons}</div>`;
+
+            row.appendChild(name);
+            row.appendChild(honor);
+            row.appendChild(damage);
+            row.appendChild(kills);
+            row.appendChild(beacons);
+
+            endGame.enemyTableBody.appendChild(row);
+        }
+
+        console.log(player);
     }
 
     class GameManager {
@@ -5163,16 +5233,18 @@ import pathfinding from "../client/src/game/pathfinding.js";
                 elements.inGameUI.style.display = "none";
                 endGame.gameResults.style.display = "flex";
                 endGame.gameResultOverview.style.display = "none";
+                endGame.gameResultDisplay.style.display = "flex";
                 endGame.gameResultDisplay.innerHTML = `
                 <div class="result-title">${isWin ? "VICTORY" : "DEFEAT"}</div>
                 <div class="result-description">${reason}</div>
                 `;
 
                 setTimeout(() => {
-                    endGame.gameResultOverview.style.display = "block";
-                }, 2e3);
+                    endGame.gameResultDisplay.style.display = "none";
+                    endGame.gameResultOverview.style.display = "flex";
 
-                console.log(allies, enemies, reason);
+                    buildEndGameTable(allies, enemies);
+                }, 2e3);
             }
         };
 

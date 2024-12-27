@@ -1,3 +1,8 @@
+:root {
+    --ally-table-border-color: rgb(107, 107, 219);
+    --enemy-table-border-color: rgb(254, 101, 101);
+}
+
 html, body {
     padding: 0;
     margin: 0;
@@ -1451,6 +1456,7 @@ a:-webkit-any-link {
     height: 100%;
     align-items: center;
     justify-content: center;
+    background-color: rgb(0, 0, 0, .15);
 }
 
 #gameResultDisplay {
@@ -1479,9 +1485,72 @@ a:-webkit-any-link {
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
     position: absolute;
     top: 0px;
-    left: 0px;
-    width: 100%;
+    left: 20px;
+    width: calc(100% - 40px);
     height: 100%;
+}
+
+td {
+    position: relative;
+    padding-top: 12px;
+    padding-bottom: 12px;
+}
+
+thead {
+    color: white;
+    font-size: 24px;
+}
+
+tbody {
+    color: white;
+}
+
+tbody td {
+    border: solid;
+    border-color: rgb(255, 255, 255, .35);
+    border-width: 0px 0px 0px 1px;
+}
+
+.result-board {
+    position: relative;
+    width: 50%;
+    border: solid;
+    border-spacing: 0px;
+}
+
+.table-name-header {
+    width: 13%;
+}
+
+.table-damage-header {
+    width: 8%;
+}
+
+.table-stat-header {
+    width: 3%;
+}
+
+.table-center-icon, .centered-stat {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ally-row-background-1 {
+    background-color: rgb(0, 75, 174);
+}
+
+.ally-row-background-2 {
+    background-color: rgb(0, 92, 213);
+}
+
+.enemy-row-background-1 {
+    background-color: rgb(173, 0, 0);
+}
+
+.enemy-row-background-2 {
+    background-color: rgb(208, 0, 0);
 }
