@@ -29,14 +29,15 @@ function groupWeapons(player) {
     return data;
 }
 
-function updatePlayerDisplay() {
+export function updatePlayerDisplay() {
     let allies = 0;
     let enemies = 0;
 
     for (let i = 0; i < players.length; i++) {
         let player = players[i];
+        let shape = player.shapes[player.chooseIndex];
 
-        if (player) {
+        if (player && shape && shape.health > 0) {
             if (player.isAlly) {
                 allies++;
             } else {
@@ -174,7 +175,7 @@ var game = new class {
                     }
     
                     // ID, name, x, y, dir, health, maxhealth, grayDamage, isAlly
-                    playersData.push(player.sid, shape.name, shape.x, shape.y, shape.dir, shape.health, shape.maxhealth, shape.grayDamage, player.isAlly);
+                    if (shape.health > 0) playersData.push(player.sid, shape.name, shape.x, shape.y, shape.dir, shape.health, shape.maxhealth, shape.grayDamage, player.isAlly);
                 }
             }
     
@@ -275,6 +276,29 @@ var game = new class {
                         }
                     }
 
+                    if (Math.abs(tmpObj.capturePoints) == 6e3) {
+                        if (!tmpObj.isCaptured) {
+                            for (let t = 0; t < players.length; t++) {
+                                let player = players[t];
+                                let shape = player.shapes[player.chooseIndex];
+                
+                                if (shape && UTILS.getDistance(shape, tmpObj) <= 400 + shape.scale) {
+                                    if (tmpObj.capturePoints == -6e3 && player.isAlly) continue;
+                                    if (tmpObj.capturePoints == 6e3 && !player.isAlly) continue;
+                                    player.stats.beacons++;
+    
+                                    if (player.isUser == "me") {
+                                        this.send("beaconCaptured", i);
+                                    }
+                                }
+                            }
+    
+                            tmpObj.isCaptured = true;
+                        }
+                    } else {
+                        if (Math.abs(tmpObj.capturePoints) <= 100) tmpObj.isCaptured = false;
+                    }
+
                     if (!tmpObj.changing) {
                         if (tmpObj.capturePoints != 0 && Math.abs(tmpObj.capturePoints) != 6e3) {
                             let wasNeg = tmpObj.capturePoints < 0 ? -1 : 1;
@@ -325,6 +349,8 @@ var game = new class {
                         this.send("updateBeaconBars", indx, this.points[indx]);
 
                         tmpObj.collectionTime = 1e3;
+                    } else {
+                        tmpObj.isCaptured = false;
                     }
                 }
             }

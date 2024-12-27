@@ -4942,6 +4942,7 @@ import pathfinding from "../client/src/game/pathfinding.js";
                     }
 
                     if (tmpObj) {
+                        tmpObj.sid = data[i];
                         tmpObj.x1 = tmpObj.x;
                         tmpObj.y1 = tmpObj.y;
                         tmpObj.dt = 0;
@@ -5124,6 +5125,16 @@ import pathfinding from "../client/src/game/pathfinding.js";
                         element.appendChild(box);
                     }
                 }
+            },
+            "beaconCaptured": (indx) => {
+                let element = document.getElementById("beaconCaptured");
+
+                element.style.display = "block";
+                element.innerHTML = `BEACON ${beaconLetters[indx]} CAPTURED`;
+
+                setTimeout(() => {
+                    element.style.display = "none";
+                }, 1500);
             }
         };
 

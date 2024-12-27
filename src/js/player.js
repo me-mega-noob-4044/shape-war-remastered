@@ -5,6 +5,7 @@ import weapon from "./weapon.js";
 import module from "./module.js";
 import * as UTILS from "./utils.js";
 import Pathfinder from "../../client/src/game/pathfinding.js";
+import { updatePlayerDisplay } from "../../client/src/main.js";
 
 function getMk3Amount(tmp) {
     let maxNumber = tmp.base;
@@ -220,7 +221,8 @@ export default class {
 
         this.stats = {
             dmg: 0,
-            kills: 0
+            kills: 0,
+            beacons: 0
         };
 
         this.init(data);
@@ -548,6 +550,7 @@ export default class {
             }
 
             this.moveDir = undefined;
+            updatePlayerDisplay();
             this.Game.send("removePlayer", this.sid);
         }
     }
