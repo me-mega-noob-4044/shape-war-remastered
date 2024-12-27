@@ -86,7 +86,7 @@ class ScoreCounter {
     }
 }
 
-function endGame(isWin) {
+function endGame(isWin, reason) {
     clearInterval(gameUpdateLoop);
     clearInterval(healingBeaconLoop);
     clearInterval(beaconPointsLoop);
@@ -111,7 +111,13 @@ function endGame(isWin) {
     ScoreCounter.rewardHighestDamage(enemies);
     ScoreCounter.rewardHighestKills(enemies);
 
-    game.send("endGame", allies, enemies);
+    game.send(
+        "endGame",
+        allies.sort((a, b) => b.honor - a.honor),
+        enemies.sort((a, b) => b.honor - a.honor),
+        isWin,
+        reason
+    );
 }
 
 export function updatePlayerDisplay() {
@@ -133,11 +139,11 @@ export function updatePlayerDisplay() {
 
     if (allies <= 0) {
         setTimeout(() => {
-            endGame();
+            endGame(false, "All enemy shapes destroyed");
         }, 2e3);
     } else if (enemies <= 0) {
         setTimeout(() => {
-            endGame(true);
+            endGame(true, "All ally shapes destroyed");
         }, 2e3);
     }
 

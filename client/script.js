@@ -4885,6 +4885,11 @@ import pathfinding from "../client/src/game/pathfinding.js";
     var beaconBarDisplays = ["allyBeaconProgress", "enemyBeaconProgress"];
     var playersVisualDisplays = ["allyAliveDisplay", "enemyAliveDisplay"];
 
+    var endGame = {
+        gameResults: UTILS.getElement("gameResults"),
+        gameResultDisplay: UTILS.getElement("gameResultDisplay"),
+    }
+
     class GameManager {
         static lastMoveDir;
         static players = [];
@@ -5131,7 +5136,7 @@ import pathfinding from "../client/src/game/pathfinding.js";
                 }
             },
             "beaconCaptured": (indx) => {
-                let element = document.getElementById("beaconCaptured");
+                let element = UTILS.getElement("beaconCaptured");
 
                 element.style.display = "block";
                 element.innerHTML = `BEACON ${beaconLetters[indx]} CAPTURED`;
@@ -5141,7 +5146,7 @@ import pathfinding from "../client/src/game/pathfinding.js";
                 }, 1500);
             },
             "killAnnouncement": (kills) => {
-                let element = document.getElementById("killsAnnouncement");
+                let element = UTILS.getElement("killsAnnouncement");
 
                 element.style.display = "block";
                 element.innerHTML = `KILL X${kills}`;
@@ -5150,13 +5155,18 @@ import pathfinding from "../client/src/game/pathfinding.js";
                     element.style.display = "none";
                 }, 1500);
             },
-            "endGame": (allies, enemies) => {
+            "endGame": (allies, enemies, isWin, reason) => {
                 this.socket.terminate();
                 renderer.start = false;
 
-                elements.gameUI.style.display = "none";
+                elements.inGameUI.style.display = "none";
+                endGame.gameResults.style.display = "flex";
+                endGame.gameResultDisplay.innerHTML = `
+                <div class="result-title">${isWin ? "VICTORY" : "DEFEAT"}</div>
+                <div class="result-description">${reason}</div>
+                `;
 
-                console.log(allies, enemies);
+                console.log(allies, enemies, reason);
             }
         };
 
