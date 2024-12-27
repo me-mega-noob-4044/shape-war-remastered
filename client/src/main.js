@@ -139,11 +139,11 @@ export function updatePlayerDisplay() {
 
     if (allies <= 0) {
         setTimeout(() => {
-            endGame(false, "All enemy shapes destroyed");
+            endGame(false, "All ally shapes destroyed");
         }, 2e3);
     } else if (enemies <= 0) {
         setTimeout(() => {
-            endGame(true, "All ally shapes destroyed");
+            endGame(true, "All enemy shapes destroyed");
         }, 2e3);
     }
 
@@ -458,8 +458,6 @@ var game = new class {
                         this.send("updateBeaconBars", indx, this.points[indx]);
 
                         tmpObj.collectionTime = 1e3;
-                    } else {
-                        tmpObj.isCaptured = false;
                     }
                 }
             }
