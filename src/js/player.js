@@ -166,7 +166,7 @@ function playerify(shape, easyMode) {
         let wpn = shape.weapons[i];
 
         wpn.fireRateTimer = 0;
-        wpn.dmg *= (easyMode ? 10 : 1)
+        wpn.dmg *= (easyMode ? 4 : 1)
         delete wpn.cost;
         delete wpn.attributes;
         delete wpn.description;
