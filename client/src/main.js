@@ -121,7 +121,7 @@ function endGame(isWin, reason) {
         if (players[i].isAlly) {
             allies.push(new ScoreCounter(players[i].isUser == "me" ? "Player" : `Bot ${i}` , players[i].stats, isWin));
         } else {
-            enemies.push(new ScoreCounter(`Bot ${i - 4}`, players[i].stats, !isWin));
+            enemies.push(new ScoreCounter(`Bot ${i - 5}`, players[i].stats, !isWin));
         }
     }
 

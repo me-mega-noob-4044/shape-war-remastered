@@ -4890,34 +4890,36 @@ import pathfinding from "../client/src/game/pathfinding.js";
         gameResultDisplay: UTILS.getElement("gameResultDisplay"),
         gameResultOverview: UTILS.getElement("gameResultOverview"),
         allyTableBody: UTILS.getElement("ally-table-body"),
-        enemyTableBody: UTILS.getElement("enemy-table-body")
+        enemyTableBody: UTILS.getElement("enemy-table-body"),
+        gridTableItemStatDamage: UTILS.getElement("grid-table-item-stat-damage"),
+        gridTableItemStatKills: UTILS.getElement("grid-table-item-stat-kills"),
+        gridTableItemStatBeacons: UTILS.getElement("grid-table-item-stat-beacons"),
+        gridTableItemStatHonor: UTILS.getElement("grid-table-item-stat-honor")
     };
 
-    function buildEndGameTable(allies, enemies) {
+    function buildTable(data, element, prefix) {
         let player;
 
-        endGame.allyTableBody.innerHTML = "";
-
-        for (let i = 0; i < allies.length; i++) {
-            if (allies[i].name == "Player") player = allies[i];
+        for (let i = 0; i < data.length; i++) {
+            if (data[i].name == "Player") player = data[i];
 
             let row = document.createElement("tr");
-            row.classList.add(`ally-row-background-${(i % 2) + 1}`);
+            row.classList.add(`${prefix}-${(i % 2) + 1}`);
 
             let name = document.createElement("td");
-            name.innerHTML = `<div style="margin-left: 10px;">${allies[i].name}</div>`;
+            name.innerHTML = `<div style="margin-left: 10px;">${data[i].name}</div>`;
 
             let honor = document.createElement("td");
-            honor.innerHTML = `<div class="centered-stat">${allies[i].honor}</div>`;
+            honor.innerHTML = `<div class="centered-stat">${UTILS.styleNumberWithComma(data[i].honor)}</div>`;
 
             let damage = document.createElement("td");
-            damage.innerHTML = `<div class="centered-stat">${allies[i].dmg}</div>`;
+            damage.innerHTML = `<div class="centered-stat">${UTILS.styleNumberWithComma(data[i].dmg)}</div>`;
 
             let kills = document.createElement("td");
-            kills.innerHTML = `<div class="centered-stat">${allies[i].kills}</div>`;
+            kills.innerHTML = `<div class="centered-stat">${data[i].kills}</div>`;
 
             let beacons = document.createElement("td");
-            beacons.innerHTML = `<div class="centered-stat">${allies[i].beacons}</div>`;
+            beacons.innerHTML = `<div class="centered-stat">${data[i].beacons}</div>`;
 
             row.appendChild(name);
             row.appendChild(honor);
@@ -4925,40 +4927,23 @@ import pathfinding from "../client/src/game/pathfinding.js";
             row.appendChild(kills);
             row.appendChild(beacons);
 
-            endGame.allyTableBody.appendChild(row);
+            element.appendChild(row);
         }
+
+        return player;
+    }
+
+    function buildEndGameTable(allies, enemies) {
+        endGame.allyTableBody.innerHTML = "";
+        let player = buildTable(allies, endGame.allyTableBody, "ally-row-background");
 
         endGame.enemyTableBody.innerHTML = "";
+        buildTable(enemies, endGame.enemyTableBody, "enemy-row-background");
 
-        for (let i = 0; i < enemies.length; i++) {
-            let row = document.createElement("tr");
-            row.classList.add(`enemy-row-background-${(i % 2) + 1}`);
-
-            let name = document.createElement("td");
-            name.innerHTML = `<div style="margin-left: 10px;">${enemies[i].name}</div>`;
-
-            let honor = document.createElement("td");
-            honor.innerHTML = `<div class="centered-stat">${enemies[i].honor}</div>`;
-
-            let damage = document.createElement("td");
-            damage.innerHTML = `<div class="centered-stat">${enemies[i].dmg}</div>`;
-
-            let kills = document.createElement("td");
-            kills.innerHTML = `<div class="centered-stat">${enemies[i].kills}</div>`;
-
-            let beacons = document.createElement("td");
-            beacons.innerHTML = `<div class="centered-stat">${enemies[i].beacons}</div>`;
-
-            row.appendChild(name);
-            row.appendChild(honor);
-            row.appendChild(damage);
-            row.appendChild(kills);
-            row.appendChild(beacons);
-
-            endGame.enemyTableBody.appendChild(row);
-        }
-
-        console.log(player);
+        endGame.gridTableItemStatDamage.innerText = UTILS.styleNumberWithComma(player.dmg);
+        endGame.gridTableItemStatKills.innerText = UTILS.styleNumberWithComma(player.kills);
+        endGame.gridTableItemStatBeacons.innerText = UTILS.styleNumberWithComma(player.beacons);
+        endGame.gridTableItemStatHonor.innerText = UTILS.styleNumberWithComma(player.honor);
     }
 
     class GameManager {
@@ -5182,7 +5167,7 @@ import pathfinding from "../client/src/game/pathfinding.js";
 
                     element.innerHTML = "";
 
-                    for (let t = 0; t < 5; t++) {
+                    for (let t = 0; t < 6; t++) {
                         let box = document.createElement("div");
                         box.style = "width: 30px; height: 30px; border-radius: 4px; background-color: rgb(0, 0, 0, .4);";
 
@@ -5428,11 +5413,11 @@ import pathfinding from "../client/src/game/pathfinding.js";
             let allies = [];
             let enemies = [];
 
-            for (let i = 0; i < 4; i++) {
+            for (let i = 0; i < 5; i++) {
                 allies.push(EquipmentBuilder.create(playerData.length, shapeAvgTier, shapeAvgLevel, weaponAvgTier, weaponAvgLevel, moduleAvgTier, moduleAvgLevel));
             }
 
-            for (let i = 0; i < 5; i++) {
+            for (let i = 0; i < 6; i++) {
                 enemies.push(EquipmentBuilder.create(playerData.length, shapeAvgTier, shapeAvgLevel, weaponAvgTier, weaponAvgLevel, moduleAvgTier, moduleAvgLevel));
             }
 

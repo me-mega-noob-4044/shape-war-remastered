@@ -1554,3 +1554,60 @@ tbody td {
 .enemy-row-background-2 {
     background-color: rgb(208, 0, 0);
 }
+
+.game-result-title {
+    font-weight: 700;
+    font-size: 34px;
+    margin: 17px;
+}
+
+.game-table-grid {
+    display: grid;
+    width: calc(100% - 20px);
+    gap: 10px;
+    grid-template-columns: repeat(4, calc(25% - 7.5px));
+}
+
+.grid-table-item-stat {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.grid-table-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 60px;
+    font-weight: 600;
+    color: white;
+    background-color: rgba(0, 0, 0, .35);
+}
+
+.table-grid-item-icon {
+    margin-left: 10px;
+    font-size: 45px;
+    margin-right: 10px;
+}
+
+.grid-table-item-stat-description {
+    margin-top: -5px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+#grid-table-item-honor-info {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 10px;
+    width: 25px;
+    height: 25px;
+    color: white;
+    cursor: pointer;
+    background-color: rgb(255, 255, 255, .3);
+    border-radius: 100%;
+}

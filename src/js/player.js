@@ -618,7 +618,13 @@ export default class {
 
             dir = UTILS.getDirection(loc, { x: x, y: y });
         } else if (this.target) {
-            dir = UTILS.getDirection(this.target, { x: x, y: y });
+            let distance = UTILS.getDistance(shape, this.target);
+            let loc = {
+                x: shape.x + Math.cos(shape.dir) * distance,
+                y: shape.y + Math.sin(shape.dir) * distance
+            };
+
+            dir = UTILS.getDirection(loc, { x: x, y: y });
         }
 
         if (wpn.spread) dir += UTILS.randDirectionSpread(wpn.spread);
