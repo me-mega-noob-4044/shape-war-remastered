@@ -10,7 +10,6 @@ import pilot from "../src/js/pilot.js";
 import skill from "../src/js/skill.js";
 import msgpack from "../src/js/msgpack.js";
 import projectile from "../client/src/game/projectile.js";
-import pathfinding from "../client/src/game/pathfinding.js";
 
 (function () {
     var elements = {
@@ -117,8 +116,8 @@ import pathfinding from "../client/src/game/pathfinding.js";
     // this is only a single player game
     class userProfile {
         static bank = {
-            silver: 100e3 * 1e6,
-            gold: 500 * 1e3,
+            silver: 100e3 * 1e3,
+            gold: 500 * 10,
             platinum: 50,
             microchips: 0 + 1e3,
             keys: 100,
@@ -4896,14 +4895,22 @@ import pathfinding from "../client/src/game/pathfinding.js";
         gridTableItemStatDamage: UTILS.getElement("grid-table-item-stat-damage"),
         gridTableItemStatKills: UTILS.getElement("grid-table-item-stat-kills"),
         gridTableItemStatBeacons: UTILS.getElement("grid-table-item-stat-beacons"),
-        gridTableItemStatHonor: UTILS.getElement("grid-table-item-stat-honor")
+        gridTableItemStatHonor: UTILS.getElement("grid-table-item-stat-honor"),
+        gridTableItemRewardSilver: UTILS.getElement("grid-table-item-reward-silver"),
+        gridTableItemRewardGold: UTILS.getElement("grid-table-item-reward-gold"),
+        gridTableItemRewardKeys: UTILS.getElement("grid-table-item-reward-keys"),
+        gridTableItemRewardLeague: UTILS.getElement("grid-table-item-reward-league")
     };
 
     function buildTable(data, element, prefix) {
         let player;
+        let placement;
 
         for (let i = 0; i < data.length; i++) {
-            if (data[i].name == "Player") player = data[i];
+            if (data[i].name == "Player") {
+                placement = i + 1;
+                player = data[i];
+            }
 
             let row = document.createElement("tr");
             row.classList.add(`${prefix}-${(i % 2) + 1}`);
@@ -4932,12 +4939,61 @@ import pathfinding from "../client/src/game/pathfinding.js";
             element.appendChild(row);
         }
 
-        return player;
+        return [player, placement];
     }
 
-    function buildEndGameTable(allies, enemies) {
+    function buildRewards(player, placement, isWin) {
+        let rewards = {
+            silver: 0,
+            gold: 0,
+            keys: 0,
+            league: 0
+        };
+
+        if (placement == (isWin ? 1 : 6)) {
+            rewards.league = 17;
+            if (isWin) {
+                rewards.gold = 20;
+                rewards.keys = 10;
+            }
+        } else if (placement == (isWin ? 2 : 5)) {
+            rewards.league = 10;
+            if (isWin) {
+                rewards.gold = 10;
+                rewards.keys = 5;
+            }
+        } else if (placement == (isWin ? 3 : 4)) {
+            rewards.league = 4;
+            if (isWin) {
+                rewards.gold = 5;
+                rewards.keys = 1;
+            }
+        } else {
+            rewards.league = 1;
+            if (isWin) rewards.keys = 1;
+        }
+
+        rewards.keys += player.kills;
+        rewards.keys += Math.floor(player.honor / 500);
+
+        rewards.gold += (player.kills + player.beacons) * 2;
+        rewards.gold += Math.floor(player.honor / 100);
+
+        rewards.silver += (player.kills + player.beacons) * 35e3;
+        rewards.silver += Math.floor(player.honor / 50) * 5e3;
+        rewards.silver += player.honor * 20;
+
+        if (!isWin) rewards.league *= -1;
+
+        endGame.gridTableItemRewardSilver.innerText = UTILS.styleNumberWithComma(rewards.silver);
+        endGame.gridTableItemRewardGold.innerText = rewards.gold;
+        endGame.gridTableItemRewardKeys.innerText = rewards.keys;
+        endGame.gridTableItemRewardLeague.innerText = rewards.league;
+    }
+
+    function buildEndGameTable(isWin, allies, enemies) {
         endGame.allyTableBody.innerHTML = "";
-        let player = buildTable(allies, endGame.allyTableBody, "ally-row-background");
+        let [player, placement] = buildTable(allies, endGame.allyTableBody, "ally-row-background");
 
         endGame.enemyTableBody.innerHTML = "";
         buildTable(enemies, endGame.enemyTableBody, "enemy-row-background");
@@ -4946,6 +5002,8 @@ import pathfinding from "../client/src/game/pathfinding.js";
         endGame.gridTableItemStatKills.innerText = UTILS.styleNumberWithComma(player.kills);
         endGame.gridTableItemStatBeacons.innerText = UTILS.styleNumberWithComma(player.beacons);
         endGame.gridTableItemStatHonor.innerText = UTILS.styleNumberWithComma(player.honor);
+
+        buildRewards(player, placement, isWin);
     }
 
     class GameManager {
@@ -5230,7 +5288,7 @@ import pathfinding from "../client/src/game/pathfinding.js";
                     endGame.gameResultDisplay.style.display = "none";
                     endGame.gameResultOverview.style.display = "flex";
 
-                    buildEndGameTable(allies, enemies);
+                    buildEndGameTable(isWin, allies, enemies);
                 }, 2e3);
             }
         };
