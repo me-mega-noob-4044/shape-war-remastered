@@ -154,8 +154,8 @@ function playerify(shape, easyMode) {
     shape.dir = 0;
     shape.grayDamage = 0;
     shape.vel = { x: 0, y: 0 };
-    shape.speed *= easyMode ? 15 : 1;
-    shape.health = shape.maxhealth *= (easyMode ? 2.5 : 1);
+    shape.speed *= 1;
+    shape.health = shape.maxhealth *= (easyMode ? .5 : 1);
     shape.grayDamage = 0;
 
     delete shape.cost;
@@ -167,7 +167,7 @@ function playerify(shape, easyMode) {
         let wpn = shape.weapons[i];
 
         wpn.fireRateTimer = 0;
-        wpn.dmg *= (easyMode ? 40 : 1)
+        wpn.dmg *= (easyMode ? .075 : 1);
         delete wpn.cost;
         delete wpn.attributes;
         delete wpn.description;
@@ -230,10 +230,10 @@ export default class {
         this.init(data, leaguePoints);
     }
 
-    init(Data, leaguePoints) {
+    init(Data, leaguePoints=0) {
         let easyMode = false;
 
-        if (this.isUser == "me" && leaguePoints < config.easyModePoints) {
+        if (this.isUser != "me" && leaguePoints < config.easyModePoints) {
             easyMode = true;
         }
 

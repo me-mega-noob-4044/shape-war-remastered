@@ -4981,7 +4981,10 @@ import projectile from "../client/src/game/projectile.js";
 
         rewards.silver += (player.kills + player.beacons) * 35e3;
         rewards.silver += Math.floor(player.honor / 50) * 5e3;
+        rewards.silver += player.dmg * (.5 + ((6 - placement) * .075));
         rewards.silver += player.honor * 20;
+
+        rewards.silver = Math.ceil(rewards.silver);
 
         if (!isWin) rewards.league *= -1;
 
@@ -4989,6 +4992,10 @@ import projectile from "../client/src/game/projectile.js";
         endGame.gridTableItemRewardGold.innerText = rewards.gold;
         endGame.gridTableItemRewardKeys.innerText = rewards.keys;
         endGame.gridTableItemRewardLeague.innerText = rewards.league;
+
+        for (let i in rewards) {
+            userProfile.changeBank(i, rewards[i]);
+        }
     }
 
     function buildEndGameTable(isWin, allies, enemies) {
@@ -5278,6 +5285,7 @@ import projectile from "../client/src/game/projectile.js";
                 elements.inGameUI.style.display = "none";
                 endGame.gameResults.style.display = "flex";
                 endGame.gameResultOverview.style.display = "none";
+                elements.chooseShapeUI.display = "none";
                 endGame.gameResultDisplay.style.display = "flex";
                 endGame.gameResultDisplay.innerHTML = `
                 <div class="result-title">${isWin ? "VICTORY" : "DEFEAT"}</div>
