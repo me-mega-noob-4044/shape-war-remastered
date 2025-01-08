@@ -3,6 +3,7 @@ import projectiles from "../../../src/js/projectiles.js";
 import * as UTILS from "../../../src/js/utils.js";
 
 self.projectileSids = 0;
+
 export default class {
     constructor(x, y, name, id, range, dir, ownerSID, dmg, dontSid) {
         if (!dontSid) {

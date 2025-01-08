@@ -1,5 +1,5 @@
 import msgpack from "../../src/js/msgpack.js";
-import player from "../../src/js/player.js";
+import Player from "../../src/js/player.js";
 import { maps, mapBuilder } from "./game/mapBuilder.js";
 import config from "../../src/js/config.js";
 import projectile from "./game/projectile.js";
@@ -113,6 +113,12 @@ function endGame(isWin, reason) {
     clearInterval(healingBeaconLoop);
     clearInterval(beaconPointsLoop);
 
+    onFirstStart = true;
+
+    projectiles.length = 0;
+    players.length = 0;
+    buildings.length = 0;
+
     let allies = [];
     let enemies = [];
 
@@ -182,8 +188,10 @@ var clientEvents = {
     "new": (data, isUser, leaguePoints) => {
         let indx = players.length;
 
-        let tmp = new player(data, isUser, game, indx, leaguePoints);
+        let tmp = new Player(data, isUser, game, indx, leaguePoints);
         players.push(tmp);
+
+        console.log(players);
 
         if (isUser == "me") {
             game.start();
@@ -200,14 +208,16 @@ var clientEvents = {
         }
     },
     "chooseSlot": (slot) => {
-        if (players[0]) {
-            players[0].chooseIndex = slot;
+        let player = players.find(e => e.isUser == "me");
 
-            let shape = players[0].shapes[slot];
+        if (player) {
+            player.chooseIndex = slot;
+
+            let shape = player.shapes[slot];
 
             onFirstStart = false;
 
-            if (players[0].isAlly) {
+            if (player.isAlly) {
                 shape.x = randIntCoords(game.map.locations[game.spawnIndx].x);
                 shape.y = randIntCoords(game.map.locations[game.spawnIndx].y);
             } else {
@@ -215,27 +225,35 @@ var clientEvents = {
                 shape.y = randIntCoords(game.map.locations[+!game.spawnIndx].y);
             }
 
-            game.send("initializeWeapons", groupWeapons(players[0]));
+            game.send("initializeWeapons", groupWeapons(player));
             updatePlayerDisplay();
         }
     },
     "updateMovement": (newMoveDir) => {
-        if (players[0]) players[0].moveDir = newMoveDir;
+        let player = players.find(e => e.isUser == "me");
+
+        if (player) player.moveDir = newMoveDir;
     },
     "pingSocket": () => {
         game.send("pingSocket");
     },
     "setAttack": (indx) => {
-        if (players[0]) players[0].isAttacking = indx;
+        let player = players.find(e => e.isUser == "me");
+
+        if (player) player.isAttacking = indx;
     },
     "reloadWeapons": () => {
-        if (players[0]) players[0].reloadAllWeapons = true;
+        let player = players.find(e => e.isUser == "me");
+
+        if (player) player.reloadAllWeapons = true;
     },
     "aim": (radian, mouseDistance) => {
-        if (players[0]) {
-            players[0].targetDir = radian;
+        let player = players.find(e => e.isUser == "me");
 
-            players[0].mouseDistance = mouseDistance;
+        if (player) {
+            player.targetDir = radian;
+
+            player.mouseDistance = mouseDistance;
         }
     }
 };
@@ -269,10 +287,6 @@ var game = new class {
 
         postMessage(binary);
     }
-
-    buildMap() {
-        
-    }
     
     updateGame() {
         try {
@@ -301,8 +315,8 @@ var game = new class {
                         }
                     }
     
-                    // ID, name, x, y, dir, health, maxhealth, grayDamage, isAlly
-                    if (shape.health > 0) playersData.push(player.sid, shape.name, shape.x, shape.y, shape.dir, shape.health, shape.maxhealth, shape.grayDamage, player.isAlly);
+                    // ID, ISUSER, name, x, y, dir, health, maxhealth, grayDamage, isAlly
+                    if (shape.health > 0) playersData.push(player.sid, player.isUser, shape.name, shape.x, shape.y, shape.dir, shape.health, shape.maxhealth, shape.grayDamage, player.isAlly);
                 }
             }
     

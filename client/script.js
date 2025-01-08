@@ -116,10 +116,10 @@ import projectile from "../client/src/game/projectile.js";
     // this is only a single player game
     class userProfile {
         static bank = {
-            silver: 100e3 * 1e3,
-            gold: 500 * 10,
+            silver: 100e3,
+            gold: 500,
             platinum: 50,
-            microchips: 0 + 1e3,
+            microchips: 0,
             keys: 100,
             powercells: 2e3,
             tokens: 0 + 10,
@@ -5028,6 +5028,18 @@ import projectile from "../client/src/game/projectile.js";
             elements.hangerUI.style.display = "block";
             hangerDisplay.updateHanger();
 
+            endGame.gameResults.style.display = "none";
+
+            GameManager.players = [];
+            GameManager.buildings = [];
+            GameManager.projectiles = [];
+            GameManager.weaponElements = [];
+
+            for (let i = 0; i < GameManager.wpnParents.length; i++) GameManager.wpnParents[i].remove();
+            GameManager.wpnParents = [];
+
+            clearInterval(GameManager.pingInterval);
+
             ctx.clearRect(0, 0, renderer.screenSize.x, renderer.screenSize.y);
         };
     }
@@ -5079,15 +5091,15 @@ import projectile from "../client/src/game/projectile.js";
                     let tmpObj = this.players.find(e => e.sid == data[i]);
 
                     if (!tmpObj) {
-                        tmpObj = new shape(items.shapes.find(e => e.name == data[i + 1]), undefined, true);
+                        tmpObj = new shape(items.shapes.find(e => e.name == data[i + 2]), undefined, true);
 
-                        if (data[i] == 0) {
+                        if (data[i + 1] == "me") {
                             player = tmpObj;
                         }
 
                         tmpObj.sid = data[i];
-                        tmpObj.x = data[i + 2];
-                        tmpObj.y = data[i + 3];
+                        tmpObj.x = data[i + 3];
+                        tmpObj.y = data[i + 4];
 
                         this.players.push(tmpObj);
                     }
@@ -5097,20 +5109,20 @@ import projectile from "../client/src/game/projectile.js";
                         tmpObj.x1 = tmpObj.x;
                         tmpObj.y1 = tmpObj.y;
                         tmpObj.dt = 0;
-                        tmpObj.x2 = data[i + 2];
-                        tmpObj.y2 = data[i + 3];
-                        tmpObj.dir = data[i + 4];
-                        tmpObj.health = data[i + 5];
-                        tmpObj.maxhealth = data[i + 6];
-                        tmpObj.grayDamage = data[i + 7];
-                        tmpObj.isAlly = data[i + 8];
+                        tmpObj.x2 = data[i + 3];
+                        tmpObj.y2 = data[i + 4];
+                        tmpObj.dir = data[i + 5];
+                        tmpObj.health = data[i + 6];
+                        tmpObj.maxhealth = data[i + 7];
+                        tmpObj.grayDamage = data[i + 8];
+                        tmpObj.isAlly = data[i + 9];
 
                         if (player == tmpObj) {
                             this.updateHealthDisplay();
                         }
                     }
 
-                    i += 9;
+                    i += 10;
                 }
             },
             "pingSocket": () => {
@@ -5299,6 +5311,7 @@ import projectile from "../client/src/game/projectile.js";
             },
             "endGame": (allies, enemies, isWin, reason) => {
                 this.socket.terminate();
+                this.socket = null;
                 renderer.start = false;
 
                 elements.inGameUI.style.display = "none";
@@ -5429,7 +5442,9 @@ import projectile from "../client/src/game/projectile.js";
             let data = Array.prototype.slice.call(arguments, 1);
             let binary = msgpack.encode([type, data]);
 
-            this.socket.postMessage(binary);
+            if (this.socket) {
+                this.socket.postMessage(binary);
+            }
         }
 
         static getAvgData(Data, items) {
@@ -5452,7 +5467,7 @@ import projectile from "../client/src/game/projectile.js";
         }
 
         static start() {
-            console.clear();
+            // console.clear();
             let playerData = EquipmentBuilder.player();
 
             this.durationOfGame = 5 * 60 * 1e3;

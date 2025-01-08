@@ -155,7 +155,7 @@ function playerify(shape, easyMode) {
     shape.grayDamage = 0;
     shape.vel = { x: 0, y: 0 };
     shape.speed *= 1;
-    shape.health = shape.maxhealth *= (easyMode ? .5 : 1);
+    shape.health = shape.maxhealth *= (easyMode ? .01 : 1);
     shape.grayDamage = 0;
 
     delete shape.cost;
@@ -195,7 +195,7 @@ function randIntCoords(e) {
     return UTILS.randInt(e - 300, e + 300);
 }
 
-export default class {
+export default class Player {
     constructor(data, isUser, Game, indx, leaguePoints) {
         this.Game = Game;
         this.isUser = isUser;
