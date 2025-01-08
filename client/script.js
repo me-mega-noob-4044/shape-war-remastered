@@ -159,7 +159,12 @@ import projectile from "../client/src/game/projectile.js";
         }
 
         static changeBank(id, value) {
-            this.bank[id] += value;
+            if (id == "leaguePoints") {
+                this.leaguePoints += value;
+            } else {
+                this.bank[id] += value;
+            }
+
             moneyDisplayManager.updateItems();
             this.saveProfile();
         }
@@ -340,7 +345,7 @@ import projectile from "../client/src/game/projectile.js";
     class imageManager {
         static images = {};
         static iconImages = ["../src/media-files/icons/range.png", "../src/media-files/icons/reload.png", "../src/media-files/icons/damage.png", "../src/media-files/icons/health.png", "../src/media-files/icons/speed.png", "../src/media-files/icons/unequip_button.png"];
-        static moneyIcons = ["../src/media-files/money/silver.png", "../src/media-files/money/gold.png", "../src/media-files/money/platinum.png", "../src/media-files/money/keys.png", "../src/media-files/money/powercells.png", "../src/media-files/money/microchips.png", "../src/media-files/money/tokens.png"];
+        static moneyIcons = ["../src/media-files/money/silver.png", "../src/media-files/money/gold.png", "../src/media-files/money/platinum.png", "../src/media-files/money/keys.png", "../src/media-files/money/powercells.png", "../src/media-files/money/microchips.png", "../src/media-files/money/tokens.png", "../src/media-files/money/league.png"];
 
         static generateWhiteImage() {
             let canvas = document.createElement("canvas");
@@ -4140,7 +4145,7 @@ import projectile from "../client/src/game/projectile.js";
 
         static updateHanger() {
             elements.hangerUI.innerHTML = "";
-            moneyDisplayManager.displayItems(["gold", "silver", "platinum"]);
+            moneyDisplayManager.displayItems(["gold", "silver", "platinum", "league"]);
             moneyDisplayManager.holderElement.style.top = null;
             let containerWidth = window.innerWidth - 200;
             let containerHeight = window.innerHeight;
@@ -4240,13 +4245,15 @@ import projectile from "../client/src/game/projectile.js";
         static displayItems(items) {
             this.items = items;
             this.holderElement.innerHTML = "";
+
             if (!items.length) {
                 this.holderElement.style.display = "none";
                 return;
             }
+
             this.holderElement.style.display = "flex";
             for (let i = 0; i < items.length; i++) {
-                let amount = userProfile.bank[items[i]];
+                let amount = items[i] == "league" ? userProfile.leaguePoints : userProfile.bank[items[i]];
                 let tmpElement = document.createElement("div");
                 tmpElement.classList.add("money-display-item");
                 if (i > 0) tmpElement.style.marginLeft = "15px";
@@ -4947,29 +4954,29 @@ import projectile from "../client/src/game/projectile.js";
             silver: 0,
             gold: 0,
             keys: 0,
-            league: 0
+            leaguePoints: 0
         };
 
         if (placement == (isWin ? 1 : 6)) {
-            rewards.league = 17;
+            rewards.leaguePoints = 17;
             if (isWin) {
                 rewards.gold = 20;
                 rewards.keys = 10;
             }
         } else if (placement == (isWin ? 2 : 5)) {
-            rewards.league = 10;
+            rewards.leaguePoints = 10;
             if (isWin) {
                 rewards.gold = 10;
                 rewards.keys = 5;
             }
         } else if (placement == (isWin ? 3 : 4)) {
-            rewards.league = 4;
+            rewards.leaguePoints = 4;
             if (isWin) {
                 rewards.gold = 5;
                 rewards.keys = 1;
             }
         } else {
-            rewards.league = 1;
+            rewards.leaguePoints = 1;
             if (isWin) rewards.keys = 1;
         }
 
@@ -4991,12 +4998,14 @@ import projectile from "../client/src/game/projectile.js";
         endGame.gridTableItemRewardSilver.innerText = UTILS.styleNumberWithComma(rewards.silver);
         endGame.gridTableItemRewardGold.innerText = rewards.gold;
         endGame.gridTableItemRewardKeys.innerText = rewards.keys;
-        endGame.gridTableItemRewardLeague.innerText = rewards.league;
+        endGame.gridTableItemRewardLeague.innerText = rewards.leaguePoints;
 
         for (let i in rewards) {
             userProfile.changeBank(i, rewards[i]);
         }
     }
+
+    var gameScreenExitButton = document.getElementById("game-screen-exit-button");
 
     function buildEndGameTable(isWin, allies, enemies) {
         endGame.allyTableBody.innerHTML = "";
@@ -5011,6 +5020,16 @@ import projectile from "../client/src/game/projectile.js";
         endGame.gridTableItemStatHonor.innerText = UTILS.styleNumberWithComma(player.honor);
 
         buildRewards(player, placement, isWin);
+
+        gameScreenExitButton.onclick = () => {
+            gameScreenExitButton.onclick = null;
+
+            elements.gameUI.style.display = "none";
+            elements.hangerUI.style.display = "block";
+            hangerDisplay.updateHanger();
+
+            ctx.clearRect(0, 0, renderer.screenSize.x, renderer.screenSize.y);
+        };
     }
 
     class GameManager {
