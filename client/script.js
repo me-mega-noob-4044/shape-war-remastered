@@ -5009,24 +5009,29 @@ import projectile from "../client/src/game/projectile.js";
 
     function buildEndGameTable(isWin, allies, enemies) {
         endGame.allyTableBody.innerHTML = "";
-        let [player, placement] = buildTable(allies, endGame.allyTableBody, "ally-row-background");
+        let [playerData, placement] = buildTable(allies, endGame.allyTableBody, "ally-row-background");
 
         endGame.enemyTableBody.innerHTML = "";
         buildTable(enemies, endGame.enemyTableBody, "enemy-row-background");
 
-        endGame.gridTableItemStatDamage.innerText = UTILS.styleNumberWithComma(player.dmg);
-        endGame.gridTableItemStatKills.innerText = UTILS.styleNumberWithComma(player.kills);
-        endGame.gridTableItemStatBeacons.innerText = UTILS.styleNumberWithComma(player.beacons);
-        endGame.gridTableItemStatHonor.innerText = UTILS.styleNumberWithComma(player.honor);
+        endGame.gridTableItemStatDamage.innerText = UTILS.styleNumberWithComma(playerData.dmg);
+        endGame.gridTableItemStatKills.innerText = UTILS.styleNumberWithComma(playerData.kills);
+        endGame.gridTableItemStatBeacons.innerText = UTILS.styleNumberWithComma(playerData.beacons);
+        endGame.gridTableItemStatHonor.innerText = UTILS.styleNumberWithComma(playerData.honor);
 
-        buildRewards(player, placement, isWin);
+        buildRewards(playerData, placement, isWin);
 
         gameScreenExitButton.onclick = () => {
+            player = null;
+
             gameScreenExitButton.onclick = null;
 
             elements.gameUI.style.display = "none";
             elements.hangerUI.style.display = "block";
             hangerDisplay.updateHanger();
+
+            elements.inGameUI.style.display = "none";
+            elements.chooseShapeUI.style.display = "block";
 
             endGame.gameResults.style.display = "none";
 
@@ -5068,6 +5073,7 @@ import projectile from "../client/src/game/projectile.js";
 
                 this.setUpChooseSlots();
                 this.startRendering();
+
                 updateBeacons();
 
                 if (userProfile.leaguePoints < config.easyModePoints) {
@@ -5365,6 +5371,8 @@ import projectile from "../client/src/game/projectile.js";
         }
 
         static setUpChooseSlots() {
+            elements.chooseShapeUI.innerHTML = "";
+
             let containerWidth = window.innerWidth - 200;
             let containerHeight = window.innerHeight;
             let gap = 10;

@@ -119,10 +119,6 @@ function endGame(isWin, reason) {
 
     onFirstStart = true;
 
-    projectiles.length = 0;
-    players.length = 0;
-    buildings.length = 0;
-
     let allies = [];
     let enemies = [];
 
@@ -150,6 +146,10 @@ function endGame(isWin, reason) {
         isWin,
         reason
     );
+
+    projectiles.length = 0;
+    players.length = 0;
+    buildings.length = 0;
 }
 
 export function updatePlayerDisplay() {
@@ -483,6 +483,8 @@ var game = new class {
         this.spawnIndx = Math.floor(Math.random() * 2);
 
         this.send("init", map, buildings);
+
+        for (let i = 0; i < 2; i++) this.send("updateBeaconBars", i, 0);
 
         beaconPointsLoop = setInterval(() => {
             if (onFirstStart) return;
