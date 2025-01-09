@@ -321,4 +321,6 @@ const motherships = [];
 
 const turrets = [];
 
-export default { shapes, weapons, modules, activeModules, pilots, skills, drones, motherships, turrets };
+const items = { shapes, weapons, modules, activeModules, pilots, skills, drones, motherships, turrets };
+
+export default items;

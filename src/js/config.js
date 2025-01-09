@@ -1,4 +1,4 @@
-export default {
+const config = {
     gameUpdateRate: 20,
     gameUpdateSpeed: 1e3 / 20,
     maxScreenWidth: 1920,
@@ -68,3 +68,5 @@ export default {
         "On Mild Damage: Fix": "../src/media-files/abilities/on_mild_damage_fix.png"
     }
 };
+
+export default config;

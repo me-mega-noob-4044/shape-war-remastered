@@ -5049,6 +5049,8 @@ import projectile from "../client/src/game/projectile.js";
         };
     }
 
+    var easyModeDisplay = document.getElementById("easy-mode-display");
+
     class GameManager {
         static lastMoveDir;
         static players = [];
@@ -5075,10 +5077,8 @@ import projectile from "../client/src/game/projectile.js";
                 this.startRendering();
 
                 updateBeacons();
-
-                if (userProfile.leaguePoints < config.easyModePoints) {
-                    // 
-                }
+                
+                easyModeDisplay.style.display = userProfile.leaguePoints < config.easyModePoints ? "block" : "none";
             },
             "chooseSlot": () => {
                 elements.inGameUI.style.display = "none";
