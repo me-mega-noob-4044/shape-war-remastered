@@ -113,6 +113,10 @@ function endGame(isWin, reason) {
     clearInterval(healingBeaconLoop);
     clearInterval(beaconPointsLoop);
 
+    game.map = null;
+    game.spawnIndx = 0;
+    game.points = [0, 0];
+
     onFirstStart = true;
 
     projectiles.length = 0;
@@ -190,8 +194,6 @@ var clientEvents = {
 
         let tmp = new Player(data, isUser, game, indx, leaguePoints);
         players.push(tmp);
-
-        console.log(players);
 
         if (isUser == "me") {
             game.start();
@@ -475,6 +477,8 @@ var game = new class {
     }
 
     start() {
+        let gameTimer = 1e3 * 60 * 5;
+
         let map = this.map = mapBuilder.build(buildings);
         this.spawnIndx = Math.floor(Math.random() * 2);
 
@@ -521,6 +525,22 @@ var game = new class {
 
         gameUpdateLoop = setInterval(() => {
             if (onFirstStart) return;
+
+            gameTimer -= config.gameUpdateSpeed;
+
+            if (gameTimer <= 0) {
+                let isWin = true;
+                let reason = "Time has run out. Your team has more beacon points and thus wins the match.";
+            
+                if (this.points[0] < this.points[1]) {
+                    isWin = false;
+                    reason = "Time has run out. The opposing team has more beacon points, and you lose the match.";
+                }
+            
+                endGame(isWin, reason);
+                return;
+            }
+            
 
             this.updateGame();
         }, config.gameUpdateSpeed);
