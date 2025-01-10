@@ -230,7 +230,7 @@ export default class Player {
         this.init(data, leaguePoints);
     }
 
-    init(Data, leaguePoints=0) {
+    init(Data, leaguePoints = 0) {
         let easyMode = false;
 
         if (this.isUser != "me" && leaguePoints < config.easyModePoints) {
@@ -287,14 +287,14 @@ export default class Player {
         if (shape.health > 0) {
             if (value <= 0) {
                 shape.grayDamage += Math.abs(value * .4);
-    
+
                 if (doer) {
                     doer.stats.dmg += Math.abs(value);
                 }
             }
-    
+
             shape.health += value;
-    
+
             if (shape.health <= 0) {
                 if (doer) {
                     doer.stats.kills++;
@@ -314,32 +314,32 @@ export default class Player {
             shape.vel.x += Math.cos(this.moveDir) * shape.speed * config.gameUpdateSpeed;
             shape.vel.y += Math.sin(this.moveDir) * shape.speed * config.gameUpdateSpeed;
         }
-        
+
         let tmpSpeed = UTILS.getDistance({ x: 0, y: 0 }, { x: shape.vel.x * delta, y: shape.vel.y * delta });
-		let depth = Math.min(4, Math.max(1, Math.round(tmpSpeed / 40)));
-		let tMlt = 1 / depth;
+        let depth = Math.min(4, Math.max(1, Math.round(tmpSpeed / 40)));
+        let tMlt = 1 / depth;
 
         let x = shape.x, y = shape.y;
         shape.lastX = x;
         shape.lastY = y;
 
-		for (let i = 0; i < depth; i++) {
+        for (let i = 0; i < depth; i++) {
             if (shape.vel.x) shape.x += shape.vel.x * delta * tMlt;
             if (shape.vel.y) shape.y += shape.vel.y * delta * tMlt;
 
             if (!shape.avoidBuildings) for (let i = 0; i < buildings.length; i++) {
                 let tmpObj = buildings[i];
-    
+
                 if (tmpObj) {
                     if (tmpObj.name == "wall") {
                         if (shape.x >= tmpObj.x - shape.scale && shape.x <= tmpObj.x + tmpObj.width + shape.scale) {
                             if (shape.y >= tmpObj.y - shape.scale && shape.y <= tmpObj.y + tmpObj.height + shape.scale) {
                                 let Px = Math.max(tmpObj.x + shape.scale, Math.min(shape.x, tmpObj.x + tmpObj.width - shape.scale));
                                 let Py = Math.max(tmpObj.y + shape.scale, Math.min(shape.y, tmpObj.y + tmpObj.height - shape.scale));
-    
+
                                 if (UTILS.getDistance({ x: Px, y: Py }, shape) <= shape.scale * 2) {
                                     let angle = UTILS.getDirection(shape, { x: Px, y: Py });
-    
+
                                     shape.x = Px + Math.cos(angle) * shape.scale * 2;
                                     shape.y = Py + Math.sin(angle) * shape.scale * 2;
                                     shape.vel.x *= .75;
@@ -354,7 +354,7 @@ export default class Player {
                                 x: tmpObj.x + Math.cos(angle) * (shape.scale + 61),
                                 y: tmpObj.y + Math.sin(angle) * (shape.scale + 61)
                             };
-    
+
                             shape.x = tmp.x;
                             shape.y = tmp.y;
                             shape.vel.x *= .75;
@@ -369,11 +369,11 @@ export default class Player {
 
         if (shape.vel.x) {
             shape.vel.x *= Math.pow(config.playerDecel, config.gameUpdateSpeed);
-			if (shape.vel.x <= 0.01 && shape.vel.x >= -0.01) shape.vel.x = 0;
+            if (shape.vel.x <= 0.01 && shape.vel.x >= -0.01) shape.vel.x = 0;
         }
         if (shape.vel.y) {
             shape.vel.y *= Math.pow(config.playerDecel, config.gameUpdateSpeed);
-			if (shape.vel.y <= 0.01 && shape.vel.y >= -0.01) shape.vel.y = 0;
+            if (shape.vel.y <= 0.01 && shape.vel.y >= -0.01) shape.vel.y = 0;
         }
     }
 
@@ -401,7 +401,7 @@ export default class Player {
 
             let netAngle = (shape.dir - this.targetDir + PI2) % PI2;
             let amnt = Math.min(Math.abs(netAngle - PI2), netAngle, shape.aimTurnSpeed * config.gameUpdateSpeed);
-            let sign = (netAngle - Math.PI) >=0 ? 1 : -1;
+            let sign = (netAngle - Math.PI) >= 0 ? 1 : -1;
 
             shape.dir += sign * amnt + PI2;
         }
@@ -487,7 +487,7 @@ export default class Player {
         if (this.isUser == "me") return;
 
         let possibleTargets = [];
-        
+
         for (let i = 0; i < players.length; i++) {
             let player = players[i];
             let shape = player.shapes[player.chooseIndex];

@@ -4736,6 +4736,24 @@ import projectile from "../client/src/game/projectile.js";
         static MAX_DISPLAY_SIZE = 47;
         static abilityImages = {};
 
+        static abilityTimers = [
+            [0, 0]
+        ];
+        static abilityMaxTimers = [
+            [0, 0]
+        ];
+        static abilityIndex = [0, 0];
+
+        static resetAbilityTimers() {
+            this.abilityTimers = [
+                [0, 0]
+            ];
+            this.abilityMaxTimers = [
+                [0, 0]
+            ];
+            this.abilityIndex = [0, 0];
+        }
+
         static getAbilityImage(src) {
             let image = this.abilityImages[src];
 
@@ -4744,7 +4762,7 @@ import projectile from "../client/src/game/projectile.js";
 
                 image.src = src;
 
-                image.onload = function() {
+                image.onload = function () {
                     this.isLoaded = true;
                 };
 
@@ -4754,7 +4772,7 @@ import projectile from "../client/src/game/projectile.js";
             return image;
         }
 
-        static renderAbilityDisplay() {
+        static renderAbilityDisplay(delta) {
             const MAX_DISPLAY_SIZE = this.MAX_DISPLAY_SIZE;
 
             this.abilityOneContext.clearRect(0, 0, MAX_DISPLAY_SIZE, MAX_DISPLAY_SIZE);
@@ -4772,10 +4790,55 @@ import projectile from "../client/src/game/projectile.js";
                     tmpContext.fillStyle = "rgba(0, 0, 0, .4)";
                     tmpContext.fillRect(0, 0, MAX_DISPLAY_SIZE, MAX_DISPLAY_SIZE);
 
+                    let dontRender = false;
+
+                    if (this.abilityTimers[i][0] || this.abilityTimers[i][1]) {
+                        this.abilityTimers[i][this.abilityIndex[i]] -= delta;
+
+                        if (this.abilityTimers[i][this.abilityIndex[i]] <= 0) {
+                            this.abilityTimers[i][this.abilityIndex[i]] = 0;
+
+                            if (this.abilityIndex[i] == 1) {
+                                this.abilityIndex[i] = 0;
+                            } else {
+                                this.abilityIndex[i] = 1;
+                            }
+                        } else {
+                            let timer = this.abilityTimers[i][this.abilityIndex[i]];
+                            let maxTimer = this.abilityMaxTimers[i][this.abilityIndex[i]];
+
+                            if (this.abilityIndex[i] == 0) {
+                                tmpContext.fillStyle = "rgba(255, 255, 255, .4)";
+                                tmpContext.fillRect(0, MAX_DISPLAY_SIZE * (1 - (timer / maxTimer)), MAX_DISPLAY_SIZE, MAX_DISPLAY_SIZE * (timer / maxTimer));
+                            } else {
+                                dontRender = true;
+
+                                let display = (timer / 1e3).toFixed(2);
+
+                                display *= 10;
+                                display = Math.ceil(display);
+                                display /= 10;
+
+                                tmpContext.fillStyle = "white";
+                                tmpContext.textAlign = "center";
+                                tmpContext.font = "16px Roboto";
+                                tmpContext.textBaseline = "middle";
+                                tmpContext.fillText(display + "s", MAX_DISPLAY_SIZE / 2, MAX_DISPLAY_SIZE / 2);
+                            }
+                        }
+                    }
+
                     let image = this.getAbilityImage(ability.imageSource);
 
-                    if (image && image.isLoaded) {
+                    if (image && image.isLoaded && !dontRender) {
+                        tmpContext.save();
+
+                        tmpContext.shadowBlur = 7;
+                        tmpContext.shadowColor = "rgba(0, 0, 0, .8)";
+
                         tmpContext.drawImage(image, 2.5, 2.5, MAX_DISPLAY_SIZE - 5, MAX_DISPLAY_SIZE - 5);
+
+                        tmpContext.restore();
                     }
 
                 } else {
@@ -4840,7 +4903,7 @@ import projectile from "../client/src/game/projectile.js";
 
                 // document.title = `${player.x.toFixed(0)} | ${player.y.toFixed(0)}`;
 
-                this.renderAbilityDisplay();
+                this.renderAbilityDisplay(delta);
 
                 GameManager.durationOfGame -= delta;
                 UTILS.getElement("cooldownTimer").innerHTML = UTILS.formatMilliseconds(GameManager.durationOfGame);
@@ -5135,7 +5198,7 @@ import projectile from "../client/src/game/projectile.js";
                 this.startRendering();
 
                 updateBeacons();
-                
+
                 easyModeDisplay.style.display = userProfile.leaguePoints < config.easyModePoints ? "block" : "none";
             },
             "chooseSlot": () => {
@@ -5372,6 +5435,11 @@ import projectile from "../client/src/game/projectile.js";
                 setTimeout(() => {
                     element.style.display = "none";
                 }, 1500);
+            },
+            "updateAbilityDisplay": (indx, duration, reload) => {
+                renderer.abilityTimers[indx] = [duration, reload];
+                renderer.abilityMaxTimers[indx] = [duration, reload];
+                renderer.abilityIndex[indx] = 0;
             },
             "endGame": (allies, enemies, isWin, reason) => {
                 this.socket.terminate();

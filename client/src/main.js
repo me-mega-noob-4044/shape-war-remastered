@@ -125,7 +125,7 @@ function endGame(isWin, reason) {
     for (let i = 0; i < players.length; i++) {
         players[i].moveDir = undefined;
         if (players[i].isAlly) {
-            allies.push(new ScoreCounter(players[i].isUser == "me" ? "Player" : `Bot ${i}` , players[i].stats, isWin));
+            allies.push(new ScoreCounter(players[i].isUser == "me" ? "Player" : `Bot ${i}`, players[i].stats, isWin));
         } else {
             enemies.push(new ScoreCounter(`Bot ${i - 5}`, players[i].stats, !isWin));
         }
@@ -271,7 +271,11 @@ var clientEvents = {
                     ability.init(player, shape);
                     ability.durationTimer = ability.duration;
 
-                    // Work :)
+                    if (ability.durationTimer <= 0) {
+                        ability.reloadTimer = ability.reload;
+                    }
+
+                    game.send("updateAbilityDisplay", id - 1, ability.duration, ability.reload);
                 }
             }
         }
@@ -307,14 +311,14 @@ var game = new class {
 
         postMessage(binary);
     }
-    
+
     updateGame() {
         try {
             let playersData = [];
 
             for (let i = 0; i < players.length; i++) {
                 let player = players[i];
-    
+
                 let shape = player.shapes[player.chooseIndex];
 
                 if (shape) {
@@ -334,28 +338,28 @@ var game = new class {
                             otherShape.y -= (tmpScale * Math.sin(tmpDir));
                         }
                     }
-    
+
                     // ID, ISUSER, name, x, y, dir, health, maxhealth, grayDamage, isAlly
                     if (shape.health > 0) playersData.push(player.sid, player.isUser, shape.name, shape.x, shape.y, shape.dir, shape.health, shape.maxhealth, shape.grayDamage, player.isAlly);
                 }
             }
-    
+
             for (let i = 0; i < projectiles.length; i++) {
                 let projectile = projectiles[i];
-    
+
                 if (projectile && projectile.active) {
                     projectile.update(players, true);
-    
+
                     for (let t = 0; t < buildings.length; t++) {
                         let tmpObj = buildings[t];
-    
+
                         if (tmpObj) {
                             if (tmpObj.name == "wall") {
                                 if (projectile.x >= tmpObj.x - projectile.scale && projectile.x <= tmpObj.x + tmpObj.width + projectile.scale) {
                                     if (projectile.y >= tmpObj.y - projectile.scale && projectile.y <= tmpObj.y + tmpObj.height + projectile.scale) {
                                         let Px = Math.max(tmpObj.x + projectile.scale, Math.min(projectile.x, tmpObj.x + tmpObj.width - projectile.scale));
                                         let Py = Math.max(tmpObj.y + projectile.scale, Math.min(projectile.y, tmpObj.y + tmpObj.height - projectile.scale));
-                
+
                                         if (UTILS.getDistance({ x: Px, y: Py }, projectile) <= projectile.scale * 2) {
                                             projectile.range = 0;
                                             break;
@@ -373,10 +377,10 @@ var game = new class {
 
                     for (let i = 0; i < players.length; i++) {
                         let player = players[i];
-            
+
                         let shape = player.shapes[player.chooseIndex];
                         let doer = players[projectile.owner];
-        
+
                         if (shape && shape.health > 0 && doer.isAlly != player.isAlly) {
                             let tmpScale = shape.scale;
                             let tmpSpeed = projectile.speed * config.gameUpdateSpeed;
@@ -398,7 +402,7 @@ var game = new class {
                             }
                         }
                     }
-    
+
                     if (projectile.range <= 0) {
                         if (done) {
                             this.send("removeProjectile", projectile.sid, 200);
@@ -414,7 +418,7 @@ var game = new class {
 
             for (let i = 0; i < buildings.length; i++) {
                 let tmpObj = buildings[i];
-    
+
                 if (tmpObj && tmpObj.name == "beacon") {
                     tmpObj.changing = false;
 
@@ -442,18 +446,18 @@ var game = new class {
                             for (let t = 0; t < players.length; t++) {
                                 let player = players[t];
                                 let shape = player.shapes[player.chooseIndex];
-                
+
                                 if (shape && UTILS.getDistance(shape, tmpObj) <= 400 + shape.scale) {
                                     if (tmpObj.capturePoints == -6e3 && player.isAlly) continue;
                                     if (tmpObj.capturePoints == 6e3 && !player.isAlly) continue;
                                     player.stats.beacons++;
-    
+
                                     if (player.isUser == "me") {
                                         this.send("beaconCaptured", i);
                                     }
                                 }
                             }
-    
+
                             tmpObj.isCaptured = true;
                         }
                     } else {
@@ -479,7 +483,7 @@ var game = new class {
             }
 
             this.send("updatePlayers", playersData);
-        } catch(e) {
+        } catch (e) {
             console.log(e);
         }
     }
@@ -491,7 +495,7 @@ var game = new class {
         let { name, range, projectileId } = wpn;
         let { sid } = tmp;
 
-        this.send("addProjectile", x, y, dir, owner, { name, range,  projectileId, sid, extraSpeed });
+        this.send("addProjectile", x, y, dir, owner, { name, range, projectileId, sid, extraSpeed });
     }
 
     start() {
@@ -532,9 +536,9 @@ var game = new class {
                 if (tmpObj.name == "healing beacon") {
                     for (let i = 0; i < players.length; i++) {
                         let player = players[i];
-            
+
                         let shape = player.shapes[player.chooseIndex];
-            
+
                         if (shape && UTILS.getDistance(tmpObj, shape) <= tmpObj.scale + shape.scale) {
                             player.changeHealth(shape, tmpObj.power);
                         }
@@ -551,16 +555,16 @@ var game = new class {
             if (gameTimer <= 0) {
                 let isWin = true;
                 let reason = "Time has run out. Your team has more beacon points and thus wins the match.";
-            
+
                 if (this.points[0] < this.points[1]) {
                     isWin = false;
                     reason = "Time has run out. The opposing team has more beacon points, and you lose the match.";
                 }
-            
+
                 endGame(isWin, reason);
                 return;
             }
-            
+
 
             this.updateGame();
         }, config.gameUpdateSpeed);
