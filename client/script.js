@@ -4734,12 +4734,56 @@ import projectile from "../client/src/game/projectile.js";
         static abilityOneContext = this.abilityOneCanvas.getContext("2d");
 
         static MAX_DISPLAY_SIZE = 47;
+        static abilityImages = {};
+
+        static getAbilityImage(src) {
+            let image = this.abilityImages[src];
+
+            if (!image) {
+                image = new Image();
+
+                image.src = src;
+
+                image.onload = function() {
+                    this.isLoaded = true;
+                };
+
+                this.abilityImages[src] = image;
+            }
+
+            return image;
+        }
 
         static renderAbilityDisplay() {
-            this.abilityOneContext.clearRect(0, 0, this.MAX_DISPLAY_SIZE, this.MAX_DISPLAY_SIZE);
+            const MAX_DISPLAY_SIZE = this.MAX_DISPLAY_SIZE;
 
-            this.abilityOneContext.fillStyle = "rgba(0, 0, 0, .45)";
-            this.abilityOneContext.fillRect(0, 0, this.MAX_DISPLAY_SIZE, this.MAX_DISPLAY_SIZE);
+            this.abilityOneContext.clearRect(0, 0, MAX_DISPLAY_SIZE, MAX_DISPLAY_SIZE);
+
+            for (let i = 0; i < 1; i++) {
+                let ability = player.abilities[i];
+
+                if (ability) {
+                    let tmpContext = this.abilityOneContext;
+
+                    if (i == 0) {
+                        this.abilityOneCanvas.style.display = "block";
+                    }
+
+                    tmpContext.fillStyle = "rgba(0, 0, 0, .4)";
+                    tmpContext.fillRect(0, 0, MAX_DISPLAY_SIZE, MAX_DISPLAY_SIZE);
+
+                    let image = this.getAbilityImage(ability.imageSource);
+
+                    if (image && image.isLoaded) {
+                        tmpContext.drawImage(image, 2.5, 2.5, MAX_DISPLAY_SIZE - 5, MAX_DISPLAY_SIZE - 5);
+                    }
+
+                } else {
+                    if (i == 0) {
+                        this.abilityOneCanvas.style.display = "none";
+                    }
+                }
+            }
         }
 
         static render() {
