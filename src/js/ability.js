@@ -5,5 +5,8 @@ export default class {
         this.imageSource = (data.imageSource || "");
         this.duration = (data.duration || 0);
         this.reload = (data.reload || 0);
+
+        this.reloadTimer = 0;
+        this.durationTimer = 0;
     }
 }

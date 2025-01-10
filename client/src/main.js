@@ -257,6 +257,21 @@ var clientEvents = {
 
             player.mouseDistance = mouseDistance;
         }
+    },
+    "useAbility": (id) => {
+        let player = players.find(e => e.isUser == "me");
+
+        if (player) {
+            let shape = player.shapes[player.chooseIndex];
+
+            if (id <= shape.abilities.length) {
+                let ability = shape.abilities[id];
+
+                if (!ability.durationTimer && !ability.reloadTimer) {
+                    // Get to work!
+                }
+            }
+        }
     }
 };
 

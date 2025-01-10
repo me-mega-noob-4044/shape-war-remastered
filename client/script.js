@@ -5598,15 +5598,8 @@ import projectile from "../client/src/game/projectile.js";
     }
 
     document.addEventListener("keydown", (event) => {
-        if (event.key == "P") {
-            /*GameManager.grid = pathfinding.search(player, {
-                x: player.x + 3e3,
-                y: player.y + 3e3
-            }, {
-                show: true,
-                map: GameManager.map,
-                gameObjects: GameManager.buildings
-            });*/
+        if (event.key == "e") {
+            GameManager.send("useAbility", 1);
         }
     })
 
