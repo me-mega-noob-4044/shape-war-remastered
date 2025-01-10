@@ -298,21 +298,19 @@ self.onmessage = (event) => {
     }
 };
 
-var game = new class {
-    constructor() {
-        this.map = null;
-        this.spawnIndx = 0;
-        this.points = [0, 0];
-    }
+class game {
+    static map = null;
+    static spawnIndx = 0;
+    static points = [0, 0];
 
-    send(type) {
+    static send(type) {
         let data = Array.prototype.slice.call(arguments, 1);
         let binary = msgpack.encode([type, data]);
 
         postMessage(binary);
     }
 
-    updateGame() {
+    static updateGame() {
         try {
             let playersData = [];
 
@@ -488,7 +486,7 @@ var game = new class {
         }
     }
 
-    addProjectile(x, y, dir, owner, wpn, extraSpeed) {
+    static addProjectile(x, y, dir, owner, wpn, extraSpeed) {
         let tmp = new projectile(x, y, wpn.name, wpn.projectileId, wpn.range, dir, owner, wpn.dmg)
         projectiles.push(tmp);
 
@@ -498,7 +496,7 @@ var game = new class {
         this.send("addProjectile", x, y, dir, owner, { name, range, projectileId, sid, extraSpeed });
     }
 
-    start() {
+    static start() {
         let gameTimer = 1e3 * 60 * 5;
 
         let map = this.map = mapBuilder.build(buildings);

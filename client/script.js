@@ -5208,6 +5208,8 @@ import projectile from "../client/src/game/projectile.js";
             "removePlayer": (sid) => {
                 for (let i = 0; i < this.players.length; i++) {
                     if (this.players[i].sid == sid) {
+                        if (player == this.players[i]) renderer.resetAbilityTimers();
+
                         this.players.splice(i, 1);
                         break;
                     }
