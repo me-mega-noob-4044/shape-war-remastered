@@ -327,7 +327,7 @@ export default class Player {
             if (shape.vel.x) shape.x += shape.vel.x * delta * tMlt;
             if (shape.vel.y) shape.y += shape.vel.y * delta * tMlt;
 
-            for (let i = 0; i < buildings.length; i++) {
+            if (!shape.avoidBuildings) for (let i = 0; i < buildings.length; i++) {
                 let tmpObj = buildings[i];
     
                 if (tmpObj) {
@@ -531,6 +531,10 @@ export default class Player {
         this.aiWeaponFire(shape, buildings, players);
 
         this.manageWeapons(shape);
+
+        for (let i = 0; i < shape.abilities.length; i++) {
+            shape.abilities[i].update(this, shape, config.gameUpdateSpeed);
+        }
 
         if (shape.health > shape.maxhealth - shape.grayDamage) {
             shape.health = shape.maxhealth - shape.grayDamage;

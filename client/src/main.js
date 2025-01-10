@@ -265,10 +265,10 @@ var clientEvents = {
             let shape = player.shapes[player.chooseIndex];
 
             if (id <= shape.abilities.length) {
-                let ability = shape.abilities[id];
+                let ability = shape.abilities[id - 1];
 
                 if (!ability.durationTimer && !ability.reloadTimer) {
-                    ability.init();
+                    ability.init(player, shape);
                     ability.durationTimer = ability.duration;
 
                     // Work :)
@@ -320,7 +320,7 @@ var game = new class {
                 if (shape) {
                     player.update(shape, this.map, buildings, players);
 
-                    for (let t = 0; t < players.length; t++) {
+                    if (!shape.avoidBuildings) for (let t = 0; t < players.length; t++) {
                         let player = players[t];
                         let otherShape = player.shapes[player.chooseIndex];
 

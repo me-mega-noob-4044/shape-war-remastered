@@ -6,15 +6,46 @@ export default class Ability {
         this.duration = (data.duration || 0);
         this.reload = (data.reload || 0);
 
+        this.boostSpeed = data.boostSpeed;
+        this.avoidBuildings = data.avoidBuildings;
+
         this.reloadTimer = 0;
         this.durationTimer = 0;
     }
 
-    init() {
-        // For abilities where it enables shields and stuff
+    init(player, shape) {
+        if (this.avoidBuildings) shape.avoidBuildings = true;
+
+        if (this.boostSpeed) {
+            let dir = (player.moveDir !== undefined && player.moveDir !== null) ? player.moveDir : player.targetDir;
+
+            shape.vel.x += Math.cos(dir) * this.boostSpeed;
+            shape.vel.y += Math.sin(dir) * this.boostSpeed;
+        }
     }
 
-    deinit() {
-        // Remove the shields and stuff when ability ends
+    logic() {
+        // ABILITY LOGIC
+    }
+
+    update(player, shape, delta) {
+        if (this.durationTimer > 0) {
+            this.durationTimer -= delta;
+
+            this.logic(shape);
+
+            if (this.durationTimer <= 0) {
+                this.durationTimer = 0;
+                this.reloadTimer = this.reload;
+                this.deinit(player, shape);
+            }
+        } else if (this.reloadTimer > 0) {
+            this.reloadTimer -= delta;
+            if (this.reloadTimer <= 0) this.reloadTimer = 0;
+        }
+    }
+
+    deinit(player, shape) {
+        if (this.avoidBuildings) shape.avoidBuildings = false;
     }
 }
