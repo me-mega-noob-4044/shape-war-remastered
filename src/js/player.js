@@ -155,7 +155,7 @@ function playerify(shape, easyMode) {
     shape.grayDamage = 0;
     shape.vel = { x: 0, y: 0 };
     shape.speed *= 1;
-    shape.health = shape.maxhealth *= (easyMode ? .01 : 1);
+    shape.health = shape.maxhealth *= (easyMode ? .25 : 1);
     shape.grayDamage = 0;
 
     delete shape.cost;
