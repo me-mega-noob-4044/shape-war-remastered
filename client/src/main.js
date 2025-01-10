@@ -268,7 +268,10 @@ var clientEvents = {
                 let ability = shape.abilities[id];
 
                 if (!ability.durationTimer && !ability.reloadTimer) {
-                    // Get to work!
+                    ability.init();
+                    ability.durationTimer = ability.duration;
+
+                    // Work :)
                 }
             }
         }
