@@ -4730,6 +4730,18 @@ import projectile from "../client/src/game/projectile.js";
             }
         }
 
+        static abilityOneCanvas = UTILS.getElement("ability-1-display");
+        static abilityOneContext = this.abilityOneCanvas.getContext("2d");
+
+        static MAX_DISPLAY_SIZE = 47;
+
+        static renderAbilityDisplay() {
+            this.abilityOneContext.clearRect(0, 0, this.MAX_DISPLAY_SIZE, this.MAX_DISPLAY_SIZE);
+
+            this.abilityOneContext.fillStyle = "rgba(0, 0, 0, .45)";
+            this.abilityOneContext.fillRect(0, 0, this.MAX_DISPLAY_SIZE, this.MAX_DISPLAY_SIZE);
+        }
+
         static render() {
             this.fpsCount++;
 
@@ -4782,7 +4794,9 @@ import projectile from "../client/src/game/projectile.js";
                     this.aimSendDate = 100;
                 }
 
-                document.title = `${player.x.toFixed(0)} | ${player.y.toFixed(0)}`;
+                // document.title = `${player.x.toFixed(0)} | ${player.y.toFixed(0)}`;
+
+                this.renderAbilityDisplay();
 
                 GameManager.durationOfGame -= delta;
                 UTILS.getElement("cooldownTimer").innerHTML = UTILS.formatMilliseconds(GameManager.durationOfGame);

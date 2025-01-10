@@ -1289,11 +1289,18 @@ a:-webkit-any-link {
     height: 100%;
 }
 
-#healthHolder {
+#bottom-holder-game {
     position: absolute;
     bottom: 15px;
-    left: 50%;
-    transform: translateX(-50%);
+    left: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+#healthHolder {
+    position: relative;
     background-color: rgba(0, 0, 0, .5);
     width: 375px;
     height: 40px;
@@ -1647,4 +1654,8 @@ tbody td {
     font-weight: 700;
     color: white;
     background-color: rgba(0, 255, 0, .85);
+}
+
+#ability-1-display {
+    margin-left: 10px;
 }
