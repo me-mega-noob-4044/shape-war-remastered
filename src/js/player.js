@@ -368,11 +368,11 @@ export default class Player {
         this.vel = UTILS.getDistance({ x, y }, shape) / config.gameUpdateSpeed;
 
         if (shape.vel.x) {
-            shape.vel.x *= Math.pow(config.playerDecel, config.gameUpdateSpeed);
+            shape.vel.x *= Math.pow(shape.avoidBuildings ? config.skyPlayerDecel : config.playerDecel, config.gameUpdateSpeed);
             if (shape.vel.x <= 0.01 && shape.vel.x >= -0.01) shape.vel.x = 0;
         }
         if (shape.vel.y) {
-            shape.vel.y *= Math.pow(config.playerDecel, config.gameUpdateSpeed);
+            shape.vel.y *= Math.pow(shape.avoidBuildings ? config.skyPlayerDecel : config.playerDecel, config.gameUpdateSpeed);
             if (shape.vel.y <= 0.01 && shape.vel.y >= -0.01) shape.vel.y = 0;
         }
     }

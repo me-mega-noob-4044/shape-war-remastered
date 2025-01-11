@@ -5603,7 +5603,8 @@ import projectile from "../client/src/game/projectile.js";
         }
 
         static start() {
-            // console.clear();
+            console.clear();
+
             let playerData = EquipmentBuilder.player();
 
             this.durationOfGame = 5 * 60 * 1e3;

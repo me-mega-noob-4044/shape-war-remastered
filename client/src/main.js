@@ -326,7 +326,7 @@ class game {
                         let player = players[t];
                         let otherShape = player.shapes[player.chooseIndex];
 
-                        if (otherShape && otherShape.health > 0 && shape != otherShape && UTILS.getDistance(shape, otherShape) <= shape.scale + otherShape.scale) {
+                        if (otherShape && !otherShape.avoidBuildings && otherShape.health > 0 && shape != otherShape && UTILS.getDistance(shape, otherShape) <= shape.scale + otherShape.scale) {
                             let tmpScale = ((UTILS.getDistance(shape, otherShape) - (shape.scale + otherShape.scale)) * -1) / 2;
                             let tmpDir = UTILS.getDirection(shape, otherShape);
 
