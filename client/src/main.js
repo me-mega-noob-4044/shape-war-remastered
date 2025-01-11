@@ -337,8 +337,8 @@ class game {
                         }
                     }
 
-                    // ID, ISUSER, name, x, y, dir, health, maxhealth, grayDamage, isAlly
-                    if (shape.health > 0) playersData.push(player.sid, player.isUser, shape.name, shape.x, shape.y, shape.dir, shape.health, shape.maxhealth, shape.grayDamage, player.isAlly);
+                    // ID, ISUSER, name, x, y, dir, health, maxhealth, grayDamage, isAlly, zIndex
+                    if (shape.health > 0) playersData.push(player.sid, player.isUser, shape.name, shape.x, shape.y, shape.dir, shape.health, shape.maxhealth, shape.grayDamage, player.isAlly, shape.zIndex);
                 }
             }
 

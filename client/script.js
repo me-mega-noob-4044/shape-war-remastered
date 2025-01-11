@@ -4562,12 +4562,13 @@ import projectile from "../client/src/game/projectile.js";
             }
         }
 
-        static renderPlayers() {
+        static renderPlayers(layer) {
             ctx.globalAlpha = 1;
+
             for (let i = 0; i < GameManager.players.length; i++) {
                 let tmpObj = GameManager.players[i];
 
-                if (tmpObj && tmpObj.health > 0) {
+                if (tmpObj && tmpObj.health > 0 && layer == tmpObj.zIndex) {
                     ctx.save();
                     ctx.translate(tmpObj.x - this.offset.x, tmpObj.y - this.offset.y);
                     ctx.strokeStyle = "black";
@@ -4934,7 +4935,8 @@ import projectile from "../client/src/game/projectile.js";
 
             this.renderProjectiles(delta);
             this.renderBuildings(delta, 1);
-            this.renderPlayers();
+            this.renderPlayers(0);
+            this.renderPlayers(1);
             this.renderBuildings(delta, 2);
             this.renderBorders();
 
@@ -5245,13 +5247,14 @@ import projectile from "../client/src/game/projectile.js";
                         tmpObj.maxhealth = data[i + 7];
                         tmpObj.grayDamage = data[i + 8];
                         tmpObj.isAlly = data[i + 9];
+                        tmpObj.zIndex = data[i + 10];
 
                         if (player == tmpObj) {
                             this.updateHealthDisplay();
                         }
                     }
 
-                    i += 10;
+                    i += 11;
                 }
             },
             "pingSocket": () => {
