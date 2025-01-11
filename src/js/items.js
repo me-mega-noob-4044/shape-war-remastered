@@ -105,10 +105,10 @@ const shapes = [{
         name: "Jump",
         description: "The shape jumps onto the air in an chosen direction, avoiding terrain and buildings.",
         imageSource: "../src/media-files/abilities/jump.png",
-        boostSpeed: 2.5,
-        duration: 375,
+        boostSpeed: 2,
+        duration: 500,
         avoidBuildings: true,
-        reload: 5e3
+        reload: 6e3
     }],
     cost: {
         silver: 75e3,

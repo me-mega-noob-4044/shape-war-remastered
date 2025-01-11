@@ -310,7 +310,7 @@ export default class Player {
     handleMovement(shape, buildings) {
         let delta = config.gameUpdateSpeed;
 
-        if (this.moveDir != undefined) {
+        if (this.moveDir != undefined && !shape.avoidBuildings) {
             shape.vel.x += Math.cos(this.moveDir) * shape.speed * config.gameUpdateSpeed;
             shape.vel.y += Math.sin(this.moveDir) * shape.speed * config.gameUpdateSpeed;
         }
