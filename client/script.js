@@ -114,6 +114,7 @@ import projectile from "../client/src/game/projectile.js";
 
     // Don't really need to use a database (MongoDB for example) for this because
     // this is only a single player game
+
     class userProfile {
         static bank = {
             silver: 100e3,
@@ -121,7 +122,7 @@ import projectile from "../client/src/game/projectile.js";
             platinum: 50,
             microchips: 0,
             keys: 100,
-            powercells: 2e3,
+            powercells: 5e3,
             tokens: 0 + 10,
             components: {
                 shapes: {},
