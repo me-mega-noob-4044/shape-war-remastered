@@ -5690,7 +5690,7 @@ import projectile from "../client/src/game/projectile.js";
         } else if (event.key == "q") {
             let module = items.activeModules[player.activeModuleIndex];
 
-            if (userProfile.bank.powercells - module.cost >= 0) {
+            if (userProfile.bank.powercells - module.cost >= 0 && !renderer.abilityTimers[1][0] && !renderer.abilityTimers[1][1]) {
                 userProfile.changeBank("powercells", -module.cost);
                 document.getElementById("in-game-power-cell-display-text").innerText = UTILS.styleNumberWithComma(userProfile.bank.powercells);
                 GameManager.send("useAbility", "active");
