@@ -40,7 +40,7 @@ const config = {
         "Affects the shape": "This drone's functions affect the shape, its weapons, its shields, etc.",
         "Temporary": "Effect is active for a certain duration",
         "One-time effect": "Module activates once per battle",
-        "Manual activation": "Actiates by tap",
+        "Manual activation": "Activates by tap",
         "Cooldown": "Effect charges for a certain time after activation"
     },
     attrubutesImages: {
