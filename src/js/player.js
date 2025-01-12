@@ -540,7 +540,7 @@ export default class Player {
             shape.health = shape.maxhealth - shape.grayDamage;
         }
 
-        shape.zIndex = shape.avoidBuildings * 1;
+        shape.zIndex = !!shape.avoidBuildings * 1;
 
         if (shape.health <= 0) {
             if (this.indx == 0) {

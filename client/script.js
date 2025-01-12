@@ -5250,6 +5250,8 @@ import projectile from "../client/src/game/projectile.js";
                         tmpObj.zIndex = data[i + 10];
 
                         if (player == tmpObj) {
+                            console.log(data[i + 10]);
+
                             this.updateHealthDisplay();
                         }
                     }
