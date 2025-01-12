@@ -1,509 +1,523 @@
 <html lang="en">
-    <head>
-        <title>Shape War: Remastered</title>
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Roboto:wght@500&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,600,0,0">
-        <link rel="icon" type="image/x-icon" href="../src/media-files/favicon.png">
-        <link href="./main.css" rel="stylesheet">
-        <script type="module" src="./script.js"></script>
-    </head>
-    <body>
-        <div id="mainMenu">
-            <div id="gameLoad">
-                <img src="../src/media-files/game_banner.png">
-                <div id="loadingText">Loading</div>
-            </div>
-            <div id="hangerUI"></div>
-            <div id="hangerButtonsUI" style="display: none;">
-                <div id="toBattleButton">To Battle</div>
-            </div>
-            <div id="moneyDisplayHolder"></div>
-            <div id="shapeViewUI">
-                <div id="imageView"></div>
-                <div class="shape-view-item" style="left: 30px;">
-                    <div class="shape-view-name">
-                        <div id="shape-view-level">1</div>
-                        <span id="shape-view-name">Name</span>
-                        <div id="shape-view-more-info">i</div>
-                    </div>
-                    <div class="shape-view-industry">
-                        <div id="circle-shape" class="shape-icon-size"></div>
-                        <div id="pentagon-shape" class="shape-icon-size"></div>
-                        <span id="shape-view-industry-name">Circle</span>
-                    </div>
-                    <div id="view-shape-stats"></div>
-                    <div id="shape-ability-view">
-                        <div id="shape-ability-view-image"></div>
-                        <div id="shape-ability-view-name"></div>
-                    </div>
-                    <div class="shape-bottom-view">
-                        <div id="view-pilot-image-holder" class="view-pilot-button view-button-items">
-                            <div id="view-pilot-image"></div>
-                        </div>
-                        <div id="view-drone-image-holder" class="view-drone-button view-button-items">
-                            <div id="view-drone-image"></div>
-                        </div>
-                    </div>
+
+<head>
+    <title>Shape War: Remastered</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Roboto:wght@500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,600,0,0">
+    <link rel="icon" type="image/x-icon" href="../src/media-files/favicon.png">
+    <link href="./main.css" rel="stylesheet">
+    <script type="module" src="./script.js"></script>
+</head>
+
+<body>
+    <div id="mainMenu">
+        <div id="gameLoad">
+            <img src="../src/media-files/game_banner.png">
+            <div id="loadingText">Loading</div>
+        </div>
+        <div id="hangerUI"></div>
+        <div id="hangerButtonsUI" style="display: none;">
+            <div id="toBattleButton">To Battle</div>
+        </div>
+        <div id="moneyDisplayHolder"></div>
+        <div id="shapeViewUI">
+            <div id="imageView"></div>
+            <div class="shape-view-item" style="left: 30px;">
+                <div class="shape-view-name">
+                    <div id="shape-view-level">1</div>
+                    <span id="shape-view-name">Name</span>
+                    <div id="shape-view-more-info">i</div>
                 </div>
-                <div class="shape-view-item" style="right: 30px;">
-                    <div class="right-view-tabs">
-                        <div id="right-view-weapons">WEAPONS</div>
-                        <div id="right-view-modules">MODULES</div>
-                    </div>
-                    <div id="right-view-display"></div>
+                <div class="shape-view-industry">
+                    <div id="circle-shape" class="shape-icon-size"></div>
+                    <div id="pentagon-shape" class="shape-icon-size"></div>
+                    <span id="shape-view-industry-name">Circle</span>
                 </div>
-                <div class="shape-view-bottom-display">
-                    <div id="shape-view-equip-button" class="shape-view-bottom-button-style">EQUIP</div>
-                    <div id="shape-view-change-button" class="shape-view-bottom-button-style">CHANGE<br>SHAPE</div>
-                    <div id="shape-view-upgrade-button" class="shape-view-bottom-button-style">UPGRADE</div>
-                    <div id="shape-view-buy-button" class="shape-view-bottom-button-style">
-                        <div>BUY</div>
-                        <div style="display: flex; align-items: center; justify-content: center;">
-                            <div id="shape-view-buy-money-icon"></div>
-                            <span id="shape-view-buy-money-display">80,000,000</span>
-                        </div>
-                    </div>
-                    <div id="shape-view-back-button" class="shape-view-bottom-button-style">
-                        <span class="material-symbols-outlined">
-                            arrow_back
-                        </span>
-                        <span>BACK</span>
-                    </div>
+                <div id="view-shape-stats"></div>
+                <div id="shape-ability-view">
+                    <div id="shape-ability-view-image"></div>
+                    <div id="shape-ability-view-name"></div>
                 </div>
-                <!-- <div id="shape-view-unequip-button"></div> -->
-                <div id="shape-view-upgrade-menu">
-                    <div id="shape-view-upgrade-back-button">
-                        <span class="material-symbols-outlined">
-                            close
-                        </span>
+                <div class="shape-bottom-view">
+                    <div id="view-pilot-image-holder" class="view-pilot-button view-button-items">
+                        <div id="view-pilot-image"></div>
                     </div>
-                    <div id="shape-view-upgrade-name"></div>
-                    <div id="shape-view-upgrade-image"></div>
-                    <div id="shape-view-upgrade-right-display"></div>
-                    <div class="shape-view-upgrade-bottom">
-                        <div id="shape-view-upgrade-button-2" class="shape-view-bottom-button-style">
-                            <div id="shape-view-upgrade-text">UPGRADE</div>
-                            <div style="display: flex; align-items: center; justify-content: center;">
-                                <div id="shape-view-upgrade-money-icon"></div>
-                                <span id="shape-view-upgrade-money-display">80,000,000</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div id="shape-view-info-menu">
-                    <div id="shape-view-info-back-button">
-                        <span class="material-symbols-outlined">
-                            close
-                        </span>
-                    </div>
-                    <div id="shape-view-info-name"></div>
-                    <div id="shape-view-info-image"></div>
-                    <div id="shape-view-info-right-display"></div>
-                </div>
-            </div>
-            <div id="shapeItemsUI">
-                <div class="change-shape-top-style-2">
-                    <div id="change-shape-item-replacing-holder"></div>
-                    <div id="shape-in-depth-view-inventory-button" class="change-shape-button-style">INVENTORY</div>
-                    <div id="shape-in-depth-view-store-button" class="change-shape-button-style">STORE</div>
-                </div>
-                <div id="change-shape-item-display"></div>
-                <div class="change-shape-item-bar-display-holder">
-                    <div id="change-shape-item-bar-display"></div>
-                </div>
-                <div class="shape-view-bottom-display">
-                    <div id="shape-item-view-unequip-button" class="shape-view-bottom-button-style">UNEQUIP</div>
-                    <div id="shape-item-view-equip-button" class="shape-view-bottom-button-style">EQUIP</div>
-                    <div id="shape-item-view-upgrade-button" class="shape-view-bottom-button-style">UPGRADE</div>
-                    <div id="shape-item-view-buy-button" class="shape-view-bottom-button-style">
-                        <div>BUY</div>
-                        <div style="display: flex; align-items: center; justify-content: center;">
-                            <div id="shape-item-view-buy-money-icon"></div>
-                            <span id="shape-item-view-buy-money-display">80,000,000</span>
-                        </div>
-                    </div>
-                    <div id="shape-view-back-button-3" class="shape-view-bottom-button-style">
-                        <span class="material-symbols-outlined">
-                            arrow_back
-                        </span>
-                        <span>BACK</span>
-                    </div>
-                </div>
-                <div id="shape-view-item-upgrade-menu">
-                    <div id="shape-view-item-upgrade-back-button">
-                        <span class="material-symbols-outlined">
-                            close
-                        </span>
-                    </div>
-                    <div id="shape-view-item-upgrade-name"></div>
-                    <div id="shape-view-item-upgrade-image"></div>
-                    <div id="shape-view-item-upgrade-right-display"></div>
-                    <div class="shape-view-upgrade-bottom">
-                        <div id="shape-view-item-upgrade-button-2" class="shape-view-bottom-button-style">
-                            <div id="shape-view-item-upgrade-text">UPGRADE</div>
-                            <div style="display: flex; align-items: center; justify-content: center;">
-                                <div id="shape-view-item-upgrade-money-icon"></div>
-                                <span id="shape-view-item-upgrade-money-display">80,000,000</span>
-                            </div>
-                        </div>
+                    <div id="view-drone-image-holder" class="view-drone-button view-button-items">
+                        <div id="view-drone-image"></div>
                     </div>
                 </div>
             </div>
-            <div id="shape-view-item-info-menu">
-                <div id="shape-view-item-info-back-button">
+            <div class="shape-view-item" style="right: 30px;">
+                <div class="right-view-tabs">
+                    <div id="right-view-weapons">WEAPONS</div>
+                    <div id="right-view-modules">MODULES</div>
+                </div>
+                <div id="right-view-display"></div>
+            </div>
+            <div class="shape-view-bottom-display">
+                <div id="shape-view-equip-button" class="shape-view-bottom-button-style">EQUIP</div>
+                <div id="shape-view-change-button" class="shape-view-bottom-button-style">CHANGE<br>SHAPE</div>
+                <div id="shape-view-upgrade-button" class="shape-view-bottom-button-style">UPGRADE</div>
+                <div id="shape-view-buy-button" class="shape-view-bottom-button-style">
+                    <div>BUY</div>
+                    <div style="display: flex; align-items: center; justify-content: center;">
+                        <div id="shape-view-buy-money-icon"></div>
+                        <span id="shape-view-buy-money-display">80,000,000</span>
+                    </div>
+                </div>
+                <div id="shape-view-back-button" class="shape-view-bottom-button-style">
+                    <span class="material-symbols-outlined">
+                        arrow_back
+                    </span>
+                    <span>BACK</span>
+                </div>
+            </div>
+            <!-- <div id="shape-view-unequip-button"></div> -->
+            <div id="shape-view-upgrade-menu">
+                <div id="shape-view-upgrade-back-button">
                     <span class="material-symbols-outlined">
                         close
                     </span>
                 </div>
-                <div id="shape-view-item-info-name"></div>
-                <div id="shape-view-item-info-image"></div>
-                <div id="shape-view-item-info-right-display"></div>
-            </div>
-            <div id="chooseShapesUI">
-                <div class="change-shape-top-style">
-                    <div id="change-shape-replacing-holder"></div>
-                    <div id="change-shape-inventory-button" class="change-shape-button-style">INVENTORY</div>
-                    <div id="change-shape-store-button" class="change-shape-button-style">STORE</div>
-                </div>
-                <div id="change-shape-display"></div>
-                <div class="shape-view-bottom-display">
-                    <div id="shape-view-back-button-2" class="shape-view-bottom-button-style">
-                        <span class="material-symbols-outlined">
-                            arrow_back
-                        </span>
-                        <span>BACK</span>
-                    </div>
-                </div>
-            </div>
-            <div id="droneViewUI">
-                <div id="droneImageView"></div>
-                <div id="droneViewNameLabel"></div>
-                <div id="drone-item-view-left" class="drone-view-item" style="left: 30px;"></div>
-                <div id="drone-item-view-right" class="drone-view-item" style="right: 30px;"></div>
-                <div class="drone-view-bottom-display">
-                    <div id="drone-view-equip-button" class="shape-view-bottom-button-style">EQUIP</div>
-                    <div id="drone-view-unequip-button" class="shape-view-bottom-button-style">UNEQUIP</div>
-                    <div id="drone-view-change-button" class="shape-view-bottom-button-style">CHANGE<br>DRONE</div>
-                    <div id="drone-view-upgrade-button" class="shape-view-bottom-button-style">UPGRADE</div>
-                    <div id="drone-view-buy-button" class="shape-view-bottom-button-style">
-                        <div>BUY</div>
+                <div id="shape-view-upgrade-name"></div>
+                <div id="shape-view-upgrade-image"></div>
+                <div id="shape-view-upgrade-right-display"></div>
+                <div class="shape-view-upgrade-bottom">
+                    <div id="shape-view-upgrade-button-2" class="shape-view-bottom-button-style">
+                        <div id="shape-view-upgrade-text">UPGRADE</div>
                         <div style="display: flex; align-items: center; justify-content: center;">
-                            <div id="drone-view-buy-money-icon"></div>
-                            <span id="drone-view-buy-money-display">80,000,000</span>
-                        </div>
-                    </div>
-                    <div id="drone-view-back-button" class="drone-view-bottom-button-style">
-                        <span class="material-symbols-outlined">
-                            arrow_back
-                        </span>
-                        <span>BACK</span>
-                    </div>
-                </div>
-                <div id="drone-view-upgrade-menu">
-                    <div id="drone-view-upgrade-back-button">
-                        <span class="material-symbols-outlined">
-                            close
-                        </span>
-                    </div>
-                    <div id="drone-view-upgrade-name"></div>
-                    <div id="drone-view-upgrade-image"></div>
-                    <div id="drone-view-upgrade-right-display"></div>
-                    <div class="shape-view-upgrade-bottom">
-                        <div id="drone-view-upgrade-button-2" class="shape-view-bottom-button-style">
-                            <div id="drone-view-upgrade-text">UPGRADE</div>
-                            <div style="display: flex; align-items: center; justify-content: center;">
-                                <div id="drone-view-upgrade-money-icon"></div>
-                                <span id="drone-view-upgrade-money-display">80,000,000</span>
-                            </div>
+                            <div id="shape-view-upgrade-money-icon"></div>
+                            <span id="shape-view-upgrade-money-display">80,000,000</span>
                         </div>
                     </div>
                 </div>
             </div>
-            <div id="drone-ability-info-menu">
-                <div id="drone-ability-info-back-button">
+            <div id="shape-view-info-menu">
+                <div id="shape-view-info-back-button">
                     <span class="material-symbols-outlined">
                         close
                     </span>
                 </div>
-                <div id="drone-ability-info-name"></div>
-                <div id="drone-ability-info-image"></div>
-                <div id="drone-ability-info-right-display"></div>
+                <div id="shape-view-info-name"></div>
+                <div id="shape-view-info-image"></div>
+                <div id="shape-view-info-right-display"></div>
             </div>
-            <div id="pilotViewUI">
-                <div id="pilot-display-name">Harold</div>
-                <div id="pilot-display-image"></div>
-                <div id="pilot-right-side-display">
-                    <div class="pilot-display-skill-header">
-                        <span style="margin-left: 4px; font-size: 50px; color: #5fbdf3;" class="material-symbols-outlined">
-                            info
-                        </span>
-                        <div class="pilot-display-header-data">
-                            <div class="pilot-operates-display">
-                                <div id="pilot-operates-header">Operates:</div>
-                                <div id="pilot-header-display-level">1</div>
-                                <div id="pilot-header-display-name">Raptor MK3</div>
-                            </div>
-                            <div class="pilot-active-skills-display">
-                                Active skills:&nbsp;
-                                <div id="pilot-skill-header-active-skills">-99</div>
-                                /
-                                <div id="pilot-skill-header-max-skills">10</div>
-                            </div>
-                            <div class="change-pilot-skill-holder">
-                                <div id="change-pilot-skill-button">CHANGE A SKILL</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="pilot-skills-display"></div>
-                    <div id="pilot-story-display"></div>
-                </div>
-                <div class="pilot-view-bottom-display">
-                    <div id="pilot-view-equip-button" class="shape-view-bottom-button-style">ASSIGN</div>
-                    <div id="pilot-view-unequip-button" class="shape-view-bottom-button-style">UNASSIGN</div>
-                    <div id="pilot-view-change-button" class="shape-view-bottom-button-style">CHANGE<br>PILOT</div>
-                    <div id="pilot-view-upgrade-button" class="shape-view-bottom-button-style">
-                        <div>PROMOTE</div>
-                        <div style="display: flex; align-items: center; justify-content: center;">
-                            <div id="pilot-view-upgrade-money-icon"></div>
-                            <span id="pilot-view-upgrade-money-display">80,000,000</span>
-                        </div>
-                    </div>
-                    <div id="pilot-view-buy-button" class="shape-view-bottom-button-style">
-                        <div>HIRE</div>
-                        <div style="display: flex; align-items: center; justify-content: center;">
-                            <div id="pilot-view-buy-money-icon"></div>
-                            <span id="pilot-view-buy-money-display">80,000,000</span>
-                        </div>
-                    </div>
-                    <div id="pilot-view-back-button" class="pilot-view-bottom-button-style">
-                        <span class="material-symbols-outlined">
-                            arrow_back
-                        </span>
-                        <span>BACK</span>
-                    </div>
-                </div>
-            </div>
-            <div id="pilot-skill-change-ui">
-                <div id="pilot-skills-left-side-display"></div>
-                <div id="pilot-skills-right-side-display"></div>
-                <div class="pilot-view-bottom-display">
-                    <div id="pilot-skills-view-back-button" class="pilot-view-bottom-button-style">
-                        <span class="material-symbols-outlined">
-                            arrow_back
-                        </span>
-                        <span>BACK</span>
-                    </div>
-                </div>
-            </div>
-            <div id="darkFadeTransition"></div>
         </div>
-
-        <div id="gameUI">
-            <div id="inGameUI">
-                <div id="easy-mode-display">EASY MODE: ON</div>
-                <div class="topHolder">
-                    <div id="cooldownTimer">5:00</div>
-                    <div style="display: flex; align-items: center; justify-content: center; width: 100%;">
-                        <div id="allyBeaconProgress" class="progressBar" style="margin-right: 10px;"></div>
-                        <div id="beaconDisplay"></div>
-                        <div id="enemyBeaconProgress" class="progressBar" style="margin-left: 10px;"></div>
-                    </div>
-                    <div style="display: flex; align-items: center; justify-content: center; width: 100%; margin-top: 4px;">
-                        <div id="allyAliveDisplay" style="margin-right: 2px;"></div>
-                        <div id="enemyAliveDisplay" style="margin-left: 2px;"></div>
-                    </div>
-                </div>
-                <div class="announcement-in-game-header">
-                    <div id="beaconCaptured">
-                        BEACON A CAPTURED
-                    </div>
-                    <div id="killsAnnouncement">
-                        KILL X15
+        <div id="shapeItemsUI">
+            <div class="change-shape-top-style-2">
+                <div id="change-shape-item-replacing-holder"></div>
+                <div id="shape-in-depth-view-inventory-button" class="change-shape-button-style">INVENTORY</div>
+                <div id="shape-in-depth-view-store-button" class="change-shape-button-style">STORE</div>
+            </div>
+            <div id="change-shape-item-display"></div>
+            <div class="change-shape-item-bar-display-holder">
+                <div id="change-shape-item-bar-display"></div>
+            </div>
+            <div class="shape-view-bottom-display">
+                <div id="shape-item-view-unequip-button" class="shape-view-bottom-button-style">UNEQUIP</div>
+                <div id="shape-item-view-equip-button" class="shape-view-bottom-button-style">EQUIP</div>
+                <div id="shape-item-view-upgrade-button" class="shape-view-bottom-button-style">UPGRADE</div>
+                <div id="shape-item-view-buy-button" class="shape-view-bottom-button-style">
+                    <div>BUY</div>
+                    <div style="display: flex; align-items: center; justify-content: center;">
+                        <div id="shape-item-view-buy-money-icon"></div>
+                        <span id="shape-item-view-buy-money-display">80,000,000</span>
                     </div>
                 </div>
-                <div id="menuButton">
+                <div id="shape-view-back-button-3" class="shape-view-bottom-button-style">
                     <span class="material-symbols-outlined">
-                        menu
+                        arrow_back
+                    </span>
+                    <span>BACK</span>
+                </div>
+            </div>
+            <div id="shape-view-item-upgrade-menu">
+                <div id="shape-view-item-upgrade-back-button">
+                    <span class="material-symbols-outlined">
+                        close
                     </span>
                 </div>
-                <div id="bottom-holder-game">
-                    <div id="healthHolder">
-                        <div id="grayDamageBar"></div>
-                        <div id="healthBar"></div>
-                        <div id="healthText">100 000</div>
-                    </div>
-
-                    <canvas id="ability-1-display" width="47" height="47"></canvas>
-                </div>
-                <div id="weaponsDisplay"></div>
-                <div id="pingDisplay"></div>
-            </div>
-            <div id="gameResults">
-                <div id="gameResultDisplay">
-                </div>
-                <div id="gameResultOverview">
-                    <div class="game-result-title">TEAM RESULTS</div>
-                    <div style="display: flex; width: 100%;">
-                        <table class="result-board" style="border-color: var(--ally-table-border-color)">
-                            <thead style="background-color: rgb(0, 0, 255);">
-                                <tr>
-                                    <td class="table-name-header">
-                                        <div style="margin-left: 10px;">ALLIES</div>
-                                    </td>
-                                    <td class="table-stat-header">
-                                        <div class="table-center-icon">
-                                            <span class="material-symbols-outlined">
-                                                military_tech
-                                            </span>
-                                        </div>
-                                    </td>
-                                    <td class="table-damage-header">
-                                        <div class="table-center-icon">
-                                            <span class="material-symbols-outlined">
-                                                destruction
-                                            </span>
-                                        </div>
-                                    </td>
-                                    <td class="table-stat-header">
-                                        <div class="table-center-icon">
-                                            <span class="material-symbols-outlined">
-                                                group_remove
-                                            </span>
-                                        </div>
-                                    </td>
-                                    <td class="table-stat-header">
-                                        <div class="table-center-icon">
-                                            <span class="material-symbols-outlined">
-                                                hub
-                                            </span>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </thead>
-                            <tbody id="ally-table-body">
-                            </tbody>
-                        </table>
-                
-                        <table class="result-board" style="margin-left: 10px; border-color: var(--enemy-table-border-color)">
-                            <thead style="background-color: rgb(255, 0, 0);">
-                                <tr>
-                                    <td class="table-name-header">
-                                        <div style="margin-left: 10px;">ENEMY TEAM</div>
-                                    </td>
-                                    <td class="table-stat-header">
-                                        <div class="table-center-icon">
-                                            <span class="material-symbols-outlined">
-                                                military_tech
-                                            </span>
-                                        </div>
-                                    </td>
-                                    <td class="table-damage-header">
-                                        <div class="table-center-icon">
-                                            <span class="material-symbols-outlined">
-                                                destruction
-                                            </span>
-                                        </div>
-                                    </td>
-                                    <td class="table-stat-header">
-                                        <div class="table-center-icon">
-                                            <span class="material-symbols-outlined">
-                                                group_remove
-                                            </span>
-                                        </div>
-                                    </td>
-                                    <td class="table-stat-header">
-                                        <div class="table-center-icon">
-                                            <span class="material-symbols-outlined">
-                                                hub
-                                            </span>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </thead>
-                            <tbody id="enemy-table-body">
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="game-result-title">YOUR RESULTS</div>
-                    <div class="game-table-grid">
-                        <div class="grid-table-item">
-                            <span class="table-grid-item-icon material-symbols-outlined">
-                                destruction
-                            </span>
-                            <div class="grid-table-item-stat">
-                                <div id="grid-table-item-stat-damage" style="font-size: 22px;">1,233</div>
-                                <div class="grid-table-item-stat-description">Damage Dealt</div>
-                            </div>
-                        </div>
-                        <div class="grid-table-item">
-                            <span class="table-grid-item-icon material-symbols-outlined">
-                                group_remove
-                            </span>
-                            <div class="grid-table-item-stat">
-                                <div id="grid-table-item-stat-kills" style="font-size: 22px;">1,233</div>
-                                <div class="grid-table-item-stat-description">Kills</div>
-                            </div>
-                        </div>
-                        <div class="grid-table-item">
-                            <span class="table-grid-item-icon material-symbols-outlined">
-                                hub
-                            </span>
-                            <div class="grid-table-item-stat">
-                                <div id="grid-table-item-stat-beacons" style="font-size: 22px;">1,233</div>
-                                <div class="grid-table-item-stat-description">Beacons</div>
-                            </div>
-                        </div>
-                        <div class="grid-table-item">
-                            <span class="table-grid-item-icon material-symbols-outlined">
-                                military_tech
-                            </span>
-                            <div class="grid-table-item-stat">
-                                <div id="grid-table-item-stat-honor" style="font-size: 22px;">1,233</div>
-                                <div class="grid-table-item-stat-description">Honor</div>
-                            </div>
-                            <div id="grid-table-item-honor-info">i</div>
+                <div id="shape-view-item-upgrade-name"></div>
+                <div id="shape-view-item-upgrade-image"></div>
+                <div id="shape-view-item-upgrade-right-display"></div>
+                <div class="shape-view-upgrade-bottom">
+                    <div id="shape-view-item-upgrade-button-2" class="shape-view-bottom-button-style">
+                        <div id="shape-view-item-upgrade-text">UPGRADE</div>
+                        <div style="display: flex; align-items: center; justify-content: center;">
+                            <div id="shape-view-item-upgrade-money-icon"></div>
+                            <span id="shape-view-item-upgrade-money-display">80,000,000</span>
                         </div>
                     </div>
-                    <div class="game-table-grid" style="margin-top: 7px; margin-bottom: 30px;">
-                        <div class="grid-table-item">
-                            <span class="table-grid-item-reward-icon" style="background-image: url('../src/media-files/money/silver.png');"></span>
-                            <div class="grid-table-item-stat">
-                                <div id="grid-table-item-reward-silver" style="font-size: 22px;">1,233</div>
-                                <div class="grid-table-item-stat-description">Silver Reward</div>
-                            </div>
-                        </div>
-                        <div class="grid-table-item">
-                            <span class="table-grid-item-reward-icon" style="background-image: url('../src/media-files/money/gold.png');"></span>
-                            <div class="grid-table-item-stat">
-                                <div id="grid-table-item-reward-gold" style="font-size: 22px;">1,233</div>
-                                <div class="grid-table-item-stat-description">Gold Reward</div>
-                            </div>
-                        </div>
-                        <div class="grid-table-item">
-                            <span class="table-grid-item-reward-icon" style="background-image: url('../src/media-files/money/keys.png');"></span>
-                            <div class="grid-table-item-stat">
-                                <div id="grid-table-item-reward-keys" style="font-size: 22px;">1,233</div>
-                                <div class="grid-table-item-stat-description">Keys Reward</div>
-                            </div>
-                        </div>
-                        <div class="grid-table-item">
-                            <span class="table-grid-item-icon material-symbols-outlined" style="color: #ffff00;">
-                                trophy
-                            </span>
-                            <div class="grid-table-item-stat">
-                                <div id="grid-table-item-reward-league" style="font-size: 22px;">1,233</div>
-                                <div class="grid-table-item-stat-description">League Reward</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="game-screen-exit-button">OK</div>
                 </div>
             </div>
-            <div id="chooseShapeUI"></div>
         </div>
+        <div id="shape-view-item-info-menu">
+            <div id="shape-view-item-info-back-button">
+                <span class="material-symbols-outlined">
+                    close
+                </span>
+            </div>
+            <div id="shape-view-item-info-name"></div>
+            <div id="shape-view-item-info-image"></div>
+            <div id="shape-view-item-info-right-display"></div>
+        </div>
+        <div id="chooseShapesUI">
+            <div class="change-shape-top-style">
+                <div id="change-shape-replacing-holder"></div>
+                <div id="change-shape-inventory-button" class="change-shape-button-style">INVENTORY</div>
+                <div id="change-shape-store-button" class="change-shape-button-style">STORE</div>
+            </div>
+            <div id="change-shape-display"></div>
+            <div class="shape-view-bottom-display">
+                <div id="shape-view-back-button-2" class="shape-view-bottom-button-style">
+                    <span class="material-symbols-outlined">
+                        arrow_back
+                    </span>
+                    <span>BACK</span>
+                </div>
+            </div>
+        </div>
+        <div id="droneViewUI">
+            <div id="droneImageView"></div>
+            <div id="droneViewNameLabel"></div>
+            <div id="drone-item-view-left" class="drone-view-item" style="left: 30px;"></div>
+            <div id="drone-item-view-right" class="drone-view-item" style="right: 30px;"></div>
+            <div class="drone-view-bottom-display">
+                <div id="drone-view-equip-button" class="shape-view-bottom-button-style">EQUIP</div>
+                <div id="drone-view-unequip-button" class="shape-view-bottom-button-style">UNEQUIP</div>
+                <div id="drone-view-change-button" class="shape-view-bottom-button-style">CHANGE<br>DRONE</div>
+                <div id="drone-view-upgrade-button" class="shape-view-bottom-button-style">UPGRADE</div>
+                <div id="drone-view-buy-button" class="shape-view-bottom-button-style">
+                    <div>BUY</div>
+                    <div style="display: flex; align-items: center; justify-content: center;">
+                        <div id="drone-view-buy-money-icon"></div>
+                        <span id="drone-view-buy-money-display">80,000,000</span>
+                    </div>
+                </div>
+                <div id="drone-view-back-button" class="drone-view-bottom-button-style">
+                    <span class="material-symbols-outlined">
+                        arrow_back
+                    </span>
+                    <span>BACK</span>
+                </div>
+            </div>
+            <div id="drone-view-upgrade-menu">
+                <div id="drone-view-upgrade-back-button">
+                    <span class="material-symbols-outlined">
+                        close
+                    </span>
+                </div>
+                <div id="drone-view-upgrade-name"></div>
+                <div id="drone-view-upgrade-image"></div>
+                <div id="drone-view-upgrade-right-display"></div>
+                <div class="shape-view-upgrade-bottom">
+                    <div id="drone-view-upgrade-button-2" class="shape-view-bottom-button-style">
+                        <div id="drone-view-upgrade-text">UPGRADE</div>
+                        <div style="display: flex; align-items: center; justify-content: center;">
+                            <div id="drone-view-upgrade-money-icon"></div>
+                            <span id="drone-view-upgrade-money-display">80,000,000</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="drone-ability-info-menu">
+            <div id="drone-ability-info-back-button">
+                <span class="material-symbols-outlined">
+                    close
+                </span>
+            </div>
+            <div id="drone-ability-info-name"></div>
+            <div id="drone-ability-info-image"></div>
+            <div id="drone-ability-info-right-display"></div>
+        </div>
+        <div id="pilotViewUI">
+            <div id="pilot-display-name">Harold</div>
+            <div id="pilot-display-image"></div>
+            <div id="pilot-right-side-display">
+                <div class="pilot-display-skill-header">
+                    <span style="margin-left: 4px; font-size: 50px; color: #5fbdf3;" class="material-symbols-outlined">
+                        info
+                    </span>
+                    <div class="pilot-display-header-data">
+                        <div class="pilot-operates-display">
+                            <div id="pilot-operates-header">Operates:</div>
+                            <div id="pilot-header-display-level">1</div>
+                            <div id="pilot-header-display-name">Raptor MK3</div>
+                        </div>
+                        <div class="pilot-active-skills-display">
+                            Active skills:&nbsp;
+                            <div id="pilot-skill-header-active-skills">-99</div>
+                            /
+                            <div id="pilot-skill-header-max-skills">10</div>
+                        </div>
+                        <div class="change-pilot-skill-holder">
+                            <div id="change-pilot-skill-button">CHANGE A SKILL</div>
+                        </div>
+                    </div>
+                </div>
+                <div id="pilot-skills-display"></div>
+                <div id="pilot-story-display"></div>
+            </div>
+            <div class="pilot-view-bottom-display">
+                <div id="pilot-view-equip-button" class="shape-view-bottom-button-style">ASSIGN</div>
+                <div id="pilot-view-unequip-button" class="shape-view-bottom-button-style">UNASSIGN</div>
+                <div id="pilot-view-change-button" class="shape-view-bottom-button-style">CHANGE<br>PILOT</div>
+                <div id="pilot-view-upgrade-button" class="shape-view-bottom-button-style">
+                    <div>PROMOTE</div>
+                    <div style="display: flex; align-items: center; justify-content: center;">
+                        <div id="pilot-view-upgrade-money-icon"></div>
+                        <span id="pilot-view-upgrade-money-display">80,000,000</span>
+                    </div>
+                </div>
+                <div id="pilot-view-buy-button" class="shape-view-bottom-button-style">
+                    <div>HIRE</div>
+                    <div style="display: flex; align-items: center; justify-content: center;">
+                        <div id="pilot-view-buy-money-icon"></div>
+                        <span id="pilot-view-buy-money-display">80,000,000</span>
+                    </div>
+                </div>
+                <div id="pilot-view-back-button" class="pilot-view-bottom-button-style">
+                    <span class="material-symbols-outlined">
+                        arrow_back
+                    </span>
+                    <span>BACK</span>
+                </div>
+            </div>
+        </div>
+        <div id="pilot-skill-change-ui">
+            <div id="pilot-skills-left-side-display"></div>
+            <div id="pilot-skills-right-side-display"></div>
+            <div class="pilot-view-bottom-display">
+                <div id="pilot-skills-view-back-button" class="pilot-view-bottom-button-style">
+                    <span class="material-symbols-outlined">
+                        arrow_back
+                    </span>
+                    <span>BACK</span>
+                </div>
+            </div>
+        </div>
+        <div id="darkFadeTransition"></div>
+    </div>
 
-        <canvas id="gameCanvas"></canvas>
-    </body>
+    <div id="gameUI">
+        <div id="inGameUI">
+            <div id="easy-mode-display">EASY MODE: ON</div>
+            <div class="topHolder">
+                <div id="cooldownTimer">5:00</div>
+                <div style="display: flex; align-items: center; justify-content: center; width: 100%;">
+                    <div id="allyBeaconProgress" class="progressBar" style="margin-right: 10px;"></div>
+                    <div id="beaconDisplay"></div>
+                    <div id="enemyBeaconProgress" class="progressBar" style="margin-left: 10px;"></div>
+                </div>
+                <div style="display: flex; align-items: center; justify-content: center; width: 100%; margin-top: 4px;">
+                    <div id="allyAliveDisplay" style="margin-right: 2px;"></div>
+                    <div id="enemyAliveDisplay" style="margin-left: 2px;"></div>
+                </div>
+            </div>
+            <div class="announcement-in-game-header">
+                <div id="beaconCaptured">
+                    BEACON A CAPTURED
+                </div>
+                <div id="killsAnnouncement">
+                    KILL X15
+                </div>
+            </div>
+            <div id="in-game-power-cell-display">
+                <img src="../src/media-files/money/powercells.png" height="25" width="25">
+                <div id="in-game-power-cell-display-text">3,000</div>
+            </div>
+            <div id="menuButton">
+                <span class="material-symbols-outlined">
+                    menu
+                </span>
+            </div>
+            <div id="bottom-holder-game">
+                <div id="healthHolder">
+                    <div id="grayDamageBar"></div>
+                    <div id="healthBar"></div>
+                    <div id="healthText">100 000</div>
+                </div>
+
+                <canvas id="ability-1-display" width="47" height="47"></canvas>
+            </div>
+            <div id="weaponsDisplay"></div>
+            <div id="pingDisplay"></div>
+        </div>
+        <div id="gameResults">
+            <div id="gameResultDisplay">
+            </div>
+            <div id="gameResultOverview">
+                <div class="game-result-title">TEAM RESULTS</div>
+                <div style="display: flex; width: 100%;">
+                    <table class="result-board" style="border-color: var(--ally-table-border-color)">
+                        <thead style="background-color: rgb(0, 0, 255);">
+                            <tr>
+                                <td class="table-name-header">
+                                    <div style="margin-left: 10px;">ALLIES</div>
+                                </td>
+                                <td class="table-stat-header">
+                                    <div class="table-center-icon">
+                                        <span class="material-symbols-outlined">
+                                            military_tech
+                                        </span>
+                                    </div>
+                                </td>
+                                <td class="table-damage-header">
+                                    <div class="table-center-icon">
+                                        <span class="material-symbols-outlined">
+                                            destruction
+                                        </span>
+                                    </div>
+                                </td>
+                                <td class="table-stat-header">
+                                    <div class="table-center-icon">
+                                        <span class="material-symbols-outlined">
+                                            group_remove
+                                        </span>
+                                    </div>
+                                </td>
+                                <td class="table-stat-header">
+                                    <div class="table-center-icon">
+                                        <span class="material-symbols-outlined">
+                                            hub
+                                        </span>
+                                    </div>
+                                </td>
+                            </tr>
+                        </thead>
+                        <tbody id="ally-table-body">
+                        </tbody>
+                    </table>
+
+                    <table class="result-board"
+                        style="margin-left: 10px; border-color: var(--enemy-table-border-color)">
+                        <thead style="background-color: rgb(255, 0, 0);">
+                            <tr>
+                                <td class="table-name-header">
+                                    <div style="margin-left: 10px;">ENEMY TEAM</div>
+                                </td>
+                                <td class="table-stat-header">
+                                    <div class="table-center-icon">
+                                        <span class="material-symbols-outlined">
+                                            military_tech
+                                        </span>
+                                    </div>
+                                </td>
+                                <td class="table-damage-header">
+                                    <div class="table-center-icon">
+                                        <span class="material-symbols-outlined">
+                                            destruction
+                                        </span>
+                                    </div>
+                                </td>
+                                <td class="table-stat-header">
+                                    <div class="table-center-icon">
+                                        <span class="material-symbols-outlined">
+                                            group_remove
+                                        </span>
+                                    </div>
+                                </td>
+                                <td class="table-stat-header">
+                                    <div class="table-center-icon">
+                                        <span class="material-symbols-outlined">
+                                            hub
+                                        </span>
+                                    </div>
+                                </td>
+                            </tr>
+                        </thead>
+                        <tbody id="enemy-table-body">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="game-result-title">YOUR RESULTS</div>
+                <div class="game-table-grid">
+                    <div class="grid-table-item">
+                        <span class="table-grid-item-icon material-symbols-outlined">
+                            destruction
+                        </span>
+                        <div class="grid-table-item-stat">
+                            <div id="grid-table-item-stat-damage" style="font-size: 22px;">1,233</div>
+                            <div class="grid-table-item-stat-description">Damage Dealt</div>
+                        </div>
+                    </div>
+                    <div class="grid-table-item">
+                        <span class="table-grid-item-icon material-symbols-outlined">
+                            group_remove
+                        </span>
+                        <div class="grid-table-item-stat">
+                            <div id="grid-table-item-stat-kills" style="font-size: 22px;">1,233</div>
+                            <div class="grid-table-item-stat-description">Kills</div>
+                        </div>
+                    </div>
+                    <div class="grid-table-item">
+                        <span class="table-grid-item-icon material-symbols-outlined">
+                            hub
+                        </span>
+                        <div class="grid-table-item-stat">
+                            <div id="grid-table-item-stat-beacons" style="font-size: 22px;">1,233</div>
+                            <div class="grid-table-item-stat-description">Beacons</div>
+                        </div>
+                    </div>
+                    <div class="grid-table-item">
+                        <span class="table-grid-item-icon material-symbols-outlined">
+                            military_tech
+                        </span>
+                        <div class="grid-table-item-stat">
+                            <div id="grid-table-item-stat-honor" style="font-size: 22px;">1,233</div>
+                            <div class="grid-table-item-stat-description">Honor</div>
+                        </div>
+                        <div id="grid-table-item-honor-info">i</div>
+                    </div>
+                </div>
+                <div class="game-table-grid" style="margin-top: 7px; margin-bottom: 30px;">
+                    <div class="grid-table-item">
+                        <span class="table-grid-item-reward-icon"
+                            style="background-image: url('../src/media-files/money/silver.png');"></span>
+                        <div class="grid-table-item-stat">
+                            <div id="grid-table-item-reward-silver" style="font-size: 22px;">1,233</div>
+                            <div class="grid-table-item-stat-description">Silver Reward</div>
+                        </div>
+                    </div>
+                    <div class="grid-table-item">
+                        <span class="table-grid-item-reward-icon"
+                            style="background-image: url('../src/media-files/money/gold.png');"></span>
+                        <div class="grid-table-item-stat">
+                            <div id="grid-table-item-reward-gold" style="font-size: 22px;">1,233</div>
+                            <div class="grid-table-item-stat-description">Gold Reward</div>
+                        </div>
+                    </div>
+                    <div class="grid-table-item">
+                        <span class="table-grid-item-reward-icon"
+                            style="background-image: url('../src/media-files/money/keys.png');"></span>
+                        <div class="grid-table-item-stat">
+                            <div id="grid-table-item-reward-keys" style="font-size: 22px;">1,233</div>
+                            <div class="grid-table-item-stat-description">Keys Reward</div>
+                        </div>
+                    </div>
+                    <div class="grid-table-item">
+                        <span class="table-grid-item-icon material-symbols-outlined" style="color: #ffff00;">
+                            trophy
+                        </span>
+                        <div class="grid-table-item-stat">
+                            <div id="grid-table-item-reward-league" style="font-size: 22px;">1,233</div>
+                            <div class="grid-table-item-stat-description">League Reward</div>
+                        </div>
+                    </div>
+                </div>
+                <div id="game-screen-exit-button">OK</div>
+            </div>
+        </div>
+        <div id="chooseShapeUI"></div>
+    </div>
+
+    <canvas id="gameCanvas"></canvas>
+</body>
+
 </html>

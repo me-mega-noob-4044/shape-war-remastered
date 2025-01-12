@@ -3,7 +3,8 @@
     --enemy-table-border-color: rgb(254, 101, 101);
 }
 
-html, body {
+html,
+body {
     padding: 0;
     margin: 0;
     user-select: none;
@@ -21,6 +22,7 @@ a:-webkit-any-link {
     0% {
         background-color: rgba(0, 0, 0, 0.2);
     }
+
     100% {
         background-color: rgba(0, 0, 0, 0.35);
     }
@@ -139,7 +141,12 @@ a:-webkit-any-link {
     height: 50px;
 }
 
-#shapeViewUI, #chooseShapesUI, #shapeItemsUI, #droneViewUI, #pilotViewUI, #pilot-skill-change-ui {
+#shapeViewUI,
+#chooseShapesUI,
+#shapeItemsUI,
+#droneViewUI,
+#pilotViewUI,
+#pilot-skill-change-ui {
     display: none;
     position: absolute;
     top: 0px;
@@ -207,7 +214,8 @@ a:-webkit-any-link {
     background-color: rgb(0, 0, 0, .4);
 }
 
-#imageView, #droneImageView {
+#imageView,
+#droneImageView {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -264,13 +272,11 @@ a:-webkit-any-link {
 #pentagon-shape {
     background-color: white;
     position: relative;
-    clip-path: polygon(
-        50% 0%,
-        100% 38%,
-        82% 100%,
-        18% 100%,
-        0% 38%
-    );
+    clip-path: polygon(50% 0%,
+            100% 38%,
+            82% 100%,
+            18% 100%,
+            0% 38%);
 }
 
 .circle-shape {
@@ -281,13 +287,11 @@ a:-webkit-any-link {
 .pentagon-shape {
     background-color: white;
     position: relative;
-    clip-path: polygon(
-        50% 0%,
-        100% 38%,
-        82% 100%,
-        18% 100%,
-        0% 38%
-    );
+    clip-path: polygon(50% 0%,
+            100% 38%,
+            82% 100%,
+            18% 100%,
+            0% 38%);
 }
 
 #shape-view-industry-name {
@@ -417,7 +421,8 @@ a:-webkit-any-link {
     height: 90px;
 }
 
-#view-pilot-image, #view-drone-image {
+#view-pilot-image,
+#view-drone-image {
     position: absolute;
     display: flex;
     align-items: center;
@@ -477,13 +482,11 @@ a:-webkit-any-link {
 }
 
 .diagonal-line-pattern {
-    background-image: repeating-linear-gradient(
-        -45deg, 
-        rgba(0, 0, 0, 0.1) 0, 
-        rgba(0, 0, 0, 0.1) 10px, 
-        rgba(255, 255, 255, 0.25) 10px, 
-        rgba(255, 255, 255, 0.25) 20px
-    );
+    background-image: repeating-linear-gradient(-45deg,
+            rgba(0, 0, 0, 0.1) 0,
+            rgba(0, 0, 0, 0.1) 10px,
+            rgba(255, 255, 255, 0.25) 10px,
+            rgba(255, 255, 255, 0.25) 20px);
     border-radius: 0px 0px 6px 6px;
 }
 
@@ -570,10 +573,13 @@ a:-webkit-any-link {
     border: solid;
     border-color: white;
     border-width: 2px;
-    border-radius: 100%; 
+    border-radius: 100%;
 }
 
-.shape-view-bottom-display, .shape-view-upgrade-bottom, .drone-view-bottom-display, .pilot-view-bottom-display {
+.shape-view-bottom-display,
+.shape-view-upgrade-bottom,
+.drone-view-bottom-display,
+.pilot-view-bottom-display {
     position: absolute;
     display: flex;
     align-items: center;
@@ -584,7 +590,9 @@ a:-webkit-any-link {
     width: 100%;
 }
 
-.shape-view-bottom-button-style, .drone-view-bottom-button-style, .pilot-view-bottom-button-style {
+.shape-view-bottom-button-style,
+.drone-view-bottom-button-style,
+.pilot-view-bottom-button-style {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -597,7 +605,12 @@ a:-webkit-any-link {
     border-radius: 4px;
 }
 
-#shape-view-back-button, #shape-view-back-button-2, #shape-view-back-button-3, #drone-view-back-button, #pilot-view-back-button, #pilot-skills-view-back-button {
+#shape-view-back-button,
+#shape-view-back-button-2,
+#shape-view-back-button-3,
+#drone-view-back-button,
+#pilot-view-back-button,
+#pilot-skills-view-back-button {
     position: absolute;
     top: 20px;
     left: 30px;
@@ -628,7 +641,10 @@ a:-webkit-any-link {
     background-color: rgb(0, 0, 0, .3);
 }
 
-#shape-view-upgrade-button, #shape-item-view-upgrade-button, #drone-view-upgrade-button, #pilot-view-upgrade-button {
+#shape-view-upgrade-button,
+#shape-item-view-upgrade-button,
+#drone-view-upgrade-button,
+#pilot-view-upgrade-button {
     margin-left: 15px;
     background-color: rgb(1, 207, 77);
 }
@@ -637,7 +653,13 @@ a:-webkit-any-link {
     flex-direction: column;
 }
 
-#shape-view-upgrade-button-2, #shape-view-buy-button, #pilot-view-buy-button, #drone-view-buy-button, #shape-item-view-buy-button, #shape-view-item-upgrade-button-2, #drone-view-upgrade-button-2 {
+#shape-view-upgrade-button-2,
+#shape-view-buy-button,
+#pilot-view-buy-button,
+#drone-view-buy-button,
+#shape-item-view-buy-button,
+#shape-view-item-upgrade-button-2,
+#drone-view-upgrade-button-2 {
     margin-left: 15px;
     background-color: rgb(1, 207, 77);
     flex-direction: column;
@@ -647,7 +669,9 @@ a:-webkit-any-link {
     display: none;
 }
 
-#shape-view-buy-button, #drone-view-buy-button, #pilot-view-buy-button {
+#shape-view-buy-button,
+#drone-view-buy-button,
+#pilot-view-buy-button {
     display: none;
 }
 
@@ -715,7 +739,14 @@ a:-webkit-any-link {
     background-color: rgba(35, 134, 232);
 }
 
-#shape-view-change-button, #shape-view-equip-button, #pilot-view-unequip-button, #shape-item-view-equip-button, #pilot-view-equip-button, #shape-item-view-unequip-button, #drone-view-equip-button, #drone-view-unequip-button {
+#shape-view-change-button,
+#shape-view-equip-button,
+#pilot-view-unequip-button,
+#shape-item-view-equip-button,
+#pilot-view-equip-button,
+#shape-item-view-unequip-button,
+#drone-view-equip-button,
+#drone-view-unequip-button {
     text-align: center;
     background-color: rgba(35, 134, 232);
 }
@@ -774,7 +805,12 @@ a:-webkit-any-link {
     background-color: rgb(0, 0, 0, .6);
 }
 
-#shape-view-upgrade-menu, #shape-view-info-menu, #shape-view-item-upgrade-menu, #shape-view-item-info-menu, #drone-ability-info-menu, #drone-view-upgrade-menu {
+#shape-view-upgrade-menu,
+#shape-view-info-menu,
+#shape-view-item-upgrade-menu,
+#shape-view-item-info-menu,
+#drone-ability-info-menu,
+#drone-view-upgrade-menu {
     display: none;
     position: absolute;
     top: 0px;
@@ -784,7 +820,12 @@ a:-webkit-any-link {
     background-color: #a8a8a8;
 }
 
-#shape-view-upgrade-name, #shape-view-info-name, #shape-view-item-upgrade-name, #shape-view-item-info-name, #drone-ability-info-name, #drone-view-upgrade-name {
+#shape-view-upgrade-name,
+#shape-view-info-name,
+#shape-view-item-upgrade-name,
+#shape-view-item-info-name,
+#drone-ability-info-name,
+#drone-view-upgrade-name {
     position: absolute;
     display: flex;
     align-items: center;
@@ -796,7 +837,12 @@ a:-webkit-any-link {
     z-index: 10;
 }
 
-#shape-view-upgrade-image, #shape-view-info-image, #shape-view-item-upgrade-image, #shape-view-item-info-image, #drone-ability-info-image, #drone-view-upgrade-image {
+#shape-view-upgrade-image,
+#shape-view-info-image,
+#shape-view-item-upgrade-image,
+#shape-view-item-info-image,
+#drone-ability-info-image,
+#drone-view-upgrade-image {
     position: absolute;
     top: 50%;
     left: 50px;
@@ -805,7 +851,12 @@ a:-webkit-any-link {
     aspect-ratio: 1 / 1;
 }
 
-#shape-view-upgrade-right-display, #shape-view-info-right-display, #shape-view-item-upgrade-right-display, #shape-view-item-info-right-display, #drone-ability-info-right-display, #drone-view-upgrade-right-display {
+#shape-view-upgrade-right-display,
+#shape-view-info-right-display,
+#shape-view-item-upgrade-right-display,
+#shape-view-item-info-right-display,
+#drone-ability-info-right-display,
+#drone-view-upgrade-right-display {
     position: absolute;
     top: 50%;
     right: 50px;
@@ -817,13 +868,21 @@ a:-webkit-any-link {
     overflow-x: hidden;
 }
 
-#shape-view-upgrade-money-icon, #shape-view-buy-money-icon, #drone-view-buy-money-icon, #pilot-view-upgrade-money-icon, #pilot-view-buy-money-icon, #shape-item-view-buy-money-icon, #shape-view-item-upgrade-money-icon, #drone-view-upgrade-money-icon {
+#shape-view-upgrade-money-icon,
+#shape-view-buy-money-icon,
+#drone-view-buy-money-icon,
+#pilot-view-upgrade-money-icon,
+#pilot-view-buy-money-icon,
+#shape-item-view-buy-money-icon,
+#shape-view-item-upgrade-money-icon,
+#drone-view-upgrade-money-icon {
     width: 30px;
     height: 30px;
-    background-size: 30px 30px; 
+    background-size: 30px 30px;
 }
 
-#pilot-view-buy-money-icon, #pilot-view-upgrade-money-icon {
+#pilot-view-buy-money-icon,
+#pilot-view-upgrade-money-icon {
     background-image: url("../src/media-files/money/gold.png");
 }
 
@@ -837,10 +896,15 @@ a:-webkit-any-link {
     left: 0px;
     width: 35px;
     height: 35px;
-    border-radius: 100%; 
+    border-radius: 100%;
 }
 
-#shape-view-upgrade-back-button, #shape-view-info-back-button, #shape-view-item-upgrade-back-button, #shape-view-item-info-back-button, #drone-ability-info-back-button, #drone-view-upgrade-back-button {
+#shape-view-upgrade-back-button,
+#shape-view-info-back-button,
+#shape-view-item-upgrade-back-button,
+#shape-view-item-info-back-button,
+#drone-ability-info-back-button,
+#drone-view-upgrade-back-button {
     position: absolute;
     top: 20px;
     right: 20px;
@@ -859,7 +923,7 @@ a:-webkit-any-link {
     left: 0px;
     width: 25px;
     height: 25px;
-    border-radius: 100%; 
+    border-radius: 100%;
 }
 
 #change-shape-display {
@@ -945,7 +1009,8 @@ a:-webkit-any-link {
     cursor: pointer;
 }
 
-#change-shape-store-button, #shape-in-depth-view-store-button {
+#change-shape-store-button,
+#shape-in-depth-view-store-button {
     margin-left: 10px;
 }
 
@@ -1047,7 +1112,8 @@ a:-webkit-any-link {
     background-color: rgb(0, 0, 0, .1);
 }
 
-#change-shape-replacing-holder, #change-shape-item-replacing-holder {
+#change-shape-replacing-holder,
+#change-shape-item-replacing-holder {
     position: absolute;
     display: flex;
     align-items: center;
@@ -1063,7 +1129,7 @@ a:-webkit-any-link {
     top: 50%;
     transform: translate(-50%, -50%);
 }
-    
+
 .drone-ability-icon-image {
     background-size: 80px 80px;
     overflow: hidden;
@@ -1094,7 +1160,8 @@ a:-webkit-any-link {
     height: 30px;
     white-space: nowrap;
     overflow-y: hidden;
-    mask-image: linear-gradient(to right, rgba(0, 0, 0, 1), rgba(0, 0, 0, 1) 85%, rgba(0, 0, 0, 0)); /* Apply fade-out effect */
+    mask-image: linear-gradient(to right, rgba(0, 0, 0, 1), rgba(0, 0, 0, 1) 85%, rgba(0, 0, 0, 0));
+    /* Apply fade-out effect */
 }
 
 .drone-ability-stat-holder {
@@ -1165,7 +1232,8 @@ a:-webkit-any-link {
     left: 60px;
 }
 
-.pilot-active-skills-display, .pilot-operates-display {
+.pilot-active-skills-display,
+.pilot-operates-display {
     display: flex;
     margin-left: 4px;
 }
@@ -1418,7 +1486,8 @@ a:-webkit-any-link {
     background-color: rgb(0, 0, 0, .4);
 }
 
-#allyAliveDisplay, #enemyAliveDisplay {
+#allyAliveDisplay,
+#enemyAliveDisplay {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1540,7 +1609,8 @@ tbody td {
     width: 3%;
 }
 
-.table-center-icon, .centered-stat {
+.table-center-icon,
+.centered-stat {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1658,4 +1728,24 @@ tbody td {
 
 #ability-1-display {
     margin-left: 10px;
+}
+
+#in-game-power-cell-display {
+    position: absolute;
+    display: flex;
+    top: 10px;
+    right: 85px;
+    padding: 2px;
+    padding-right: 7px;
+    border-radius: 4px;
+    background-color: rgb(0, 0, 0, .35);
+    pointer-events: none;
+}
+
+#in-game-power-cell-display-text {
+    display: flex;
+    align-items: center;
+    font-weight: 700;
+    color: white;
+    margin-left: 3px;
 }
