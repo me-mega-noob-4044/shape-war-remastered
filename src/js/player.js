@@ -560,6 +560,18 @@ export default class Player {
             shape.abilities[i].update(this, shape, config.gameUpdateSpeed);
         }
 
+        if (shape.activeModuleRegen && shape.activeModuleRegen.duration > 0) {
+            shape.activeModuleRegen.duration -= delta;
+            shape.activeModuleRegen.rate -= delta;
+
+            if (shape.activeModuleRegen.rate <= 0) {
+                shape.activeModuleRegen.rate = shape.activeModuleRegen.maxRate;
+                this.changeHealth(shape, shape.maxhealth * shape.activeModuleRegen.power);
+            }
+
+            if (shape.activeModuleRegen.duration <= 0) shape.activeModuleRegen.duration = 0;
+        }
+
         if (shape.health > shape.maxhealth - shape.grayDamage) {
             shape.health = shape.maxhealth - shape.grayDamage;
         }

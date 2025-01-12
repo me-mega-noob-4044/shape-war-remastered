@@ -1726,7 +1726,8 @@ tbody td {
     background-color: rgba(0, 255, 0, .85);
 }
 
-#ability-1-display {
+#ability-1-display,
+#active-module-display {
     margin-left: 10px;
 }
 

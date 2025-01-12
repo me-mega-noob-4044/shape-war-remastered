@@ -4734,22 +4734,29 @@ import projectile from "../client/src/game/projectile.js";
         static abilityOneCanvas = UTILS.getElement("ability-1-display");
         static abilityOneContext = this.abilityOneCanvas.getContext("2d");
 
+        static activeModuleCanvas = UTILS.getElement("active-module-display");
+        static activeModuleContext = this.activeModuleCanvas.getContext("2d");
+
         static MAX_DISPLAY_SIZE = 47;
         static abilityImages = {};
 
         static abilityTimers = [
+            [0, 0],
             [0, 0]
         ];
         static abilityMaxTimers = [
+            [0, 0],
             [0, 0]
         ];
         static abilityIndex = [0, 0];
 
         static resetAbilityTimers() {
             this.abilityTimers = [
+                [0, 0],
                 [0, 0]
             ];
             this.abilityMaxTimers = [
+                [0, 0],
                 [0, 0]
             ];
             this.abilityIndex = [0, 0];
@@ -4776,17 +4783,19 @@ import projectile from "../client/src/game/projectile.js";
         static renderAbilityDisplay(delta) {
             const MAX_DISPLAY_SIZE = this.MAX_DISPLAY_SIZE;
 
-            this.abilityOneContext.clearRect(0, 0, MAX_DISPLAY_SIZE, MAX_DISPLAY_SIZE);
-
-            for (let i = 0; i < 1; i++) {
+            for (let i = 0; i < 2; i++) {
                 let ability = player.abilities[i];
 
-                if (ability) {
-                    let tmpContext = this.abilityOneContext;
+                if (ability || i == 1) {
+                    let tmpContext = i == 1 ? this.activeModuleContext : this.abilityOneContext;
 
                     if (i == 0) {
                         this.abilityOneCanvas.style.display = "block";
+                    } else {
+                        this.activeModuleCanvas.style.display = "block";
                     }
+
+                    tmpContext.clearRect(0, 0, MAX_DISPLAY_SIZE, MAX_DISPLAY_SIZE);
 
                     tmpContext.fillStyle = "rgba(0, 0, 0, .4)";
                     tmpContext.fillRect(0, 0, MAX_DISPLAY_SIZE, MAX_DISPLAY_SIZE);
@@ -4829,7 +4838,7 @@ import projectile from "../client/src/game/projectile.js";
                         }
                     }
 
-                    let image = this.getAbilityImage(ability.imageSource);
+                    let image = this.getAbilityImage(i == 1 ? "../src/media-files/money/powercells.png" : ability.imageSource);
 
                     if (image && image.isLoaded && !dontRender) {
                         tmpContext.save();
@@ -4845,6 +4854,8 @@ import projectile from "../client/src/game/projectile.js";
                 } else {
                     if (i == 0) {
                         this.abilityOneCanvas.style.display = "none";
+                    } else {
+                        this.activeModuleCanvas.style.display = "none";
                     }
                 }
             }
@@ -5250,8 +5261,6 @@ import projectile from "../client/src/game/projectile.js";
                         tmpObj.zIndex = data[i + 10];
 
                         if (player == tmpObj) {
-                            console.log(data[i + 10]);
-
                             this.updateHealthDisplay();
                         }
                     }
@@ -5610,6 +5619,8 @@ import projectile from "../client/src/game/projectile.js";
         static start() {
             console.clear();
 
+            document.getElementById("in-game-power-cell-display-text").innerText = UTILS.styleNumberWithComma(userProfile.bank.powercells);
+
             let playerData = EquipmentBuilder.player();
 
             this.durationOfGame = 5 * 60 * 1e3;
@@ -5676,6 +5687,14 @@ import projectile from "../client/src/game/projectile.js";
     document.addEventListener("keydown", (event) => {
         if (event.key == "e") {
             GameManager.send("useAbility", 1);
+        } else if (event.key == "q") {
+            let module = items.activeModules[player.activeModuleIndex];
+
+            if (userProfile.bank.powercells - module.cost >= 0) {
+                userProfile.changeBank("powercells", -module.cost);
+                document.getElementById("in-game-power-cell-display-text").innerText = UTILS.styleNumberWithComma(userProfile.bank.powercells);
+                GameManager.send("useAbility", "active");
+            }
         }
     })
 

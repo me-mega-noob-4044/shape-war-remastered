@@ -4,6 +4,7 @@ import { maps, mapBuilder } from "./game/mapBuilder.js";
 import config from "../../src/js/config.js";
 import projectile from "./game/projectile.js";
 import * as UTILS from "../../src/js/utils.js";
+import items from "../../src/js/items.js";
 
 export const players = [];
 export const buildings = [];
@@ -264,7 +265,20 @@ var clientEvents = {
         if (player) {
             let shape = player.shapes[player.chooseIndex];
 
-            if (id <= shape.abilities.length) {
+            if (id == "active") {
+                let module = items.activeModules[shape.activeModuleIndex];
+
+                if (module.regenData) {
+                    shape.activeModuleRegen = {
+                        duration: module.duration,
+                        power: module.regenData.power,
+                        rate: module.regenData.rate,
+                        maxRate: module.regenData.rate
+                    };
+                }
+
+                game.send("updateAbilityDisplay", 1, module.duration, module.reload);
+            } else if (id <= shape.abilities.length) {
                 let ability = shape.abilities[id - 1];
 
                 if (!ability.durationTimer && !ability.reloadTimer) {
