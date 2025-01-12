@@ -114,17 +114,17 @@ export default class Pathfinder {
     }
 
     static search(start, end, { map, show, gameObjects }) {
-        let cellRadius = 20;
+        let cellRadius = 30;
         let grid = [];
 
         let min = {
-            x: Math.floor(Math.min(start.x, end.x) / cellRadius * cellRadius) - (cellRadius * 2) * 30,
-            y: Math.floor(Math.min(start.y, end.y) / cellRadius * cellRadius) - (cellRadius * 2) * 30
+            x: Math.floor(Math.min(start.x, end.x) / cellRadius * cellRadius) - (cellRadius * 2) * 25,
+            y: Math.floor(Math.min(start.y, end.y) / cellRadius * cellRadius) - (cellRadius * 2) * 25
         };
 
         let max = {
-            x: Math.floor(Math.max(start.x, end.x) / cellRadius * cellRadius) + (cellRadius * 2) * 30,
-            y: Math.floor(Math.max(start.y, end.y) / cellRadius * cellRadius) + (cellRadius * 2) * 30
+            x: Math.floor(Math.max(start.x, end.x) / cellRadius * cellRadius) + (cellRadius * 2) * 25,
+            y: Math.floor(Math.max(start.y, end.y) / cellRadius * cellRadius) + (cellRadius * 2) * 25
         };
 
         let difference = { x: max.x - min.x, y: max.y - min.y };
