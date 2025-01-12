@@ -442,7 +442,31 @@ export default class Player {
             .sort((a, b) => UTILS.getDistance(a, shape) - UTILS.getDistance(b, shape))[0];
 
         if (nearestBeacon && UTILS.getDistance(nearestBeacon, shape) > 300) {
-            if (this.pathType == `beacon${nearestBeacon.sid}`) {
+            let found = false;
+
+            for (let i = 0; i < buildings.length; i++) {
+                let tmpObj = buildings[i];
+
+                if (tmpObj.name == "wall") {
+                    if (UTILS.lineInRect(
+                        tmpObj.x,
+                        tmpObj.y,
+                        tmpObj.x + tmpObj.width,
+                        tmpObj.y + tmpObj.height,
+                        shape.x,
+                        shape.y,
+                        nearestBeacon.x,
+                        nearestBeacon.y
+                    )) {
+                        found = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!found) { // If bot can go path striagt then do so (ignore grammar and spelling)
+                this.moveDir = UTILS.getDirection(nearestBeacon, shape);
+            } else if (this.pathType == `beacon${nearestBeacon.sid}`) {
                 if (this.pathData) {
                     this.moveDir = this.movePathfind(shape);
                 } else {
