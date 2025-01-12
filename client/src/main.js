@@ -272,7 +272,7 @@ var clientEvents = {
                     shape.activeModuleRegen = {
                         duration: module.duration,
                         power: module.regenData.power,
-                        rate: module.regenData.rate,
+                        rate: 0,
                         maxRate: module.regenData.rate
                     };
                 }
