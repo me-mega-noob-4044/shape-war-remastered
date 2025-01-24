@@ -8,5 +8,6 @@ export default class {
         this.imageSource = data.imageSource;
         this.healthIncrease = data.healthIncrease;
         this.dmgIncrease = data.dmgIncrease;
+        this.speedIncrease = data.speedIncrease;
     }
 }
