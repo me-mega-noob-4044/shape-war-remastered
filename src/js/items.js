@@ -259,12 +259,28 @@ const skills = [{
     healthIncrease: .12,
     dmgIncrease: -.12
 }, {
+    tier: 1,
+    name: "Dense Material",
+    description: "Increases the maximum durability of the shape but reduces the shape's speed by 12%.",
+    imageSource: "../src/media-files/modules/armor_kit.png",
+    main: "healthIncrease",
+    healthIncrease: .12,
+    speedIncrease: -.12
+}, {
     tier: 0,
     name: "Master Gunsmith",
     description: "Increases the damage output of all weapons mounted on the shape.",
     imageSource: "../src/media-files/modules/nuclear_reactor.png",
     main: "dmgIncrease",
     dmgIncrease: .07
+}, {
+    tier: 2,
+    name: "Thrill Seeker",
+    description: "Increases the damage output of all weapons but reduces the shape's durability by 12%.",
+    imageSource: "../src/media-files/modules/nuclear_reactor.png",
+    main: "dmgIncrease",
+    dmgIncrease: .12,
+    healthIncrease: .12
 }, {
     tier: 2,
     name: "Thrill Seeker",

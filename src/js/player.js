@@ -116,7 +116,8 @@ var upgraderManager = new class {
 function setBonuses(shape, skills) {
     let bonuses = {
         healthIncrease: 1,
-        dmgIncrease: 1
+        dmgIncrease: 1,
+        speedIncrease: 1
     };
 
     for (let i = 0; i < skills.length; i++) {
@@ -139,6 +140,7 @@ function setBonuses(shape, skills) {
         }
     }
 
+    shape.speed *= bonuses.speedIncrease;
     shape.maxhealth = shape.health = Math.ceil(shape.health * bonuses.healthIncrease);
 
     for (let i = 0; i < shape.weapons.length; i++) {
@@ -154,7 +156,6 @@ function playerify(shape, easyMode) {
     shape.dir = 0;
     shape.grayDamage = 0;
     shape.vel = { x: 0, y: 0 };
-    shape.speed *= 1;
     shape.health = shape.maxhealth *= (easyMode ? .25 : 1);
     shape.grayDamage = 0;
 
