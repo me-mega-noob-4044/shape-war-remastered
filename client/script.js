@@ -483,6 +483,7 @@ import projectile from "../client/src/game/projectile.js";
     }
 
     class canvasDrawer {
+
         static bulletImages = {};
         static bulletSprites = {};
 
@@ -555,7 +556,7 @@ import projectile from "../client/src/game/projectile.js";
         }
     }
 
-    class game {
+    class Game {
         static screenSize = {
             x: config.defaultScreenX,
             y: config.defaultScreenY
@@ -598,7 +599,7 @@ import projectile from "../client/src/game/projectile.js";
         }
     }
 
-    game.doMenuLoading();
+    Game.doMenuLoading();
 
     class upgraderManager {
         static upgradeShape(shape, dontSaveData) {
@@ -4493,6 +4494,7 @@ import projectile from "../client/src/game/projectile.js";
             }
         }
     });
+
     document.addEventListener("keyup", (event) => {
         if (event.isTrusted) {
             let key = event.which || event.keyCode;
@@ -4522,7 +4524,7 @@ import projectile from "../client/src/game/projectile.js";
         return this;
     }
 
-    class renderer {
+    class Renderer {
         static fps = 0;
         static fpsCount = 0;
         static lastUpdateFPS = Date.now();
@@ -5001,7 +5003,7 @@ import projectile from "../client/src/game/projectile.js";
                 }
             }
 
-            if (renderer.start) {
+            if (Renderer.start) {
                 window.requestAnimationFrame(() => {
                     this.render();
                 });
@@ -5014,7 +5016,7 @@ import projectile from "../client/src/game/projectile.js";
             hangerDisplay.updateHanger();
         }
 
-        renderer.resize();
+        Renderer.resize();
     }
     window.addEventListener("resize", resize);
     resize();
@@ -5212,7 +5214,7 @@ import projectile from "../client/src/game/projectile.js";
 
             clearInterval(GameManager.pingInterval);
 
-            ctx.clearRect(0, 0, renderer.screenSize.x, renderer.screenSize.y);
+            ctx.clearRect(0, 0, Renderer.screenSize.x, Renderer.screenSize.y);
         };
     }
 
@@ -5254,7 +5256,7 @@ import projectile from "../client/src/game/projectile.js";
             "removePlayer": (sid) => {
                 for (let i = 0; i < this.players.length; i++) {
                     if (this.players[i].sid == sid) {
-                        if (player == this.players[i]) renderer.resetAbilityTimers();
+                        if (player == this.players[i]) Renderer.resetAbilityTimers();
 
                         this.players.splice(i, 1);
                         break;
@@ -5304,7 +5306,7 @@ import projectile from "../client/src/game/projectile.js";
             "pingSocket": () => {
                 this.pingTime = Date.now() - this.pingLastUpdate;
 
-                elements.pingDisplay.innerText = `${this.pingTime} ms | ${renderer.fps} fps`;
+                elements.pingDisplay.innerText = `${this.pingTime} ms | ${Renderer.fps} fps`;
             },
             "initializeWeapons": (wpns) => {
                 elements.weaponsDisplay.innerHTML = "";
@@ -5486,14 +5488,14 @@ import projectile from "../client/src/game/projectile.js";
                 }, 1500);
             },
             "updateAbilityDisplay": (indx, duration, reload) => {
-                renderer.abilityTimers[indx] = [duration, reload];
-                renderer.abilityMaxTimers[indx] = [duration, reload];
-                renderer.abilityIndex[indx] = 0;
+                Renderer.abilityTimers[indx] = [duration, reload];
+                Renderer.abilityMaxTimers[indx] = [duration, reload];
+                Renderer.abilityIndex[indx] = 0;
             },
             "endGame": (allies, enemies, isWin, reason) => {
                 this.socket.terminate();
                 this.socket = null;
-                renderer.start = false;
+                Renderer.start = false;
 
                 elements.inGameUI.style.display = "none";
                 endGame.gameResults.style.display = "flex";
@@ -5541,8 +5543,8 @@ import projectile from "../client/src/game/projectile.js";
         }
 
         static startRendering() {
-            renderer.start = true;
-            renderer.render();
+            Renderer.start = true;
+            Renderer.render();
         }
 
         static setUpChooseSlots() {
@@ -5594,11 +5596,11 @@ import projectile from "../client/src/game/projectile.js";
                     }
                     squareItem.appendChild(shapeImage);
                     squareItem.onclick = () => {
-                        renderer.screenSize = {
+                        Renderer.screenSize = {
                             x: config.maxScreenWidth * shape.fovMulti,
                             y: config.maxScreenHeight * shape.fovMulti
                         };
-                        renderer.resize();
+                        Renderer.resize();
 
                         elements.inGameUI.style.display = "block";
                         elements.chooseShapeUI.style.display = "none";
@@ -5723,7 +5725,7 @@ import projectile from "../client/src/game/projectile.js";
         } else if (event.key == "q") {
             let module = items.activeModules[player.activeModuleIndex];
 
-            if (userProfile.bank.powercells - module.cost >= 0 && !renderer.abilityTimers[1][0] && !renderer.abilityTimers[1][1]) {
+            if (userProfile.bank.powercells - module.cost >= 0 && !Renderer.abilityTimers[1][0] && !Renderer.abilityTimers[1][1]) {
                 userProfile.changeBank("powercells", -module.cost);
                 document.getElementById("in-game-power-cell-display-text").innerText = UTILS.styleNumberWithComma(userProfile.bank.powercells);
                 GameManager.send("useAbility", "active");
@@ -5736,7 +5738,7 @@ import projectile from "../client/src/game/projectile.js";
     };
 
     window.onload = () => {
-        game.init();
+        Game.init();
     };
 
     window.onbeforeunload = function (event) {
