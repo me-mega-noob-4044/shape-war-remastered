@@ -1327,12 +1327,15 @@ a:-webkit-any-link {
 
 #taskButton {
     display: flex;
+    align-items: center;
+    justify-content: center;
     color: white;
     width: 75px;
     height: 75px;
     cursor: pointer;
     background-color: rgba(0, 0, 0, .2);
     border-radius: 6px;
+    margin-left: 10px;
 }
 
 #taskButton:hover {
@@ -1350,7 +1353,6 @@ a:-webkit-any-link {
     border-radius: 6px;
     align-items: center;
     justify-content: center;
-    transform: translateX(-50%);
     cursor: pointer;
 }
 
