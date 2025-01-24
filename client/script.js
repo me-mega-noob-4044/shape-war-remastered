@@ -28,7 +28,8 @@ import projectile from "../client/src/game/projectile.js";
         gameUI: UTILS.getElement("gameUI"),
         inGameUI: UTILS.getElement("inGameUI"),
         pingDisplay: UTILS.getElement("pingDisplay"),
-        weaponsDisplay: UTILS.getElement("weaponsDisplay")
+        weaponsDisplay: UTILS.getElement("weaponsDisplay"),
+        taskDisplay: UTILS.getElement("task-display")
     };
 
     const hangerUIObserver = new MutationObserver(() => {
@@ -41,30 +42,43 @@ import projectile from "../client/src/game/projectile.js";
 
     hangerUIObserver.observe(elements.hangerUI, { attributes: true });
 
-    var indxRole = ["Tank", "Assault", "Scout", "Support"];
+    // var indxRole = ["Tank", "Assault", "Scout", "Support"];
 
     class storeManager {
+
+        /**
+         * 
+         * @param {shape} shape 
+         * @returns {weapon[]}
+         */
+
         static setUpStoreWeapons(shape) {
             let weapons = [];
             let hardpoints = shape.weaponHardpoints;
             let weaponSlots = 0;
+
             if (hardpoints.light) {
                 let wpn = items.weapons.find(e => e.name == "Punisher");
+
                 for (let i = 0; i < hardpoints.light; i++) {
                     let tmpWpn = new weapon(wpn, undefined, weaponSlots);
                     weaponSlots++;
                     weapons.push(tmpWpn);
                 }
             }
+
             if (hardpoints.medium) {
                 let wpn = items.weapons.find(e => e.name == "Punisher T");
+
                 for (let i = 0; i < hardpoints.medium; i++) {
                     let tmpWpn = new weapon(wpn, undefined, weaponSlots);
                     weaponSlots++;
                     weapons.push(tmpWpn);
                 }
             }
+
             if (hardpoints.heavy) { }
+
             return weapons;
         }
 
@@ -274,30 +288,37 @@ import projectile from "../client/src/game/projectile.js";
             this.bank = content.bank;
             this.leaguePoints = parseInt(content.leaguePoints);
             this.slotsData = content.slotsData;
+
             for (let i = 0; i < content.shapes.length; i++) {
                 let data = content.shapes[i];
                 let tmp = items.shapes.find(e => e.name == data.name);
                 let tmpItem = new shape(tmp, data.slot, true);
+
                 tmpItem.sid = data.sid;
                 tmpItem.slot = data.slot;
                 tmpItem.activeModuleIndex = (data.activeModuleIndex || 0);
+
                 for (let t = 0; t < data.level - 1; t++) {
                     upgraderManager.upgradeShape(tmpItem, true);
                 }
                 this.shapes.push(tmpItem);
+
                 if (data.sid > highestSid) {
                     highestSid = data.sid;
                 }
             }
+
             window.shapeSid = highestSid + 1;
 
             for (let i = 0; i < content.weapons.length; i++) {
                 let data = content.weapons[i];
                 let tmp = items.weapons.find(e => e.name == data.name);
                 let tmpItem = new weapon(tmp, data.ownerSID, data.slot);
+
                 for (let t = 0; t < data.level - 1; t++) {
                     upgraderManager.upgradeWeapon(tmpItem, true);
                 }
+
                 this.weapons.push(tmpItem);
             }
 
@@ -305,9 +326,11 @@ import projectile from "../client/src/game/projectile.js";
                 let data = content.modules[i];
                 let tmp = items.modules.find(e => e.name == data.name);
                 let tmpItem = new module(tmp, data.ownerSID, data.slot);
+
                 for (let t = 0; t < data.level - 1; t++) {
                     upgraderManager.upgradeModule(tmpItem, true);
                 }
+
                 this.modules.push(tmpItem);
             }
 
@@ -315,9 +338,11 @@ import projectile from "../client/src/game/projectile.js";
                 let data = content.drones[i];
                 let tmp = items.drones.find(e => e.name == data.name);
                 let tmpItem = new drone(tmp, data.ownerSID);
+
                 for (let t = 0; t < data.level - 1; t++) {
                     upgraderManager.upgradeDrone(tmpItem, true);
                 }
+
                 this.drones.push(tmpItem);
             }
 
@@ -334,10 +359,6 @@ import projectile from "../client/src/game/projectile.js";
                 });
 
                 this.pilots.push(tmpItem);
-            }
-
-            for (let i = 0; i < content.motherships.length; i++) {
-                //
             }
         }
     }
@@ -365,14 +386,17 @@ import projectile from "../client/src/game/projectile.js";
             if (!image) {
                 image = new Image();
                 image.src = source;
+
                 image.onload = () => {
                     image.isLoaded = true;
                     console.log(`"${source}" has loaded.`);
                 };
+
                 image.onerror = () => {
                     image.onerror = null;
                     image.src = this.generateWhiteImage();
                 };
+
                 this.images[source] = image;
             }
         }
@@ -383,10 +407,12 @@ import projectile from "../client/src/game/projectile.js";
             if (originalImage && originalImage.isLoaded) {
                 let duplicateImage = new Image();
                 duplicateImage.src = source;
+
                 duplicateImage.onerror = () => {
                     duplicateImage.onerror = null;
                     duplicateImage.src = this.generateWhiteImage();
                 };
+
                 return duplicateImage;
             }
         }
@@ -403,6 +429,7 @@ import projectile from "../client/src/game/projectile.js";
 
             for (let i = 0; i < items.weapons.length + items.modules.length + items.activeModules.length; i++) {
                 let data = items.weapons[i] || items.modules[i - items.weapons.length] || items.activeModules[i - (items.weapons.length + items.modules.length)];
+
                 if (data) {
                     this.cacheImage(data.imageSource);
                 }
@@ -410,6 +437,7 @@ import projectile from "../client/src/game/projectile.js";
 
             for (let i = 0; i < items.pilots.length; i++) {
                 let data = items.pilots[i];
+
                 if (data) {
                     this.cacheImage(data.imageSource);
                 }
@@ -417,6 +445,7 @@ import projectile from "../client/src/game/projectile.js";
 
             for (let i = 0; i < this.moneyIcons.length + this.iconImages.length; i++) {
                 let data = this.moneyIcons[i] || this.iconImages[i - this.moneyIcons.length];
+
                 if (data) {
                     this.cacheImage(data);
                 }
@@ -424,6 +453,7 @@ import projectile from "../client/src/game/projectile.js";
 
             for (let i in config.attrubutesImages) {
                 let data = config.attrubutesImages[i];
+
                 if (data) {
                     this.cacheImage(data);
                 }
@@ -431,6 +461,7 @@ import projectile from "../client/src/game/projectile.js";
 
             for (let i in config.droneAbilityImages) {
                 let data = config.droneAbilityImages[i];
+
                 if (data) {
                     this.cacheImage(data);
                 }
