@@ -296,7 +296,7 @@ const pilots = [{
     tier: 1,
     name: "George",
     description: `
-    Year 223.<br>
+    Year 223.<br><br>
     George was just another name on a long list of foot soldiers, trudging through the trenches of a war that should have ended decades ago. At 34, he had spent most of his life fighting battles for his superiors without stopping. He had thought about leaving his bloodborne job but it was too late to change careers&ndash;there was nothing left.<br>
     On one grim morning, George's unit was sent on a routine mission to secure a key supply line. Routine. That word had lost its meaning. Every mission was a gamble with death, and this one was no exception. As they approached their objective, the ground shook, and the air was filled with an ear piercing roar. The team froze in place.<br>
     Towering war machines&ndash;almost alien&ndash;descended upon them. George had heard rumors of new tech being used in the battlefield. He had once dismissed them as legend and propaganda to discourage them from victory. But now, standing in their shadow, George regrets not taking those rumors into heart.<br>
@@ -304,8 +304,8 @@ const pilots = [{
     George didn't remember how he survived. The last thing he recalled was facing a projectile coming at him. When he woke, he was in a white room. His body felt strange. He tried to move, but his limbs didn't respond as they once had. Looking down, he saw the flare of metal where his arms and legs had been.<br>
     “They saved your life,” a voice said, breaking George's train of thought. George turned to see a man in a crisp uniform. “Well, most of it. You were lucky we found you.”<br>
     “Lucky?” George responded. His voice was hoarse. “Everyone else is dead.”<br>
-    The man didn't flinch. “And now, you have a chance to make sure their sacrifice wasn't in vain. You've been selected for something much greater” George wanted to lash out, but his new body didn't obey him.<br>
-    Year 224.<br>
+    The man didn't flinch. “And now, you have a chance to make sure their sacrifice wasn't in vain. You've been selected for something much greater” George wanted to lash out, but his new body didn't obey him.<br><br>
+    Year 224.<br><br>
     One day, after the brutal training session, the revelation came. He was led into a massive hanger. There, the shapes stood waiting. He felt a surge of both fear and awe.<br>
     “You're going to pilot one of these,” the man said, his voice calm.<br>
     George stared at the war machine, his mind racing. He remembered the destruction these machines had caused, the lives they had taken. And now, he was being asked to become one of them.<br>
@@ -315,7 +315,7 @@ const pilots = [{
     The training was even more brutal now, even more demanding than his life as a soldier. The machine's interfaces melded with his cybernetic body, enhancing his reflexes and senses. As time passed, George grew used to piloting the massive shapes, though he never forgot what it had done to his team. He vowed that, if nothing else, he would use it to end the war, the suffering of all.<br>
     But deep down, he knew the truth. More was going to die and it would take multiple lifetimes to end the endless cycle of war, this war.
     `,
-    imageSource: "",
+    imageSource: "../src/media-files/pilots-badges/george.png",
     maxSkills: 4,
     cost: 500
 }];
