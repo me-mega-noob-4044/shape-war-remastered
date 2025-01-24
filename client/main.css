@@ -1316,11 +1316,33 @@ a:-webkit-any-link {
     overflow-y: scroll;
 }
 
+#hangerButtonsUI {
+    position: absolute;
+    left: 0px;
+    width: 100%;
+    bottom: 12px;
+    align-items: center;
+    justify-content: center;
+}
+
+#taskButton {
+    display: flex;
+    color: white;
+    width: 75px;
+    height: 75px;
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, .2);
+    border-radius: 6px;
+}
+
+#taskButton:hover {
+    background-color: rgba(0, 0, 0, .35);
+}
+
 #toBattleButton {
     display: flex;
     color: white;
     font-weight: 600;
-    position: absolute;
     width: 205px;
     height: 75px;
     background-color: rgba(0, 0, 0, .2);
@@ -1328,8 +1350,6 @@ a:-webkit-any-link {
     border-radius: 6px;
     align-items: center;
     justify-content: center;
-    left: 50%;
-    bottom: 12px;
     transform: translateX(-50%);
     cursor: pointer;
 }

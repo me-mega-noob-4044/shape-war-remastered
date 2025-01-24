@@ -33,11 +33,12 @@ import projectile from "../client/src/game/projectile.js";
 
     const hangerUIObserver = new MutationObserver(() => {
         if (elements.hangerUI.style.display != "none") {
-            elements.hangerButtonsUI.style.display = "block";
+            elements.hangerButtonsUI.style.display = "flex";
         } else {
             elements.hangerButtonsUI.style.display = "none";
         }
     });
+
     hangerUIObserver.observe(elements.hangerUI, { attributes: true });
 
     var indxRole = ["Tank", "Assault", "Scout", "Support"];
