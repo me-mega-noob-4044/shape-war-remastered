@@ -146,6 +146,7 @@ a:-webkit-any-link {
 #shapeItemsUI,
 #droneViewUI,
 #pilotViewUI,
+#task-display,
 #pilot-skill-change-ui {
     display: none;
     position: absolute;
