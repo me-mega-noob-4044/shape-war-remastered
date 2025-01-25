@@ -2,14 +2,14 @@
 import config from "../src/js/config.js";
 import * as UTILS from "../src/js/utils.js";
 import items from "../src/js/items.js";
-import shape from "../src/js/shape.js";
-import weapon from "../src/js/weapon.js";
-import module from "../src/js/module.js";
-import drone from "../src/js/drone.js";
-import pilot from "../src/js/pilot.js";
-import skill from "../src/js/skill.js";
+import Shape from "../src/js/shape.js";
+import Weapon from "../src/js/weapon.js";
+import Module from "../src/js/module.js";
+import Drone from "../src/js/drone.js";
+import Pilot from "../src/js/pilot.js";
+import Skill from "../src/js/skill.js";
 import msgpack from "../src/js/msgpack.js";
-import projectile from "../client/src/game/projectile.js";
+import Projectile from "../client/src/game/projectile.js";
 
 (function () {
     var elements = {
@@ -61,7 +61,7 @@ import projectile from "../client/src/game/projectile.js";
                 let wpn = items.weapons.find(e => e.name == "Punisher");
 
                 for (let i = 0; i < hardpoints.light; i++) {
-                    let tmpWpn = new weapon(wpn, undefined, weaponSlots);
+                    let tmpWpn = new Weapon(wpn, undefined, weaponSlots);
                     weaponSlots++;
                     weapons.push(tmpWpn);
                 }
@@ -71,7 +71,7 @@ import projectile from "../client/src/game/projectile.js";
                 let wpn = items.weapons.find(e => e.name == "Punisher T");
 
                 for (let i = 0; i < hardpoints.medium; i++) {
-                    let tmpWpn = new weapon(wpn, undefined, weaponSlots);
+                    let tmpWpn = new Weapon(wpn, undefined, weaponSlots);
                     weaponSlots++;
                     weapons.push(tmpWpn);
                 }
@@ -85,13 +85,13 @@ import projectile from "../client/src/game/projectile.js";
         static addItem(type, name, slot, ownerSID) {
             if (type == "shape") {
                 let tmp = items.shapes.find(e => e.name == name);
-                let tmpItem = new shape(tmp, slot);
+                let tmpItem = new Shape(tmp, slot);
                 let hardpoints = tmpItem.weaponHardpoints;
                 let weaponSlots = 0;
                 if (hardpoints.light) {
                     let wpn = items.weapons.find(e => e.name == "Punisher");
                     for (let i = 0; i < hardpoints.light; i++) {
-                        let tmpWpn = new weapon(wpn, tmpItem.sid, weaponSlots);
+                        let tmpWpn = new Weapon(wpn, tmpItem.sid, weaponSlots);
                         weaponSlots++;
                         userProfile.weapons.push(tmpWpn);
                     }
@@ -99,7 +99,7 @@ import projectile from "../client/src/game/projectile.js";
                 if (hardpoints.medium) {
                     let wpn = items.weapons.find(e => e.name == "Punisher T");
                     for (let i = 0; i < hardpoints.medium; i++) {
-                        let tmpWpn = new weapon(wpn, tmpItem.sid, weaponSlots);
+                        let tmpWpn = new Weapon(wpn, tmpItem.sid, weaponSlots);
                         weaponSlots++;
                         userProfile.weapons.push(tmpWpn);
                     }
@@ -109,19 +109,19 @@ import projectile from "../client/src/game/projectile.js";
                 userProfile.saveProfile();
             } else if (type == "weapon") {
                 let data = items.weapons.find(e => e.name == name);
-                userProfile.weapons.push(new weapon(data, ownerSID, slot));
+                userProfile.weapons.push(new Weapon(data, ownerSID, slot));
                 userProfile.saveProfile();
             } else if (type == "module") {
                 let data = items.modules.find(e => e.name == name);
-                userProfile.modules.push(new module(data, ownerSID, slot));
+                userProfile.modules.push(new Module(data, ownerSID, slot));
                 userProfile.saveProfile();
             } else if (type == "drone") {
                 let data = items.drones.find(e => e.name == name);
-                userProfile.drones.push(new drone(data, ownerSID));
+                userProfile.drones.push(new Drone(data, ownerSID));
                 userProfile.saveProfile();
             } else if (type == "pilot") {
                 let data = items.pilots.find(e => e.name == name);
-                userProfile.pilots.push(new pilot(data, ownerSID));
+                userProfile.pilots.push(new Pilot(data, ownerSID));
                 userProfile.saveProfile();
             }
         }
@@ -292,7 +292,7 @@ import projectile from "../client/src/game/projectile.js";
             for (let i = 0; i < content.shapes.length; i++) {
                 let data = content.shapes[i];
                 let tmp = items.shapes.find(e => e.name == data.name);
-                let tmpItem = new shape(tmp, data.slot, true);
+                let tmpItem = new Shape(tmp, data.slot, true);
 
                 tmpItem.sid = data.sid;
                 tmpItem.slot = data.slot;
@@ -313,7 +313,7 @@ import projectile from "../client/src/game/projectile.js";
             for (let i = 0; i < content.weapons.length; i++) {
                 let data = content.weapons[i];
                 let tmp = items.weapons.find(e => e.name == data.name);
-                let tmpItem = new weapon(tmp, data.ownerSID, data.slot);
+                let tmpItem = new Weapon(tmp, data.ownerSID, data.slot);
 
                 for (let t = 0; t < data.level - 1; t++) {
                     upgraderManager.upgradeWeapon(tmpItem, true);
@@ -325,7 +325,7 @@ import projectile from "../client/src/game/projectile.js";
             for (let i = 0; i < content.modules.length; i++) {
                 let data = content.modules[i];
                 let tmp = items.modules.find(e => e.name == data.name);
-                let tmpItem = new module(tmp, data.ownerSID, data.slot);
+                let tmpItem = new Module(tmp, data.ownerSID, data.slot);
 
                 for (let t = 0; t < data.level - 1; t++) {
                     upgraderManager.upgradeModule(tmpItem, true);
@@ -337,7 +337,7 @@ import projectile from "../client/src/game/projectile.js";
             for (let i = 0; i < content.drones.length; i++) {
                 let data = content.drones[i];
                 let tmp = items.drones.find(e => e.name == data.name);
-                let tmpItem = new drone(tmp, data.ownerSID);
+                let tmpItem = new Drone(tmp, data.ownerSID);
 
                 for (let t = 0; t < data.level - 1; t++) {
                     upgraderManager.upgradeDrone(tmpItem, true);
@@ -349,7 +349,7 @@ import projectile from "../client/src/game/projectile.js";
             for (let i = 0; i < content.pilots.length; i++) {
                 let data = content.pilots[i];
                 let tmp = items.pilots.find(e => e.name == data.name);
-                let tmpItem = new pilot(tmp, data.ownerSID);
+                let tmpItem = new Pilot(tmp, data.ownerSID);
                 tmpItem.level = data.level;
 
                 data.skills.forEach(e => {
@@ -1529,7 +1529,7 @@ import projectile from "../client/src/game/projectile.js";
                                 Activate with powercells:
                                 <div style="width: 20px; height: 20px; background-size: 20px 20px; background-image: url('../src/media-files/money/powercells.png');"></div>
                                 ${data.cost}
-                                `;
+                            `;
                         }
                         element.appendChild(powercellCostDisplay);
 
@@ -1542,7 +1542,7 @@ import projectile from "../client/src/game/projectile.js";
                         levelDisplay.innerHTML = item.level == 25 ? 1 : item.level > 12 ? item.level - 12 : (item.level || 1);
                         nameDisplay.innerHTML = data.name;
 
-                        let itemData = isModuleData == "Active" ? data : isModuleData ? new module(data, null, null) : new weapon(data, null, null);
+                        let itemData = isModuleData == "Active" ? data : isModuleData ? new Module(data, null, null) : new Weapon(data, null, null);
 
                         let moreInfoButton = document.createElement("div");
                         moreInfoButton.style = `position: absolute; right: 2.5px; top: 2.5px; cursor: pointer; display: flex; align-items: center; justify-content: center; border-radius: 100%; width: 25px; height: 25px; background-color: rgb(255, 255, 255, .6);`;
@@ -3957,11 +3957,11 @@ import projectile from "../client/src/game/projectile.js";
                 for (let i = 0; i < tmpItems.length; i++) {
                     let tmp = tmpItems[i];
                     if (type == "drone") {
-                        items.push(new drone(tmp, tmpItems.owner));
+                        items.push(new Drone(tmp, tmpItems.owner));
                     } else if (type == "pilot") {
-                        items.push(new pilot(tmp, tmpItems.owner));
+                        items.push(new Pilot(tmp, tmpItems.owner));
                     } else {
-                        items.push(new shape(tmp, undefined, true));
+                        items.push(new Shape(tmp, undefined, true));
                     }
                 }
             }
@@ -5277,7 +5277,7 @@ import projectile from "../client/src/game/projectile.js";
                     let tmpObj = this.players.find(e => e.sid == data[i]);
 
                     if (!tmpObj) {
-                        tmpObj = new shape(items.shapes.find(e => e.name == data[i + 2]), undefined, true);
+                        tmpObj = new Shape(items.shapes.find(e => e.name == data[i + 2]), undefined, true);
 
                         if (data[i + 1] == "me") {
                             player = tmpObj;

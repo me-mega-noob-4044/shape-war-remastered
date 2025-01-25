@@ -1,4 +1,4 @@
-export default class {
+export default class Module {
     constructor(data, ownerSID, slot) {
         this.typeOfObj = "module";
         this.tier = data.tier;
@@ -6,7 +6,7 @@ export default class {
         this.owner = ownerSID;
         this.type = data.type;
         this.description = data.description;
-        this.attributes = [ ...data.attributes ];
+        this.attributes = [...data.attributes];
         this.imageSource = data.imageSource;
         this.slot = slot;
         this.level = 1;

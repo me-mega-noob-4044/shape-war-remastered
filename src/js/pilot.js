@@ -1,4 +1,4 @@
-export default class {
+export default class Pilot {
     constructor(data, ownerSID) {
         this.level = 1;
         this.tier = data.tier;

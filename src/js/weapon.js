@@ -1,4 +1,4 @@
-export default class {
+export default class Weapon {
     constructor(data, ownerSID, slot) {
         this.typeOfObj = "weapon";
         this.tier = data.tier;
@@ -10,7 +10,7 @@ export default class {
         this.industryName = data.industryName;
         this.description = data.description;
         this.type = data.type;
-        this.attributes = [ ...data.attributes ];
+        this.attributes = [...data.attributes];
         this.ammo = this.maxammo = data.ammo;
         this.mothershipChargeRate = data.mothershipChargeRate;
         this.imageSource = data.imageSource;

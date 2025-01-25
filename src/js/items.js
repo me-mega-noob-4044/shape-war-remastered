@@ -377,6 +377,19 @@ const motherships = [];
 
 const turrets = [];
 
-const items = { shapes, weapons, modules, activeModules, pilots, skills, drones, motherships, turrets };
+const tasks = [{
+    label: "Destroy 10 enemies",
+    description: "Destroy 10 enemies in any game mode.",
+    requirement: {
+        type: "destroy enemies",
+        amount: 10
+    },
+    reward: {
+        type: "gold",
+        amount: 25
+    }
+}];
+
+const items = { shapes, weapons, modules, activeModules, pilots, skills, drones, motherships, turrets, tasks };
 
 export default items;

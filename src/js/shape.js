@@ -1,7 +1,7 @@
 (self || window).shapeSid = 0;
 import ability from "./ability.js";
 
-export default class {
+export default class Shape {
     constructor(data, slot, dontAssignSID) {
         if (!dontAssignSID) {
             this.sid = (self || window).shapeSid;

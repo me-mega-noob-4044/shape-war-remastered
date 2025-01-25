@@ -1,4 +1,4 @@
-export default class {
+export default class Skill {
     constructor(data, slot) {
         this.tier = data.tier;
         this.name = data.name;

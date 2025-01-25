@@ -1,6 +1,6 @@
 import droneAbility from "../js/drone-ability.js";
 
-export default class {
+export default class Drone {
     constructor(data, ownerSID) {
         this.level = 1;
         this.tier = data.tier;

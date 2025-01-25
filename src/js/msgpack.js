@@ -470,9 +470,11 @@ function decodeUtf8(bytes, start, length) {
     return str;
 }
 
-export default {
+const msgpack = {
     serialize: serialize,
     deserialize: deserialize,
     encode: serialize,
     decode: deserialize
 };
+
+export default msgpack;

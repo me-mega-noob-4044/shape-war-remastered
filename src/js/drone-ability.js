@@ -1,10 +1,10 @@
-export default class {
+export default class droneAbility {
     constructor(data) {
         this.name = data.name;
         this.description = (data.description || "No description.");
-        this.attributes = [ ...data.attributes ];
-        this.statIcons = [ ...data.statIcons ];
-        this.statTitles = [ ...data.statTitles ];
+        this.attributes = [...data.attributes];
+        this.statIcons = [...data.statIcons];
+        this.statTitles = [...data.statTitles];
         this.reload = (data.reload || 0);
 
         this.stats = [];
