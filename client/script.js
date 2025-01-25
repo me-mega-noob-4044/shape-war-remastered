@@ -132,8 +132,8 @@ import projectile from "../client/src/game/projectile.js";
 
     class userProfile {
         static bank = {
-            silver: 100e3,
-            gold: 500,
+            silver: 100e3 * 5,
+            gold: 500 * 20,
             platinum: 50,
             microchips: 0,
             keys: 100,
@@ -1263,8 +1263,8 @@ import projectile from "../client/src/game/projectile.js";
 
 
             this.shapeViewItemInfoRightDisplay.innerHTML += `
-                    <div style="font-weight: 600;">${item.description}</div>
-                `;
+                <div style="font-weight: 600;">${item.description}</div>
+            `;
 
             let data = ["damageData", "rangeData", "reloadData"];
             let statAmount = 3;
@@ -1369,21 +1369,23 @@ import projectile from "../client/src/game/projectile.js";
             }
         }
 
+        /**
+         * @param {shape} shape 
+         */
+
         static doShapeDescriptionDisplay(shape) {
             this.shapeViewInfoRightDisplay.innerHTML = "";
-            let splitData = shape.name.split(" ");
-            let industryName = splitData[splitData.length - 1];
 
             let industryDisplayHolder = document.createElement("div");
             industryDisplayHolder.style = `display: flex; align-items: center;`;
 
             let industryDisplay = document.createElement("div");
             industryDisplay.style = "width: 20px; height: 20px;";
-            industryDisplay.classList.add(`${industryName.toLowerCase()}-shape`);
+            industryDisplay.classList.add(`${shape.industryName.toLowerCase()}-shape`);
 
             let industryNameElement = document.createElement("div");
             industryNameElement.style = "margin-left: 5px;";
-            industryNameElement.innerHTML = industryName;
+            industryNameElement.innerHTML = shape.industryName;
 
             industryDisplayHolder.appendChild(industryDisplay);
             industryDisplayHolder.appendChild(industryNameElement);
@@ -3387,6 +3389,15 @@ import projectile from "../client/src/game/projectile.js";
             };
         }
 
+        /**
+         * Displays the shape data in depth
+         * @param {shape} shape 
+         * @param {boolean} isStore 
+         * @param {boolean} isChanging 
+         * @param {number} slotId 
+         * @param {boolean} isModuleData 
+         */
+
         static viewInDepth(shape, isStore, isChanging, slotId, isModuleData) {
             let isUpgrading = false;
 
@@ -3427,10 +3438,8 @@ import projectile from "../client/src/game/projectile.js";
                 this.nameDisplay.innerHTML += `<span style="color: #00ff00;">&nbsp;MK2</span>`;
             }
 
-            let spiltName = shape.name.split(" ");
-            let industryName = spiltName[spiltName.length - 1];
-            this.industryDisplay.textContent = industryName;
-            this.showImageBadge(industryName.toLowerCase());
+            this.industryDisplay.textContent = shape.industryName;
+            this.showImageBadge(shape.industryName.toLowerCase());
 
             this.statsDisplay.innerHTML = "";
             let items = ["healthData", "speedData"];
