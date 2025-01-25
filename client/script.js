@@ -355,7 +355,7 @@ import Projectile from "../client/src/game/projectile.js";
                 data.skills.forEach(e => {
                     let tmp = items.skills.find(obj => obj.name == e.name);
 
-                    tmpItem.skills.push(new skill(tmp, e.slot));
+                    tmpItem.skills.push(new Skill(tmp, e.slot));
                 });
 
                 this.pilots.push(tmpItem);
@@ -507,7 +507,7 @@ import Projectile from "../client/src/game/projectile.js";
             tmpContext.lineWidth = 5.5;
             tmpContext.strokeStyle = "#000";
 
-            if (tmpObj.industryName.includes("Circle")) {
+            if (tmpObj.name.includes("Circle") || tmpObj.industryName.includes("Circle")) {
                 tmpContext.fillStyle = tmpObj.color;
                 this.drawCircle(0, 0, tmpContext, tmpObj.scale * 2, false, false, 11);
             }
@@ -3041,7 +3041,7 @@ import Projectile from "../client/src/game/projectile.js";
         static modifyPilotSkill(type, pilot, slot) {
             let skills = pilotSkillManager.getSkills(pilot);
             if (type == "empty") {
-                pilot.skills.push(new skill(skills[Math.floor(Math.random() * skills.length)], slot));
+                pilot.skills.push(new Skill(skills[Math.floor(Math.random() * skills.length)], slot));
 
                 userProfile.saveProfile();
             }
@@ -3056,7 +3056,7 @@ import Projectile from "../client/src/game/projectile.js";
 
             let sorted = pilot.skills.sort((a, b) => a.slot - b.slot);
 
-            let skillClassConstructor = skill;
+            let skillClassConstructor = Skill;
 
             let selectedSkill;
 
