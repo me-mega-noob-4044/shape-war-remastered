@@ -1327,6 +1327,14 @@ a:-webkit-any-link {
 }
 
 #taskButton {
+    margin-left: 10px;
+}
+
+#settingsButton {
+    margin-right: 10px;
+}
+
+.hanger-button {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1336,10 +1344,9 @@ a:-webkit-any-link {
     cursor: pointer;
     background-color: rgba(0, 0, 0, .2);
     border-radius: 6px;
-    margin-left: 10px;
 }
 
-#taskButton:hover {
+.hanger-button:hover {
     background-color: rgba(0, 0, 0, .35);
 }
 
