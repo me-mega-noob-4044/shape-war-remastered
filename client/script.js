@@ -279,7 +279,7 @@ import projectile from "../client/src/game/projectile.js";
         }
 
         static setDefaultItems() {
-            storeManager.addItem("shape", "Gray Circle", 0);
+            storeManager.addItem("shape", items.shapes[0].name, 0);
         }
 
         static loadProfile() {
@@ -507,7 +507,7 @@ import projectile from "../client/src/game/projectile.js";
             tmpContext.lineWidth = 5.5;
             tmpContext.strokeStyle = "#000";
 
-            if (tmpObj.name.includes("Circle")) {
+            if (tmpObj.industryName.includes("Circle")) {
                 tmpContext.fillStyle = tmpObj.color;
                 this.drawCircle(0, 0, tmpContext, tmpObj.scale * 2, false, false, 11);
             }

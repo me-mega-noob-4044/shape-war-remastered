@@ -9,6 +9,8 @@ export default class {
         } else if (data.cost) {
             this.cost = { ...data.cost };
         }
+
+        this.industryName = data.industryName;
         this.level = 1;
         this.tier = data.tier;
         this.name = data.name;
@@ -20,7 +22,7 @@ export default class {
         this.aimTurnSpeed = data.aimTurnSpeed;
         this.slot = slot;
         this.weaponHardpoints = { ...data.weaponHardpoints };
-        this.moduleHardpoints = {  ...data.moduleHardpoints };
+        this.moduleHardpoints = { ...data.moduleHardpoints };
         this.maxhealth = this.health = data.healthData?.base || data.health;
         this.speed = data.speedData?.base || data.speed;
         this.activeModuleIndex = 0;
