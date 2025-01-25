@@ -1,6 +1,6 @@
 const shapes = [{
     tier: 0,
-    name: "Gray Circle",
+    name: "Destrier",
     description: `
     Training shape for mastering the basics of combat.<br><br>
     Recommended Equipment: x2 Punisher
@@ -36,7 +36,7 @@ const shapes = [{
     }
 }, {
     tier: 0,
-    name: "Light Brown Circle",
+    name: "Patton",
     description: `
     Having 4 light weapon slots, this shape is extremely verstile. Fit for combay at any range.<br><br>
     Recommended Equipment: x4 Punisher
@@ -72,7 +72,7 @@ const shapes = [{
     }
 }, {
     tier: 0,
-    name: "Charcoal Circle",
+    name: "Cossack",
     description: `
     Very small and fast shape. Jumping engines allows this shape to jump across obstacles.<br><br>
     Recommended Equipment: x1 Punisher T
