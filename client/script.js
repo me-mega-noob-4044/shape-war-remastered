@@ -4600,7 +4600,19 @@ import Task from "../src/js/task.js";
                     background-color: ${config.tierColors[1]};
                     `;
 
+                    let progressText = document.createElement("div");
+                    progressText.style = `
+                    position: absolute;
+                    top: 0px;
+                    left: 0px;
+                    width: 100%;
+                    text-align: center;
+                    color: white;
+                    `;
+                    progressText.innerHTML = `${UTILS.styleNumberWithComma(task.current)}/${UTILS.styleNumberWithComma(task.requirement.amount)}`;
+
                     progressBarHolder.appendChild(progressBar);
+                    progressBarHolder.appendChild(progressText);
                     element.appendChild(progressBarHolder);
 
                     icon.appendChild(image);
