@@ -462,7 +462,6 @@ const tasks = [
         type: "gold",
         amount: 60
     }),
-
     new Task("Capture 5 beacons", "Capture 5 beacons in any game mode", {
         type: "capture",
         amount: 5,
@@ -477,7 +476,6 @@ const tasks = [
         type: "gold",
         amount: 50
     }),
-
     new Task("Win 6 battles", "Win 6 battles in any game mode", {
         type: "win",
         amount: 6,
@@ -491,8 +489,73 @@ const tasks = [
     }, {
         type: "gold",
         amount: 125
-    })
+    }),
+    new Task("Deal 1M Damage", "Deal 1,000,000 damage in any game mode", {
+        type: "damage",
+        amount: 1e6
+    }, {
+        type: "gold",
+        amount: 25
+    }),
+    new Task("Deal 5M Damage", "Deal 5,000,000 damage in any game mode", {
+        type: "damage",
+        amount: 5e6
+    }, {
+        type: "gold",
+        amount: 35
+    }),
 
+    // PLATINUM TASKS
+
+    new Task("Destroy 10 shapes", "Destroy 10 enemy shapes in battle", {
+        type: "destroy",
+        amount: 10,
+    }, {
+        type: "platinum",
+        amount: 15
+    }),
+    new Task("Destroy 25 shapes", "Destroy 25 enemy shapes in battle", {
+        type: "destroy",
+        amount: 25,
+    }, {
+        type: "platinum",
+        amount: 30
+    }),
+    new Task("Capture 5 beacons", "Capture 5 beacons in battle", {
+        type: "capture",
+        amount: 5,
+    }, {
+        type: "platinum",
+        amount: 10
+    }),
+    new Task("Capture 35 beacons", "Capture 35 beacons in battle", {
+        type: "capture",
+        amount: 35,
+    }, {
+        type: "platinum",
+        amount: 45
+    }),
+    new Task("Win 20 battles", "Win 20 battles in any game mode", {
+        type: "win",
+        amount: 20,
+    }, {
+        type: "gold",
+        amount: 100
+    }),
+    new Task("Deal 20M Damage", "Deal 20,000,000 damage in any game mode", {
+        type: "damage",
+        amount: 20e6
+    }, {
+        type: "gold",
+        amount: 100
+    }),
+    new Task("Deal 100M Damage", "Deal 100,000,000 damage in any game mode", {
+        type: "damage",
+        amount: 100e6
+    }, {
+        type: "gold",
+        amount: 250
+    })
 ];
 
 tasks.push();
