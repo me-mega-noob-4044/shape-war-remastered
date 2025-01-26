@@ -29,7 +29,8 @@ import Projectile from "../client/src/game/projectile.js";
         inGameUI: UTILS.getElement("inGameUI"),
         pingDisplay: UTILS.getElement("pingDisplay"),
         weaponsDisplay: UTILS.getElement("weaponsDisplay"),
-        taskDisplay: UTILS.getElement("task-display")
+        taskDisplay: UTILS.getElement("task-display"),
+        taskButton: UTILS.getElement("taskButton")
     };
 
     const hangerUIObserver = new MutationObserver(() => {
@@ -152,6 +153,8 @@ import Projectile from "../client/src/game/projectile.js";
         static pilots = [];
         static drones = [];
         static motherships = [];
+
+        static tasks = [];
 
         static leaguePoints = 0;
         static slotsData = [{
@@ -4463,6 +4466,28 @@ import Projectile from "../client/src/game/projectile.js";
             }
 
             return allShapes;
+        }
+    }
+
+    elements.taskButton.onclick = () => {
+        TaskDisplay.toggle();
+    };
+
+    class TaskDisplay {
+        static opened = false;
+
+        static toggle() {
+            this.opened = !this.opened;
+
+            doDarkModeTransition();
+
+            if (this.opened) {
+                elements.taskDisplay.style.display = "block";
+                elements.hangerUI.style.display = "none";
+            } else {
+                elements.taskDisplay.style.display = "none";
+                elements.hangerUI.style.display = "block";
+            }
         }
     }
 
