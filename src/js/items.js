@@ -407,6 +407,9 @@ destroy row = destroy a certain amount of shapes in a row
 // Total of 4 skills each
 
 const tasks = [
+
+    // SILVER TASKS
+
     new Task("Destroy 5 shapes", "Destroy 5 enemy shapes in battle", {
         type: "destroy",
         amount: 5
@@ -441,7 +444,55 @@ const tasks = [
     }, {
         type: "silver",
         amount: 325e3
+    }),
+
+    // GOLD TASKS
+
+    new Task("Destroy 5 shapes", "Destroy 5 enemy shapes in battle", {
+        type: "destroy",
+        amount: 5,
+    }, {
+        type: "gold",
+        amount: 15
+    }),
+    new Task("Destroy 15 shapes", "Destroy 15 enemy shapes in battle", {
+        type: "destroy",
+        amount: 15,
+    }, {
+        type: "gold",
+        amount: 60
+    }),
+
+    new Task("Capture 5 beacons", "Capture 5 beacons in any game mode", {
+        type: "capture",
+        amount: 5,
+    }, {
+        type: "gold",
+        amount: 20
+    }),
+    new Task("Capture 20 beacons", "Capture 20 beacons in any game mode", {
+        type: "capture",
+        amount: 20,
+    }, {
+        type: "gold",
+        amount: 50
+    }),
+
+    new Task("Win 6 battles", "Win 6 battles in any game mode", {
+        type: "win",
+        amount: 6,
+    }, {
+        type: "gold",
+        amount: 40
+    }),
+    new Task("Win 6 battles in a row", "Win 6 battles in a row in any game mode", {
+        type: "win row",
+        amount: 6,
+    }, {
+        type: "gold",
+        amount: 125
     })
+
 ];
 
 tasks.push();
