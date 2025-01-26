@@ -10,6 +10,7 @@ import Pilot from "../src/js/pilot.js";
 import Skill from "../src/js/skill.js";
 import msgpack from "../src/js/msgpack.js";
 import Projectile from "../client/src/game/projectile.js";
+import Task from "../src/js/task.js";
 
 (function () {
     var elements = {
@@ -147,12 +148,28 @@ import Projectile from "../client/src/game/projectile.js";
             }
         };
 
+        /** @type {Shape[]} */
+
         static shapes = [];
+
+        /** @type {Weapon[]} */
+
         static weapons = [];
+
+        /** @type {Module[]} */
+
         static modules = [];
+
+        /** @type {Pilot[]} */
+
         static pilots = [];
+
+        /** @type {Drone[]} */
+
         static drones = [];
         static motherships = [];
+
+        /** @type {Task[]} */
 
         static tasks = [];
 
@@ -274,6 +291,16 @@ import Projectile from "../client/src/game/projectile.js";
                     equipped: mothership.equipped,
                     level: mothership.level,
                     turrets: turrets
+                });
+            }
+
+            let tasks = [];
+            for (let i = 0; i < this.tasks.length; i++) {
+                let task = this.tasks[i];
+
+                tasks.push({
+                    label: task.label,
+                    current: task.current
                 });
             }
 
@@ -4474,6 +4501,26 @@ import Projectile from "../client/src/game/projectile.js";
     };
 
     class TaskDisplay {
+
+        /**
+         * Generates X amount of tasks
+         * 
+         * @param {number} amount 
+         */
+
+        static generate(amount) {
+            amount = Math.min(amount, Math.max(0, 15 - userProfile.tasks.length));
+
+            if (amount <= 0) return;
+
+            for (let i = 0; i < amount; i++) {
+                let taskData = items.tasks[Math.floor(Math.random() * items.tasks.length)];
+                userProfile.tasks.push(new Task(taskData));
+            }
+
+            userProfile.saveProfile();
+        }
+
         static toggle() {
             doDarkModeTransition();
 
