@@ -4586,11 +4586,20 @@ import Task from "../src/js/task.js";
                     icon.appendChild(reward);
                     element.appendChild(icon);
 
-                    if (true || task.current >= task.requirement.amount) {
+                    if (task.current >= task.requirement.amount) {
                         let claimButton = document.createElement("div");
                         claimButton.classList.add("task-claim-button");
                         claimButton.innerHTML = "CLAIM";
                         element.appendChild(claimButton);
+
+                        claimButton.onclick = () => {
+                            doDarkModeTransition();
+
+                            userProfile.changeBank(task.reward.type, task.reward.amount);
+                            userProfile.tasks.splice(i, 1);
+                            this.update();
+                            userProfile.saveProfile();
+                        };
                     }
 
                     this.taskViewDisplay.appendChild(element);
