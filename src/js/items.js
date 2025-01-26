@@ -555,7 +555,44 @@ const tasks = [
     }, {
         type: "gold",
         amount: 250
-    })
+    }),
+
+    // POWERCELL TASKS
+    new Task("Deal 100K Damage", "Deal 100,000 damage in any game mode", {
+        type: "damage",
+        amount: 100e3
+    }, {
+        type: "powercells",
+        amount: 100
+    }),
+    new Task("Deal 1M Damage", "Deal 1,000,000 damage in any game mode", {
+        type: "damage",
+        amount: 1e6
+    }, {
+        type: "powercells",
+        amount: 200
+    }),
+    new Task("Deal 10M Damage", "Deal 10,000,000 damage in any game mode", {
+        type: "damage",
+        amount: 10e6
+    }, {
+        type: "powercells",
+        amount: 500
+    }),
+    new Task("Deal 50M Damage", "Deal 50,000,000 damage in any game mode", {
+        type: "damage",
+        amount: 50e6
+    }, {
+        type: "powercells",
+        amount: 2250
+    }),
+    new Task("Deal 200M Damage", "Deal 200,000,000 damage in any game mode", {
+        type: "damage",
+        amount: 200e6
+    }, {
+        type: "powercells",
+        amount: 6500
+    }),
 ];
 
 tasks.push();
