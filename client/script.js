@@ -4530,6 +4530,8 @@ import Task from "../src/js/task.js";
         }
 
         static toggle() {
+            this.generate(2);
+
             doDarkModeTransition();
 
             moneyDisplayManager.displayItems(["gold", "silver", "platinum", "powercells", "microchips"])
