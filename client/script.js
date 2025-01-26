@@ -304,7 +304,7 @@ import Task from "../src/js/task.js";
                 });
             }
 
-            let content = JSON.stringify({ slotsData, leaguePoints, bank, shapes, weapons, modules, drones, pilots, motherships });
+            let content = JSON.stringify({ slotsData, leaguePoints, bank, shapes, weapons, modules, drones, pilots, motherships, tasks });
             UTILS.saveVal("userProfile", content);
         }
 
@@ -389,6 +389,14 @@ import Task from "../src/js/task.js";
                 });
 
                 this.pilots.push(tmpItem);
+            }
+
+            for (let i = 0; i < content.tasks.length; i++) {
+                let data = content.tasks[i];
+
+                let task = new Task(items.tasks.find(e => e.label == data.label));
+                task.current = data.current;
+                this.tasks.push(task);
             }
         }
     }
