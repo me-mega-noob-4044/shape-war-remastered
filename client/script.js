@@ -4513,6 +4513,7 @@ import Task from "../src/js/task.js";
     class TaskDisplay {
 
         static taskViewDisplay = UTILS.getElement("task-view-display");
+        static taskViewBackButton = UTILS.getElement("task-view-back-button");
 
         /**
          * Generates X amount of tasks
@@ -4535,6 +4536,8 @@ import Task from "../src/js/task.js";
 
         static update() {
             this.taskViewDisplay.innerHTML = "";
+
+            moneyDisplayManager.displayItems(["gold", "silver", "platinum", "powercells", "microchips"])
 
             for (let i = 0; i < userProfile.tasks.length; i++) {
                 let task = userProfile.tasks[i];
@@ -4614,13 +4617,23 @@ import Task from "../src/js/task.js";
 
             doDarkModeTransition();
 
-            moneyDisplayManager.displayItems(["gold", "silver", "platinum", "powercells", "microchips"])
+            moneyDisplayManager.displayItems(["gold", "silver", "platinum", "powercells", "microchips"]);
 
             elements.taskDisplay.style.display = "block";
             elements.hangerUI.style.display = "none";
             moneyDisplayManager.holderElement.style.top = "5px";
 
             this.update();
+
+            this.taskViewBackButton.onclick = () => {
+                doDarkModeTransition();
+
+                elements.taskDisplay.style.display = "none";
+                elements.hangerUI.style.display = "block";
+                moneyDisplayManager.holderElement.style.top = null;
+
+                hangerDisplay.updateHanger();
+            };
         }
     }
 
