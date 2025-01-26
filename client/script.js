@@ -4581,6 +4581,28 @@ import Task from "../src/js/task.js";
                     let image = imageManager.getImage(`../src/media-files/money/${task.reward.type}.png`);
                     image.style = "width: 90px; height: 90px;";
 
+                    let progressBarHolder = document.createElement("div");
+                    progressBarHolder.style = `
+                    position: absolute;
+                    left: 130px;
+                    bottom: 10px;
+                    width: calc(100% - 340px);
+                    height: 20px;
+                    border-radius: 4px;
+                    background-color: rgba(0, 0, 0, .4);
+                    overflow: hidden;
+                    `;
+
+                    let progressBar = document.createElement("div");
+                    progressBar.style = `
+                    height: 100%;
+                    width: ${(task.current / task.requirement.amount) * 100}%;
+                    background-color: ${config.tierColors[1]};
+                    `;
+
+                    progressBarHolder.appendChild(progressBar);
+                    element.appendChild(progressBarHolder);
+
                     icon.appendChild(image);
                     icon.appendChild(reward);
                     element.appendChild(icon);
