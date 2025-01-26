@@ -4474,20 +4474,14 @@ import Projectile from "../client/src/game/projectile.js";
     };
 
     class TaskDisplay {
-        static opened = false;
-
         static toggle() {
-            this.opened = !this.opened;
-
             doDarkModeTransition();
 
-            if (this.opened) {
-                elements.taskDisplay.style.display = "block";
-                elements.hangerUI.style.display = "none";
-            } else {
-                elements.taskDisplay.style.display = "none";
-                elements.hangerUI.style.display = "block";
-            }
+            moneyDisplayManager.displayItems(["gold", "silver", "platinum", "powercells", "microchips"])
+
+            elements.taskDisplay.style.display = "block";
+            elements.hangerUI.style.display = "none";
+            moneyDisplayManager.holderElement.style.top = "5px";
         }
     }
 

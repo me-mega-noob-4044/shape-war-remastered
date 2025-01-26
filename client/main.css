@@ -611,11 +611,16 @@ a:-webkit-any-link {
 #shape-view-back-button-3,
 #drone-view-back-button,
 #pilot-view-back-button,
-#pilot-skills-view-back-button {
+#pilot-skills-view-back-button,
+#task-view-back-button {
     position: absolute;
     top: 20px;
     left: 30px;
     background-color: rgb(0, 0, 0, .2);
+}
+
+#task-view-back-button:hover {
+    background-color: rgb(0, 0, 0, .3);
 }
 
 #shape-view-back-button:hover {
