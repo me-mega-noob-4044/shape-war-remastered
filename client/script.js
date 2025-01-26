@@ -391,6 +391,8 @@ import Task from "../src/js/task.js";
                 this.pilots.push(tmpItem);
             }
 
+            if (!content.tasks) content.tasks = [];
+
             for (let i = 0; i < content.tasks.length; i++) {
                 let data = content.tasks[i];
 
@@ -4510,6 +4512,8 @@ import Task from "../src/js/task.js";
 
     class TaskDisplay {
 
+        static taskViewDisplay = UTILS.getElement("task-view-display");
+
         /**
          * Generates X amount of tasks
          * 
@@ -4529,8 +4533,33 @@ import Task from "../src/js/task.js";
             userProfile.saveProfile();
         }
 
+        static update() {
+            this.taskViewDisplay.innerHTML = "";
+
+            for (let i = 0; i < userProfile.tasks.length; i++) {
+                let task = userProfile.tasks[i];
+
+                if (task) {
+                    let element = document.createElement("div");
+                    element.style = `
+                    ${i > 0 ? "margin-top: 10px;" : ""}
+                    width: 100%;
+                    height: 125px;
+                    border-radius: 4px;
+                    background-color: rgba(0, 0, 0, .25);
+                    `;
+
+                    this.taskViewDisplay.appendChild(element);
+                }
+            }
+        }
+
         static toggle() {
-            this.generate(2);
+            if (userProfile.tasks.length == 0) {
+                this.generate(5);
+            }
+
+            console.log(userProfile.tasks);
 
             doDarkModeTransition();
 
@@ -4539,6 +4568,8 @@ import Task from "../src/js/task.js";
             elements.taskDisplay.style.display = "block";
             elements.hangerUI.style.display = "none";
             moneyDisplayManager.holderElement.style.top = "5px";
+
+            this.update();
         }
     }
 
