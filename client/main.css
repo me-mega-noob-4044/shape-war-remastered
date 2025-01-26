@@ -577,14 +577,22 @@ a:-webkit-any-link {
     border-radius: 100%;
 }
 
+.task-view-bottom-display {
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    height: 14%;
+    width: 100%;
+}
+
 .shape-view-bottom-display,
 .shape-view-upgrade-bottom,
 .drone-view-bottom-display,
 .pilot-view-bottom-display {
     position: absolute;
-    /*display: flex;
+    display: flex;
     align-items: center;
-    justify-content: center;*/
+    justify-content: center;
     bottom: 0px;
     left: 0px;
     height: 14%;
@@ -608,9 +616,8 @@ a:-webkit-any-link {
 
 #task-view-display {
     position: absolute;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 1fr;
     top: 50%;
     left: 50%;
     transform: translate(-50%, calc(-50% - 25px));
