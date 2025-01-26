@@ -5298,7 +5298,7 @@ import Task from "../src/js/task.js";
         return [player, placement];
     }
 
-    function handleTasks(isWin) {
+    function handleTasks(isWin, player) {
         for (let i = 0; i < userProfile.tasks.length; i++) {
             let task = userProfile.tasks[i];
 
@@ -5375,7 +5375,7 @@ import Task from "../src/js/task.js";
             userProfile.changeBank(i, rewards[i]);
         }
 
-        handleTasks(isWin);
+        handleTasks(isWin, player);
     }
 
     var gameScreenExitButton = document.getElementById("game-screen-exit-button");
@@ -5586,7 +5586,7 @@ import Task from "../src/js/task.js";
                 this.wpnParents[id].appendChild(element);
             },
             "addProjectile": (x, y, dir, owner, data) => {
-                let tmp = new projectile(x, y, data.name, data.projectileId, data.range, dir, owner, data.dmg, true);
+                let tmp = new Projectile(x, y, data.name, data.projectileId, data.range, dir, owner, data.dmg, true);
                 tmp.sid = data.sid;
                 tmp.speed += data.extraSpeed;
 
