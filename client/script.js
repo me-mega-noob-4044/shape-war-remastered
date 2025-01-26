@@ -4596,7 +4596,7 @@ import Task from "../src/js/task.js";
                     let progressBar = document.createElement("div");
                     progressBar.style = `
                     height: 100%;
-                    width: ${(task.current / task.requirement.amount) * 100}%;
+                    width: ${Math.min(1, task.current / task.requirement.amount) * 100}%;
                     background-color: ${config.tierColors[1]};
                     `;
 
@@ -4615,9 +4615,32 @@ import Task from "../src/js/task.js";
                     progressBarHolder.appendChild(progressText);
                     element.appendChild(progressBarHolder);
 
+                    let taskDescription = document.createElement("div");
+                    taskDescription.style = `
+                    position: absolute;
+                    left: 130px;
+                    bottom: 30px;
+                    color: white;
+                    font-size: 12px;
+                    `;
+                    taskDescription.innerHTML = task.description;
+                    element.appendChild(taskDescription);
+
+                    let taskLabel = document.createElement("div");
+                    taskLabel.classList.add("task-label");
+                    taskLabel.innerHTML = task.label;
+                    element.appendChild(taskLabel);
+
                     icon.appendChild(image);
                     icon.appendChild(reward);
                     element.appendChild(icon);
+
+                    if (true || task.current >= task.requirement.amount) {
+                        let claimButton = document.createElement("div");
+                        claimButton.classList.add("task-claim-button");
+                        claimButton.innerHTML = "CLAIM";
+                        element.appendChild(claimButton);
+                    }
 
                     this.taskViewDisplay.appendChild(element);
                 }
