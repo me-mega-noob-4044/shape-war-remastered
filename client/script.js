@@ -5201,6 +5201,8 @@ import Task from "../src/js/task.js";
     window.addEventListener("resize", resize);
     resize();
 
+    /** @type {Shape | undefined | null} */
+
     var player;
     let beaconDisplay = document.getElementById("beaconDisplay");
     var beaconLetters = ["A", "B", "C", "D", "E"];
@@ -5307,11 +5309,11 @@ import Task from "../src/js/task.js";
                     task.current++;
                 } else if (task.type == "win row" && isWin) {
                     task.current++;
-                } else if (task.type == "damage" && player) {
+                } else if (task.type == "damage") {
                     task.current += player.dmg;
-                } else if (task.type == "destroy" && player) {
+                } else if (task.type == "destroy") {
                     task.current += player.kills;
-                } else if (task.type == "capture" && player) {
+                } else if (task.type == "capture") {
                     task.current += player.beacons;
                 } else if (!isWin && task.type == "win row") {
                     task.current = 0;
