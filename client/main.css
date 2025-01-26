@@ -582,9 +582,9 @@ a:-webkit-any-link {
 .drone-view-bottom-display,
 .pilot-view-bottom-display {
     position: absolute;
-    display: flex;
+    /*display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: center;*/
     bottom: 0px;
     left: 0px;
     height: 14%;
@@ -601,8 +601,19 @@ a:-webkit-any-link {
     color: white;
     font-size: 18px;
     font-weight: 700;
-    height: calc(100% - 40px);
+    height: 80px;
     cursor: pointer;
+    border-radius: 4px;
+}
+
+#task-view-display {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, calc(-50% - 25px));
+    width: calc(100% - 180px);
+    height: calc(100% - 200px);
+    background-color: rgba(0, 0, 0, .15);
     border-radius: 4px;
 }
 
@@ -614,7 +625,7 @@ a:-webkit-any-link {
 #pilot-skills-view-back-button,
 #task-view-back-button {
     position: absolute;
-    top: 20px;
+    bottom: 20px;
     left: 30px;
     background-color: rgb(0, 0, 0, .2);
 }
