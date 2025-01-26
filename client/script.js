@@ -5298,6 +5298,28 @@ import Task from "../src/js/task.js";
         return [player, placement];
     }
 
+    function handleTasks(isWin) {
+        for (let i = 0; i < userProfile.tasks.length; i++) {
+            let task = userProfile.tasks[i];
+
+            if (task) {
+                if (task.type == "win" && isWin) {
+                    task.current++;
+                } else if (task.type == "win row" && isWin) {
+                    task.current++;
+                } else if (task.type == "damage" && player) {
+                    task.current += player.dmg;
+                } else if (task.type == "destroy" && player) {
+                    task.current += player.kills;
+                } else if (task.type == "capture" && player) {
+                    task.current += player.beacons;
+                } else if (!isWin && task.type == "win row") {
+                    task.current = 0;
+                }
+            }
+        }
+    }
+
     function buildRewards(player, placement, isWin) {
         let rewards = {
             silver: 0,
@@ -5352,6 +5374,8 @@ import Task from "../src/js/task.js";
         for (let i in rewards) {
             userProfile.changeBank(i, rewards[i]);
         }
+
+        handleTasks(isWin);
     }
 
     var gameScreenExitButton = document.getElementById("game-screen-exit-button");
