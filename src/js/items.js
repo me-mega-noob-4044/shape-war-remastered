@@ -404,262 +404,47 @@ win row = win a certain amount of battles in a row
 destroy row = destroy a certain amount of shapes in a row
 */
 
-const tasks = [];
+// Total of 4 skills each
 
-tasks.push(
-    new Task(
-        "Win 5 battles",
-        "Win 5 battles in any mode",
-        {
-            type: "win",
-            amount: 5
-        },
-        {
-            type: "silver",
-            amount: 100e3
-        }
-    ),
-    new Task(
-        "Destroy 10 shapes",
-        "Destroy 10 enemy shapes in any mode",
-        {
-            type: "destroy",
-            amount: 10
-        },
-        {
-            type: "silver",
-            amount: 150e3
-        }
-    ),
-    new Task(
-        "Capture 3 beacons",
-        "Capture 3 beacons in any mode",
-        {
-            type: "capture",
-            amount: 3
-        },
-        {
-            type: "silver",
-            amount: 50e3
-        }
-    ),
-    new Task(
-        "Deal 500K damage",
-        "Deal a total of 500,000 damage in any mode",
-        {
-            type: "damage",
-            amount: 500e3
-        },
-        {
-            type: "silver",
-            amount: 200e3
-        }
-    ),
-    new Task(
-        "Win 3 battles in a row",
-        "Win 3 consecutive battles in any mode",
-        {
-            type: "win row",
-            amount: 3
-        },
-        {
-            type: "gold",
-            amount: 50
-        }
-    ),
-    new Task(
-        "Destroy 5 shapes in a row",
-        "Destroy 5 enemy shapes consecutively in any mode",
-        {
-            type: "destroy row",
-            amount: 5
-        },
-        {
-            type: "gold",
-            amount: 75
-        }
-    ),
-    new Task(
-        "Win 10 battles",
-        "Win 10 battles in any mode",
-        {
-            type: "win",
-            amount: 10
-        },
-        {
-            type: "silver",
-            amount: 250e3
-        }
-    ),
-    new Task(
-        "Destroy 20 shapes",
-        "Destroy 20 enemy shapes in any mode",
-        {
-            type: "destroy",
-            amount: 20
-        },
-        {
-            type: "silver",
-            amount: 300e3
-        }
-    ),
-    new Task(
-        "Capture 5 beacons",
-        "Capture 5 beacons in any mode",
-        {
-            type: "capture",
-            amount: 5
-        },
-        {
-            type: "silver",
-            amount: 100e3
-        }
-    ),
-    new Task(
-        "Deal 1M damage",
-        "Deal a total of 1,000,000 damage in any mode",
-        {
-            type: "damage",
-            amount: 1e6
-        },
-        {
-            type: "silver",
-            amount: 400e3
-        }
-    ),
-    new Task(
-        "Win 5 battles in a row",
-        "Win 5 consecutive battles in any mode",
-        {
-            type: "win row",
-            amount: 5
-        },
-        {
-            type: "gold",
-            amount: 100
-        }
-    ),
-    new Task(
-        "Destroy 10 shapes in a row",
-        "Destroy 10 enemy shapes consecutively in any mode",
-        {
-            type: "destroy row",
-            amount: 10
-        },
-        {
-            type: "gold",
-            amount: 150
-        }
-    ),
-    new Task(
-        "Win 15 battles",
-        "Win 15 battles in any mode",
-        {
-            type: "win",
-            amount: 15
-        },
-        {
-            type: "silver",
-            amount: 350e3
-        }
-    ),
-    new Task(
-        "Destroy 30 shapes",
-        "Destroy 30 enemy shapes in any mode",
-        {
-            type: "destroy",
-            amount: 30
-        },
-        {
-            type: "silver",
-            amount: 450e3
-        }
-    ),
-    new Task(
-        "Capture 10 beacons",
-        "Capture 10 beacons in any mode",
-        {
-            type: "capture",
-            amount: 10
-        },
-        {
-            type: "silver",
-            amount: 200e3
-        }
-    ),
-    new Task(
-        "Deal 2M damage",
-        "Deal a total of 2,000,000 damage in any mode",
-        {
-            type: "damage",
-            amount: 2e6
-        },
-        {
-            type: "silver",
-            amount: 800e3
-        }
-    ),
-    new Task(
-        "Win 10 battles in a row",
-        "Win 10 consecutive battles in any mode",
-        {
-            type: "win row",
-            amount: 10
-        },
-        {
-            type: "gold",
-            amount: 200
-        }
-    ),
-    new Task(
-        "Destroy 15 shapes in a row",
-        "Destroy 15 enemy shapes consecutively in any mode",
-        {
-            type: "destroy row",
-            amount: 15
-        },
-        {
-            type: "gold",
-            amount: 300
-        }
-    ),
-    new Task(
-        "Win 20 battles",
-        "Win 20 battles in any mode",
-        {
-            type: "win",
-            amount: 20
-        },
-        {
-            type: "silver",
-            amount: 500e3
-        }
-    ),
-    new Task(
-        "Destroy 50 shapes",
-        "Destroy 50 enemy shapes in any mode",
-        {
-            type: "destroy",
-            amount: 50
-        },
-        {
-            type: "silver",
-            amount: 750e3
-        }
-    ),
-    new Task(
-        "Capture 15 beacons",
-        "Capture 15 beacons in any mode",
-        {
-            type: "capture",
-            amount: 15
-        },
-        {
-            type: "silver",
-            amount: 300e3
-        }
-    )
-);
+const tasks = [
+    new Task("Destroy 5 shapes", "Destroy 5 enemy shapes in battle", {
+        type: "destroy",
+        amount: 5
+    }, {
+        type: "silver",
+        amount: 150e3
+    }),
+    new Task("Capture 5 beacons", "Capture 5 beacons in any game mode", {
+        type: "capture",
+        amount: 5
+    }, {
+        type: "silver",
+        amount: 275e3
+    }),
+    new Task("Win 5 battles", "Win 5 battles in any game mode", {
+        type: "win",
+        amount: 5
+    }, {
+        type: "silver",
+        amount: 350e3
+    }),
+    new Task("Win 5 battles in a row", "Win 5 battles in a row in any game mode", {
+        type: "win row",
+        amount: 5
+    }, {
+        type: "silver",
+        amount: 575e3
+    }),
+    new Task("Deal 2M Damage", "Deal 2,000,000 damage in any game mode", {
+        type: "damage",
+        amount: 2e6
+    }, {
+        type: "silver",
+        amount: 325e3
+    })
+];
+
+tasks.push();
 
 const items = { shapes, weapons, modules, activeModules, pilots, skills, drones, motherships, turrets, tasks };
 
