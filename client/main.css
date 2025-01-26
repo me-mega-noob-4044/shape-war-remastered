@@ -1837,3 +1837,64 @@ tbody td {
     font-size: 16px;
     font-weight: 700;
 }
+
+.task-description {
+    position: absolute;
+    left: 130px;
+    bottom: 30px;
+    color: white;
+    font-size: 12px;
+}
+
+.task-progress-text {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    text-align: center;
+    color: white;
+}
+
+.task-progress-bar-holder {
+    position: absolute;
+    left: 130px;
+    bottom: 10px;
+    width: calc(100% - 340px);
+    height: 20px;
+    border-radius: 4px;
+    background-color: rgba(0, 0, 0, .4);
+    overflow: hidden;
+}
+
+.task-reward-style {
+    position: absolute;
+    color: white;
+    font-weight: 700;
+    right: -10px;
+    bottom: -12px;
+    width: auto;
+    padding: 2px;
+    padding-left: 7px;
+    padding-right: 7px;
+    border-radius: 12px;
+    background-color: rgba(0, 0, 0, .3);
+}
+
+.task-icon {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 90px;
+    height: 90px;
+    border-radius: 4px;
+    background-color: rgba(255, 255, 255, .2);
+}
+
+.task-element {
+    position: relative;
+    width: 100%;
+    height: 125px;
+    border-radius: 4px;
+    background-color: rgba(0, 0, 0, .25);
+}

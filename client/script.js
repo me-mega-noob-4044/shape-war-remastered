@@ -4541,57 +4541,21 @@ import Task from "../src/js/task.js";
 
                 if (task) {
                     let element = document.createElement("div");
-                    element.style = `
-                    position: relative;
-                    ${i > 0 ? "margin-top: 10px;" : ""}
-                    width: 100%;
-                    height: 125px;
-                    border-radius: 4px;
-                    background-color: rgba(0, 0, 0, .25);
-                    `;
+                    if (i > 0) element.style.marginTop = "10px";
+                    element.classList.add("task-element");
 
                     let icon = document.createElement("div");
-                    icon.style = `
-                    position: absolute;
-                    left: 20px;
-                    top: 50%;
-                    transform: translateY(-50%);
-                    width: 90px;
-                    height: 90px;
-                    border-radius: 4px;
-                    background-color: rgba(255, 255, 255, .2);
-                    `;
+                    icon.classList.add("task-icon");
 
                     let reward = document.createElement("div");
-                    reward.style = `
-                    position: absolute;
-                    color: white;
-                    font-weight: 700;
-                    right: -10px;
-                    bottom: -12px;
-                    width: auto;
-                    padding: 2px;
-                    padding-left: 7px;
-                    padding-right: 7px;
-                    border-radius: 12px;
-                    background-color: rgba(0, 0, 0, .3);
-                    `;
+                    reward.classList.add("task-reward-style");
                     reward.innerHTML = UTILS.styleNumberWithComma(task.reward.amount);
 
                     let image = imageManager.getImage(`../src/media-files/money/${task.reward.type}.png`);
                     image.style = "width: 90px; height: 90px;";
 
                     let progressBarHolder = document.createElement("div");
-                    progressBarHolder.style = `
-                    position: absolute;
-                    left: 130px;
-                    bottom: 10px;
-                    width: calc(100% - 340px);
-                    height: 20px;
-                    border-radius: 4px;
-                    background-color: rgba(0, 0, 0, .4);
-                    overflow: hidden;
-                    `;
+                    progressBarHolder.classList.add("task-progress-bar-holder");
 
                     let progressBar = document.createElement("div");
                     progressBar.style = `
@@ -4601,14 +4565,7 @@ import Task from "../src/js/task.js";
                     `;
 
                     let progressText = document.createElement("div");
-                    progressText.style = `
-                    position: absolute;
-                    top: 0px;
-                    left: 0px;
-                    width: 100%;
-                    text-align: center;
-                    color: white;
-                    `;
+                    progressText.classList.add("task-progress-text");
                     progressText.innerHTML = `${UTILS.styleNumberWithComma(task.current)}/${UTILS.styleNumberWithComma(task.requirement.amount)}`;
 
                     progressBarHolder.appendChild(progressBar);
@@ -4616,13 +4573,7 @@ import Task from "../src/js/task.js";
                     element.appendChild(progressBarHolder);
 
                     let taskDescription = document.createElement("div");
-                    taskDescription.style = `
-                    position: absolute;
-                    left: 130px;
-                    bottom: 30px;
-                    color: white;
-                    font-size: 12px;
-                    `;
+                    taskDescription.classList.add("task-description");
                     taskDescription.innerHTML = task.description;
                     element.appendChild(taskDescription);
 
