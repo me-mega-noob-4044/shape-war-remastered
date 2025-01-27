@@ -5305,17 +5305,17 @@ import Task from "../src/js/task.js";
             let task = userProfile.tasks[i];
 
             if (task) {
-                if (task.type == "win" && isWin) {
+                if (task.requirement.type == "win" && isWin) {
                     task.current++;
-                } else if (task.type == "win row" && isWin) {
+                } else if (task.requirement.type == "win row" && isWin) {
                     task.current++;
-                } else if (task.type == "damage") {
+                } else if (task.requirement.type == "damage") {
                     task.current += player.dmg;
-                } else if (task.type == "destroy") {
+                } else if (task.requirement.type == "destroy") {
                     task.current += player.kills;
-                } else if (task.type == "capture") {
+                } else if (task.requirement.type == "capture") {
                     task.current += player.beacons;
-                } else if (!isWin && task.type == "win row") {
+                } else if (!isWin && task.requirement.type == "win row") {
                     task.current = 0;
                 }
             }
