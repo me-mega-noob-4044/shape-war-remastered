@@ -4600,8 +4600,9 @@ import Task from "../src/js/task.js";
 
                             userProfile.changeBank(task.reward.type, task.reward.amount);
                             userProfile.tasks.splice(i, 1);
-                            this.update();
                             userProfile.saveProfile();
+
+                            this.update();
                         };
                     }
 
@@ -5320,6 +5321,8 @@ import Task from "../src/js/task.js";
                 }
             }
         }
+
+        userProfile.saveProfile();
     }
 
     function buildRewards(player, placement, isWin) {
