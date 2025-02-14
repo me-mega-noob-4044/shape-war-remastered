@@ -2,7 +2,6 @@ import msgpack from "../../src/js/msgpack.js";
 import Player from "../../src/js/player.js";
 import { mapBuilder, Map } from "./game/mapBuilder.js";
 import config from "../../src/js/config.js";
-import projectile from "./game/projectile.js";
 import * as UTILS from "../../src/js/utils.js";
 import items from "../../src/js/items.js";
 import GameObject from "./game/GameObject.js";
@@ -519,7 +518,7 @@ class game {
     }
 
     static addProjectile(x, y, dir, owner, wpn, extraSpeed) {
-        let tmp = new projectile(x, y, wpn.name, wpn.projectileId, wpn.range, dir, owner, wpn.dmg)
+        let tmp = new Projectile(x, y, wpn.name, wpn.projectileId, wpn.range, dir, owner, wpn.dmg)
         projectiles.push(tmp);
 
         let { name, range, projectileId } = wpn;

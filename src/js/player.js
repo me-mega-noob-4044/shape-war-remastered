@@ -8,6 +8,8 @@ import Pathfinder from "../../client/src/game/pathfinding.js";
 import { updatePlayerDisplay } from "../../client/src/main.js";
 import Shape from "./shape.js";
 import GameObject from "../../client/src/game/GameObject.js";
+import { Map } from "../../client/src/game/mapBuilder.js";
+import Weapon from "./weapon.js";
 
 function getMk3Amount(tmp) {
     let maxNumber = tmp.base;
@@ -411,7 +413,7 @@ export default class Player {
 
     /**
      * @param {Shape} shape 
-     * @param {*} map 
+     * @param {Map} map 
      */
 
     handleBorder(shape, map) {
@@ -482,7 +484,7 @@ export default class Player {
 
     /**
      * @param {Shape} shape 
-     * @param {*} map 
+     * @param {Map} map 
      * @param {GameObject[]} buildings 
      */
 
@@ -617,7 +619,7 @@ export default class Player {
 
     /**
      * @param {Shape} shape 
-     * @param {*} map 
+     * @param {Map} map 
      * @param {GameObject[]} buildings 
      * @param {Player[]} players 
      */
@@ -678,6 +680,14 @@ export default class Player {
             this.Game.send("removePlayer", this.sid);
         }
     }
+
+    /**
+     * 
+     * @param {Shape} shape 
+     * @param {number} slot 
+     * @param {Weapon} wpn 
+     * @param {number} hardpoints 
+     */
 
     fireWeapon(shape, slot, wpn, hardpoints) {
         let x, y, dir = 0;
