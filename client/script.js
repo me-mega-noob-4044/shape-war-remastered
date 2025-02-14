@@ -4612,7 +4612,7 @@ import Task from "../src/js/task.js";
 
         static toggle() {
             if (userProfile.tasks.length == 0) {
-                this.generate(5);
+                this.generate(UTILS.randInt(5, 15));
             }
 
             doDarkModeTransition();

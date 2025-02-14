@@ -1,20 +1,47 @@
-import config from "./config.js";
+import GameObject from "../../client/src/game/GameObject.js";
+import Shape from "./shape.js";
+import Skill from "./skill.js";
+
+/**
+ * @param {string} id 
+ */
 
 export const getElement = (id) => {
     return document.getElementById(id);
 };
 
+/**
+ * @param {string} id 
+ */
+
 export const getSavedVal = (id) => {
     return localStorage.getItem(id);
 };
+
+/**
+ * @param {string} id 
+ * @param {string} value
+ */
 
 export const saveVal = (id, value) => {
     localStorage.setItem(id, value);
 };
 
+/**
+ * @param {string} id 
+ */
+
 export const deleteVal = (id) => {
     localStorage.removeItem(id);
 }
+
+/**
+ * @param {number} pilotTier 
+ * @param {Skill} skill 
+ * @param {number} pilotLevel 
+ * @param {boolean} int 
+ * @returns {number} cost
+ */
 
 export const getSkillCost = (pilotTier, skill, pilotLevel, int) => {
     let baseCost = 100;
@@ -50,7 +77,7 @@ export const hexToRgb = (hex) => {
     hex = hex.replace(/^#/, "");
 
     if (hex.length === 3) {
-        hex = hex.split("").map(function(h) {
+        hex = hex.split("").map(function (h) {
             return h + h;
         }).join("");
     }
@@ -62,6 +89,11 @@ export const hexToRgb = (hex) => {
 
     return r + "," + g + "," + b;
 };
+
+/**
+ * @param {number} value 
+ * @returns {string}
+ */
 
 export const abbreviateNumber = (value) => {
     if (value < 1e3) {
@@ -81,11 +113,21 @@ export const fixTo = (value, indx) => {
     return parseFloat(value.toFixed(indx));
 };
 
+/**
+ * @param {number} value 
+ * @returns {string}
+ */
+
 export const styleNumberWithSpace = (value) => {
     value = styleNumberWithComma(value);
 
     return value.split(",").join(" ");
 };
+
+/**
+ * @param {number} value 
+ * @returns {string}
+ */
 
 export const styleNumberWithComma = (value) => {
     if (typeof value == "string") {
@@ -96,9 +138,21 @@ export const styleNumberWithComma = (value) => {
     return Math.round(value).toLocaleString();
 };
 
+/**
+ * @param {Shape | GameObject | { x: number, y: number }} start 
+ * @param {Shape | GameObject | { x: number, y: number }} end 
+ * @returns {number}
+ */
+
 export const getDistance = (start, end) => {
     return Math.hypot(start.y - end.y, start.x - end.x);
 };
+
+/**
+ * @param {Shape | GameObject | { x: number, y: number }} start 
+ * @param {Shape | GameObject | { x: number, y: number }} end 
+ * @returns {number}
+ */
 
 export const getDirection = (start, end) => {
     return Math.atan2(start.y - end.y, start.x - end.x);
@@ -108,6 +162,12 @@ export const capitalizeFirstLetter = (string) => {
     return string[0].toUpperCase() + string.substring(1);
 };
 
+/**
+ * @param {string} name 
+ * @param {number} value 
+ * @returns {string}
+ */
+
 export const droneStatAmount = (name, value) => {
     if (name == "On Mild Damage: Fix") {
         return styleNumberWithComma(value);
@@ -116,12 +176,23 @@ export const droneStatAmount = (name, value) => {
     }
 };
 
+/**
+ * @param {number} degrees 
+ * @returns {number}
+ */
+
 export const randDirectionSpread = (degrees) => {
     let rand = Math.random() * (degrees / 2);
     rand = rand / 180 * Math.PI;
 
     return rand * (Math.random() > .5 ? -1 : 1);
 };
+
+/**
+ * @param {number} min 
+ * @param {number} max 
+ * @returns {number}
+ */
 
 export const randInt = (min, max) => {
     return (Math.random() * (max - min + 1)) + min;
@@ -134,38 +205,50 @@ export const formatMilliseconds = (ms) => {
     return `${minutes}:${seconds.toString().padStart(2, "0")}`;
 }
 
+/**
+ * @param {number} recX 
+ * @param {number} recY 
+ * @param {number} recX2 
+ * @param {number} recY2 
+ * @param {number} x1 
+ * @param {number} y1 
+ * @param {number} x2 
+ * @param {number} y2 
+ * @returns {boolean}
+ */
+
 export const lineInRect = function (recX, recY, recX2, recY2, x1, y1, x2, y2) {
-	let minX = x1;
-	let maxX = x2;
+    let minX = x1;
+    let maxX = x2;
 
-	if (x1 > x2) {
-		minX = x2;
-		maxX = x1;
-	}
-	if (maxX > recX2) maxX = recX2;
-	if (minX < recX) minX = recX;
-	if (minX > maxX) return false;
+    if (x1 > x2) {
+        minX = x2;
+        maxX = x1;
+    }
+    if (maxX > recX2) maxX = recX2;
+    if (minX < recX) minX = recX;
+    if (minX > maxX) return false;
 
-	let minY = y1;
-	let maxY = y2;
-	let dx = x2 - x1;
+    let minY = y1;
+    let maxY = y2;
+    let dx = x2 - x1;
 
-	if (Math.abs(dx) > 0.0000001) {
-		let a = (y2 - y1) / dx;
-		let b = y1 - a * x1;
-		minY = a * minX + b;
-		maxY = a * maxX + b;
-	}
+    if (Math.abs(dx) > 0.0000001) {
+        let a = (y2 - y1) / dx;
+        let b = y1 - a * x1;
+        minY = a * minX + b;
+        maxY = a * maxX + b;
+    }
 
-	if (minY > maxY) {
-		let tmp = maxY;
-		maxY = minY;
-		minY = tmp;
-	}
+    if (minY > maxY) {
+        let tmp = maxY;
+        maxY = minY;
+        minY = tmp;
+    }
 
-	if (maxY > recY2) maxY = recY2;
-	if (minY < recY) minY = recY;
-	if (minY > maxY) return false;
+    if (maxY > recY2) maxY = recY2;
+    if (minY < recY) minY = recY;
+    if (minY > maxY) return false;
 
-	return true;
+    return true;
 };
