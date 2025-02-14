@@ -1,18 +1,34 @@
-const maps = [{
-    name: "Bastion",
-    width: 8e3,
-    height: 4e3,
-    locations: [{
-        x: 500,
-        y: 2e3
-    }, {
-        x: 7500,
-        y: 2e3
-    }]
-}];
+import GameObject from "./GameObject.js";
 
-var mapBuilder = new class {
-    build(buildings) {
+export class Map {
+
+    /**
+     * @param {string} name 
+     * @param {number} width 
+     * @param {number} height 
+     * @param {{ x: number, y: number }} firstSpawn 
+     * @param {{ x: number, y: number  }} secondSpawn 
+     */
+
+    constructor(name, width, height, firstSpawn, secondSpawn) {
+        this.name = name;
+        this.width = width;
+        this.height = height;
+        this.locations = [firstSpawn, secondSpawn];
+    }
+}
+
+/** @type {Map[]} */
+
+export const maps = [
+    new Map("Bastion", 8e3, 4e3, { x: 500, y: 2e3 }, { x: 7500, y: 2e3 })
+];
+
+export class MapBuilder {
+
+    /** @type {GameObject[]} */
+
+    static build(buildings) {
         let indx = Math.floor(Math.random() * maps.length);
         let map = maps[indx];
 
@@ -155,6 +171,4 @@ var mapBuilder = new class {
 
         return map;
     }
-};
-
-export { maps, mapBuilder };
+}

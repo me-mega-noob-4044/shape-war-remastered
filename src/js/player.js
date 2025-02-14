@@ -615,6 +615,13 @@ export default class Player {
         }
     }
 
+    /**
+     * @param {Shape} shape 
+     * @param {*} map 
+     * @param {GameObject[]} buildings 
+     * @param {Player[]} players 
+     */
+
     update(shape, map, buildings, players) {
         this.updateDir(shape);
 

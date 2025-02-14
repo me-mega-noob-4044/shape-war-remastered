@@ -1,6 +1,6 @@
 import msgpack from "../../src/js/msgpack.js";
 import Player from "../../src/js/player.js";
-import { maps, mapBuilder } from "./game/mapBuilder.js";
+import { mapBuilder, Map } from "./game/mapBuilder.js";
 import config from "../../src/js/config.js";
 import projectile from "./game/projectile.js";
 import * as UTILS from "../../src/js/utils.js";
@@ -328,6 +328,9 @@ self.onmessage = (event) => {
 };
 
 class game {
+
+    /** @type {Map | null} */
+
     static map = null;
     static spawnIndx = 0;
     static points = [0, 0];
