@@ -4,7 +4,7 @@ import * as UTILS from "../../../src/js/utils.js";
 
 self.projectileSids = 0;
 
-export default class {
+export default class Projectile {
     constructor(x, y, name, id, range, dir, ownerSID, dmg, dontSid) {
         if (!dontSid) {
             this.sid = self.projectileSids;
@@ -30,7 +30,7 @@ export default class {
 
     update(players, server, delta) {
         let tmpSpd = this.speed * (delta || config.gameUpdateSpeed);
-        
+
         let oldX = this.x, oldY = this.y;
 
         this.x += Math.cos(this.dir) * tmpSpd;
@@ -43,6 +43,6 @@ export default class {
             this.active = false;
         }
 
-        if (server) {}
+        if (server) { }
     }
 }

@@ -5,9 +5,19 @@ import config from "../../src/js/config.js";
 import projectile from "./game/projectile.js";
 import * as UTILS from "../../src/js/utils.js";
 import items from "../../src/js/items.js";
+import GameObject from "./game/GameObject.js";
+import Projectile from "./game/projectile.js";
+
+/** @type {Player[]} */
 
 export const players = [];
+
+/** @type {GameObject[]} */
+
 export const buildings = [];
+
+/** @type {Projectile[]} */
+
 export const projectiles = [];
 
 var gameUpdateLoop;
