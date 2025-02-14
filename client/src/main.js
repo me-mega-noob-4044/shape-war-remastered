@@ -531,7 +531,7 @@ class game {
         try {
             let gameTimer = 1e3 * 60 * 5;
 
-            let map = this.map = MapBuilder.build(buildings);
+            let map = this.map = MapBuilder.build();
             this.spawnIndx = Math.floor(Math.random() * 2);
 
             this.send("init", map, buildings);
