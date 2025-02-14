@@ -6,6 +6,8 @@ import module from "./module.js";
 import * as UTILS from "./utils.js";
 import Pathfinder from "../../client/src/game/pathfinding.js";
 import { updatePlayerDisplay } from "../../client/src/main.js";
+import Shape from "./shape.js";
+import GameObject from "../../client/src/game/GameObject.js";
 
 function getMk3Amount(tmp) {
     let maxNumber = tmp.base;
@@ -201,6 +203,15 @@ function randIntCoords(e) {
 }
 
 export default class Player {
+
+    /**
+     * @param {*} data 
+     * @param {string | boolean} isUser 
+     * @param {*} Game 
+     * @param {number} indx 
+     * @param {number} leaguePoints 
+     */
+
     constructor(data, isUser, Game, indx, leaguePoints) {
         this.Game = Game;
         this.isUser = isUser;
@@ -211,6 +222,8 @@ export default class Player {
         this.pathId = null;
         this.pathType = "";
 
+        /** @type {string | boolean} */
+
         this.isAlly = !!isUser;
 
         this.isAttacking = 0;
@@ -218,6 +231,9 @@ export default class Player {
         this.mothershipCharge = 0;
         this.moveDir = undefined;
         this.reloadAllWeapons = false;
+
+        /** @type {Shape[]} */
+
         this.shapes = [];
 
         this.mouseDistance = 0;
@@ -288,6 +304,12 @@ export default class Player {
         }
     }
 
+    /**
+     * @param {Shape} shape 
+     * @param {number} value 
+     * @param {Shape | null | undefined} doer 
+     */
+
     changeHealth(shape, value, doer) {
         if (shape.health > 0) {
             if (value <= 0) {
@@ -311,6 +333,11 @@ export default class Player {
             }
         }
     }
+
+    /**
+     * @param {Shape} shape 
+     * @param {GameObject[]} buildings 
+     */
 
     handleMovement(shape, buildings) {
         let delta = config.gameUpdateSpeed;
@@ -382,6 +409,11 @@ export default class Player {
         }
     }
 
+    /**
+     * @param {Shape} shape 
+     * @param {*} map 
+     */
+
     handleBorder(shape, map) {
         if (shape.x <= shape.scale) {
             shape.x = shape.scale;
@@ -400,6 +432,10 @@ export default class Player {
         }
     }
 
+    /**
+     * @param {Shape} shape 
+     */
+
     updateDir(shape) {
         if (shape.dir != this.targetDir) {
             shape.dir %= PI2;
@@ -413,6 +449,11 @@ export default class Player {
 
         shape.dir %= PI2;
     }
+
+    /**
+     * @param {Player} player 
+     * @returns {number | undefined}
+     */
 
     movePathfind(player) {
         let nearestDistance = Infinity;
@@ -438,6 +479,12 @@ export default class Player {
             return undefined;
         }
     }
+
+    /**
+     * @param {Shape} shape 
+     * @param {*} map 
+     * @param {GameObject[]} buildings 
+     */
 
     aiMovement(shape, map, buildings) {
         this.moveDir = undefined;
@@ -488,6 +535,13 @@ export default class Player {
             }
         }
     }
+
+    /**
+     * @param {Shape} shape 
+     * @param {Shape | GameObject | object} target 
+     * @param {GameObject[]} buildings 
+     * @returns {boolean}
+     */
 
     canHit(shape, target, buildings) {
         for (let i = 0; i < buildings.length; i++) {
@@ -682,6 +736,10 @@ export default class Player {
 
         this.Game.addProjectile(x, y, dir, this.indx, wpn, this.vel);
     }
+
+    /**
+     * @param {Shape} shape 
+     */
 
     manageWeapons(shape) {
         let game = this.Game;

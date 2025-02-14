@@ -28,6 +28,10 @@ export default class Shape {
         this.activeModuleIndex = 0;
         this.abilities = [];
 
+        this.lastX = 0;
+        this.lastY = 0;
+        this.avoidBuildings = false;
+
         if (data.abilities.length) {
             this.abilities = [];
             for (let i = 0; i < data.abilities.length; i++) {
