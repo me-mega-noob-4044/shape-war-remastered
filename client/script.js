@@ -1,4 +1,3 @@
-"use strict";
 import config from "../src/js/config.js";
 import * as UTILS from "../src/js/utils.js";
 import items from "../src/js/items.js";
@@ -5877,6 +5876,10 @@ import Task from "../src/js/task.js";
             this.socket = new Worker("client/src/main.js", {
                 type: "module"
             });
+
+            this.socket.onerror = (error) => {
+                console.log(error);
+            }
 
             this.socket.onmessage = (event) => {
                 let data = new Uint8Array(event.data);

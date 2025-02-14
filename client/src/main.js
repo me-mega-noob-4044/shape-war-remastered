@@ -1,6 +1,6 @@
 import msgpack from "../../src/js/msgpack.js";
 import Player from "../../src/js/player.js";
-import { mapBuilder, Map } from "./game/mapBuilder.js";
+import { MapBuilder, Map } from "./game/mapBuilder.js";
 import config from "../../src/js/config.js";
 import * as UTILS from "../../src/js/utils.js";
 import items from "../../src/js/items.js";
@@ -528,74 +528,78 @@ class game {
     }
 
     static start() {
-        let gameTimer = 1e3 * 60 * 5;
+        try {
+            let gameTimer = 1e3 * 60 * 5;
 
-        let map = this.map = mapBuilder.build(buildings);
-        this.spawnIndx = Math.floor(Math.random() * 2);
+            let map = this.map = MapBuilder.build(buildings);
+            this.spawnIndx = Math.floor(Math.random() * 2);
 
-        this.send("init", map, buildings);
+            this.send("init", map, buildings);
 
-        for (let i = 0; i < 2; i++) this.send("updateBeaconBars", i, 0);
+            for (let i = 0; i < 2; i++) this.send("updateBeaconBars", i, 0);
 
-        beaconPointsLoop = setInterval(() => {
-            if (onFirstStart) return;
+            beaconPointsLoop = setInterval(() => {
+                if (onFirstStart) return;
 
-            for (let i = 0; i < buildings.length; i++) {
-                let tmpObj = buildings[i];
+                for (let i = 0; i < buildings.length; i++) {
+                    let tmpObj = buildings[i];
 
-                if (tmpObj.name == "beacon") {
-                    if (Math.abs(tmpObj.capturePoints) == 6e3) {
-                        let indx = (tmpObj.capturePoints == -6e3) * 1;
+                    if (tmpObj.name == "beacon") {
+                        if (Math.abs(tmpObj.capturePoints) == 6e3) {
+                            let indx = (tmpObj.capturePoints == -6e3) * 1;
 
-                        this.points[indx] = Math.min(this.points[indx] + 1, 300);
-                        this.send("updateBeaconBars", indx, this.points[indx]);
+                            this.points[indx] = Math.min(this.points[indx] + 1, 300);
+                            this.send("updateBeaconBars", indx, this.points[indx]);
 
-                        tmpObj.collectionTime = 1e3;
-                    }
-                }
-            }
-        }, 1e3);
-
-        healingBeaconLoop = setInterval(() => { // healing beacon
-            if (onFirstStart) return;
-
-            for (let i = 0; i < buildings.length; i++) {
-                let tmpObj = buildings[i];
-
-                if (tmpObj.name == "healing beacon") {
-                    for (let i = 0; i < players.length; i++) {
-                        let player = players[i];
-
-                        let shape = player.shapes[player.chooseIndex];
-
-                        if (shape && UTILS.getDistance(tmpObj, shape) <= tmpObj.scale + shape.scale) {
-                            player.changeHealth(shape, tmpObj.power);
+                            tmpObj.collectionTime = 1e3;
                         }
                     }
                 }
-            }
-        }, 2e3);
+            }, 1e3);
 
-        gameUpdateLoop = setInterval(() => {
-            if (onFirstStart) return;
+            healingBeaconLoop = setInterval(() => { // healing beacon
+                if (onFirstStart) return;
 
-            gameTimer -= config.gameUpdateSpeed;
+                for (let i = 0; i < buildings.length; i++) {
+                    let tmpObj = buildings[i];
 
-            if (gameTimer <= 0) {
-                let isWin = true;
-                let reason = "Time has run out. Your team has more beacon points and thus wins the match.";
+                    if (tmpObj.name == "healing beacon") {
+                        for (let i = 0; i < players.length; i++) {
+                            let player = players[i];
 
-                if (this.points[0] < this.points[1]) {
-                    isWin = false;
-                    reason = "Time has run out. The opposing team has more beacon points, and you lose the match.";
+                            let shape = player.shapes[player.chooseIndex];
+
+                            if (shape && UTILS.getDistance(tmpObj, shape) <= tmpObj.scale + shape.scale) {
+                                player.changeHealth(shape, tmpObj.power);
+                            }
+                        }
+                    }
+                }
+            }, 2e3);
+
+            gameUpdateLoop = setInterval(() => {
+                if (onFirstStart) return;
+
+                gameTimer -= config.gameUpdateSpeed;
+
+                if (gameTimer <= 0) {
+                    let isWin = true;
+                    let reason = "Time has run out. Your team has more beacon points and thus wins the match.";
+
+                    if (this.points[0] < this.points[1]) {
+                        isWin = false;
+                        reason = "Time has run out. The opposing team has more beacon points, and you lose the match.";
+                    }
+
+                    endGame(isWin, reason);
+                    return;
                 }
 
-                endGame(isWin, reason);
-                return;
-            }
 
-
-            this.updateGame();
-        }, config.gameUpdateSpeed);
+                this.updateGame();
+            }, config.gameUpdateSpeed);
+        } catch (e) {
+            console.log(e);
+        }
     }
 };

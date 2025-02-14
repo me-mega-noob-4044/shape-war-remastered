@@ -29,7 +29,7 @@ app.get("*", (req, res) => {
         res.sendFile(path.join(__dirname + "/client/script.js"));
     } else if (url == "/main.css") {
         res.sendFile(path.join(__dirname + "/client/main.css"));
-    } else if (subdomain == "test")  {
+    } else if (subdomain == "test") {
         res.sendFile(path.join(__dirname + "/client/index.html"));
     } else {
         res.sendFile(path.join(__dirname + "/client/wip.html"));
