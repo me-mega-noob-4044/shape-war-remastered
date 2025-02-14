@@ -39,8 +39,8 @@ function getMk2Amount(tmpObj, tmp, type) {
     return total / 11;
 }
 
-var upgraderManager = new class {
-    upgradeShape(shape) {
+class UpgraderManager {
+    static upgradeShape(shape) {
         let item = items.shapes.find(e => e.name == shape.name);
         if (item.healthData) {
             let value = item.healthData.level[shape.level];
@@ -64,7 +64,8 @@ var upgraderManager = new class {
         }
         shape.level++;
     }
-    upgradeWeapon(weapon) {
+
+    static upgradeWeapon(weapon) {
         let item = items.weapons.find(e => e.name == weapon.name);
         if (item.damageData) {
             let value = item.damageData.level[weapon.level];
@@ -81,7 +82,8 @@ var upgraderManager = new class {
 
         weapon.level++;
     }
-    upgradeModule(module) {
+
+    static upgradeModule(module) {
         let item = items.modules.find(e => e.name == module.name);
         if (item.healthIncreaseData) {
             module.healthIncrease += item.healthIncreaseData.level[module.level];
@@ -89,7 +91,8 @@ var upgraderManager = new class {
 
         module.level++;
     }
-    upgradeDrone(drone) {
+
+    static upgradeDrone(drone) {
         let item = items.drones.find(e => e.name == drone.name);
 
         for (let i = 0; i < drone.abilities.length; i++) {
@@ -111,7 +114,7 @@ var upgraderManager = new class {
 
         drone.level++;
     }
-};
+}
 
 function setBonuses(shape, skills) {
     let bonuses = {
@@ -245,7 +248,7 @@ export default class Player {
             let Shape = new shape(items.shapes.find(e => e.name == data.name), data.slot, true);
 
             for (let i = 0; i < data.level - 1; i++) {
-                upgraderManager.upgradeShape(Shape);
+                UpgraderManager.upgradeShape(Shape);
             }
 
             Shape.weapons = [];
@@ -256,7 +259,7 @@ export default class Player {
                 let Item = new weapon(items.weapons.find(e => e.name == wpn.name), undefined, wpn.slot);
 
                 for (let t = 0; t < wpn.level - 1; t++) {
-                    upgraderManager.upgradeWeapon(Item);
+                    UpgraderManager.upgradeWeapon(Item);
                 }
 
                 Shape.weapons.push(Item);
@@ -272,7 +275,7 @@ export default class Player {
                 let Item = new module(items.modules.find(e => e.name == Module.name));
 
                 for (let t = 0; t < Module.level - 1; t++) {
-                    upgraderManager.upgradeModule(Item);
+                    UpgraderManager.upgradeModule(Item);
                 }
 
                 Shape.modules.push(Item);

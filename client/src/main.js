@@ -24,6 +24,11 @@ var gameUpdateLoop;
 var healingBeaconLoop;
 var beaconPointsLoop;
 
+/**
+ * @param {Player} player 
+ * @returns {{ name: string, maxammo: number, ammo: number, imageSource: string }[]}
+ */
+
 function groupWeapons(player) {
     let data = [];
     let shape = player.shapes[player.chooseIndex];
