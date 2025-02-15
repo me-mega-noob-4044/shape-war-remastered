@@ -12,7 +12,10 @@ export default class Drone {
         this.cost = data.cost;
         this.maxlevel = data.maxlevel;
 
+        /** @type {droneAbility[]} */
+
         this.abilities = [];
+
         if (data.abilities.length) {
             for (let i = 0; i < data.abilities.length; i++) {
                 let ability = data.abilities[i];

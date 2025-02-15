@@ -1,11 +1,13 @@
-(self || window).shapeSid = 0;
 import ability from "./ability.js";
+import Drone from "./drone.js";
+
+var shapeSid = 0;
 
 export default class Shape {
     constructor(data, slot, dontAssignSID) {
         if (!dontAssignSID) {
-            this.sid = (self || window).shapeSid;
-            (self || window).shapeSid++;
+            this.sid = shapeSid;
+            shapeSid++;
         } else if (data.cost) {
             this.cost = { ...data.cost };
         }
@@ -27,6 +29,10 @@ export default class Shape {
         this.speed = data.speedData?.base || data.speed;
         this.activeModuleIndex = 0;
         this.abilities = [];
+
+        /** @type {Drone} */
+
+        this.drone = null;
 
         this.lastX = 0;
         this.lastY = 0;
