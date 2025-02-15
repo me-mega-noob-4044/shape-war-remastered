@@ -30,7 +30,7 @@ export default class Shape {
         this.activeModuleIndex = 0;
         this.abilities = [];
 
-        /** @type {Drone} */
+        /** @type {Drone | null} */
 
         this.drone = null;
 

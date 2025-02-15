@@ -10,6 +10,9 @@ import Shape from "./shape.js";
 import GameObject from "../../client/src/game/GameObject.js";
 import { Map } from "../../client/src/game/mapBuilder.js";
 import Weapon from "./weapon.js";
+import Drone from "./drone.js";
+import Module from "./module.js";
+import Skill from "./skill.js";
 
 function getMk3Amount(tmp) {
     let maxNumber = tmp.base;
@@ -253,6 +256,12 @@ export default class Player {
         this.init(data, leaguePoints);
     }
 
+    /**
+     * 
+     * @param {{ drone: Drone, level: number, modules: Module[], name: string, sid: number, skills: Skill[], slot: number, weapons: Weapon[] }[]} Data 
+     * @param {*} leaguePoints 
+     */
+
     init(Data, leaguePoints = 0) {
         let easyMode = false;
 
@@ -297,6 +306,12 @@ export default class Player {
                 }
 
                 Shape.modules.push(Item);
+            }
+
+            if (this.isUser == "me") console.log(Data);
+
+            if (Data.drone) {
+
             }
 
             setBonuses(Shape, data.skills);

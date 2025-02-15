@@ -187,11 +187,21 @@ import Task from "../src/js/task.js";
             }
         }
 
+        /**
+         * @param {number} id 
+         * @param {number} value 
+         */
+
         static purchaseSlot(indx, cost) {
             this.slotsData[indx].locked = false;
             this.changeBank("gold", -cost);
             hangerDisplay.updateHanger();
         }
+
+        /**
+         * @param {number} id 
+         * @param {number} value 
+         */
 
         static changeBank(id, value) {
             if (id == "leaguePoints") {
@@ -2858,6 +2868,9 @@ import Task from "../src/js/task.js";
                             userProfile.changeBank("microchips", -userProfile.bank.microchips);
                             userProfile.changeBank("gold", -goldCost);
 
+                            goldAndMicrochipsElement.remove();
+                            isIngoldAndMicrochipsElement = false;
+
                             this.purchaseDrone(drone, true, slotId);
                         };
                     }
@@ -2973,7 +2986,7 @@ import Task from "../src/js/task.js";
                     <span style="font-size: 80px; color: rgba(0, 255, 0, .45); font-weight: 400;" class="material-symbols-outlined">
                         close
                     </span>
-                    `;
+                `;
                 element.appendChild(weirdIcon);
 
                 let textDisplay = document.createElement("div");
@@ -4402,6 +4415,17 @@ import Task from "../src/js/task.js";
 
                 let shape = shapes.find(e => e.sid == mod.owner && e.slot >= 0);
                 if (shape) shape.modules.push(module);
+            }
+
+            let equipppedDrones = userProfile.drones.filter(e => e.owner >= 0);
+            for (let i = 0; i < equipppedDrones.length; i++) {
+                let drone = equipppedDrones[i];
+                let shape = shapes.find(e => e.sid == pilot.owner && e.slot >= 0);
+
+                if (shape) shape.drone = {
+                    name: drone.name,
+                    level: drone.level
+                };
             }
 
             let equippedPilots = userProfile.pilots.filter(e => e.owner >= 0);
