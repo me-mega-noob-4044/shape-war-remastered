@@ -4420,7 +4420,7 @@ import Task from "../src/js/task.js";
             let equipppedDrones = userProfile.drones.filter(e => e.owner >= 0);
             for (let i = 0; i < equipppedDrones.length; i++) {
                 let drone = equipppedDrones[i];
-                let shape = shapes.find(e => e.sid == pilot.owner && e.slot >= 0);
+                let shape = shapes.find(e => e.sid == drone.owner && e.slot >= 0);
 
                 if (shape) shape.drone = {
                     name: drone.name,

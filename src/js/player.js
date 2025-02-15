@@ -258,8 +258,8 @@ export default class Player {
 
     /**
      * 
-     * @param {{ drone: Drone, level: number, modules: Module[], name: string, sid: number, skills: Skill[], slot: number, weapons: Weapon[] }[]} Data 
-     * @param {*} leaguePoints 
+     * @param {{ drone: { name: string, level: number }, level: number, modules: Module[], name: string, sid: number, skills: Skill[], slot: number, weapons: Weapon[] }[]} Data 
+     * @param {number} leaguePoints 
      */
 
     init(Data, leaguePoints = 0) {
@@ -308,11 +308,17 @@ export default class Player {
                 Shape.modules.push(Item);
             }
 
-            if (this.isUser == "me") console.log(Data);
+            if (data.drone) {
+                let drone = new Drone(items.drones.find(e => e.name == data.drone.name));
 
-            if (Data.drone) {
+                for (let t = 0; t < data.drone.level - 1; t++) {
+                    UpgraderManager.upgradeDrone(drone);
+                }
 
+                Shape.drone = drone;
             }
+
+            if (this.isUser == "me") console.log(Shape);
 
             setBonuses(Shape, data.skills);
             playerify(Shape, easyMode);

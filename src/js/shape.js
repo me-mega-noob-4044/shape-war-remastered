@@ -1,5 +1,7 @@
 import ability from "./ability.js";
 import Drone from "./drone.js";
+import Module from "./module.js";
+import Weapon from "./weapon.js";
 
 var shapeSid = 0;
 
@@ -33,6 +35,14 @@ export default class Shape {
         /** @type {Drone | null} */
 
         this.drone = null;
+
+        /** @type {Module[]} */
+
+        this.modules = [];
+
+        /** @type {Weapon[]} */
+
+        this.weapons = [];
 
         this.lastX = 0;
         this.lastY = 0;
