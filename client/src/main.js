@@ -6,6 +6,7 @@ import * as UTILS from "../../src/js/utils.js";
 import items from "../../src/js/items.js";
 import GameObject from "./game/GameObject.js";
 import Projectile from "./game/projectile.js";
+import Drone from "../../src/js/drone.js";
 
 /** @type {Player[]} */
 
@@ -18,6 +19,10 @@ export const buildings = [];
 /** @type {Projectile[]} */
 
 export const projectiles = [];
+
+/** @type {Drone[]} */
+
+export const drones = [];
 
 var gameUpdateLoop;
 var healingBeaconLoop;

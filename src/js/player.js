@@ -5,7 +5,7 @@ import weapon from "./weapon.js";
 import module from "./module.js";
 import * as UTILS from "./utils.js";
 import Pathfinder from "../../client/src/game/pathfinding.js";
-import { updatePlayerDisplay } from "../../client/src/main.js";
+import { drones, updatePlayerDisplay } from "../../client/src/main.js";
 import Shape from "./shape.js";
 import GameObject from "../../client/src/game/GameObject.js";
 import { Map } from "../../client/src/game/mapBuilder.js";
@@ -309,16 +309,15 @@ export default class Player {
             }
 
             if (data.drone) {
-                let drone = new Drone(items.drones.find(e => e.name == data.drone.name));
+                let drone = new Drone(items.drones.find(e => e.name == data.drone.name), Shape);
 
                 for (let t = 0; t < data.drone.level - 1; t++) {
                     UpgraderManager.upgradeDrone(drone);
                 }
 
                 Shape.drone = drone;
+                drones.push(drone);
             }
-
-            if (this.isUser == "me") console.log(Shape);
 
             setBonuses(Shape, data.skills);
             playerify(Shape, easyMode);
