@@ -128,6 +128,11 @@ class ScoreCounter {
     }
 }
 
+/**
+ * @param {boolean} isWin 
+ * @param {string} reason 
+ */
+
 function endGame(isWin, reason) {
     clearInterval(gameUpdateLoop);
     clearInterval(healingBeaconLoop);
@@ -144,6 +149,7 @@ function endGame(isWin, reason) {
 
     for (let i = 0; i < players.length; i++) {
         players[i].moveDir = undefined;
+
         if (players[i].isAlly) {
             allies.push(new ScoreCounter(players[i].isUser == "me" ? "Player" : `Bot ${i}`, players[i].stats, isWin));
         } else {
@@ -170,6 +176,7 @@ function endGame(isWin, reason) {
     projectiles.length = 0;
     players.length = 0;
     buildings.length = 0;
+    drones.length = 0;
 }
 
 export function updatePlayerDisplay() {
@@ -201,6 +208,11 @@ export function updatePlayerDisplay() {
 
     game.send("updatePlayerDisplay", allies, enemies);
 }
+
+/**
+ * @param {number} e 
+ * @returns {number}
+ */
 
 function randIntCoords(e) {
     return UTILS.randInt(e - 300, e + 300);
@@ -376,6 +388,12 @@ class game {
                     // ID, ISUSER, name, x, y, dir, health, maxhealth, grayDamage, isAlly, zIndex
                     if (shape.health > 0) playersData.push(player.sid, player.isUser, shape.name, shape.x, shape.y, shape.dir, shape.health, shape.maxhealth, shape.grayDamage, player.isAlly, shape.zIndex);
                 }
+            }
+
+            for (let i = 0; i < drones.length; i++) {
+                let drone = drones[i];
+
+                if (drone.active) { }
             }
 
             for (let i = 0; i < projectiles.length; i++) {

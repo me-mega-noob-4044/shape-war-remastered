@@ -13,6 +13,8 @@ export default class Drone {
         this.y = 0;
         this.vel = { x: 0, y: 0 };
 
+        this.active = true;
+
         this.level = 1;
         this.tier = data.tier;
         this.name = data.name;
