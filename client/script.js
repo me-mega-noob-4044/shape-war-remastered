@@ -4698,7 +4698,12 @@ import Task from "../src/js/task.js";
         mouseY = event.clientY;
     });
 
+    /** @type {HTMLCanvasElement} */
+
     var gameCanvas = document.getElementById("gameCanvas");
+
+    /** @type {CanvasRenderingContext2D} */
+
     var ctx = gameCanvas.getContext("2d");
 
     document.addEventListener("keydown", (event) => {
@@ -4855,6 +4860,24 @@ import Task from "../src/js/task.js";
                     }
 
                     ctx.restore();
+                }
+            }
+        }
+
+        static renderDamageIndicators(delta) {
+            let now = Date.now();
+
+            for (let i = 0; i < GameManager.players.length; i++) {
+                let tmpObj = GameManager.players[i];
+
+                if (tmpObj && tmpObj.health > 0 && now - tmpObj.showDamageIndicator > 0) {
+                    let height = 0;
+
+                    ctx.save();
+                    ctx
+
+                    tmpObj.showDamageIndicator -= delta;
+                    if (tmpObj.showDamageIndicator <= 0) tmpObj.showDamageIndicator = 0;
                 }
             }
         }
@@ -5204,6 +5227,7 @@ import Task from "../src/js/task.js";
             this.renderPlayers(1);
             this.renderBuildings(delta, 2);
             this.renderBorders();
+            this.renderDamageIndicators(delta);
 
             ctx.fillStyle = "rgba(0, 0, 70, 0.35)";
             ctx.fillRect(0, 0, this.screenSize.x, this.screenSize.y);
@@ -5469,7 +5493,11 @@ import Task from "../src/js/task.js";
 
     class GameManager {
         static lastMoveDir;
+
+        /** @type {Shape[]} */
+
         static players = [];
+
         static buildings = [];
         static projectiles = [];
         static weaponElements = [];
@@ -5760,7 +5788,34 @@ import Task from "../src/js/task.js";
 
                     buildEndGameTable(isWin, allies, enemies);
                 }, 2e3);
+            },
+
+            /**
+             * @param {number} sid 
+             * @param {string} type 
+             * @param {number} value 
+             */
+
+            "damageIndicators": (sid, type, value) => {
+                for (let i = 0; i < this.players.length; i++) {
+                    let shape = this.players[i];
+
+                    if (shape.sid == sid) {
+                        let id = `lastUpdate${UTILS.capitalizeFirstLetter(type)}`;
+
+                        if (Date.now() - shape.damageIndicators[id] <= 15e3) {
+                            shape.damageIndicators[type] += value;
+                        } else {
+                            shape.damageIndicators[type] = value;
+                        }
+
+                        shape.showDamageIndicator = 3e3; // Show for 3 seconds
+                        shape.damageIndicators[id] = Date.now();
+                        break;
+                    }
+                }
             }
+            // doer.sid, "normal", Math.abs(value)
         };
 
         static updateHealthDisplay() {

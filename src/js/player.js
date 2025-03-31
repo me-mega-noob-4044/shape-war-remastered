@@ -5,7 +5,7 @@ import weapon from "./weapon.js";
 import module from "./module.js";
 import * as UTILS from "./utils.js";
 import Pathfinder from "../../client/src/game/pathfinding.js";
-import { drones, updatePlayerDisplay } from "../../client/src/main.js";
+import Game, { drones, updatePlayerDisplay } from "../../client/src/main.js";
 import Shape from "./shape.js";
 import GameObject from "../../client/src/game/GameObject.js";
 import { Map } from "../../client/src/game/mapBuilder.js";
@@ -212,7 +212,7 @@ export default class Player {
     /**
      * @param {*} data 
      * @param {string | boolean} isUser 
-     * @param {*} Game 
+     * @param {Game} Game 
      * @param {number} indx 
      * @param {number} leaguePoints 
      */
@@ -227,7 +227,7 @@ export default class Player {
         this.pathId = null;
         this.pathType = "";
 
-        /** @type {string | boolean} */
+        /** @type {boolean} */
 
         this.isAlly = !!isUser;
 
@@ -329,7 +329,7 @@ export default class Player {
     /**
      * @param {Shape} shape - Victim
      * @param {number} value - The amount of health change (positive for healing and negative for damage)
-     * @param {Shape | null | undefined} doer - The object that is responible for dealing damage to the ``shape`` object
+     * @param {Player} doer - The object that is responible for dealing damage to the ``shape`` object
      * @param {string} weaponName - Name of the weapon that is damaging the ``shape`` object
      * @param {number} weaponLevel - Level of the weapon that is damaging the ``shape`` object
      */
@@ -351,16 +351,18 @@ export default class Player {
 
             shape.health += value;
 
+            if (doer.isUser == "me" || this.isUser == "me") {
+                if (value < 0) {
+                    this.Game.send("damageIndicators", doer.sid, "normal", Math.abs(value));
+                }
+            }
+
             if (shape.health <= 0) {
                 if (doer) {
                     doer.stats.kills++;
 
                     if (doer.isUser == "me") {
                         this.Game.send("killAnnouncement", doer.stats.kills);
-                    }
-
-                    if (weaponName) {
-                        this.Game.send("smallKillAnnouncement")
                     }
                 }
             }

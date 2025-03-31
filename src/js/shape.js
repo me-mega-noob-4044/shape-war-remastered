@@ -50,6 +50,21 @@ export default class Shape {
         this.lastY = 0;
         this.avoidBuildings = false;
 
+        this.damageIndicators = {
+            normal: 0, // FOR NORMAL HEALTH
+            lastUpdateNormal: 0, // LAST DAMAGED FOR NORMAL HEALTH
+            blue: 0, // FOR BLUE SHIELDS
+            lastUpdateBlue: 0, // LAST DAMAGED FOR BLUE SHIELDS
+            yellow: 0, // FOR YELLOW SHIELDS
+            lastUpdateYellow: 0, // LAST DAMAGED FOR YELLOW SHIELDS
+            purple: 0, // FOR PURPLE SHIELDS
+            lastUpdatePurple: 0 // LAST DAMAGED FOR PURPLE SHIELDS
+        };
+
+        /** @type {number} */
+
+        this.showDamageIndicator = 0;
+
         if (data.abilities.length) {
             this.abilities = [];
             for (let i = 0; i < data.abilities.length; i++) {

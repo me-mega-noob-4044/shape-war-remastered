@@ -138,9 +138,9 @@ function endGame(isWin, reason) {
     clearInterval(healingBeaconLoop);
     clearInterval(beaconPointsLoop);
 
-    game.map = null;
-    game.spawnIndx = 0;
-    game.points = [0, 0];
+    Game.map = null;
+    Game.spawnIndx = 0;
+    Game.points = [0, 0];
 
     onFirstStart = true;
 
@@ -165,7 +165,7 @@ function endGame(isWin, reason) {
     ScoreCounter.rewardHighestDamage(enemies);
     ScoreCounter.rewardHighestKills(enemies);
 
-    game.send(
+    Game.send(
         "endGame",
         allies.sort((a, b) => b.honor - a.honor),
         enemies.sort((a, b) => b.honor - a.honor),
@@ -206,7 +206,7 @@ export function updatePlayerDisplay() {
         }, 2e3);
     }
 
-    game.send("updatePlayerDisplay", allies, enemies);
+    Game.send("updatePlayerDisplay", allies, enemies);
 }
 
 /**
@@ -224,20 +224,20 @@ var clientEvents = {
     "new": (data, isUser, leaguePoints) => {
         let indx = players.length;
 
-        let tmp = new Player(data, isUser, game, indx, leaguePoints);
+        let tmp = new Player(data, isUser, Game, indx, leaguePoints);
         players.push(tmp);
 
         if (isUser == "me") {
-            game.start();
+            Game.start();
         } else {
             let shape = tmp.shapes[0];
 
             if (tmp.isAlly) {
-                shape.x = randIntCoords(game.map.locations[game.spawnIndx].x);
-                shape.y = randIntCoords(game.map.locations[game.spawnIndx].y);
+                shape.x = randIntCoords(Game.map.locations[Game.spawnIndx].x);
+                shape.y = randIntCoords(Game.map.locations[Game.spawnIndx].y);
             } else {
-                shape.x = randIntCoords(game.map.locations[+!game.spawnIndx].x);
-                shape.y = randIntCoords(game.map.locations[+!game.spawnIndx].y);
+                shape.x = randIntCoords(Game.map.locations[+!Game.spawnIndx].x);
+                shape.y = randIntCoords(Game.map.locations[+!Game.spawnIndx].y);
             }
         }
     },
@@ -252,14 +252,14 @@ var clientEvents = {
             onFirstStart = false;
 
             if (player.isAlly) {
-                shape.x = randIntCoords(game.map.locations[game.spawnIndx].x);
-                shape.y = randIntCoords(game.map.locations[game.spawnIndx].y);
+                shape.x = randIntCoords(Game.map.locations[Game.spawnIndx].x);
+                shape.y = randIntCoords(Game.map.locations[Game.spawnIndx].y);
             } else {
-                shape.x = randIntCoords(game.map.locations[+!game.spawnIndx].x);
-                shape.y = randIntCoords(game.map.locations[+!game.spawnIndx].y);
+                shape.x = randIntCoords(Game.map.locations[+!Game.spawnIndx].x);
+                shape.y = randIntCoords(Game.map.locations[+!Game.spawnIndx].y);
             }
 
-            game.send("initializeWeapons", groupWeapons(player));
+            Game.send("initializeWeapons", groupWeapons(player));
             updatePlayerDisplay();
         }
     },
@@ -269,7 +269,7 @@ var clientEvents = {
         if (player) player.moveDir = newMoveDir;
     },
     "pingSocket": () => {
-        game.send("pingSocket");
+        Game.send("pingSocket");
     },
     "setAttack": (indx) => {
         let player = players.find(e => e.isUser == "me");
@@ -308,7 +308,7 @@ var clientEvents = {
                     };
                 }
 
-                game.send("updateAbilityDisplay", 1, module.duration, module.reload);
+                Game.send("updateAbilityDisplay", 1, module.duration, module.reload);
             } else if (id <= shape.abilities.length) {
                 let ability = shape.abilities[id - 1];
 
@@ -320,7 +320,7 @@ var clientEvents = {
                         ability.reloadTimer = ability.reload;
                     }
 
-                    game.send("updateAbilityDisplay", id - 1, ability.duration, ability.reload);
+                    Game.send("updateAbilityDisplay", id - 1, ability.duration, ability.reload);
                 }
             }
         }
@@ -343,7 +343,7 @@ self.onmessage = (event) => {
     }
 };
 
-class game {
+export default class Game {
 
     /** @type {Map | null} */
 
