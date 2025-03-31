@@ -327,12 +327,14 @@ export default class Player {
     }
 
     /**
-     * @param {Shape} shape 
-     * @param {number} value 
-     * @param {Shape | null | undefined} doer 
+     * @param {Shape} shape - Victim
+     * @param {number} value - The amount of health change (positive for healing and negative for damage)
+     * @param {Shape | null | undefined} doer - The object that is responible for dealing damage to the ``shape`` object
+     * @param {string} weaponName - Name of the weapon that is damaging the ``shape`` object
+     * @param {number} weaponLevel - Level of the weapon that is damaging the ``shape`` object
      */
 
-    changeHealth(shape, value, doer) {
+    changeHealth(shape, value, doer, weaponName, weaponLevel) {
         if (shape.health > 0) {
             if (value <= 0) {
                 shape.grayDamage += Math.abs(value * .4);
@@ -340,6 +342,11 @@ export default class Player {
                 if (doer) {
                     doer.stats.dmg += Math.abs(value);
                 }
+            } else {
+
+                // Healing is count as damage
+
+                this.stats.dmg += Math.abs(value);
             }
 
             shape.health += value;
@@ -350,6 +357,10 @@ export default class Player {
 
                     if (doer.isUser == "me") {
                         this.Game.send("killAnnouncement", doer.stats.kills);
+                    }
+
+                    if (weaponName) {
+                        this.Game.send("smallKillAnnouncement")
                     }
                 }
             }
