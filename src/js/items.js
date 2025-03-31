@@ -286,14 +286,6 @@ const skills = [{
     healthIncrease: .12
 }, {
     tier: 2,
-    name: "Thrill Seeker",
-    description: "Increases the damage output of all weapons but reduces the shape's durability by 12%.",
-    imageSource: "../src/media-files/modules/nuclear_reactor.png",
-    main: "dmgIncrease",
-    dmgIncrease: .12,
-    healthIncrease: .12
-}, {
-    tier: 2,
     name: "Slow Ruiner",
     description: "Increases the damage output of all weapons but reduces the shape's speed by 12%.",
     imageSource: "../src/media-files/modules/nuclear_reactor.png",

@@ -4002,6 +4002,14 @@ import Task from "../src/js/task.js";
             }
         }
 
+        /**
+         * @param {*[]} tmpItems 
+         * @param {boolean} createObjs 
+         * @param {number} slot 
+         * @param {Shape} oldShape 
+         * @param {string} type 
+         */
+
         static displayChangeSlot(tmpItems, createObjs, slot, oldShape, type) {
             let items = createObjs ? [] : tmpItems;
 
@@ -4134,6 +4142,13 @@ import Task from "../src/js/task.js";
                 this.changeShapeDisplay.appendChild(element);
             }
         }
+
+        /**
+         * @param {number} slot 
+         * @param {Shape} oldShape 
+         * @param {string} type 
+         * @param {boolean} nextPG 
+         */
 
         static changeSlot(slot, oldShape, type, nextPG) {
             doDarkModeTransition();
