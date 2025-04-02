@@ -252,3 +252,13 @@ export const lineInRect = function (recX, recY, recX2, recY2, x1, y1, x2, y2) {
 
     return true;
 };
+
+export const damageIndicatorStyle = (val) => {
+    if (val >= 1e6) {
+        return Math.floor(val / 1e6) + "K";
+    } else if (val >= 1e3) {
+        return Math.floor(val / 1e3) + "K";
+    } else {
+        return Math.floor(val);
+    }
+};

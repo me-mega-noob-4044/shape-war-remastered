@@ -4870,15 +4870,37 @@ import Task from "../src/js/task.js";
             for (let i = 0; i < GameManager.players.length; i++) {
                 let tmpObj = GameManager.players[i];
 
-                if (tmpObj && tmpObj.health > 0) { // } && tmpObj.showDamageIndicator > 0) {
-                    let height = 50;
-                    let width = 137.5;
+                if (tmpObj && tmpObj.health > 0 && tmpObj.showDamageIndicator > 0) {
+                    let height = 45;
+                    let width = 130;
 
                     ctx.save();
                     ctx.translate(tmpObj.x - this.offset.x, tmpObj.y - this.offset.y);
-                    ctx.globalAlpha = 1;
+                    ctx.globalAlpha = .75;
                     ctx.fillStyle = "black";
                     ctx.fillRect(-(width + tmpObj.scale + 20), -height / 2, width, height);
+
+                    ctx.globalAlpha = 1;
+
+                    ctx.fillStyle = "red";
+                    ctx.font = "32px Roboto";
+                    ctx.textAlign = "left";
+                    ctx.fillText(UTILS.damageIndicatorStyle(tmpObj.damageIndicators.normal), -(tmpObj.scale + width) + 22, 12);
+
+                    ctx.strokeStyle = "red";
+                    ctx.lineWidth = 7.5;
+                    ctx.beginPath();
+                    ctx.moveTo(-(width + tmpObj.scale + 20) + 5, 0);
+                    ctx.lineTo(-(width + tmpObj.scale - 10) + 5, 0);
+                    ctx.stroke();
+
+                    ctx.strokeStyle = "red";
+                    ctx.lineWidth = 7.5;
+                    ctx.beginPath();
+                    ctx.moveTo(-(width + tmpObj.scale), -15);
+                    ctx.lineTo(-(width + tmpObj.scale), 15);
+                    ctx.stroke();
+
                     ctx.restore();
 
                     tmpObj.showDamageIndicator -= delta;
