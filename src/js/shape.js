@@ -50,6 +50,9 @@ export default class Shape {
         this.lastY = 0;
         this.avoidBuildings = false;
 
+        this.x = 0;
+        this.y = 0;
+
         this.damageIndicators = {
             normal: 0, // FOR NORMAL HEALTH
             lastUpdateNormal: 0, // LAST DAMAGED FOR NORMAL HEALTH

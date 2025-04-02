@@ -351,7 +351,7 @@ export default class Player {
 
             shape.health += value;
 
-            if (doer.isUser == "me" || this.isUser == "me") {
+            if ((doer && doer.isUser == "me") || this.isUser == "me") {
                 if (value < 0) {
                     this.Game.send("damageIndicators", doer.sid, "normal", Math.abs(value));
                 }

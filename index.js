@@ -24,6 +24,11 @@ app.get("*", (req, res) => {
     let { url, subdomain } = req;
 
     if (url.includes("/src/")) {
+        if (url.includes("src/game/pathfinding")) {
+            res.sendFile(path.join(__dirname + `/client/src/game/pathfinding.js`));
+            return;
+        }
+
         res.sendFile(path.join(__dirname + url));
     } else if (url == "/script.js") {
         res.sendFile(path.join(__dirname + "/client/script.js"));

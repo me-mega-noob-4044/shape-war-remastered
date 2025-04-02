@@ -4870,11 +4870,16 @@ import Task from "../src/js/task.js";
             for (let i = 0; i < GameManager.players.length; i++) {
                 let tmpObj = GameManager.players[i];
 
-                if (tmpObj && tmpObj.health > 0 && now - tmpObj.showDamageIndicator > 0) {
-                    let height = 0;
+                if (tmpObj && tmpObj.health > 0) { // } && tmpObj.showDamageIndicator > 0) {
+                    let height = 50;
+                    let width = 137.5;
 
                     ctx.save();
-                    ctx
+                    ctx.translate(tmpObj.x - this.offset.x, tmpObj.y - this.offset.y);
+                    ctx.globalAlpha = 1;
+                    ctx.fillStyle = "black";
+                    ctx.fillRect(-(width + tmpObj.scale + 20), -height / 2, width, height);
+                    ctx.restore();
 
                     tmpObj.showDamageIndicator -= delta;
                     if (tmpObj.showDamageIndicator <= 0) tmpObj.showDamageIndicator = 0;
@@ -5241,7 +5246,7 @@ import Task from "../src/js/task.js";
                     ctx.save();
                     ctx.translate(data.x - this.offset.x, data.y - this.offset.y);
                     ctx.fillStyle = data.path ? "rgb(0, 255, 0, .6)" : data.wall ? "rgb(255, 255, 255, .4)" : "rgb(0, 0, 0, .4)";
-                    canvasDrawer.drawCircle(0, 0, ctx, 15, true, false);
+                    canvasDrawer.drawCircle(0, 0, ctx, 20, true, false);
                     ctx.restore();
                 }
             }
@@ -6009,11 +6014,11 @@ import Task from "../src/js/task.js";
             let allies = [];
             let enemies = [];
 
-            for (let i = 0; i < 5; i++) {
+            for (let i = 0; i < 0; i++) {
                 allies.push(EquipmentBuilder.create(playerData.length, shapeAvgTier, shapeAvgLevel, weaponAvgTier, weaponAvgLevel, moduleAvgTier, moduleAvgLevel));
             }
 
-            for (let i = 0; i < 6; i++) {
+            for (let i = 0; i < 1; i++) {
                 enemies.push(EquipmentBuilder.create(playerData.length, shapeAvgTier, shapeAvgLevel, weaponAvgTier, weaponAvgLevel, moduleAvgTier, moduleAvgLevel));
             }
 
@@ -6036,6 +6041,15 @@ import Task from "../src/js/task.js";
                 document.getElementById("in-game-power-cell-display-text").innerText = UTILS.styleNumberWithComma(userProfile.bank.powercells);
                 GameManager.send("useAbility", "active");
             }
+        } else if (event.key == "P") {
+            /*GameManager.grid = Pathfinder.search(player, {
+                x: player.x + 1e3,
+                y: player.y
+            }, {
+                show: true,
+                map: GameManager.map,
+                gameObjects: GameManager.buildings
+            });*/
         }
     })
 

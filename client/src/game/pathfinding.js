@@ -35,7 +35,7 @@ export default class Pathfinder {
 
         function getNeighbors(bestNode) {
             let neighbors = grid.filter(e => !e.wall && !e.walked && distance(e, bestNode) <= Sqrt2);
-    
+
             return neighbors;
         }
 
@@ -70,7 +70,7 @@ export default class Pathfinder {
                     let neighbor = neighbors[i];
     
                     neighbor.gScore = distance(bestNode, neighbor) + bestNode.gScore;
-                    neighbor30Score = distance(endNode, neighbor);
+                    neighbor.hScore = distance(endNode, neighbor);
                     neighbor.fScore = neighbor.gScore + neighbor.hScore;
     
                     if (neighbor.gScore < (pathMap.get(neighbor) || Infinity)) {
@@ -141,9 +141,9 @@ export default class Pathfinder {
                     y: min.y + cellRadius * 2 * y
                 };
 
-                if (tmp.x <= start.scale || tmp.x >= map.x - start.scale || tmp.y <= start.scale || tmp.y >= map.y - start.scale) continue;
+                if (tmp.x <= start.scale || tmp.x >= map.width - start.scale || tmp.y <= start.scale || tmp.y >= map.height - start.scale) continue;
 
-                if ((gameObjects || buildings).find(e => tmp.x >= e.x - start.scale && tmp.x <= e.x + e.width + start.scale && tmp.y >= e.y - start.scale && tmp.y <= e.y + e.height + start.scale)) {
+                if ((gameObjects || buildings).find(e => e.width && e.height && tmp.x >= e.x - start.scale && tmp.x <= e.x + e.width + start.scale && tmp.y >= e.y - start.scale && tmp.y <= e.y + e.height + start.scale)) {
                     grid.push(new PathNode(tmp.x, tmp.y, true));
                 } else if ((gameObjects || buildings).find(e => e.name == "healing beacon" && UTILS.getDistance(e, tmp) <= start.scale + 60)) {
                     grid.push(new PathNode(tmp.x, tmp.y, true));
