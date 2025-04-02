@@ -5833,10 +5833,10 @@ import Task from "../src/js/task.js";
                         if (Date.now() - shape.damageIndicators[id] <= 15e3) {
                             shape.damageIndicators[type] += value;
                         } else {
-                            shape.damageIndicators[type] = value;
+                            shape.damageIndicators[type] = value; // Reset value after 15 seconds of not getting damaged
                         }
 
-                        shape.showDamageIndicator = 3e3; // Show for 3 seconds
+                        shape.showDamageIndicator = 2e3; // Show for 2 seconds
                         shape.damageIndicators[id] = Date.now();
                         break;
                     }
