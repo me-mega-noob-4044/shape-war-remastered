@@ -6014,11 +6014,11 @@ import Task from "../src/js/task.js";
             let allies = [];
             let enemies = [];
 
-            for (let i = 0; i < 0; i++) {
+            for (let i = 0; i < 5; i++) {
                 allies.push(EquipmentBuilder.create(playerData.length, shapeAvgTier, shapeAvgLevel, weaponAvgTier, weaponAvgLevel, moduleAvgTier, moduleAvgLevel));
             }
 
-            for (let i = 0; i < 1; i++) {
+            for (let i = 0; i < 6; i++) {
                 enemies.push(EquipmentBuilder.create(playerData.length, shapeAvgTier, shapeAvgLevel, weaponAvgTier, weaponAvgLevel, moduleAvgTier, moduleAvgLevel));
             }
 
