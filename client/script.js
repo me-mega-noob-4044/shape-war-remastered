@@ -5419,7 +5419,13 @@ import Task from "../src/js/task.js";
         return [player, placement];
     }
 
-    function handleTasks(isWin, player) {
+    /**
+     * @param {boolean} isWin 
+     * @param {*} player 
+     * @param {{ silver: number, gold: number, keys: number, leaguePoints: number }} rewards 
+     */
+
+    function handleTasks(isWin, player, rewards) {
         for (let i = 0; i < userProfile.tasks.length; i++) {
             let task = userProfile.tasks[i];
 
@@ -5436,6 +5442,9 @@ import Task from "../src/js/task.js";
                     task.current += player.beacons;
                 } else if (!isWin && task.requirement.type == "win row") {
                     task.current = 0;
+                } else if (task.requirement.type == "league") {
+                    task.current += rewards.leaguePoints;
+                    if (task.current <= 0) task.current = 0;
                 }
             }
         }
@@ -5498,7 +5507,7 @@ import Task from "../src/js/task.js";
             userProfile.changeBank(i, rewards[i]);
         }
 
-        handleTasks(isWin, player);
+        handleTasks(isWin, player, rewards);
     }
 
     var gameScreenExitButton = document.getElementById("game-screen-exit-button");

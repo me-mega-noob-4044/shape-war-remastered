@@ -400,6 +400,7 @@ capture = capture a certain amount of beacons
 damage = deal a certain amount of damage
 win row = win a certain amount of battles in a row
 destroy row = destroy a certain amount of shapes in a row
+league = earn certain amount of league points
 */
 
 // Total of 4 skills each
@@ -537,22 +538,29 @@ const tasks = [
         type: "win",
         amount: 20,
     }, {
-        type: "gold",
+        type: "platinum",
         amount: 100
     }),
     new Task("Deal 20M Damage", "Deal 20,000,000 damage in any game mode", {
         type: "damage",
         amount: 20e6
     }, {
-        type: "gold",
+        type: "platinum",
         amount: 100
     }),
     new Task("Deal 100M Damage", "Deal 100,000,000 damage in any game mode", {
         type: "damage",
         amount: 100e6
     }, {
-        type: "gold",
+        type: "platinum",
         amount: 250
+    }),
+    new Task("Earn 100 trophies", "Earn 100 league points in any game mode", {
+        type: "league",
+        amount: 100
+    }, {
+        type: "platinum",
+        amount: 50
     }),
 
     // POWERCELL TASKS
