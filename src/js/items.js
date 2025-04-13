@@ -627,6 +627,71 @@ const tasks = [
         type: "powercells",
         amount: 3750
     }),
+
+    // MICROCHIPS TASKS
+    new Task("Deal 100K Damage", "Deal 100,000 damage in any game mode", {
+        type: "damage",
+        amount: 100e3
+    }, {
+        type: "microchips",
+        amount: 2
+    }),
+    new Task("Deal 1M Damage", "Deal 1,000,000 damage in any game mode", {
+        type: "damage",
+        amount: 1e6
+    }, {
+        type: "microchips",
+        amount: 5
+    }),
+    new Task("Deal 10M Damage", "Deal 10,000,000 damage in any game mode", {
+        type: "damage",
+        amount: 10e6
+    }, {
+        type: "microchips",
+        amount: 15
+    }),
+    new Task("Deal 50M Damage", "Deal 50,000,000 damage in any game mode", {
+        type: "damage",
+        amount: 50e6
+    }, {
+        type: "microchips",
+        amount: 25
+    }),
+    new Task("Deal 200M Damage", "Deal 200,000,000 damage in any game mode", {
+        type: "damage",
+        amount: 200e6
+    }, {
+        type: "microchips",
+        amount: 50
+    }),
+    new Task("Earn 20 trophies", "Earn 20 league points in any game mode", {
+        type: "league",
+        amount: 20
+    }, {
+        type: "microchips",
+        amount: 10
+    }),
+    new Task("Earn 75 trophies", "Earn 75 league points in any game mode", {
+        type: "league",
+        amount: 75
+    }, {
+        type: "microchips",
+        amount: 50
+    }),
+    new Task("Earn 150 trophies", "Earn 150 league points in any game mode", {
+        type: "league",
+        amount: 150
+    }, {
+        type: "microchips",
+        amount: 50
+    }),
+    new Task("Earn 300 trophies", "Earn 300 league points in any game mode", {
+        type: "league",
+        amount: 300
+    }, {
+        type: "microchips",
+        amount: 125
+    }),
 ];
 
 tasks.push();
