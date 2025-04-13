@@ -381,7 +381,13 @@ class Task {
     constructor(label, description, requirement, reward) {
         this.label = label;
         this.description = description;
+
+        /** @type {{ type: string, amount: number }} */
+
         this.requirement = requirement;
+
+        /** @type {{ type: string, amount: number }} */
+
         this.reward = reward;
     }
 }
