@@ -178,6 +178,8 @@ import Task from "../src/js/task.js";
             cost: 0
         }];
 
+        static lastTaskUpdate = 0;
+
         static init() {
             for (let i = 0; i < 7; i++) {
                 this.slotsData.push({
@@ -313,7 +315,9 @@ import Task from "../src/js/task.js";
                 });
             }
 
-            let content = JSON.stringify({ slotsData, leaguePoints, bank, shapes, weapons, modules, drones, pilots, motherships, tasks });
+            let lastTaskUpdate = this.lastTaskUpdate;
+
+            let content = JSON.stringify({ lastTaskUpdate, slotsData, leaguePoints, bank, shapes, weapons, modules, drones, pilots, motherships, tasks });
             UTILS.saveVal("userProfile", content);
         }
 
@@ -408,6 +412,10 @@ import Task from "../src/js/task.js";
                 let task = new Task(items.tasks.find(e => e.label == data.label));
                 task.current = data.current;
                 this.tasks.push(task);
+            }
+
+            if (content.lastTaskUpdate) {
+                this.lastTaskUpdate = parseInt(content.lastTaskUpdate);
             }
         }
     }
@@ -4575,10 +4583,25 @@ import Task from "../src/js/task.js";
         static update() {
             this.taskViewDisplay.innerHTML = "";
 
-            moneyDisplayManager.displayItems(["gold", "silver", "platinum", "powercells", "microchips"])
+            moneyDisplayManager.displayItems(["gold", "silver", "platinum", "powercells", "microchips"]);
 
-            for (let i = 0; i < userProfile.tasks.length; i++) {
-                let task = userProfile.tasks[i];
+            const sortedTasks = userProfile.tasks.sort((a, b) => {
+                let doneA = a.current >= a.requirement.amount;
+                let doneB = b.current >= b.requirement.amount;
+
+                if (doneA && !doneB) {
+                    return -1;
+                } else if (doneA && doneB) {
+                    return 0;
+                } else if (!doneA && doneB) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            });
+
+            for (let i = 0; i < sortedTasks.length; i++) {
+                let task = sortedTasks[i];
 
                 if (task) {
                     let element = document.createElement("div");
@@ -4650,8 +4673,14 @@ import Task from "../src/js/task.js";
         }
 
         static toggle() {
-            if (userProfile.tasks.length == 0) {
-                this.generate(UTILS.randInt(5, 15));
+            if (userProfile.tasks.length == 0 || Date.now() - userProfile.lastTaskUpdate >= 60e3 * 60 * 3) {
+                if (Date.now() - userProfile.lastTaskUpdate >= 60e3 * 60 * 3) {
+                    userProfile.lastTaskUpdate = Date.now();
+                    userProfile.tasks = userProfile.tasks.filter(e => e.current >= e.requirement.amount);
+                    this.generate(UTILS.randInt(3, 6));
+                } else {
+                    this.generate(UTILS.randInt(5, 15));
+                }
             }
 
             doDarkModeTransition();
