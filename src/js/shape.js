@@ -6,6 +6,15 @@ import Weapon from "./weapon.js";
 var shapeSid = 0;
 
 export default class Shape {
+
+    /**
+     * @param {number} sid 
+     */
+
+    static setDefault(sid) {
+        shapeSid = sid;
+    }
+
     constructor(data, slot, dontAssignSID) {
         if (!dontAssignSID) {
             this.sid = shapeSid;

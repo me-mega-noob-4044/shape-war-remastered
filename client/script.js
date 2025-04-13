@@ -133,12 +133,12 @@ import Task from "../src/js/task.js";
 
     class userProfile {
         static bank = {
-            silver: 100e3 * 5,
+            silver: 100e3 * 500,
             gold: 500 * 20,
             platinum: 50,
             microchips: 0,
             keys: 100,
-            powercells: 5e3,
+            powercells: 1e3,
             tokens: 0 + 10,
             components: {
                 shapes: {},
@@ -217,7 +217,7 @@ import Task from "../src/js/task.js";
         }
 
         static saveProfile() {
-            let { leaguePoints, bank, slotsData } = this;
+            let { leaguePoints, bank, slotsData, lastTaskUpdate } = this;
 
             let shapes = [];
             for (let i = 0; i < this.shapes.length; i++) {
@@ -315,8 +315,6 @@ import Task from "../src/js/task.js";
                 });
             }
 
-            let lastTaskUpdate = this.lastTaskUpdate;
-
             let content = JSON.stringify({ lastTaskUpdate, slotsData, leaguePoints, bank, shapes, weapons, modules, drones, pilots, motherships, tasks });
             UTILS.saveVal("userProfile", content);
         }
@@ -352,6 +350,7 @@ import Task from "../src/js/task.js";
             }
 
             window.shapeSid = highestSid + 1;
+            Shape.setDefault(highestSid + 1);
 
             for (let i = 0; i < content.weapons.length; i++) {
                 let data = content.weapons[i];
@@ -416,6 +415,10 @@ import Task from "../src/js/task.js";
 
             if (content.lastTaskUpdate) {
                 this.lastTaskUpdate = parseInt(content.lastTaskUpdate);
+            }
+
+            if (!content.tasks.length) {
+                TaskDisplay.generate(4);
             }
         }
     }

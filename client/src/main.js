@@ -651,7 +651,10 @@ export default class Game {
                         reason = "Lose. The enemy team has captured the required 300 beacon points for their research.";
                     }
 
-                    endGame(isWin, reason);
+                    if (reason) {
+                        endGame(isWin, reason);
+                        return;
+                    }
                 }
 
 
