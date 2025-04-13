@@ -4585,23 +4585,8 @@ import Task from "../src/js/task.js";
 
             moneyDisplayManager.displayItems(["gold", "silver", "platinum", "powercells", "microchips"]);
 
-            const sortedTasks = userProfile.tasks.sort((a, b) => {
-                let doneA = a.current >= a.requirement.amount;
-                let doneB = b.current >= b.requirement.amount;
-
-                if (doneA && !doneB) {
-                    return -1;
-                } else if (doneA && doneB) {
-                    return 0;
-                } else if (!doneA && doneB) {
-                    return 1;
-                } else {
-                    return 0;
-                }
-            });
-
-            for (let i = 0; i < sortedTasks.length; i++) {
-                let task = sortedTasks[i];
+            for (let i = 0; i < userProfile.tasks.length; i++) {
+                let task = userProfile.tasks[i];
 
                 if (task) {
                     let element = document.createElement("div");
