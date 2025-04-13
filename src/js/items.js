@@ -599,6 +599,34 @@ const tasks = [
         type: "powercells",
         amount: 6500
     }),
+    new Task("Earn 20 trophies", "Earn 20 league points in any game mode", {
+        type: "league",
+        amount: 20
+    }, {
+        type: "powercells",
+        amount: 250
+    }),
+    new Task("Earn 75 trophies", "Earn 75 league points in any game mode", {
+        type: "league",
+        amount: 75
+    }, {
+        type: "powercells",
+        amount: 750
+    }),
+    new Task("Earn 150 trophies", "Earn 150 league points in any game mode", {
+        type: "league",
+        amount: 150
+    }, {
+        type: "powercells",
+        amount: 1500
+    }),
+    new Task("Earn 300 trophies", "Earn 300 league points in any game mode", {
+        type: "league",
+        amount: 300
+    }, {
+        type: "powercells",
+        amount: 3750
+    }),
 ];
 
 tasks.push();
