@@ -630,10 +630,28 @@ export default class Game {
                     if (this.points[0] < this.points[1]) {
                         isWin = false;
                         reason = "Time has run out. The opposing team has more beacon points, and you lose the match.";
+                    } else if (this.points[0] == this.points[1]) {
+                        isWin = false;
+                        reason = "Tied. Both teams have the same amount of captured beacon points.";
                     }
 
                     endGame(isWin, reason);
                     return;
+                } else {
+                    let isWin = true;
+                    let reason = "";
+
+                    if (this.points[0] >= 300 && this.points[0] == this.points[1]) {
+                        isWin = false;
+                        reason = "Tied. Both teams have the same amount of captured beacon points.";
+                    } else if (this.points[0] >= 300) {
+                        reason = "Successfully captured the 300 required beacon points for our research.";
+                    } else if (this.points[1] >= 300) {
+                        isWin = false;
+                        reason = "Lose. The enemy team has captured the required 300 beacon points for their research.";
+                    }
+
+                    endGame(isWin, reason);
                 }
 
 
