@@ -4673,7 +4673,7 @@ import Task from "../src/js/task.js";
         }
 
         static toggle() {
-            if (userProfile.tasks.length == 0 || Date.now() - userProfile.lastTaskUpdate >= 60e3 * 60 * 3) {
+            if (userProfile.tasks.length == 0 || Date.now() - userProfile.lastTaskUpdate >= 360e3) {
                 if (Date.now() - userProfile.lastTaskUpdate >= 60e3 * 60 * 3) {
                     userProfile.lastTaskUpdate = Date.now();
                     userProfile.tasks = userProfile.tasks.filter(e => e.current >= e.requirement.amount);
@@ -4704,6 +4704,8 @@ import Task from "../src/js/task.js";
             };
         }
     }
+
+    // window.generate = () => TaskDisplay.generate(3);
 
     var keys = {};
     var moveKeys = {
