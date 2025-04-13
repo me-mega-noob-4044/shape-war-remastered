@@ -7,6 +7,8 @@ import items from "../../src/js/items.js";
 import GameObject from "./game/GameObject.js";
 import Projectile from "./game/projectile.js";
 import Drone from "../../src/js/drone.js";
+import Weapon from "../../src/js/weapon.js";
+import Shape from "../../src/js/shape.js";
 
 /** @type {Player[]} */
 
@@ -73,8 +75,8 @@ class ScoreCounter {
         this.dmg = data.dmg;
         this.beacons = data.beacons;
 
-        this.honor += data.beacons * 20;
-        this.results.push([data.beacons * 20, "Every beacon captured"]);
+        this.honor += data.beacons * 15;
+        this.results.push([data.beacons * 15, "Every beacon captured"]);
 
         this.honor += Math.floor(data.beacons / 4) * 20;
         this.results.push([Math.floor(data.beacons / 4) * 20, "Every 4 beacons captured"]);
@@ -546,6 +548,15 @@ export default class Game {
             console.log(e);
         }
     }
+
+    /**
+     * @param {number} x 
+     * @param {number} y 
+     * @param {number} dir 
+     * @param {Shape} owner 
+     * @param {Weapon} wpn 
+     * @param {number} extraSpeed 
+     */
 
     static addProjectile(x, y, dir, owner, wpn, extraSpeed) {
         let tmp = new Projectile(x, y, wpn.name, wpn.projectileId, wpn.range, dir, owner, wpn.dmg)
