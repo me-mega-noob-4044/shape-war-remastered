@@ -384,9 +384,6 @@ export default class Game {
                             otherShape.y -= (tmpScale * Math.sin(tmpDir));
                         }
                     }
-
-                    // ID, ISUSER, name, x, y, dir, health, maxhealth, grayDamage, isAlly, zIndex
-                    if (shape.health > 0) playersData.push(player.sid, player.isUser, shape.name, shape.x, shape.y, shape.dir, shape.health, shape.maxhealth, shape.grayDamage, player.isAlly, shape.zIndex);
                 }
             }
 
@@ -531,6 +528,16 @@ export default class Game {
                             this.send("beaconUpdate", i, tmpObj.capturePoints);
                         }
                     }
+                }
+            }
+
+            for (let i = 0; i < players.length; i++) {
+                let player = players[i];
+                let shape = player.shapes[player.chooseIndex];
+
+                if (shape) {
+                    // ID, ISUSER, name, x, y, dir, health, maxhealth, grayDamage, isAlly, zIndex
+                    if (shape.health > 0) playersData.push(player.sid, player.isUser, shape.name, shape.x, shape.y, shape.dir, shape.health, shape.maxhealth, shape.grayDamage, player.isAlly, shape.zIndex);
                 }
             }
 
