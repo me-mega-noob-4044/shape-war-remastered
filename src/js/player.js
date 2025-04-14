@@ -698,6 +698,8 @@ export default class Player {
                     this.pathId = -1;
                     this.pathType = "";
 
+                    Drone.activateDrones(this);
+
                     if (this.isAlly) {
                         shape.x = randIntCoords(this.Game.map.locations[this.Game.spawnIndx].x);
                         shape.y = randIntCoords(this.Game.map.locations[this.Game.spawnIndx].y);

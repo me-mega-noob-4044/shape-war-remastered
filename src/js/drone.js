@@ -1,4 +1,5 @@
 import droneAbility from "../js/drone-ability.js";
+import Player from "./player.js";
 import Shape from "./shape.js";
 import * as UTILS from "./utils.js";
 
@@ -14,13 +15,16 @@ export default class Drone {
         this.y = 0;
         this.vel = { x: 0, y: 0 };
 
-        this.active = true;
+        this.active = false;
 
         this.level = 1;
         this.tier = data.tier;
         this.name = data.name;
         this.description = data.description;
         this.industryName = data.industryName;
+
+        /** @type {{ name: string, color: string, scale: number }} */
+
         this.visualData = { ...data.visualData };
 
         /** @type {Shape | number} */
@@ -45,7 +49,44 @@ export default class Drone {
         }
     }
 
-    update(delta) {
+    /**
+     * @param {number} delta 
+     */
 
+    update(delta) {
+        this.dir += .0018 * delta;
+
+        let positionScale = this.owner.scale + this.visualData.scale + 15;
+
+        this.x = this.owner.x + Math.cos(this.dir) * positionScale;
+        this.y = this.owner.y + Math.sin(this.dir) * positionScale;
+    }
+
+    /**
+     * Update function for health base drone abilities
+     * 
+     * @param {number} value - Amount of health loss or gain
+     */
+
+    health(value) {
+        // 
+    }
+
+    /**
+     * @param {Player} player 
+     */
+
+    static activateDrones(player) {
+        let chooseIndex = player.chooseIndex;
+
+        for (let i = 0; i < player.shapes.length; i++) {
+            let shape = player.shapes[i];
+
+            if (i == chooseIndex) {
+                if (shape.drone) shape.drone.active = true;
+            } else {
+                if (shape.drone) shape.drone.active = false;
+            }
+        }
     }
 }

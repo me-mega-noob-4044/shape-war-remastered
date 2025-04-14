@@ -250,16 +250,12 @@ var clientEvents = {
             player.chooseIndex = slot;
 
             let shape = player.shapes[slot];
-
             onFirstStart = false;
 
-            if (player.isAlly) {
-                shape.x = randIntCoords(Game.map.locations[Game.spawnIndx].x);
-                shape.y = randIntCoords(Game.map.locations[Game.spawnIndx].y);
-            } else {
-                shape.x = randIntCoords(Game.map.locations[+!Game.spawnIndx].x);
-                shape.y = randIntCoords(Game.map.locations[+!Game.spawnIndx].y);
-            }
+            shape.x = randIntCoords(Game.map.locations[Game.spawnIndx].x);
+            shape.y = randIntCoords(Game.map.locations[Game.spawnIndx].y);
+
+            Drone.activateDrones(player);
 
             Game.send("initializeWeapons", groupWeapons(player));
             updatePlayerDisplay();
@@ -607,7 +603,7 @@ export default class Game {
                         }
                     }
                 }
-            }, 2e3);
+            }, 1500);
 
             healingBeaconLoop = setInterval(() => { // healing beacon
                 if (onFirstStart) return;
