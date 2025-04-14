@@ -6,7 +6,7 @@ export default class droneAbility {
         this.statIcons = [...data.statIcons];
         this.statTitles = [...data.statTitles];
 
-        this.reload = (data.reload || 0);
+        this.reload = 0;
         this.maxReload = (data.reload || 0);
 
         this.stats = [];

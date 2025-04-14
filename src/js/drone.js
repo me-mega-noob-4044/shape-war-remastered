@@ -21,11 +21,11 @@ export default class Drone {
         this.x2 = 0;
         this.y2 = 0;
 
-        // this.vel = { x: 0, y: 0 };
-
         this.active = false;
         this.sid = -1;
         this.zIndex = -1;
+
+        this.forcePosition = false;
 
         this.level = 1;
         this.tier = data.tier;
@@ -64,7 +64,7 @@ export default class Drone {
      */
 
     update(delta) {
-        this.dir += .002 * delta;
+        this.dir += .0022 * delta;
 
         let positionScale = this.owner.scale + (this.visualData.scale * 2) + 15;
 

@@ -4853,7 +4853,7 @@ import Task from "../src/js/task.js";
             for (let i = 0; i < GameManager.drones.length; i++) {
                 let tmpObj = GameManager.drones[i];
 
-                if (tmpObj && layer == tmpObj.zIndex) {
+                if (tmpObj && tmpObj.active && layer == tmpObj.zIndex) {
                     ctx.save();
                     ctx.translate(tmpObj.x - this.offset.x, tmpObj.y - this.offset.y);
                     ctx.strokeStyle = "black";
@@ -4871,7 +4871,7 @@ import Task from "../src/js/task.js";
             for (let i = 0; i < GameManager.players.length; i++) {
                 let tmpObj = GameManager.players[i];
 
-                if (tmpObj && tmpObj.health > 0 && layer == tmpObj.zIndex) {
+                if (tmpObj && tmpObj.active && tmpObj.health > 0 && layer == tmpObj.zIndex) {
                     ctx.save();
                     ctx.translate(tmpObj.x - this.offset.x, tmpObj.y - this.offset.y);
                     ctx.strokeStyle = "black";
@@ -5273,13 +5273,18 @@ import Task from "../src/js/task.js";
                 let tmpObj = GameManager.players[i] || GameManager.drones[i - GameManager.players.length];
 
                 if (tmpObj) {
-                    let tmpDiff = tmpObj.x2 - tmpObj.x1;
-                    tmpObj.dt += delta;
-                    let tmpRate = tmpObj.dt / 100;// 66.5;
+                    if (tmpObj.forcePosition) {
+                        tmpObj.x = tmpObj.x2;
+                        tmpObj.y = tmpObj.y2;
+                    } else {
+                        let tmpDiff = tmpObj.x2 - tmpObj.x1;
+                        tmpObj.dt += delta;
+                        let tmpRate = tmpObj.dt / 100;// 66.5;
 
-                    tmpObj.x = tmpObj.x1 + (tmpDiff * tmpRate);
-                    tmpDiff = (tmpObj.y2 - tmpObj.y1);
-                    tmpObj.y = tmpObj.y1 + (tmpDiff * tmpRate);
+                        tmpObj.x = tmpObj.x1 + (tmpDiff * tmpRate);
+                        tmpDiff = (tmpObj.y2 - tmpObj.y1);
+                        tmpObj.y = tmpObj.y1 + (tmpDiff * tmpRate);
+                    }
                 }
             }
 
@@ -5630,6 +5635,11 @@ import Task from "../src/js/task.js";
              */
 
             "updatePlayers": (data) => {
+                for (let i = 0; i < this.players.length; i++) {
+                    this.players[i].forcePosition = !this.players[i].active;
+                    this.players[i].active = false;
+                }
+
                 for (let i = 0; i < data.length;) {
                     let tmpObj = this.players.find(e => e.sid == data[i]);
 
@@ -5660,6 +5670,7 @@ import Task from "../src/js/task.js";
                         tmpObj.grayDamage = data[i + 8];
                         tmpObj.isAlly = data[i + 9];
                         tmpObj.zIndex = data[i + 10];
+                        tmpObj.active = true;
 
                         if (player == tmpObj) {
                             this.updateHealthDisplay();
@@ -5675,6 +5686,11 @@ import Task from "../src/js/task.js";
              */
 
             "updateDrones": (data) => {
+                for (let i = 0; i < this.drones.length; i++) {
+                    this.drones[i].forcePosition = !this.drones[i].active;
+                    this.drones[i].active = false;
+                }
+
                 for (let i = 0; i < data.length;) {
                     let tmpObj = this.drones.find(e => e.sid == data[i]);
 
@@ -5700,6 +5716,7 @@ import Task from "../src/js/task.js";
                         tmpObj.y2 = data[i + 3];
 
                         tmpObj.zIndex = data[i + 4];
+                        tmpObj.active = true;
                     }
 
                     i += 5;

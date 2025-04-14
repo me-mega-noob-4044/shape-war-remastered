@@ -41,6 +41,10 @@ export default class Shape {
         this.activeModuleIndex = 0;
         this.abilities = [];
 
+        this.active = false;
+
+        this.forcePosition = false;
+
         this.vel = { x: 0, y: 0 };
 
         /** @type {Drone | null} */
