@@ -4666,8 +4666,13 @@ import Task from "../src/js/task.js";
 
                 if (Date.now() - userProfile.lastTaskUpdate >= 360e3) {
                     userProfile.lastTaskUpdate = Date.now();
-                    userProfile.tasks = userProfile.tasks.filter(e => e.current >= e.requirement.amount);
-                    this.generate(UTILS.randInt(3, 6));
+
+                    if (userProfile.tasks.length > 7) {
+                        userProfile.tasks = userProfile.tasks.filter(e => e.current >= e.requirement.amount);
+                        this.generate(UTILS.randInt(3, 6));
+                    } else {
+                        this.generate(UTILS.randInt(2, 5));
+                    }
                 } else {
                     this.generate(UTILS.randInt(5, 15));
                 }
@@ -5595,6 +5600,11 @@ import Task from "../src/js/task.js";
                     }
                 }
             },
+
+            /**
+             * @param {(number | string)[]} data 
+             */
+
             "updatePlayers": (data) => {
                 for (let i = 0; i < data.length;) {
                     let tmpObj = this.players.find(e => e.sid == data[i]);
@@ -5634,6 +5644,14 @@ import Task from "../src/js/task.js";
 
                     i += 11;
                 }
+            },
+
+            /**
+             * @param {(number | string)[]} data
+             */
+
+            "updateDrones": (data) => {
+
             },
             "pingSocket": () => {
                 this.pingTime = Date.now() - this.pingLastUpdate;
