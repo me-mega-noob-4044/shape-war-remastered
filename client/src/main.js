@@ -363,6 +363,7 @@ export default class Game {
     static updateGame() {
         try {
             let playersData = [];
+            let dronesData = [];
 
             for (let i = 0; i < players.length; i++) {
                 let player = players[i];
@@ -392,7 +393,9 @@ export default class Game {
             for (let i = 0; i < drones.length; i++) {
                 let drone = drones[i];
 
-                if (drone.active) { }
+                if (drone.active) {
+                    drone.update(config.gameUpdateSpeed);
+                }
             }
 
             for (let i = 0; i < projectiles.length; i++) {
@@ -543,6 +546,14 @@ export default class Game {
                 }
             }
 
+            for (let i = 0; i < drones.length; i++) {
+                let drone = drones[i];
+
+                if (drone.active) {
+                    dronesData.push(drone.name, drone.x, drone.y);
+                }
+            }
+
             this.send("updatePlayers", playersData);
         } catch (e) {
             console.log(e);
@@ -596,7 +607,7 @@ export default class Game {
                         }
                     }
                 }
-            }, 1e3);
+            }, 2e3);
 
             healingBeaconLoop = setInterval(() => { // healing beacon
                 if (onFirstStart) return;

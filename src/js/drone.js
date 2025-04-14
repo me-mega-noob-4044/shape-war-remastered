@@ -1,5 +1,6 @@
 import droneAbility from "../js/drone-ability.js";
 import Shape from "./shape.js";
+import * as UTILS from "./utils.js";
 
 export default class Drone {
 
@@ -33,6 +34,8 @@ export default class Drone {
 
         this.abilities = [];
 
+        this.dir = UTILS.randFloat(-Math.PI, Math.PI);
+
         if (data.abilities.length) {
             for (let i = 0; i < data.abilities.length; i++) {
                 let ability = data.abilities[i];
@@ -40,5 +43,9 @@ export default class Drone {
                 this.abilities.push(new droneAbility(ability));
             }
         }
+    }
+
+    update(delta) {
+
     }
 }

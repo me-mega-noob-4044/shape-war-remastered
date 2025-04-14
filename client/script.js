@@ -133,10 +133,10 @@ import Task from "../src/js/task.js";
 
     class userProfile {
         static bank = {
-            silver: 100e3 * 500,
+            silver: 100e3 * 10e3,
             gold: 500 * 20,
             platinum: 50,
-            microchips: 0,
+            microchips: 0 + 100e3,
             keys: 100,
             powercells: 1e3,
             tokens: 0 + 10,
