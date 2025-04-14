@@ -6,6 +6,14 @@ export default class droneAbility {
         this.statIcons = [...data.statIcons];
         this.statTitles = [...data.statTitles];
 
+        /**
+         * Used for storing values for ability functions such as health loss, health repaired, and damage dealt.
+         * 
+         * @type {number}
+         */
+
+        this.count = 0;
+
         this.reload = 0;
         this.maxReload = (data.reload || 0);
 
