@@ -6,7 +6,7 @@ const shapes = [{
     Training shape for mastering the basics of combat.<br><br>
     Recommended Equipment: x2 Punisher
     `,
-    aimTurnSpeed: .01,
+    aimTurnSpeed: .018,
     fovMulti: 1.35,
     scale: 55,
     indxRole: 1,
@@ -43,7 +43,7 @@ const shapes = [{
     Having 4 light weapon slots, this shape is extremely verstile. Fit for combay at any range.<br><br>
     Recommended Equipment: x4 Punisher
     `,
-    aimTurnSpeed: 0.008,
+    aimTurnSpeed: 0.012,
     fovMulti: 1.6,
     scale: 65,
     indxRole: 1,
@@ -80,7 +80,7 @@ const shapes = [{
     Very small and fast shape. Jumping engines allows this shape to jump across obstacles.<br><br>
     Recommended Equipment: x1 Punisher T
     `,
-    aimTurnSpeed: 0.012,
+    aimTurnSpeed: 0.016,
     fovMulti: 1.15,
     scale: 40,
     indxRole: 2,

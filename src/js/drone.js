@@ -13,9 +13,19 @@ export default class Drone {
     constructor(data, ownerSID) {
         this.x = 0;
         this.y = 0;
-        this.vel = { x: 0, y: 0 };
+
+        this.dt = 0;
+
+        this.x1 = 0;
+        this.y1 = 0;
+        this.x2 = 0;
+        this.y2 = 0;
+
+        // this.vel = { x: 0, y: 0 };
 
         this.active = false;
+        this.sid = -1;
+        this.zIndex = -1;
 
         this.level = 1;
         this.tier = data.tier;
@@ -54,9 +64,9 @@ export default class Drone {
      */
 
     update(delta) {
-        this.dir += .0018 * delta;
+        this.dir += .002 * delta;
 
-        let positionScale = this.owner.scale + this.visualData.scale + 15;
+        let positionScale = this.owner.scale + (this.visualData.scale * 2) + 15;
 
         this.x = this.owner.x + Math.cos(this.dir) * positionScale;
         this.y = this.owner.y + Math.sin(this.dir) * positionScale;

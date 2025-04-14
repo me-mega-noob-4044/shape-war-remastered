@@ -4847,6 +4847,24 @@ import Task from "../src/js/task.js";
             }
         }
 
+        static renderDrones(layer) {
+            ctx.globalAlpha = 1;
+
+            for (let i = 0; i < GameManager.drones.length; i++) {
+                let tmpObj = GameManager.drones[i];
+
+                if (tmpObj && layer == tmpObj.zIndex) {
+                    ctx.save();
+                    ctx.translate(tmpObj.x - this.offset.x, tmpObj.y - this.offset.y);
+                    ctx.strokeStyle = "black";
+                    ctx.fillStyle = tmpObj.visualData.color;
+                    canvasDrawer.drawCircle(0, 0, ctx, tmpObj.visualData.scale, false, false);
+
+                    ctx.restore();
+                }
+            }
+        }
+
         static renderPlayers(layer) {
             ctx.globalAlpha = 1;
 
@@ -5251,8 +5269,8 @@ import Task from "../src/js/task.js";
                 UTILS.getElement("cooldownTimer").innerHTML = UTILS.formatMilliseconds(GameManager.durationOfGame);
             }
 
-            for (let i = 0; i < GameManager.players.length; i++) {
-                let tmpObj = GameManager.players[i];
+            for (let i = 0; i < GameManager.players.length + GameManager.drones.length; i++) {
+                let tmpObj = GameManager.players[i] || GameManager.drones[i - GameManager.players.length];
 
                 if (tmpObj) {
                     let tmpDiff = tmpObj.x2 - tmpObj.x1;
@@ -5277,7 +5295,9 @@ import Task from "../src/js/task.js";
             this.renderProjectiles(delta);
             this.renderBuildings(delta, 1);
             this.renderPlayers(0);
+            this.renderDrones(0);
             this.renderPlayers(1);
+            this.renderDrones(1);
             this.renderBuildings(delta, 2);
             this.renderBorders();
             this.renderDamageIndicators(delta);
@@ -5560,6 +5580,10 @@ import Task from "../src/js/task.js";
 
         static players = [];
 
+        /** @type {Drone[]} */
+
+        static drones = [];
+
         static buildings = [];
         static projectiles = [];
         static weaponElements = [];
@@ -5651,7 +5675,35 @@ import Task from "../src/js/task.js";
              */
 
             "updateDrones": (data) => {
+                for (let i = 0; i < data.length;) {
+                    let tmpObj = this.drones.find(e => e.sid == data[i]);
 
+                    if (!tmpObj) {
+                        let droneData = items.drones.find(e => e.name == data[i + 1]);
+                        let drone = new Drone(droneData, -1);
+                        drone.sid = data[i];
+
+                        drone.x = data[i + 2];
+                        drone.y = data[i + 3];
+                        drone.zIndex = data[i + 4];
+
+                        tmpObj = drone;
+                        this.drones.push(drone);
+                    }
+
+                    if (tmpObj) {
+                        tmpObj.dt = 0;
+                        tmpObj.x1 = tmpObj.x;
+                        tmpObj.y1 = tmpObj.y;
+
+                        tmpObj.x2 = data[i + 2];
+                        tmpObj.y2 = data[i + 3];
+
+                        tmpObj.zIndex = data[i + 4];
+                    }
+
+                    i += 5;
+                }
             },
             "pingSocket": () => {
                 this.pingTime = Date.now() - this.pingLastUpdate;

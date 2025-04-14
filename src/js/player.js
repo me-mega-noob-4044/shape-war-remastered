@@ -166,8 +166,8 @@ function playerify(shape, easyMode) {
     shape.dir = 0;
     shape.grayDamage = 0;
     shape.vel = { x: 0, y: 0 };
-    shape.health = shape.maxhealth *= (easyMode ? 25 : 1);
-    shape.speed *= (easyMode ? 1 : 5);
+    shape.health = shape.maxhealth *= (easyMode ? .25 : 1);
+    shape.speed *= (easyMode ? 1 : 10);
     shape.grayDamage = 0;
 
     delete shape.cost;

@@ -546,11 +546,13 @@ export default class Game {
                 let drone = drones[i];
 
                 if (drone.active) {
-                    dronesData.push(drone.name, drone.x, drone.y);
+                    // SID, NAME, X, Y
+                    dronesData.push(i, drone.name, drone.x, drone.y, drone.owner.zIndex);
                 }
             }
 
             this.send("updatePlayers", playersData);
+            this.send("updateDrones", dronesData);
         } catch (e) {
             console.log(e);
         }
