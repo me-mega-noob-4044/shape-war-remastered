@@ -10,16 +10,6 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use((req, res, next) => {
-    req.subdomain = req.headers.host.split(".")[0];
-
-    next();
-});
-
-app.get("/test", (req, res) => {
-    res.redirect("http://test.localhost:8080");
-});
-
 app.get("*", (req, res) => {
     let { url, subdomain } = req;
 
@@ -34,10 +24,8 @@ app.get("*", (req, res) => {
         res.sendFile(path.join(__dirname + "/client/script.js"));
     } else if (url == "/main.css") {
         res.sendFile(path.join(__dirname + "/client/main.css"));
-    } else if (subdomain == "test") {
-        res.sendFile(path.join(__dirname + "/client/index.html"));
     } else {
-        res.sendFile(path.join(__dirname + "/client/wip.html"));
+        res.sendFile(path.join(__dirname + "/client/index.html"));
     }
 });
 
