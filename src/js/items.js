@@ -696,8 +696,6 @@ const tasks = [
     }),
 ];
 
-tasks.push();
-
 const items = { shapes, weapons, modules, activeModules, pilots, skills, drones, motherships, turrets, tasks };
 
 export default items;
