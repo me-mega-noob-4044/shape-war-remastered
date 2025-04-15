@@ -4695,8 +4695,6 @@ import Task from "../src/js/task.js";
 
         static toggle() {
             if (userProfile.tasks.length == 0 || Date.now() - userProfile.lastTaskUpdate >= 360e3) {
-                console.log(userProfile.tasks.length == 0, Date.now() - userProfile.lastTaskUpdate, 360e3);
-
                 if (Date.now() - userProfile.lastTaskUpdate >= 360e3) {
                     userProfile.lastTaskUpdate = Date.now();
 
@@ -4709,6 +4707,8 @@ import Task from "../src/js/task.js";
                 } else {
                     this.generate(UTILS.randInt(5, 15));
                 }
+
+                userProfile.saveProfile();
             }
 
             doDarkModeTransition();
