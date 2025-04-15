@@ -158,11 +158,22 @@ export default class Pathfinder {
             let blob = new Blob([this.getWorkerCode()], { type: "application/javascript" });
             let worker = new Worker(URL.createObjectURL(blob));
 
-            worker.postMessage({
-                grid,
-                start,
-                end
-            });
+            try {
+                worker.postMessage({
+                    grid,
+                    start: {
+                        x: start.x,
+                        y: start.y
+                    },
+                    end: {
+                        x: end.x,
+                        y: end.y
+                    }
+                });
+            } catch (e) {
+                worker.terminate();
+                console.error(e);
+            }
 
             worker.onmessage = (event) => {
                 if (typeof event.data == "object") {
