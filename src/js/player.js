@@ -241,6 +241,13 @@ export default class Player {
 
         this.shapes = [];
 
+        /**
+         * This is for bots
+         * @type {boolean}
+         */
+
+        this.initDrone = false;
+
         this.mouseDistance = 0;
 
         this.targetDir = 0;
@@ -663,6 +670,11 @@ export default class Player {
         this.updateDir(shape);
 
         if (this.isUser != "me") {
+            if (!this.initDrone) {
+                Drone.activateDrones(this);
+                this.initDrone = true;
+            }
+
             this.aiMovement(shape, map, buildings);
         }
 

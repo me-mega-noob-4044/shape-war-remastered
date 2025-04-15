@@ -4529,7 +4529,7 @@ import Task from "../src/js/task.js";
         static create(hangerSlots, shapeAvgTier, shapeAvgLevel, weaponAvgTier, weaponAvgLevel, moduleAvgTier, moduleAvgLevel, droneAvgTeir, droneAvglevel, droneCount) {
             let allShapes = [];
             let shapes = items.shapes.filter(e => e.tier == shapeAvgTier);
-            let filteredDrones = items.drones.find(e => e.tier == droneAvgTeir);
+            let filteredDrones = items.drones.filter(e => e.tier == droneAvgTeir);
 
             for (let ii = 0; ii < hangerSlots; ii++) {
                 let shape = shapes[Math.floor(Math.random() * shapes.length)];
@@ -4564,7 +4564,7 @@ import Task from "../src/js/task.js";
                 if (droneCount > 0) {
                     let droneData = filteredDrones[Math.floor(Math.random() * filteredDrones.length)];
 
-                    shape.drone = {
+                    drone = {
                         name: droneData.name,
                         level: droneAvglevel
                     };
@@ -6199,6 +6199,8 @@ import Task from "../src/js/task.js";
             for (let i = 0; i < 6; i++) {
                 enemies.push(EquipmentBuilder.create(playerData.length, shapeAvgTier, shapeAvgLevel, weaponAvgTier, weaponAvgLevel, moduleAvgTier, moduleAvgLevel, droneAvgTier, droneAvgLevel, drones.length));
             }
+
+            console.log(allies, enemies);
 
             for (let i = 0; i < allies.length + enemies.length; i++) {
                 let tmp = allies[i] || enemies[i - allies.length];
