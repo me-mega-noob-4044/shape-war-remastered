@@ -4698,8 +4698,8 @@ import Task from "../src/js/task.js";
                 if (Date.now() - userProfile.lastTaskUpdate >= 360e3) {
                     userProfile.lastTaskUpdate = Date.now();
 
-                    if (userProfile.tasks.length > 7) {
-                        userProfile.tasks = userProfile.tasks.filter(e => e.current >= e.requirement.amount);
+                    if (userProfile.tasks.length > 10) {
+                        userProfile.tasks = userProfile.tasks.filter(e => e.current > 0);
                         this.generate(UTILS.randInt(3, 6));
                     } else {
                         this.generate(UTILS.randInt(2, 5));
@@ -4708,7 +4708,7 @@ import Task from "../src/js/task.js";
                     this.generate(UTILS.randInt(5, 15));
                 }
 
-                userProfile.saveProfile();
+                // userProfile.saveProfile();
             }
 
             doDarkModeTransition();
