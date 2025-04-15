@@ -97,7 +97,6 @@ export default class Drone {
             if (ability) {
                 if (ability.isReloaded() && ability.isValid()) {
                     if (ability.name == "On Mild Damage: Fix") {
-                        console.log(ability.stats[0])
                         this.ownerParent.changeHealth(this.owner, ability.stats[0]);
                     }
 

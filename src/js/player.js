@@ -166,8 +166,8 @@ function playerify(shape, easyMode) {
     shape.dir = 0;
     shape.grayDamage = 0;
     shape.vel = { x: 0, y: 0 };
-    shape.health = shape.maxhealth *= (easyMode ? .25 : 100);
-    shape.speed *= (easyMode ? 1 : 10);
+    shape.health = shape.maxhealth *= (easyMode ? .25 : 1);
+    shape.speed *= (easyMode ? 1 : 5);
     shape.grayDamage = 0;
 
     delete shape.cost;
@@ -179,7 +179,7 @@ function playerify(shape, easyMode) {
         let wpn = shape.weapons[i];
 
         wpn.fireRateTimer = 0;
-        wpn.dmg *= (easyMode ? 15.075 : 15);
+        wpn.dmg *= (easyMode ? .125 : 10);
         delete wpn.cost;
         delete wpn.attributes;
         delete wpn.description;
