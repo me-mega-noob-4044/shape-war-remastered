@@ -446,6 +446,20 @@ const tasks = [
         type: "silver",
         amount: 325e3
     }),
+    new Task("Earn 200 trophies", "Earn 200 league points in any game mode", {
+        type: "league",
+        amount: 200
+    }, {
+        type: "silver",
+        amount: 10e6
+    }),
+    new Task("Earn 50 trophies", "Earn 50 league points in any game mode", {
+        type: "league",
+        amount: 50
+    }, {
+        type: "silver",
+        amount: 250e3
+    }),
 
     // GOLD TASKS
 
