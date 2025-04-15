@@ -166,7 +166,7 @@ function playerify(shape, easyMode) {
     shape.dir = 0;
     shape.grayDamage = 0;
     shape.vel = { x: 0, y: 0 };
-    shape.health = shape.maxhealth *= (easyMode ? .25 : 1);
+    shape.health = shape.maxhealth *= (easyMode ? .25 : 100);
     shape.speed *= (easyMode ? 1 : 10);
     shape.grayDamage = 0;
 
@@ -179,7 +179,7 @@ function playerify(shape, easyMode) {
         let wpn = shape.weapons[i];
 
         wpn.fireRateTimer = 0;
-        wpn.dmg *= (easyMode ? .075 : 15);
+        wpn.dmg *= (easyMode ? 15.075 : 15);
         delete wpn.cost;
         delete wpn.attributes;
         delete wpn.description;
@@ -349,7 +349,9 @@ export default class Player {
                 this.stats.dmg += Math.abs(value);
             }
 
+            if (shape.drone) shape.drone.health(value);
             shape.health += value;
+            if (shape.health >= (shape.maxhealth - shape.grayDamage)) shape.health = shape.maxhealth - shape.grayDamage;
 
             if (doer && doer.isUser == "me") { // ) || this.isUser == "me"
                 if (value < 0) {

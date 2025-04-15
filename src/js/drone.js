@@ -3,6 +3,14 @@ import Player from "./player.js";
 import Shape from "./shape.js";
 import * as UTILS from "./utils.js";
 
+/*
+ABILTIES GUIDE:
+    On Mild Damage: Fix
+        0: Repair power
+*/
+
+const countDamageTaken = ["On Mild Damage: Fix"];
+
 export default class Drone {
 
     /**
@@ -41,6 +49,10 @@ export default class Drone {
 
         this.owner = ownerSID;
 
+        /** @type {Player | null} */
+
+        this.ownerParent = null;
+
         this.cost = data.cost;
         this.maxlevel = data.maxlevel;
 
@@ -70,6 +82,33 @@ export default class Drone {
 
         this.x = this.owner.x + Math.cos(this.dir) * positionScale;
         this.y = this.owner.y + Math.sin(this.dir) * positionScale;
+
+        this.updateAbilities(delta);
+    }
+
+    /**
+     * The actual function that handles the effects of the abilities
+     */
+
+    updateAbilities(delta) {
+        for (let i = 0; i < this.abilities.length; i++) {
+            let ability = this.abilities[i];
+
+            if (ability) {
+                if (ability.isReloaded() && ability.isValid()) {
+                    if (ability.name == "On Mild Damage: Fix") {
+                        console.log(ability.stats[0])
+                        this.ownerParent.changeHealth(this.owner, ability.stats[0]);
+                    }
+
+                    ability.count = 0;
+                    ability.reload = ability.maxReload;
+                } else if (!ability.isReloaded()) {
+                    ability.reload -= delta;
+                    if (ability.reload <= 0) ability.reload = 0;
+                }
+            }
+        }
     }
 
     /**
@@ -79,7 +118,19 @@ export default class Drone {
      */
 
     health(value) {
-        // 
+        if (value < 0) {
+            // Taking damage counter
+
+            for (let i = 0; i < this.abilities.length; i++) {
+                let ability = this.abilities[i];
+
+                if (ability && countDamageTaken.includes(ability.name) && ability.isReloaded()) {
+                    ability.updateCount(Math.abs(value));
+                }
+            }
+        } else {
+            // Repair counter
+        }
     }
 
     /**
@@ -93,9 +144,15 @@ export default class Drone {
             let shape = player.shapes[i];
 
             if (i == chooseIndex) {
-                if (shape.drone) shape.drone.active = true;
+                if (shape.drone) {
+                    shape.drone.ownerParent = player;
+                    shape.drone.active = true;
+                }
             } else {
-                if (shape.drone) shape.drone.active = false;
+                if (shape.drone) {
+                    shape.drone.ownerParent = player;
+                    shape.drone.active = false;
+                }
             }
         }
     }

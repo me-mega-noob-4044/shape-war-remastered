@@ -358,6 +358,8 @@ const drones = [{
             base: 12e3,
             level: [0, 1e3, 2e3]
         }],
+        withIn: 5e3,
+        requirement: 70e3,
         attributes: ["Temporary", "Affects the shape"],
         reload: 5e3
     }],
