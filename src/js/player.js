@@ -160,14 +160,22 @@ function setBonuses(shape, skills) {
     }
 }
 
+/**
+ * @param {Shape} shape 
+ * @param {boolean} easyMode 
+ */
+
 function playerify(shape, easyMode) {
     shape.x = 0;
     shape.y = 0;
     shape.dir = 0;
     shape.grayDamage = 0;
     shape.vel = { x: 0, y: 0 };
-    shape.health = shape.maxhealth *= (easyMode ? .25 : 1);
-    shape.speed *= (easyMode ? 1 : 5);
+
+    if (easyMode) {
+        shape.health = shape.maxhealth *= .15;
+    }
+
     shape.grayDamage = 0;
 
     delete shape.cost;
@@ -179,7 +187,11 @@ function playerify(shape, easyMode) {
         let wpn = shape.weapons[i];
 
         wpn.fireRateTimer = 0;
-        wpn.dmg *= (easyMode ? .125 : 10);
+
+        if (easyMode) {
+            wpn.dmg *= .125;
+        }
+
         delete wpn.cost;
         delete wpn.attributes;
         delete wpn.description;

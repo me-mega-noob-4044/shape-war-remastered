@@ -6243,7 +6243,7 @@ import Task from "../src/js/task.js";
             for (let i = 0; i < allies.length + enemies.length; i++) {
                 let tmp = allies[i] || enemies[i - allies.length];
 
-                this.send("new", tmp, i < allies.length ? true : false);
+                this.send("new", tmp, i < allies.length ? true : false, userProfile.leaguePoints);
             }
         }
     }
