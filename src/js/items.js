@@ -117,6 +117,51 @@ const shapes = [{
         silver: 75e3,
         gold: 0
     }
+}, {
+    tier: 1,
+    name: "Griffin",
+    industryName: "Circle",
+    description: `
+    Equipped with a jump drive that allows it to leap into the air and close in on enemies when necessary<br><br>
+    Recommended Equipment: x2 Punisher T + x2 Punisher
+    `,
+    aimTurnSpeed: 0.014,
+    fovMulti: 1.8,
+    scale: 60,
+    indxRole: 1,
+    speedData: {
+        base: 0.0013,
+        level: [0, 0, 0.0001, 0, 0.0001, 0, 0.0001, 0.0001, 0, 0.0001, 0, 0.0002]
+    },
+    mk2DataIncrease: 1.18,
+    healthData: {
+        base: 116400,
+        level: [0, 1100, 1900, 2100, 2500, 3100, 3500, 4700, 5100, 5700, 7100, 8100]
+    },
+    color: "#8a7b58",
+    weaponHardpoints: {
+        light: 2,
+        medium: 2,
+        heavy: 0
+    },
+    moduleHardpoints: {
+        defense: 1,
+        assault: 0,
+        universal: 0
+    },
+    abilities: [{
+        name: "Jump",
+        description: "The shape jumps onto the air in an chosen direction, avoiding terrain and buildings.",
+        imageSource: "../src/media-files/abilities/jump.png",
+        boostSpeed: 4.5,
+        duration: 1200,
+        avoidBuildings: true,
+        reload: 22e3
+    }],
+    cost: {
+        silver: 1700000,
+        gold: 0
+    }
 }];
 
 const weapons = [{
@@ -148,13 +193,13 @@ const weapons = [{
     industryName: "Circle",
     name: "Molot",
     type: "light",
-    description: "Multi-barreled machine gun with a high rate of fire. Great at close range.",
+    description: "Classic autocannon weapon. Great at firing down enemies at far distances.",
     damageData: {
         base: 279,
         level: [0, 30, 30, 30, 40, 40, 40, 40, 40, 50, 60, 70]
     },
     projectileId: 0,
-    spread: 7,
+    spread: 5,
     attributes: ["Kinetic", "Manual", "Automatic", "Magazine"],
     mothershipChargeRate: 0.000125,
     mk2DataIncrease: 1.2,
