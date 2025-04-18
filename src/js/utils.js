@@ -4,6 +4,7 @@ import Skill from "./skill.js";
 
 /**
  * @param {string} id 
+ * @returns {HTMLElement}
  */
 
 export const getElement = (id) => {

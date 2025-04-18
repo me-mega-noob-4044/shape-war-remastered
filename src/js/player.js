@@ -285,6 +285,7 @@ export default class Player {
                 UpgraderManager.upgradeShape(Shape);
             }
 
+            Shape.activeModuleIndex = data.activeModuleIndex;
             Shape.weapons = [];
 
             for (let i = 0; i < data.weapons.length; i++) {
@@ -697,6 +698,8 @@ export default class Player {
 
         shape.zIndex = !!shape.avoidBuildings * 1;
 
+        shape.manageEffects(config.gameUpdateSpeed);
+
         if (shape.health <= 0) {
             if (this.indx == 0) {
                 this.chooseIndex = -1;
@@ -810,6 +813,8 @@ export default class Player {
     manageWeapons(shape) {
         let game = this.Game;
         let fired = [];
+
+        if (shape.isPhaseShift()) return;
 
         for (let i = 0; i < shape.weapons.length; i++) {
             let wpn = shape.weapons[i];

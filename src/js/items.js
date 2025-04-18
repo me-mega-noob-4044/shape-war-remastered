@@ -242,6 +242,17 @@ const activeModules = [{
     duration: 4e3,
     reload: 20e3,
     cost: 40
+}, {
+    tier: 3,
+    typeOfObj: "module",
+    name: "Phase Shift",
+    type: "Active",
+    description: "When activiated, the shape enters an state where it will become temporarily immune to all incoming damage, but it cannot deal damage.",
+    imageSource: "../src/media-files/abilities/phase_shift.png",
+    attributes: ["Affects Self", "Manual activation", "Temporary", "Cooldown"],
+    duration: 3e3,
+    reload: 35e3,
+    cost: 60
 }];
 
 // main = data that is displayed

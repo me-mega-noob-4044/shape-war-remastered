@@ -293,34 +293,7 @@ var clientEvents = {
 
         if (player) {
             let shape = player.shapes[player.chooseIndex];
-
-            if (id == "active") {
-                let module = items.activeModules[shape.activeModuleIndex];
-
-                if (module.regenData) {
-                    shape.activeModuleRegen = {
-                        duration: module.duration,
-                        power: module.regenData.power,
-                        rate: 0,
-                        maxRate: module.regenData.rate
-                    };
-                }
-
-                Game.send("updateAbilityDisplay", 1, module.duration, module.reload);
-            } else if (id <= shape.abilities.length) {
-                let ability = shape.abilities[id - 1];
-
-                if (!ability.durationTimer && !ability.reloadTimer) {
-                    ability.init(player, shape);
-                    ability.durationTimer = ability.duration;
-
-                    if (ability.durationTimer <= 0) {
-                        ability.reloadTimer = ability.reload;
-                    }
-
-                    Game.send("updateAbilityDisplay", id - 1, ability.duration, ability.reload);
-                }
-            }
+            shape.useAbility(player, id, Game);
         }
     }
 };
@@ -432,6 +405,8 @@ export default class Game {
                         let doer = players[projectile.owner];
 
                         if (shape && shape.health > 0 && doer.isAlly != player.isAlly) {
+                            if (shape.isPhaseShift()) continue;
+
                             let tmpScale = shape.scale;
                             let tmpSpeed = projectile.speed * config.gameUpdateSpeed;
 
@@ -476,6 +451,8 @@ export default class Game {
                         let player = players[t];
                         let shape = player.shapes[player.chooseIndex];
 
+                        if (shape && shape.isPhaseShift()) continue;
+
                         if (shape && UTILS.getDistance(shape, tmpObj) <= 400 + shape.scale) {
                             tmpObj.changing = true;
 
@@ -496,6 +473,8 @@ export default class Game {
                             for (let t = 0; t < players.length; t++) {
                                 let player = players[t];
                                 let shape = player.shapes[player.chooseIndex];
+
+                                if (shape && shape.isPhaseShift()) continue;
 
                                 if (shape && UTILS.getDistance(shape, tmpObj) <= 400 + shape.scale) {
                                     if (tmpObj.capturePoints == -6e3 && player.isAlly) continue;

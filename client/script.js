@@ -12,7 +12,7 @@ import Projectile from "../client/src/game/projectile.js";
 import Task from "../src/js/task.js";
 
 (function () {
-    var elements = {
+    const elements = {
         loadingText: UTILS.getElement("loadingText"),
         gameLoad: UTILS.getElement("gameLoad"),
         hangerUI: UTILS.getElement("hangerUI"),
@@ -50,7 +50,7 @@ import Task from "../src/js/task.js";
         /**
          * 
          * @param {shape} shape 
-         * @returns {weapon[]}
+         * @returns {Weapon[]}
          */
 
         static setUpStoreWeapons(shape) {
@@ -1347,11 +1347,13 @@ import Task from "../src/js/task.js";
                 let displayData = data[t];
                 let element = document.createElement("div");
                 let amountDisplay = document.createElement("div");
+
                 amountDisplay.style.marginLeft = "45px";
                 amountDisplay.style.color = "white";
                 amountDisplay.style.fontSize = "24px";
                 amountDisplay.style.fontWeight = "600";
                 element.classList.add("store-item-stats-style-display");
+
                 if (t == 0) element.style.marginTop = "10px";
                 if (t > 0) element.style.marginTop = "5px";
                 if (displayData) {
@@ -1380,6 +1382,8 @@ import Task from "../src/js/task.js";
                         amount = Math.round(amount);
                         amount /= 100;
                     }
+
+                    if (isNaN(amount)) continue;
 
                     amountDisplay.innerHTML = `${this.dataToDescription[displayData]}: ${UTILS.styleNumberWithComma(amount * multi)}`;
 
@@ -1762,29 +1766,31 @@ import Task from "../src/js/task.js";
 
                             let dataValue = itemData[data];
 
-                            if (data == "regenData") {
-                                dataValue = dataValue.power * 100;
-                                dataValue += "% hp/sec";
-                            } else if (data == "reload" || data == "duration") {
-                                dataValue /= 1e3;
-                                dataValue += " sec";
-                            } else if (data == "range") {
-                                dataValue = UTILS.styleNumberWithComma(dataValue);
-                                dataValue += " px";
-                            } else if (data == "healthIncrease") {
-                                dataValue *= 1e4;
-                                dataValue = Math.round(dataValue);
-                                dataValue /= 100;
-                                dataValue += "%";
+                            if (dataValue) {
+                                if (data == "regenData") {
+                                    dataValue = dataValue.power * 100;
+                                    dataValue += "% hp/sec";
+                                } else if (data == "reload" || data == "duration") {
+                                    dataValue /= 1e3;
+                                    dataValue += " sec";
+                                } else if (data == "range") {
+                                    dataValue = UTILS.styleNumberWithComma(dataValue);
+                                    dataValue += " px";
+                                } else if (data == "healthIncrease") {
+                                    dataValue *= 1e4;
+                                    dataValue = Math.round(dataValue);
+                                    dataValue /= 100;
+                                    dataValue += "%";
+                                }
                             }
 
                             if (data == "industryName") {
                                 let element = document.createElement("div");
                                 element.style = "display: flex; font-size: 18px; color: white; align-items: center; height: 50px;";
                                 element.innerHTML = `
-                                        <div class="circle-shape" style="margin: 0px 10px 0px 5px; width: 45px; height: 45px;"></div>
-                                        ${dataValue}
-                                        `;
+                                    <div class="circle-shape" style="margin: 0px 10px 0px 5px; width: 45px; height: 45px;"></div>
+                                    ${dataValue}
+                                `;
 
                                 leftSideDisplay.appendChild(element);
                             } else if (dataValue != null && dataValue != undefined) {
@@ -1792,9 +1798,9 @@ import Task from "../src/js/task.js";
                                 let offsetLeft = data == "dmg" ? -2.5 : 0;
                                 element.style = `display: flex; margin-left: ${offsetLeft}px; font-size: 18px; color: white; align-items: center; height: 50px;`;
                                 element.innerHTML = `
-                                        <div style="width: 60px; height: 60px; background-size: 60px 60px; background-image: url('${icon}');"></div>
-                                        ${typeof dataValue == "string" ? dataValue : UTILS.styleNumberWithComma(dataValue)}
-                                        `;
+                                    <div style="width: 60px; height: 60px; background-size: 60px 60px; background-image: url('${icon}');"></div>
+                                    ${typeof dataValue == "string" ? dataValue : UTILS.styleNumberWithComma(dataValue)}
+                                `;
 
                                 leftSideDisplay.appendChild(element);
                             }
@@ -4415,6 +4421,7 @@ import Task from "../src/js/task.js";
                     sid: shape.sid,
                     level: shape.level,
                     slot: shape.slot,
+                    activeModuleIndex: shape.activeModuleIndex,
                     drone: null,
                     weapons: [],
                     modules: [],
@@ -4576,6 +4583,7 @@ import Task from "../src/js/task.js";
                     name: shape.name,
                     sid: shape.sid,
                     level: shapeAvgLevel,
+                    activeModuleIndex: 0,
                     slot: ii,
                     drone,
                     weapons,
@@ -4898,7 +4906,12 @@ import Task from "../src/js/task.js";
             }
         }
 
-        static renderPlayers(layer) {
+        /**
+         * @param {number} layer 
+         * @param {number} delta 
+         */
+
+        static renderPlayers(layer, delta) {
             ctx.globalAlpha = 1;
 
             for (let i = 0; i < GameManager.players.length; i++) {
@@ -4907,6 +4920,10 @@ import Task from "../src/js/task.js";
                 if (tmpObj && tmpObj.active && tmpObj.health > 0 && layer == tmpObj.zIndex) {
                     ctx.save();
                     ctx.translate(tmpObj.x - this.offset.x, tmpObj.y - this.offset.y);
+
+                    ctx.globalAlpha = tmpObj.isPhaseShift() ? .4 : 1;
+                    tmpObj.manageEffects(delta);
+
                     ctx.strokeStyle = "black";
                     ctx.fillStyle = tmpObj.color;
                     canvasDrawer.drawCircle(0, 0, ctx, tmpObj.scale, false, false);
@@ -5332,9 +5349,9 @@ import Task from "../src/js/task.js";
 
             this.renderProjectiles(delta);
             this.renderBuildings(delta, 1);
-            this.renderPlayers(0);
+            this.renderPlayers(0, delta);
             this.renderDrones(0);
-            this.renderPlayers(1);
+            this.renderPlayers(1, delta);
             this.renderDrones(1);
             this.renderBuildings(delta, 2);
             this.renderBorders();
@@ -5991,8 +6008,29 @@ import Task from "../src/js/task.js";
                         break;
                     }
                 }
+            },
+
+            /**
+             * @param {number} duration 
+             */
+
+            "phaseShift": (sid, duration) => {
+                let tmpObj = this.players.find(e => e.sid == sid);
+
+                if (tmpObj) {
+                    tmpObj.phaseShiftDuration = duration;
+
+                    if (tmpObj == player) {
+                        elements.weaponsDisplay.querySelectorAll("div").forEach(element => {
+                            element.style.opacity = .6;
+
+                            setTimeout(() => {
+                                element.style.opacity = 1;
+                            }, duration);
+                        });
+                    }
+                }
             }
-            // doer.sid, "normal", Math.abs(value)
         };
 
         static updateHealthDisplay() {

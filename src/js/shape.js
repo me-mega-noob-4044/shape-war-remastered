@@ -1,9 +1,37 @@
 import ability from "./ability.js";
 import Drone from "./drone.js";
+import items from "./items.js";
 import Module from "./module.js";
+import Player from "./player.js";
 import Weapon from "./weapon.js";
 
 var shapeSid = 0;
+
+class Game {
+
+    /** @type {Map | null} */
+
+    static map = null;
+    static spawnIndx = 0;
+    static points = [0, 0];
+
+    static send(type) { }
+
+    static updateGame() { }
+
+    /**
+     * @param {number} x 
+     * @param {number} y 
+     * @param {number} dir 
+     * @param {Shape} owner 
+     * @param {Weapon} wpn 
+     * @param {number} extraSpeed 
+     */
+
+    static addProjectile(x, y, dir, owner, wpn, extraSpeed) { }
+
+    static start() { }
+}
 
 export default class Shape {
 
@@ -86,6 +114,60 @@ export default class Shape {
             for (let i = 0; i < data.abilities.length; i++) {
                 let abilityData = data.abilities[i];
                 this.abilities.push(new ability(abilityData));
+            }
+        }
+
+        this.phaseShiftDuration = 0;
+    }
+
+    isPhaseShift() {
+        return this.phaseShiftDuration > 0;
+    }
+
+    /**
+     * @param {number} delta 
+     */
+
+    manageEffects(delta) {
+        this.phaseShiftDuration -= delta;
+        if (this.phaseShiftDuration <= 0) this.phaseShiftDuration = 0;
+    }
+
+    /**
+     * @param {Player} player 
+     * @param {number | string} id 
+     * @param {Game} Game 
+     */
+
+    useAbility(player, id, Game) {
+        if (id == "active") {
+            let module = items.activeModules[this.activeModuleIndex];
+
+            if (module.regenData) {
+                this.activeModuleRegen = {
+                    duration: module.duration,
+                    power: module.regenData.power,
+                    rate: 0,
+                    maxRate: module.regenData.rate
+                };
+            } else if (module.name == "Phase Shift") {
+                this.phaseShiftDuration = module.duration;
+                Game.send("phaseShift", player.sid, module.duration);
+            }
+
+            Game.send("updateAbilityDisplay", 1, module.duration, module.reload);
+        } else if (id <= this.abilities.length) {
+            let ability = this.abilities[id - 1];
+
+            if (!ability.durationTimer && !ability.reloadTimer) {
+                ability.init(player, this);
+                ability.durationTimer = ability.duration;
+
+                if (ability.durationTimer <= 0) {
+                    ability.reloadTimer = ability.reload;
+                }
+
+                Game.send("updateAbilityDisplay", id - 1, ability.duration, ability.reload);
             }
         }
     }
