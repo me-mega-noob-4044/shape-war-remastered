@@ -344,6 +344,8 @@ export default class Player {
 
     changeHealth(shape, value, doer, weaponName, weaponLevel) {
         if (shape.health > 0) {
+            if (shape.isPhaseShift()) return; // Ignore health changes during phase shift (prevents healing during phasing)
+
             if (value <= 0) {
                 shape.grayDamage += Math.abs(value * .4);
 
