@@ -727,9 +727,14 @@ import Task from "../src/js/task.js";
         }
 
         static upgradeModule(module, dontSaveData) {
-            let item = items.modules.find(e => e.name == module.name);
+            const item = items.modules.find(e => e.name == module.name);
+
             if (item.healthIncreaseData) {
                 module.healthIncrease += item.healthIncreaseData.level[module.level];
+            }
+
+            if (item.dmgIncreaseData) {
+                module.dmgIncrease += item.dmgIncreaseData.level[module.level];
             }
 
             module.level++;
@@ -970,6 +975,7 @@ import Task from "../src/js/task.js";
             "rangeData": "../src/media-files/icons/range.png",
             "reloadData": "../src/media-files/icons/reload.png",
             "healthIncreaseData": "../src/media-files/modules/armor_kit.png",
+            "dmgIncreaseData": "../src/media-files/modules/nuclear_reactor.png",
             "duration": "../src/media-files/icons/cooldown.png",
             "regenData": "../src/media-files/modules/repair_unit.png"
         };
@@ -980,6 +986,7 @@ import Task from "../src/js/task.js";
             "reloadData": "Reload",
             "rangeData": "Range",
             "healthIncreaseData": "Health Boost",
+            "dmgIncreaseData": "Damage Boost",
             "duration": "Duration",
             "regenData": "Regeneration Power"
         };
@@ -1064,7 +1071,7 @@ import Task from "../src/js/task.js";
         static styleAmountData(amount, data) {
             if (data == "speedData") {
                 amount = Math.floor(amount * 1e4) + " px/s";
-            } else if (["healthIncreaseData"].includes(data)) {
+            } else if (["healthIncreaseData", "dmgIncreaseData"].includes(data)) {
                 amount *= 1e4;
                 amount = Math.round(amount);
                 amount /= 100;
@@ -1087,7 +1094,7 @@ import Task from "../src/js/task.js";
             if (amount <= 0 || isNaN(amount + 1)) return "";
             if (data == "speedData") {
                 return "+" + (UTILS.styleNumberWithComma(amount * 1e5) / 10) + " px/s";
-            } else if (data == "healthIncreaseData") {
+            } else if (data == "healthIncreaseData" || data == "dmgIncreaseData") {
                 amount *= 1e4;
                 amount = Math.round(amount);
                 amount /= 100;
@@ -1144,6 +1151,8 @@ import Task from "../src/js/task.js";
             let barDisplayDescription, barAdditionDisplay, barUpgradeItem;
 
             let itemData = item[data];
+
+            if (!itemData) return;
 
             if (isUpgradeStat) {
                 barDisplayDescription = document.createElement("div");
@@ -1353,8 +1362,8 @@ import Task from "../src/js/task.js";
                     data = ["duration", "regenData"];
                     statAmount = 2;
                 } else {
-                    data = ["healthIncreaseData"];
-                    statAmount = 1;
+                    data = ["healthIncreaseData", "dmgIncreaseData"];
+                    statAmount = 2;
                 }
             }
 
@@ -1770,8 +1779,8 @@ import Task from "../src/js/task.js";
                                 dataDisplays = ["duration", "regenData"];
                                 dataDisplayIcons = ["../src/media-files/icons/cooldown.png", "../src/media-files/modules/repair_unit.png"];
                             } else {
-                                dataDisplays = ["healthIncrease"];
-                                dataDisplayIcons = ["../src/media-files/modules/armor_kit.png"];
+                                dataDisplays = ["healthIncrease", "dmgIncrease"];
+                                dataDisplayIcons = ["../src/media-files/modules/armor_kit.png", "../src/media-files/modules/nuclear_reactor.png"];
                             }
                         }
 
@@ -1791,7 +1800,7 @@ import Task from "../src/js/task.js";
                                 } else if (data == "range") {
                                     dataValue = UTILS.styleNumberWithComma(dataValue);
                                     dataValue += " px";
-                                } else if (data == "healthIncrease") {
+                                } else if (data == "healthIncrease" || data == "dmgIncrease") {
                                     dataValue *= 1e4;
                                     dataValue = Math.round(dataValue);
                                     dataValue /= 100;
@@ -1859,7 +1868,7 @@ import Task from "../src/js/task.js";
                             let items = ["damageData"];
 
                             if (isModuleData) {
-                                items = ["healthIncreaseData"];
+                                items = ["healthIncreaseData", "dmgIncreaseData"];
                             }
 
                             this.shapeViewItemUpgradeRightDisplay.innerHTML = "";

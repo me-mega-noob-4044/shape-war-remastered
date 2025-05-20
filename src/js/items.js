@@ -362,8 +362,8 @@ const modules = [{
     tier: 0,
     name: "Nuclear Reactor",
     type: "Assault",
-    description: "Basic armor plating, increases shape's durability",
-    healthIncreaseData: {
+    description: "Basic reactor for powering weapons, increases shape's weapons damage output.",
+    dmgIncreaseData: {
         base: 0.02,
         level: [0, 0.01, 0.01, 0.01, 0.01, 0.01]
     },
@@ -372,6 +372,21 @@ const modules = [{
     cost: {
         silver: 75e3,
         gold: 0
+    }
+}, {
+    tier: 2,
+    name: "Thermonuclear Reactor",
+    type: "Assault",
+    description: "Advanced reactor for powering weapons, shapes using this power source will gain a huge increase to damage output.",
+    dmgIncreaseData: {
+        base: 0.07,
+        level: [0, 0.02, 0.02, 0.02, 0.02, 0.02]
+    },
+    imageSource: "../src/media-files/modules/nuclear_reactor.png",
+    attributes: ["Affects Self", "Permanent"],
+    cost: {
+        silver: 0,
+        gold: 1500
     }
 }];
 

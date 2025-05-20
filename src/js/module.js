@@ -10,6 +10,7 @@ export default class Module {
         this.imageSource = data.imageSource;
         this.slot = slot;
         this.level = 1;
+        this.dmgIncrease = data.dmgIncreaseData ? data.dmgIncreaseData.base : data.dmgIncrease;
         this.healthIncrease = data.healthIncreaseData ? data.healthIncreaseData.base : data.healthIncrease;
         this.cost = { ...data.cost };
     }

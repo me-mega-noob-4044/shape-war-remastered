@@ -35,7 +35,11 @@ const config = {
     }, {
         shapes: [0, 20e3, 40e3, 80e3, 400e3, 800e3, 1.6e6, 3e6, 6e6, 10e6, 16e6, 26e6],
         weapons: [0, 10e3, 20e3, 40e3, 200e3, 400e3, 800e3, 1e6, 1.5e6, 2e6, 2.5e6, 3e6], // NOT DONE
-        modules: [0, 200e3, 200e3, 200e3, 200e3, 200e3] // NOT DONE
+        modules: [0, 1e6, 1e6, 1e6, 1e6, 1e6] // NOT DONE
+    }, {
+        shapes: [0, 20e3, 40e3, 80e3, 400e3, 800e3, 1.6e6, 3e6, 6e6, 10e6, 16e6, 26e6], // NOT DONE
+        weapons: [0, 10e3, 20e3, 40e3, 200e3, 400e3, 800e3, 1e6, 1.5e6, 2e6, 2.5e6, 3e6], // NOT DONE
+        modules: [0, 10e6, 10e6, 10e6, 10e6, 10e6] // NOT DONE
     }],
     silverUpgradesMK2: [{
         shapes: [0, 250e3, 500e3, 1e6, 3.75e6, 3.75e6, 3.75e6, 3.75e6, 3.75e6, 3.75e6, 3.75e6, 3.75e6],

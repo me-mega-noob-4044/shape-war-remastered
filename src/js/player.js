@@ -92,8 +92,13 @@ class UpgraderManager {
 
     static upgradeModule(module) {
         let item = items.modules.find(e => e.name == module.name);
+
         if (item.healthIncreaseData) {
             module.healthIncrease += item.healthIncreaseData.level[module.level];
+        }
+
+        if (item.dmgIncreaseData) {
+            module.dmgIncrease += item.dmgIncreaseData.level[module.level];
         }
 
         module.level++;
