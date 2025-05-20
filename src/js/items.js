@@ -1,3 +1,44 @@
+
+/**
+ * @param {number} totalSum 
+ * @param {number} levels 
+ * @param {"linear" | "exponential"} mode 
+ * @param {number} startValue 
+ * 
+ * @returns {number[]}
+ */
+
+function generateUpgradeValues(totalSum, levels = 11, mode = "linear", startValue = 100) {
+    const result = [0];
+
+    if (mode === "linear") {
+        const n = levels;
+        const d = ((2 * totalSum) / n - 2 * startValue) / (n - 1);
+
+        for (let i = 0; i < n; i++) {
+            result.push(Math.round(startValue + d * i));
+        }
+    } else if (mode === "exponential") {
+        const ratio = 1.2;
+        const values = [];
+
+        let sum = 0;
+
+        for (let i = 0; i < levels; i++) {
+            const val = startValue * Math.pow(ratio, i);
+            values.push(val);
+            sum += val;
+        }
+
+        const scale = totalSum / sum;
+        for (let val of values) {
+            result.push(Math.round(val * scale));
+        }
+    }
+
+    return result;
+}
+
 const shapes = [{
     tier: 0,
     name: "Destrier",
@@ -147,7 +188,7 @@ const shapes = [{
     moduleHardpoints: {
         defense: 1,
         assault: 0,
-        universal: 0
+        universal: 1
     },
     abilities: [{
         name: "Jump",
@@ -158,6 +199,43 @@ const shapes = [{
         avoidBuildings: true,
         reload: 22e3
     }],
+    cost: {
+        silver: 1700000,
+        gold: 0
+    }
+}, {
+    tier: 1,
+    name: "Natasha",
+    industryName: "Circle",
+    description: `
+    Equipped with a jump drive that allows it to leap into the air and close in on enemies when necessary<br><br>
+    Recommended Equipment: x2 Punisher T + x2 Punisher
+    `,
+    aimTurnSpeed: 0.014,
+    fovMulti: 1.8,
+    scale: 60,
+    indxRole: 1,
+    speedData: {
+        base: 0.0013,
+        level: [0, 0, 0.0001, 0, 0.0001, 0, 0.0001, 0.0001, 0, 0.0001, 0, 0.0002]
+    },
+    mk2DataIncrease: 1.18,
+    healthData: {
+        base: 126e3,
+        level: generateUpgradeValues(74e3, 11, "linear", 3e3)
+    },
+    color: "#06610a",
+    weaponHardpoints: {
+        light: 2,
+        medium: 2,
+        heavy: 2
+    },
+    moduleHardpoints: {
+        defense: 0,
+        assault: 1,
+        universal: 0
+    },
+    abilities: [],
     cost: {
         silver: 1700000,
         gold: 0
@@ -253,6 +331,21 @@ const modules = [{
     attributes: ["Affects Self", "Permanent"],
     cost: {
         silver: 50e3,
+        gold: 0
+    }
+}, {
+    tier: 0,
+    name: "Nuclear Reactor",
+    type: "Assault",
+    description: "Basic armor plating, increases shape's durability",
+    healthIncreaseData: {
+        base: 0.02,
+        level: [0, 0.01, 0.01, 0.01, 0.01, 0.01]
+    },
+    imageSource: "../src/media-files/modules/nuclear_reactor.png",
+    attributes: ["Affects Self", "Permanent"],
+    cost: {
+        silver: 75e3,
         gold: 0
     }
 }];
