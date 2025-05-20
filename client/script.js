@@ -78,7 +78,15 @@ import Task from "../src/js/task.js";
                 }
             }
 
-            if (hardpoints.heavy) { }
+            if (hardpoints.heavy) {
+                let wpn = items.weapons.find(e => e.name == "Thunder");
+
+                for (let i = 0; i < hardpoints.heavy; i++) {
+                    let tmpWpn = new Weapon(wpn, undefined, weaponSlots);
+                    weaponSlots++;
+                    weapons.push(tmpWpn);
+                }
+            }
 
             return weapons;
         }
@@ -108,7 +116,14 @@ import Task from "../src/js/task.js";
                     }
                 }
 
-                if (hardpoints.heavy) { }
+                if (hardpoints.heavy) {
+                    let wpn = items.weapons.find(e => e.name == "Thunder");
+                    for (let i = 0; i < hardpoints.heavy; i++) {
+                        let tmpWpn = new Weapon(wpn, tmpItem.sid, weaponSlots);
+                        weaponSlots++;
+                        userProfile.weapons.push(tmpWpn);
+                    }
+                }
 
                 userProfile.shapes.push(tmpItem);
                 userProfile.saveProfile();
@@ -2368,7 +2383,9 @@ import Task from "../src/js/task.js";
                     let wpnElement = document.createElement("div");
                     let height = boxHeight - (i + 1 < items.length ? 2 : 0);
                     wpnElement.classList.add("view-weapon-bar-style");
-                    wpnElement.style = `top: ${(boxHeight - (i > 0 ? 2 : 0)) * i}px; height: ${height}px;`;
+                    wpnElement.style = `height: ${height}px;`;
+
+                    console.log(boxHeight - (i > 0 ? 2 : 0) * i, boxHeight * i);
 
                     if (isStore) wpnElement.style.pointerEvents = "none";
 
@@ -2416,9 +2433,11 @@ import Task from "../src/js/task.js";
             }
 
             if (hardpoints < 4) {
-                let amount = 4 - (hardpoints + (type == "module" ? 1 : 0));
+                const points = hardpoints + (type == "module" ? 0 : -2);
+                const amount = 4 - (hardpoints + (type == "module" ? 1 : 0));
+
                 let fillRestElement = document.createElement("div");
-                fillRestElement.style = `position: absolute; top: ${(hardpoints + (type == "module" ? 1 : 0)) * boxHeight}px; left: 0px; height: ${boxHeight * amount}px; width: 100%;`;
+                fillRestElement.style = `position: absolute; bottom: 0px; left: 0px; height: ${boxHeight * amount - (points * 2)}px; width: 100%;`;
                 fillRestElement.classList.add("diagonal-line-pattern");
                 this.rightSideDisplay.appendChild(fillRestElement);
             }

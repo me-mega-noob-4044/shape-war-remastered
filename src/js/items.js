@@ -212,12 +212,12 @@ const shapes = [{
     Recommended Equipment: x2 Punisher T + x2 Punisher
     `,
     aimTurnSpeed: 0.014,
-    fovMulti: 1.8,
-    scale: 60,
+    fovMulti: 1.95,
+    scale: 65,
     indxRole: 1,
     speedData: {
-        base: 0.0013,
-        level: [0, 0, 0.0001, 0, 0.0001, 0, 0.0001, 0.0001, 0, 0.0001, 0, 0.0002]
+        base: 0.0012,
+        level: [0, 0, 0.0001, 0, 0.0001, 0, 0.0001, 0.0001, 0, 0.0001, 0, 0.0001]
     },
     mk2DataIncrease: 1.18,
     healthData: {
@@ -227,12 +227,12 @@ const shapes = [{
     color: "#06610a",
     weaponHardpoints: {
         light: 2,
-        medium: 2,
+        medium: 0,
         heavy: 2
     },
     moduleHardpoints: {
         defense: 0,
-        assault: 1,
+        assault: 2,
         universal: 0
     },
     abilities: [],
@@ -312,6 +312,30 @@ const weapons = [{
     range: 1200,
     cost: {
         silver: 30e3,
+        gold: 0
+    }
+}, {
+    tier: 0,
+    industryName: "Circle",
+    name: "Thunder",
+    type: "heavy",
+    description: "",
+    damageData: {
+        base: 260,
+        level: [0, 30, 30, 40, 45, 45, 50, 50, 60, 65, 65, 80]
+    },
+    projectileId: 0,
+    spread: 28,
+    attributes: ["Kinetic", "Manual", "Automatic", "Magazine"],
+    mothershipChargeRate: 0.000125,
+    mk2DataIncrease: 1.2,
+    imageSource: "../src/media-files/weapons/punisher_t.png",
+    ammo: 220,
+    fireRate: 60,
+    reload: 8e3,
+    range: 1200,
+    cost: {
+        silver: 580e3,
         gold: 0
     }
 }];
