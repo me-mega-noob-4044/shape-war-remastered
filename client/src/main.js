@@ -547,7 +547,7 @@ export default class Game {
      */
 
     static addProjectile(x, y, dir, owner, wpn, extraSpeed) {
-        let tmp = new Projectile(x, y, wpn.name, wpn.projectileId, wpn.range, dir, owner, wpn.dmg)
+        let tmp = new Projectile(x, y, wpn.name, wpn.projectileId, wpn.range, dir, owner, wpn.dmg / wpn.projectilesFired);
         projectiles.push(tmp);
 
         let { name, range, projectileId } = wpn;

@@ -321,19 +321,20 @@ const weapons = [{
     type: "heavy",
     description: "",
     damageData: {
-        base: 260,
-        level: [0, 30, 30, 40, 45, 45, 50, 50, 60, 65, 65, 80]
+        base: 8640,
+        level: generateUpgradeValues(8240, 11, "linear", 700)
     },
     projectileId: 0,
+    projectilesFired: 8,
     spread: 28,
     attributes: ["Kinetic", "Manual", "Automatic", "Magazine"],
     mothershipChargeRate: 0.000125,
     mk2DataIncrease: 1.2,
-    imageSource: "../src/media-files/weapons/punisher_t.png",
-    ammo: 220,
-    fireRate: 60,
-    reload: 8e3,
-    range: 1200,
+    imageSource: "../src/media-files/weapons/thunder.png",
+    ammo: 5,
+    fireRate: 1e3,
+    reload: 10e3,
+    range: 2400,
     cost: {
         silver: 580e3,
         gold: 0

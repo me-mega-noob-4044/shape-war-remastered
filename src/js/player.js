@@ -815,9 +815,14 @@ export default class Player {
             dir = UTILS.getDirection(loc, { x: x, y: y });
         }
 
-        if (wpn.spread) dir += UTILS.randDirectionSpread(wpn.spread);
+        const originalDirection = dir;
 
-        this.Game.addProjectile(x, y, dir, this.indx, wpn, this.vel);
+        for (let i = 0; i < wpn.projectilesFired; i++) {
+            let dir = originalDirection;
+            if (wpn.spread) dir += UTILS.randDirectionSpread(wpn.spread);
+
+            this.Game.addProjectile(x, y, dir, this.indx, wpn, this.vel);
+        }
     }
 
     /**

@@ -4,7 +4,7 @@
 const projectiles = [{
     name: "normal projectile",
     type: "normal",
-    speed: 3,
+    speed: 3.5,
     scale: 20,
     imageSource: "../src/media-files/projectiles/normal.png"
 }];
