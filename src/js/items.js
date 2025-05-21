@@ -325,7 +325,7 @@ const weapons = [{
         level: generateUpgradeValues(8240, 11, "linear", 700)
     },
     projectileId: 0,
-    projectilesFired: 8,
+    projectilesFired: 6,
     spread: 28,
     attributes: ["Kinetic", "Manual", "Automatic", "Magazine"],
     mothershipChargeRate: 0.000125,
@@ -333,7 +333,8 @@ const weapons = [{
     imageSource: "../src/media-files/weapons/thunder.png",
     ammo: 5,
     fireRate: 1e3,
-    reload: 10e3,
+    reload: 2e3,
+    continousReload: true,
     range: 2400,
     cost: {
         silver: 580e3,

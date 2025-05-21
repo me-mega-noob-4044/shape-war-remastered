@@ -1322,6 +1322,11 @@ import Task from "../src/js/task.js";
             };
         }
 
+        /**
+         * @param {Shape | Weapon | Module} item 
+         * @param {*} DifferentMode 
+         */
+
         static doShapeItemDescriptionDisplay(item, DifferentMode) {
             this.shapeViewItemInfoRightDisplay.innerHTML = "";
             let industryName = item.industryName;
@@ -1795,6 +1800,10 @@ import Task from "../src/js/task.js";
                                     dataValue = dataValue.power * 100;
                                     dataValue += "% hp/sec";
                                 } else if (data == "reload" || data == "duration") {
+                                    if (data == "reload" && itemData.continousReload) {
+                                        dataValue *= itemData.maxammo;
+                                    }
+
                                     dataValue /= 1e3;
                                     dataValue += " sec";
                                 } else if (data == "range") {

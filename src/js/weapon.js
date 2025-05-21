@@ -59,5 +59,11 @@ export default class Weapon {
 
         this.projectilesFired = data.projectilesFired || 1;
         this.cost = { ...data.cost };
+
+        /** @type {boolean} */
+
+        this.continousReload = data.continousReload || false;
+
+        this.ammoRegainDelay = 0;
     }
 }

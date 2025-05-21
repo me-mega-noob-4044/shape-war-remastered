@@ -844,8 +844,18 @@ export default class Player {
             let wpn = shape.weapons[i];
 
             if (wpn) {
-                if (wpn.ammo > 0 && wpn.reloaded) {
-                    if (this.reloadAllWeapons) {
+                if (wpn.continousReload) {
+                    wpn.ammoRegainDelay += config.gameUpdateSpeed;
+
+                    if (wpn.ammoRegainDelay >= wpn.reload) {
+                        wpn.ammoRegainDelay = 0;
+                        wpn.ammo = Math.min(wpn.maxammo, wpn.ammo + 1);
+                        fired.push([i, wpn.ammo / wpn.maxammo]);
+                    }
+                }
+
+                if (wpn.ammo > 0 && (wpn.continousReload || wpn.reloaded)) {
+                    if (this.reloadAllWeapons && !wpn.continousReload) {
                         wpn.ammo = 0;
                         fired.push([i, 0]);
                     }
@@ -858,7 +868,7 @@ export default class Player {
 
                         fired.push([i, wpn.ammo / wpn.maxammo]);
                     }
-                } else {
+                } else if (!wpn.continousReload) {
                     if (wpn.reloaded && this.isUser == "me") {
                         game.send("reloadWeapon", i, wpn.reload);
                     }
