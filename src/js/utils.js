@@ -100,13 +100,21 @@ export const abbreviateNumber = (value) => {
     if (value < 1e3) {
         return value;
     }
-    if (value >= 1e9) {
+
+    if (value >= 1e18) {
+        return Math.floor(value / 1e17) + "Qu"; // This is never going to happen lol x3
+    } else if (value >= 1e15) {
+        return Math.floor(value / 1e14) + "Q"; // This is never going to happen lol x2
+    } else if (value >= 1e12) {
+        return Math.floor(value / 1e11) + "T"; // This is never going to happen lol
+    } else if (value >= 1e9) {
         value = (Math.round(value / 1e7) / 100) + "B";
     } else if (value >= 1e6) {
         value = (Math.round(value / 1e4) / 100) + "M";
     } else if (value >= 1e3) {
         value = (Math.round(value / 10) / 100) + "K";
     }
+
     return value;
 };
 
