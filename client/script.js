@@ -6198,9 +6198,9 @@ import Task from "../src/js/task.js";
             }
 
             avgTier /= Data.length;
-            avgTier = Math.floor(avgTier);
+            avgTier = Math.random() > .5 ? Math.min(4, Math.ceil(avgTier)) : Math.floor(avgTier);
             avgLevel /= Data.length;
-            avgLevel = Math.floor(avgLevel);
+            avgLevel = Math.random() > .5 ? Math.min(25, Math.ceil(avgLevel)) : Math.floor(avgLevel);
 
             return [(avgTier || 0), (avgLevel || 0)];
         }

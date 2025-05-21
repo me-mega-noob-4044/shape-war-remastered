@@ -340,7 +340,61 @@ const weapons = [{
         silver: 580e3,
         gold: 0
     }
+}, {
+    tier: 0,
+    industryName: "Circle",
+    name: "Storm",
+    type: "medium",
+    description: "",
+    damageData: {
+        base: 4320,
+        level: generateUpgradeValues(4120, 11, "linear", 350)
+    },
+    projectileId: 0,
+    projectilesFired: 6,
+    spread: 28,
+    attributes: ["Kinetic", "Manual", "Automatic", "Magazine"],
+    mothershipChargeRate: 0.000125,
+    mk2DataIncrease: 1.2,
+    imageSource: "../src/media-files/weapons/storm.png",
+    ammo: 5,
+    fireRate: 1e3,
+    reload: 2e3,
+    continousReload: true,
+    range: 2400,
+    cost: {
+        silver: 580e3,
+        gold: 0
+    }
+}, {
+    tier: 0,
+    industryName: "Circle",
+    name: "Gust",
+    type: "light",
+    description: "",
+    damageData: {
+        base: 2160,
+        level: generateUpgradeValues(2060, 11, "linear", 175)
+    },
+    projectileId: 0,
+    projectilesFired: 6,
+    spread: 28,
+    attributes: ["Kinetic", "Manual", "Automatic", "Magazine"],
+    mothershipChargeRate: 0.000125,
+    mk2DataIncrease: 1.2,
+    imageSource: "../src/media-files/weapons/gust.png",
+    ammo: 5,
+    fireRate: 1e3,
+    reload: 2e3,
+    continousReload: true,
+    range: 2400,
+    cost: {
+        silver: 580e3,
+        gold: 0
+    }
 }];
+
+// END OF WEAPONS
 
 // Defense, Assault, Universal
 
