@@ -249,6 +249,8 @@ var clientEvents = {
         if (player) {
             player.chooseIndex = slot;
 
+            console.log(player.shapes[slot], slot)
+
             let shape = player.shapes[slot];
             onFirstStart = false;
 

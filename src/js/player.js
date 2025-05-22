@@ -349,6 +349,8 @@ export default class Player {
 
             this.shapes.push(Shape);
         }
+
+        if (this.isUser == "me") console.log(this.shapes);
     }
 
     /**

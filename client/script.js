@@ -1542,6 +1542,20 @@ import Task from "../src/js/task.js";
             }
         }
 
+        static hexToRgb(hex, alpha = 1) {
+            hex = hex.replace("#", "");
+
+            if (hex.length === 3) {
+                hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
+            }
+
+            const r = parseInt(hex.substring(0, 2), 16);
+            const g = parseInt(hex.substring(2, 4), 16);
+            const b = parseInt(hex.substring(4, 6), 16);
+
+            return `rgb(${r}, ${g}, ${b}, ${alpha})`;
+        }
+
         static displayShapeItems(itemsData, indx, slotId, ownerSID, isStore, isModuleData, itemType) {
             let isUpgrading = false;
             let height = window.innerHeight * .72;
@@ -1604,7 +1618,7 @@ import Task from "../src/js/task.js";
 
                         let backgroundColorDisplay = document.createElement("div");
                         backgroundColorDisplay.classList.add("center-the-god-damn-node");
-                        backgroundColorDisplay.style = `height: ${height - 150}px; width: ${height - 150}px; border-radius: 100%; background: radial-gradient(circle, ${config.tierColors[data.tier]} 0%, rgb(255, 255, 255, .5) 15%, rgb(255, 255, 255, 0) 50%);`;
+                        backgroundColorDisplay.style = `height: ${height - 150}px; width: ${height - 150}px; border-radius: 100%; background: radial-gradient(circle, ${config.tierColors[data.tier]} 0%, ${this.hexToRgb(config.tierColors[data.tier], .5)} 15%, ${this.hexToRgb(config.tierColors[data.tier], 0)} 50%);`;
                         element.appendChild(backgroundColorDisplay);
 
                         let imgSize = height - 200;
@@ -1701,8 +1715,8 @@ import Task from "../src/js/task.js";
                                 }
 
                                 if (oldItem) {
-                                    oldItem.owner = null;
-                                    oldItem.slot = null;
+                                    oldItem.owner = -1;
+                                    oldItem.slot = -1;
                                 }
 
                                 if (Item) {
@@ -1727,8 +1741,8 @@ import Task from "../src/js/task.js";
                                 }
 
                                 if (oldItem) {
-                                    oldItem.owner = null;
-                                    oldItem.slot = null;
+                                    oldItem.owner = -1;
+                                    oldItem.slot = -1;
                                 }
 
                                 if (isModuleData) {
@@ -1749,8 +1763,8 @@ import Task from "../src/js/task.js";
                             }
 
                             if (oldItem) {
-                                oldItem.owner = null;
-                                oldItem.slot = null;
+                                oldItem.owner = -1;
+                                oldItem.slot = -1;
                             }
 
                             userProfile.saveProfile();
@@ -3952,7 +3966,7 @@ import Task from "../src/js/task.js";
                             if (userProfile.bank.gold - shape.cost.gold >= 0) {
                                 let oldShape = userProfile.shapes.find(e => e.slot == shape.slot);
                                 if (oldShape) {
-                                    oldShape.slot = null;
+                                    oldShape.slot = -1;
                                 }
 
                                 userProfile.changeBank("silver", -shape.cost.silver);
@@ -4515,7 +4529,7 @@ import Task from "../src/js/task.js";
                 if (shape) shape.skills = skills;
             }
 
-            return shapes;
+            return shapes.sort((a, b) => a.slot - b.slot);
         }
 
         static fetchRandWeapon(type, weaponAvgTier, weaponAvgLevel, W) {
@@ -6148,6 +6162,7 @@ import Task from "../src/js/task.js";
                         tmpElement.style = `bottom: ${bottom}px; border-color: ${config.tierColors[wpn.tier]}; background-image: url('${wpn.imageSource}'), none;`;
                         squareItem.appendChild(tmpElement);
                     }
+                    squareItem.id = `chooseIndex:sid:${i}`;
                     squareItem.appendChild(shapeImage);
                     squareItem.onclick = () => {
                         Renderer.screenSize = {
