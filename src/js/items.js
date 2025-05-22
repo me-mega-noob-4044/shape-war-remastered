@@ -207,16 +207,13 @@ const shapes = [{
     tier: 1,
     name: "Natasha",
     industryName: "Circle",
-    description: `
-    Equipped with a jump drive that allows it to leap into the air and close in on enemies when necessary<br><br>
-    Recommended Equipment: x2 Punisher T + x2 Punisher
-    `,
+    description: ` `,
     aimTurnSpeed: 0.014,
     fovMulti: 1.95,
     scale: 65,
     indxRole: 1,
     speedData: {
-        base: 0.0012,
+        base: 0.0018,
         level: [0, 0, 0.0001, 0, 0.0001, 0, 0.0001, 0.0001, 0, 0.0001, 0, 0.0001]
     },
     mk2DataIncrease: 1.18,
@@ -240,7 +237,43 @@ const shapes = [{
         silver: 1700000,
         gold: 0
     }
+}, {
+    tier: 1,
+    name: "Leo",
+    industryName: "Circle",
+    description: ``,
+    aimTurnSpeed: 0.028,
+    fovMulti: 1.95,
+    scale: 75,
+    indxRole: 1,
+    speedData: {
+        base: 0.0016,
+        level: [0, 0, 0.0001, 0, 0.0001, 0, 0.0001, 0.0001, 0.0001, 0.0001, 0.0002, 0.0002]
+    },
+    mk2DataIncrease: 1.18,
+    healthData: {
+        base: 168310,
+        level: generateUpgradeValues(75700, 11, "exponential", 550)
+    },
+    color: "#715353",
+    weaponHardpoints: {
+        light: 3,
+        medium: 0,
+        heavy: 1
+    },
+    moduleHardpoints: {
+        defense: 1,
+        assault: 0,
+        universal: 1
+    },
+    abilities: [],
+    cost: {
+        silver: 17e5,
+        gold: 0
+    }
 }];
+
+// END OF SHAPES
 
 const weapons = [{
     tier: 0,
