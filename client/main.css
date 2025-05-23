@@ -1353,11 +1353,13 @@ a:-webkit-any-link {
     justify-content: center;
 }
 
-#taskButton {
+#taskButton,
+#lootboxButton {
     margin-left: 10px;
 }
 
-#settingsButton {
+#settingsButton,
+#operationButton {
     margin-right: 10px;
 }
 
