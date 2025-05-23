@@ -309,6 +309,8 @@ const shapes = [{
 
 // END OF SHAPES
 
+// WEAPON RULE: HEAVY = 1.5 MED, HEAVY = 3 LIGHT
+
 const weapons = [{
     tier: 0,
     industryName: "Circle",
@@ -414,8 +416,8 @@ const weapons = [{
     type: "medium",
     description: "",
     damageData: {
-        base: 4320,
-        level: generateUpgradeValues(4120, 11, "linear", 350)
+        base: 5760,
+        level: generateUpgradeValues(5493, 11, "linear", 350)
     },
     projectileId: 0,
     projectilesFired: 6,
@@ -440,8 +442,8 @@ const weapons = [{
     type: "light",
     description: "",
     damageData: {
-        base: 2160,
-        level: generateUpgradeValues(2060, 11, "linear", 175)
+        base: 2880,
+        level: generateUpgradeValues(2746, 11, "linear", 175)
     },
     projectileId: 0,
     projectilesFired: 6,
