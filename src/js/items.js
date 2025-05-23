@@ -271,6 +271,40 @@ const shapes = [{
         silver: 17e5,
         gold: 0
     }
+}, {
+    tier: 2,
+    name: "Fury",
+    industryName: "Circle",
+    description: ``,
+    aimTurnSpeed: 0.02,
+    fovMulti: 1.95,
+    scale: 80,
+    indxRole: 1,
+    speedData: {
+        base: 0.0014,
+        level: [0, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0002]
+    },
+    mk2DataIncrease: 1.18,
+    healthData: {
+        base: 120e3,
+        level: generateUpgradeValues(70e3, 11, "exponential", 2200)
+    },
+    color: "#a28143",
+    weaponHardpoints: {
+        light: 0,
+        medium: 0,
+        heavy: 3
+    },
+    moduleHardpoints: {
+        defense: 2,
+        assault: 0,
+        universal: 1
+    },
+    abilities: [],
+    cost: {
+        silver: 0,
+        gold: 2500
+    }
 }];
 
 // END OF SHAPES
