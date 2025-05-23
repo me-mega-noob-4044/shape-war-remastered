@@ -4133,11 +4133,11 @@ import Task from "../src/js/task.js";
                     if (createObjs) {
                         let costDisplay = document.createElement("div");
                         let costAmount = document.createElement("div");
-                        let image = imageManager.getImage(`../src/media-files/money/${type == "pilot" ? "gold" : type == "drone" ? "microchips" : "silver"}.png`);
+                        let image = imageManager.getImage(`../src/media-files/money/${type == "pilot" ? "gold" : type == "drone" ? "microchips" : item.cost.gold ? "gold" : "silver"}.png`);
                         image.style = "position: absolute; top: 0px; left: 0px; width: 30px; height: 30px;";
                         costDisplay.classList.add("store-item-cost");
                         costAmount.style.marginLeft = "-5px";
-                        costAmount.innerHTML = UTILS.styleNumberWithComma(type == "pilot" ? item.cost : type == "drone" ? item.cost : item.cost.silver);
+                        costAmount.innerHTML = UTILS.styleNumberWithComma(type == "pilot" ? item.cost : type == "drone" ? item.cost : (item.cost.gold || item.cost.silver));
                         costDisplay.appendChild(image);
                         costDisplay.appendChild(costAmount);
                         element.appendChild(costDisplay);
@@ -4185,8 +4185,8 @@ import Task from "../src/js/task.js";
                             } else if (type == "drone") {
                                 this.viewDroneInDepth(item, true, true, slot);
                             } else {
-                                this.shapeViewBuyMoneyIcon.style.backgroundImage = `url('../src/media-files/money/silver.png'), none`;
-                                this.shapeViewBuyMoneyDisplay.innerHTML = UTILS.styleNumberWithComma(item.cost.silver);
+                                this.shapeViewBuyMoneyIcon.style.backgroundImage = `url('../src/media-files/money/${item.cost.gold ? "gold" : "silver"}.png'), none`;
+                                this.shapeViewBuyMoneyDisplay.innerHTML = UTILS.styleNumberWithComma(item.cost.gold || item.cost.silver);
                                 item.slot = slot;
 
                                 this.viewInDepth(item, true); // item, isStore, isChanging, slotId
