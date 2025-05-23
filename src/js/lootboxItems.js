@@ -3,15 +3,15 @@ export class LootboxItem {
     /**
      * @param {string} name 
      * @param {"money" | "shape" | "weapon" | "module" | "drone"} type 
-     * @param {number} amount 
      * @param {number} weight - Out of 100. This value is based on percentages (for example 50 -> 50%).
+     * @param {number} amount 
      */
 
-    constructor(name, type, amount, weight) {
+    constructor(name, type, weight, amount = 1) {
         this.name = name;
         this.type = type;
-        this.amount = amount;
         this.weight = weight;
+        this.amount = amount;
 
         this.normalized = 0;
     }
@@ -56,20 +56,20 @@ const lootboxItems = {
     /** @type {LootboxItem[]} */
 
     basic: [
-        new LootboxItem("gold", "money", 10, 80),
-        new LootboxItem("gold", "money", 5, 80),
-        new LootboxItem("gold", "money", 7, 80),
-        new LootboxItem("gold", "money", 15, 80),
+        new LootboxItem("gold", "money", 80, 10),
+        new LootboxItem("gold", "money", 80, 5),
+        new LootboxItem("gold", "money", 80, 7),
+        new LootboxItem("gold", "money", 80, 15),
 
-        new LootboxItem("silver", "money", 15e3, 80),
-        new LootboxItem("silver", "money", 5e3, 80),
-        new LootboxItem("silver", "money", 2e3, 80),
+        new LootboxItem("silver", "money", 80, 15e3),
+        new LootboxItem("silver", "money", 80, 5e3),
+        new LootboxItem("silver", "money", 80, 2e3),
 
-        new LootboxItem("keys", "money", 7, 80),
-        new LootboxItem("keys", "money", 5, 80),
-        new LootboxItem("keys", "money", 2, 80),
-        new LootboxItem("keys", "money", 10, 80),
-        new LootboxItem("keys", "money", 10, 15)
+        new LootboxItem("keys", "money", 80, 7),
+        new LootboxItem("keys", "money", 80, 5),
+        new LootboxItem("keys", "money", 80, 2),
+        new LootboxItem("keys", "money", 80, 10),
+        new LootboxItem("keys", "money", 15, 10)
     ],
 
     /** @type {LootboxItem[]} */
