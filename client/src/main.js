@@ -417,8 +417,8 @@ export default class Game {
                                 shape.y - tmpScale,
                                 shape.x + tmpScale,
                                 shape.y + tmpScale,
-                                projectile.x,
-                                projectile.y,
+                                projectile.x - (tmpSpeed * .5 * Math.cos(projectile.dir)),
+                                projectile.y - (tmpSpeed * .5 * Math.sin(projectile.dir)),
                                 projectile.x + (tmpSpeed * Math.cos(projectile.dir)),
                                 projectile.y + (tmpSpeed * Math.sin(projectile.dir))
                             )) {
