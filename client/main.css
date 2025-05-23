@@ -634,11 +634,16 @@ a:-webkit-any-link {
 #drone-view-back-button,
 #pilot-view-back-button,
 #pilot-skills-view-back-button,
-#task-view-back-button {
+#task-view-back-button,
+#lootbox-view-back-button {
     position: absolute;
     bottom: 20px;
     left: 30px;
     background-color: rgb(0, 0, 0, .2);
+}
+
+#lootbox-view-back-button:hover {
+    background-color: rgb(0, 0, 0, .3);
 }
 
 #task-view-back-button:hover {

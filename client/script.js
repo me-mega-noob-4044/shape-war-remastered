@@ -30,7 +30,8 @@ import Task from "../src/js/task.js";
         pingDisplay: UTILS.getElement("pingDisplay"),
         weaponsDisplay: UTILS.getElement("weaponsDisplay"),
         taskDisplay: UTILS.getElement("task-display"),
-        taskButton: UTILS.getElement("taskButton")
+        taskButton: UTILS.getElement("taskButton"),
+        lootboxButton: UTILS.getElement("lootboxButton")
     };
 
     const hangerUIObserver = new MutationObserver(() => {
@@ -4646,6 +4647,21 @@ import Task from "../src/js/task.js";
             return allShapes;
         }
     }
+
+    class LootboxManager {
+        static lootboxDisplay = UTILS.getElement("lootbox-display");
+        static lootboxViewBackButton = UTILS.getElement("lootbox-view-back-button");
+
+        static main() {
+            doDarkModeTransition();
+            moneyDisplayManager.displayItems(["keys"]);
+            moneyDisplayManager.holderElement.style.top = "5px";
+        }
+    }
+
+    elements.lootboxButton.onclick = () => {
+        LootboxManager.main();
+    };
 
     elements.taskButton.onclick = () => {
         TaskDisplay.toggle();
