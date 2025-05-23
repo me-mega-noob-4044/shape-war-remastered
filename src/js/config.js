@@ -1,25 +1,3 @@
-/**
- * 
-Tier 2	MK 1
-Level	Upgrade cost	Upgrade time
-HH:MM
-1	0	00:00
-2	20,000	00:10
-3	40,000	01:00
-4	80,000	02:00
-5	400,000	08:00
-6	800,000	12:00
-7	1,600,000	24:00
-8	3,000,000	32:00
-9	6,000,000	40:00
-10	10,000,000	44:00
-11	16,000,000	52:00
-12	26,000,000	60:00
-Total	Cost	Time [DD:HH:MM]
-63,940,000	11:11:10
-
- */
-
 const config = {
     gameUpdateRate: 20,
     gameUpdateSpeed: 1e3 / 20,
@@ -56,7 +34,7 @@ const config = {
     mk2UpgradeCost: 500,
     mk3UpgradeCost: [1, 1, 2, 3, 4],
     mk3EnchantmentIncrease: .1,
-    easyModePoints: 300,
+    easyModePoints: 250,
     attrubutesDescription: {
         "Kinetic": "Fires with kinetic shells",
         "Explosive": "Fires with explosive shells",
