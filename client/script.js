@@ -5584,25 +5584,25 @@ import Task from "../src/js/task.js";
         };
 
         if (placement == (isWin ? 1 : 6)) {
-            rewards.leaguePoints = 17;
+            rewards.leaguePoints = 23;
             if (isWin) {
                 rewards.gold = 20;
                 rewards.keys = 10;
             }
         } else if (placement == (isWin ? 2 : 5)) {
-            rewards.leaguePoints = 10;
+            rewards.leaguePoints = 17;
             if (isWin) {
                 rewards.gold = 10;
                 rewards.keys = 5;
             }
         } else if (placement == (isWin ? 3 : 4)) {
-            rewards.leaguePoints = 4;
+            rewards.leaguePoints = 10;
             if (isWin) {
                 rewards.gold = 5;
                 rewards.keys = 1;
             }
         } else {
-            rewards.leaguePoints = 1;
+            rewards.leaguePoints = 4;
             if (isWin) rewards.keys = 1;
         }
 
