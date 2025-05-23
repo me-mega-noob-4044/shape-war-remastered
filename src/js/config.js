@@ -47,6 +47,9 @@ const config = {
     }, {
         shapes: [0, 500e3, 1e6, 2e6, 7.5e6, 7.5e6, 7.5e6, 7.5e6, 7.5e6, 7.5e6, 7.5e6, 7.5e6],
         weapons: [0, 10e3, 20e3, 40e3, 200e3, 400e3, 800e3, 1e6, 1.5e6, 2e6, 2.5e6, 3e6] // NOT DONE
+    }, {
+        shapes: [0, 1e6, 2e6, 4e6, 15e6, 15e6, 15e6, 15e6, 20e6, 20e6, 20e6, 20e6], // NOT DONE
+        weapons: [0, 10e3, 20e3, 40e3, 200e3, 400e3, 800e3, 1e6, 1.5e6, 2e6, 2.5e6, 3e6] // NOT DONE
     }],
     skyPlayerDecel: .997,
     playerDecel: 0.99,
