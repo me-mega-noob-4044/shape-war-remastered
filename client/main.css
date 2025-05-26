@@ -147,6 +147,7 @@ a:-webkit-any-link {
 #droneViewUI,
 #pilotViewUI,
 #task-display,
+#lootbox-display,
 #pilot-skill-change-ui {
     display: none;
     position: absolute;
