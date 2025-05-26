@@ -5115,6 +5115,7 @@ import Task from "../src/js/task.js";
 
                     tmpObj.update([], false, delta);
                 } else if (tmpObj && !tmpObj.active) {
+                    GameManager.aoeEffects.push(new AoeEffect(tmpObj.x, tmpObj.y, tmpObj.aoeEffectRange));
                     GameManager.projectiles.splice(i, 1);
                     i--;
                 }
@@ -5326,6 +5327,29 @@ import Task from "../src/js/task.js";
             }
         }
 
+        static renderAoeEffects(delta) {
+            ctx.globalAlpha = 1;
+
+            for (let i = 0; i < GameManager.aoeEffects.length; i++) {
+                const tmpObj = GameManager.aoeEffects[i];
+
+                if (tmpObj) {
+                    ctx.save();
+                    ctx.translate(tmpObj.x - this.offset.x, tmpObj.y - this.offset.y);
+
+                    ctx.fillStyle = `rgba(0, 0, 0, .4)`;
+                    canvasDrawer.drawCircle(0, 0, ctx, tmpObj.radius, true, false);
+
+                    ctx.restore();
+
+                    tmpObj.life -= delta;
+                    if (tmpObj.life <= 0) {
+                        GameManager.aoeEffects.splice(i, 1);
+                    }
+                }
+            }
+        }
+
         static render() {
             this.fpsCount++;
 
@@ -5424,7 +5448,10 @@ import Task from "../src/js/task.js";
             this.renderBorders();
             this.renderDamageIndicators(delta);
 
-            ctx.fillStyle = "rgba(0, 0, 70, 0.35)";
+            this.renderAoeEffects(delta);
+
+            ctx.globalAlpha = 1;
+            ctx.fillStyle = "rgb(0, 0, 70, 0.1)";
             ctx.fillRect(0, 0, this.screenSize.x, this.screenSize.y);
 
             if (GameManager.grid) {
@@ -5695,6 +5722,23 @@ import Task from "../src/js/task.js";
 
     var easyModeDisplay = document.getElementById("easy-mode-display");
 
+    class AoeEffect {
+
+        /**
+         * @param {number} x 
+         * @param {number} y 
+         * @param {number} radius 
+         */
+
+        constructor(x, y, radius) {
+            this.x = x;
+            this.y = y;
+            this.radius = radius;
+
+            this.life = 200;
+        }
+    }
+
     class GameManager {
         static lastMoveDir;
 
@@ -5713,6 +5757,10 @@ import Task from "../src/js/task.js";
         static map = {};
         static pingInterval = null;
         static pingLastUpdate = 0;
+
+        /** @type {AoeEffects[]} */
+
+        static aoeEffects = [];
 
         static durationOfGame = 5 * 60 * 1e3;
 
@@ -5924,12 +5972,14 @@ import Task from "../src/js/task.js";
 
                 this.projectiles.push(tmp);
             },
-            "removeProjectile": (sid, time) => {
+            "removeProjectile": (sid, time, aoeEffectRange) => {
                 for (let i = 0; i < this.projectiles.length; i++) {
                     if (this.projectiles[i].sid == sid) {
                         if (time) {
+                            this.projectiles[i].aoeEffectRange = aoeEffectRange;
                             this.projectiles[i].range = time;
                         } else {
+                            this.aoeEffects.push(new AoeEffect(this.projectiles[i].x, this.projectiles[i].y, aoeEffectRange));
                             this.projectiles.splice(i, 1);
                         }
 

@@ -417,10 +417,10 @@ export default class Game {
                                 shape.y - tmpScale,
                                 shape.x + tmpScale,
                                 shape.y + tmpScale,
-                                projectile.x - (tmpSpeed * .5 * Math.cos(projectile.dir)),
-                                projectile.y - (tmpSpeed * .5 * Math.sin(projectile.dir)),
-                                projectile.x + (tmpSpeed * Math.cos(projectile.dir)),
-                                projectile.y + (tmpSpeed * Math.sin(projectile.dir))
+                                projectile.x - (tmpSpeed * .1 * Math.cos(projectile.dir)),
+                                projectile.y - (tmpSpeed * .1 * Math.sin(projectile.dir)),
+                                projectile.x + (tmpSpeed * .1 * Math.cos(projectile.dir)),
+                                projectile.y + (tmpSpeed * .1 * Math.sin(projectile.dir))
                             )) {
                                 player.changeHealth(shape, -projectile.dmg, doer);
                                 projectile.range = 0;
@@ -437,12 +437,10 @@ export default class Game {
                                             if (player == other) continue;
 
                                             if (UTILS.getDistance(otherShape, projectile) <= otherShape.scale + projectile.aoeEffectRange) {
-                                                er.changeHealth(otherShape, -projectile.dmg, doer);
+                                                other.changeHealth(otherShape, -projectile.dmg, doer);
                                             }
                                         }
                                     }
-
-                                    this.send("aoeEffect", projectile.sid, projectile.aoeEffectRange);
                                 }
                                 break;
                             }
@@ -451,9 +449,9 @@ export default class Game {
 
                     if (projectile.range <= 0) {
                         if (done) {
-                            this.send("removeProjectile", projectile.sid, 200);
+                            this.send("removeProjectile", projectile.sid, 200, projectile.aoeEffectRange);
                         } else {
-                            this.send("removeProjectile", projectile.sid);
+                            this.send("removeProjectile", projectile.sid, 0, projectile.aoeEffectRange);
                         }
 
                         projectiles.splice(i, 1);
@@ -568,13 +566,13 @@ export default class Game {
      */
 
     static addProjectile(x, y, dir, owner, wpn, extraSpeed) {
-        let tmp = new Projectile(x, y, wpn.name, wpn.projectileId, wpn.range, dir, owner, wpn.dmg / wpn.projectilesFired);
+        let tmp = new Projectile(x, y, wpn.name, wpn.projectileId, wpn.range, dir, owner, wpn.dmg / wpn.projectilesFired, wpn.aoeEffectRange);
         projectiles.push(tmp);
 
         let { name, range, projectileId } = wpn;
         let { sid } = tmp;
 
-        this.send("addProjectile", x, y, dir, owner, { name, range, projectileId, sid, extraSpeed });
+        this.send("addProjectile", x, y, dir, owner, { name, range, projectileId, sid, extraSpeed, aoeEffectRange: wpn.aoeEffectRange });
     }
 
     static start() {
