@@ -388,7 +388,7 @@ const weapons = [{
     industryName: "Circle",
     name: "Thunder",
     type: "heavy",
-    description: "",
+    description: "A kinetic shotgun that deals huge amount of damage up close. Equipped with a unique reloading mechanic, it can reload even while firing",
     damageData: {
         base: 8640,
         level: generateUpgradeValues(8240, 11, "linear", 700)
@@ -414,7 +414,7 @@ const weapons = [{
     industryName: "Circle",
     name: "Storm",
     type: "medium",
-    description: "",
+    description: "A medium kinetic shotgun from the Thunder weapon family. Equipped with a unique reloading mechanic, it can reload even while firing",
     damageData: {
         base: 5760,
         level: generateUpgradeValues(5493, 11, "linear", 350)
@@ -440,7 +440,7 @@ const weapons = [{
     industryName: "Circle",
     name: "Gust",
     type: "light",
-    description: "",
+    description: "A lightweight kinetic shotgun from the Thunder weapon family. Equipped with a unique reloading mechanic, it can reload even while firing.",
     damageData: {
         base: 2880,
         level: generateUpgradeValues(2746, 11, "linear", 175)
@@ -459,6 +459,31 @@ const weapons = [{
     range: 2400,
     cost: {
         silver: 580e3,
+        gold: 0
+    }
+}, {
+    tier: 0,
+    industryName: "Circle",
+    name: "Pin",
+    type: "light",
+    description: "A long ranged rocket launcher, rockets deal huge area of effect damage and are best used for targeting groups of enemies.",
+    damageData: {
+        base: 1420,
+        level: generateUpgradeValues(1340, 11, "linear", 50)
+    },
+    projectileId: 1,
+    aoeEffect: 30,
+    attributes: ["Explosive", "Manual", "Volley", "Continuous Reload", "AoE Effect"],
+    mothershipChargeRate: 0.000125,
+    mk2DataIncrease: 1.2,
+    imageSource: "../src/media-files/weapons/pin.png",
+    ammo: 8,
+    fireRate: 350,
+    reload: 3e3,
+    continousReload: true,
+    range: 1800,
+    cost: {
+        silver: 290e3,
         gold: 0
     }
 }];
