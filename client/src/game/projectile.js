@@ -68,23 +68,26 @@ export default class Projectile {
         this.aoeEffectRange = aoeEffectRange;
 
         this.active = true;
+
+        this.skipMovement = true;
     }
 
     update(players, server, delta) {
-        let tmpSpd = this.speed * (delta || config.gameUpdateSpeed);
+        const tmpSpd = this.speed * (delta || config.gameUpdateSpeed);
 
-        let oldX = this.x, oldY = this.y;
+        if (!this.skipMovement) {
+            let oldX = this.x, oldY = this.y;
 
-        this.x += Math.cos(this.dir) * tmpSpd;
-        this.y += Math.sin(this.dir) * tmpSpd;
+            this.x += Math.cos(this.dir) * tmpSpd;
+            this.y += Math.sin(this.dir) * tmpSpd;
 
-
-        this.range -= UTILS.getDistance({ x: oldX, y: oldY }, this);
+            this.range -= UTILS.getDistance({ x: oldX, y: oldY }, this);
+        } else {
+            this.skipMovement = false;
+        }
 
         if (this.range <= 0) {
             this.active = false;
         }
-
-        if (server) { }
     }
 }

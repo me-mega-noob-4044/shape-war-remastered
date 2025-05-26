@@ -9,6 +9,7 @@ import Projectile from "./game/projectile.js";
 import Drone from "../../src/js/drone.js";
 import Weapon from "../../src/js/weapon.js";
 import Shape from "../../src/js/shape.js";
+import Projectiles from "../../src/js/projectiles.js";
 
 /** @type {Player[]} */
 
@@ -417,10 +418,10 @@ export default class Game {
                                 shape.y - tmpScale,
                                 shape.x + tmpScale,
                                 shape.y + tmpScale,
-                                projectile.x - (tmpSpeed * .1 * Math.cos(projectile.dir)),
-                                projectile.y - (tmpSpeed * .1 * Math.sin(projectile.dir)),
-                                projectile.x + (tmpSpeed * .1 * Math.cos(projectile.dir)),
-                                projectile.y + (tmpSpeed * .1 * Math.sin(projectile.dir))
+                                projectile.x,
+                                projectile.y,
+                                projectile.x + (tmpSpeed * 1 * Math.cos(projectile.dir)),
+                                projectile.y + (tmpSpeed * 1 * Math.sin(projectile.dir))
                             )) {
                                 player.changeHealth(shape, -projectile.dmg, doer);
                                 projectile.range = 0;
@@ -449,7 +450,7 @@ export default class Game {
 
                     if (projectile.range <= 0) {
                         if (done) {
-                            this.send("removeProjectile", projectile.sid, 200, projectile.aoeEffectRange);
+                            this.send("removeProjectile", projectile.sid, 50, projectile.aoeEffectRange);
                         } else {
                             this.send("removeProjectile", projectile.sid, 0, projectile.aoeEffectRange);
                         }
@@ -571,6 +572,8 @@ export default class Game {
 
         let { name, range, projectileId } = wpn;
         let { sid } = tmp;
+
+        const data = Projectiles[wpn.projectileId];
 
         this.send("addProjectile", x, y, dir, owner, { name, range, projectileId, sid, extraSpeed, aoeEffectRange: wpn.aoeEffectRange });
     }

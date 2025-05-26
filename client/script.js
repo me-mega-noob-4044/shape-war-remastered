@@ -5337,7 +5337,7 @@ import Task from "../src/js/task.js";
                     ctx.save();
                     ctx.translate(tmpObj.x - this.offset.x, tmpObj.y - this.offset.y);
 
-                    ctx.fillStyle = `rgba(0, 0, 0, .4)`;
+                    ctx.fillStyle = `rgba(255, 0, 0, .55)`;
                     canvasDrawer.drawCircle(0, 0, ctx, tmpObj.radius, true, false);
 
                     ctx.restore();
@@ -5975,13 +5975,8 @@ import Task from "../src/js/task.js";
             "removeProjectile": (sid, time, aoeEffectRange) => {
                 for (let i = 0; i < this.projectiles.length; i++) {
                     if (this.projectiles[i].sid == sid) {
-                        if (time) {
-                            this.projectiles[i].aoeEffectRange = aoeEffectRange;
-                            this.projectiles[i].range = time;
-                        } else {
-                            this.aoeEffects.push(new AoeEffect(this.projectiles[i].x, this.projectiles[i].y, aoeEffectRange));
-                            this.projectiles.splice(i, 1);
-                        }
+                        this.aoeEffects.push(new AoeEffect(this.projectiles[i].x, this.projectiles[i].y, aoeEffectRange));
+                        this.projectiles.splice(i, 1);
 
                         break;
                     }
