@@ -472,7 +472,7 @@ const weapons = [{
         level: generateUpgradeValues(1340, 11, "linear", 50)
     },
     projectileId: 1,
-    aoeEffect: 30,
+    aoeEffectRange: 30,
     attributes: ["Explosive", "Manual", "Volley", "Continuous Reload", "AoE Effect"],
     mothershipChargeRate: 0.000125,
     mk2DataIncrease: 1.2,

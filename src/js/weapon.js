@@ -65,5 +65,9 @@ export default class Weapon {
         this.continousReload = data.continousReload || false;
 
         this.ammoRegainDelay = 0;
+
+        /** @type {number} */
+
+        this.aoeEffectRange = data.aoeEffectRange || 0;
     }
 }

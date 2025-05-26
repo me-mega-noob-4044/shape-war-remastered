@@ -370,7 +370,7 @@ export default class Game {
             }
 
             for (let i = 0; i < projectiles.length; i++) {
-                let projectile = projectiles[i];
+                const projectile = projectiles[i];
 
                 if (projectile && projectile.active) {
                     projectile.update(players, true);
@@ -401,16 +401,16 @@ export default class Game {
                     let done = false;
 
                     for (let i = 0; i < players.length; i++) {
-                        let player = players[i];
+                        const player = players[i];
 
-                        let shape = player.shapes[player.chooseIndex];
-                        let doer = players[projectile.owner];
+                        const shape = player.shapes[player.chooseIndex];
+                        const doer = players[projectile.owner];
 
                         if (shape && shape.health > 0 && doer.isAlly != player.isAlly) {
                             if (shape.isPhaseShift()) continue;
 
-                            let tmpScale = shape.scale;
-                            let tmpSpeed = projectile.speed * config.gameUpdateSpeed;
+                            const tmpScale = shape.scale;
+                            const tmpSpeed = projectile.speed * config.gameUpdateSpeed;
 
                             if (UTILS.lineInRect(
                                 shape.x - tmpScale,
@@ -425,6 +425,25 @@ export default class Game {
                                 player.changeHealth(shape, -projectile.dmg, doer);
                                 projectile.range = 0;
                                 done = true;
+
+                                if (projectile.aoeEffectRange) {
+                                    for (let j = 0; j < players.length; j++) {
+                                        const other = players[j];
+
+                                        const otherShape = other.shapes[other.chooseIndex];
+
+                                        if (otherShape && otherShape.health > 0 && player.isAlly == other.isAlly) {
+                                            if (otherShape.isPhaseShift()) continue;
+                                            if (player == other) continue;
+
+                                            if (UTILS.getDistance(otherShape, projectile) <= otherShape.scale + projectile.aoeEffectRange) {
+                                                er.changeHealth(otherShape, -projectile.dmg, doer);
+                                            }
+                                        }
+                                    }
+
+                                    this.send("aoeEffect", projectile.sid, projectile.aoeEffectRange);
+                                }
                                 break;
                             }
                         }
