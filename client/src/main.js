@@ -374,12 +374,16 @@ export default class Game {
                 const projectile = projectiles[i];
 
                 if (projectile && projectile.active) {
-                    projectile.update(players, true);
+                    let tmpDist = 0;
+
+                    projectile.update();
 
                     for (let t = 0; t < buildings.length; t++) {
-                        let tmpObj = buildings[t];
+                        const tmpObj = buildings[t];
 
                         if (tmpObj) {
+                            const doer = players[projectile.owner];
+
                             if (tmpObj.name == "wall") {
                                 if (projectile.x >= tmpObj.x - projectile.scale && projectile.x <= tmpObj.x + tmpObj.width + projectile.scale) {
                                     if (projectile.y >= tmpObj.y - projectile.scale && projectile.y <= tmpObj.y + tmpObj.height + projectile.scale) {
@@ -387,12 +391,14 @@ export default class Game {
                                         let Py = Math.max(tmpObj.y + projectile.scale, Math.min(projectile.y, tmpObj.y + tmpObj.height - projectile.scale));
 
                                         if (UTILS.getDistance({ x: Px, y: Py }, projectile) <= projectile.scale * 2) {
+                                            tmpDist = UTILS.getDistance({ x: Px, y: Py }, projectile);
                                             projectile.range = 0;
                                             break;
                                         }
                                     }
                                 }
                             } else if (tmpObj.name == "healing beacon" && UTILS.getDistance(tmpObj, projectile) <= projectile.scale + 60) {
+                                tmpDist = UTILS.getDistance(tmpObj, projectile);
                                 projectile.range = 0;
                                 break;
                             }
@@ -423,6 +429,7 @@ export default class Game {
                                 projectile.x + (tmpSpeed * 1 * Math.cos(projectile.dir)),
                                 projectile.y + (tmpSpeed * 1 * Math.sin(projectile.dir))
                             )) {
+                                tmpDist = UTILS.getDistance(shape, projectile);
                                 player.changeHealth(shape, -projectile.dmg, doer);
                                 projectile.range = 0;
                                 done = true;
@@ -449,12 +456,7 @@ export default class Game {
                     }
 
                     if (projectile.range <= 0) {
-                        if (done) {
-                            this.send("removeProjectile", projectile.sid, 50, projectile.aoeEffectRange);
-                        } else {
-                            this.send("removeProjectile", projectile.sid, 0, projectile.aoeEffectRange);
-                        }
-
+                        this.send("removeProjectile", projectile.sid, tmpDist, projectile.aoeEffectRange);
                         projectiles.splice(i, 1);
                         i--;
                     }

@@ -72,7 +72,7 @@ export default class Projectile {
         this.skipMovement = true;
     }
 
-    update(players, server, delta) {
+    update(delta) {
         const tmpSpd = this.speed * (delta || config.gameUpdateSpeed);
 
         if (!this.skipMovement) {

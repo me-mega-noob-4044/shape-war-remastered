@@ -5113,7 +5113,7 @@ import Task from "../src/js/task.js";
 
                     ctx.restore();
 
-                    tmpObj.update([], false, delta);
+                    tmpObj.update(delta);
                 } else if (tmpObj && !tmpObj.active) {
                     GameManager.aoeEffects.push(new AoeEffect(tmpObj.x, tmpObj.y, tmpObj.aoeEffectRange));
                     GameManager.projectiles.splice(i, 1);
@@ -5975,9 +5975,10 @@ import Task from "../src/js/task.js";
             "removeProjectile": (sid, time, aoeEffectRange) => {
                 for (let i = 0; i < this.projectiles.length; i++) {
                     if (this.projectiles[i].sid == sid) {
-                        this.aoeEffects.push(new AoeEffect(this.projectiles[i].x, this.projectiles[i].y, aoeEffectRange));
-                        this.projectiles.splice(i, 1);
-
+                        if (aoeEffectRange) this.aoeEffects.push(new AoeEffect(this.projectiles[i].x, this.projectiles[i].y, aoeEffectRange));
+                        this.projectiles[i].range = time;
+                        console.log(time);
+                        // this.projectiles.splice(i, 1);
                         break;
                     }
                 }
