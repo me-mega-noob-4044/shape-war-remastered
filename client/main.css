@@ -680,7 +680,7 @@ a:-webkit-any-link {
 #drone-view-upgrade-button,
 #pilot-view-upgrade-button {
     margin-left: 15px;
-    background-color: rgb(1, 207, 77);
+    background-color: #01cf4d;
 }
 
 #pilot-view-upgrade-button {
@@ -695,7 +695,7 @@ a:-webkit-any-link {
 #shape-view-item-upgrade-button-2,
 #drone-view-upgrade-button-2 {
     margin-left: 15px;
-    background-color: rgb(1, 207, 77);
+    background-color: #01cf4d;
     flex-direction: column;
 }
 
@@ -782,11 +782,11 @@ a:-webkit-any-link {
 #drone-view-equip-button,
 #drone-view-unequip-button {
     text-align: center;
-    background-color: rgba(35, 134, 232);
+    background-color: #2386e8;
 }
 
 #drone-view-unequip-button:hover {
-    background-color: rgb(28, 110, 191);
+    background-color: #1c6ebf;
 }
 
 #pilot-view-unequip-button:hover {
